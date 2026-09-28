@@ -7,8 +7,8 @@ Output, under _site/portfolio-lab/data/:
   t/<TICKER>.csv  daily adjusted closes for every other ETF in the universe
   universe.json   the ETF list the app offers (ticker, name)
 
-The universe is the most-traded US ETFs by 3-month average dollar volume,
-leaving out leveraged and inverse funds, plus the core tickers. It is
+The universe is every US-listed ETF that is not leveraged or inverse, ranked by
+3-month average dollar volume (set UNIVERSE_SIZE to keep only the top N), plus the core tickers. It is
 re-ranked weekly (Saturday runs) and saved to data/universe.json in the repo.
 """
 import json
@@ -31,7 +31,7 @@ OUT = OUT_SITE / "portfolio-lab" / "data"
 UNIVERSE_FILE = ROOT / "data" / "universe.json"
 LIVE = "https://danielcaley.com/portfolio-lab/data"  # previous deploy, used as a fallback
 
-UNIVERSE_SIZE = int(os.environ.get("UNIVERSE_SIZE", "1000"))
+UNIVERSE_SIZE = int(os.environ.get("UNIVERSE_SIZE", "0"))  # 0 = every non-leveraged ETF
 START = "2007-01-01"
 CORE = ("SPY QQQ MDY IWM IJR VTI XLK EFA VEA VWO VXUS VT ACWI AGG BND TLT IEF SHY "
         "TIP LQD JNK HYG GLD FCNTX ACWX IEUR IEMG").split()
@@ -110,7 +110,7 @@ def build_universe():
     dv = dollar_volume(sorted(plain))
     ranked = sorted(dv, key=dv.get, reverse=True)
     total = sum(dv.values()) or 1
-    top = ranked[:UNIVERSE_SIZE]
+    top = ranked[:UNIVERSE_SIZE] if UNIVERSE_SIZE > 0 else ranked
     log(f"Top {len(top)} cover {sum(dv[t] for t in top) / total:.1%} of non-leveraged dollar volume")
     if len(top) < 300:
         raise SystemExit("Ranking returned too few ETFs; keeping the previous universe.")
