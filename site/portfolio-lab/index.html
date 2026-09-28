@@ -1,0 +1,1477 @@
+<title>Portfolio Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#F3F0E8;--panel:#FFFDF8;--panel2:#F6F3EC;--pill:#ECE8DE;--line:#DDD6C8;--line2:#EEE9DE;
+  --ink:#1C1B18;--ink2:#3D3A34;--muted:#5E5A52;--faint:#8A8478;--input:#FFFFFF;--inputLine:#CFC7B6;
+  --accent:#1D6B4C;--accentBg:#E6F0E9;--pos:#1D6B4C;--neg:#A8401C;--posBar:#3F9A70;--negBar:#C9724C;
+  --btn:#1C1B18;--btnInk:#FFFDF8;--warnBg:#F4DDB0;--warnFg:#5A3A08;--grid:#E8E2D5;--lockBg:#ECE8DE;
+  --p1:#2a78d6;--p2:#eb6834;--p3:#1baf7a;--p4:#eda100;--p5:#e87ba4;--p6:#4a3aa7;--tw:#1C1B18;--spy:#8A8478;
+  --focus:#2a78d6;--segOn:#1C1B18;--segOnFg:#FFFDF8;--segOnLine:#1C1B18;--tyEq:#2E8A63;--tyEqBg:#E3EFE7;--tyEqFg:#1D5A40;--tyBd:#4A6FA5;--tyBdBg:#E6EAF3;--tyBdFg:#2F4F80;--tyCa:#C98A12;--tyCaBg:#FBF0D6;--tyCaFg:#6B4608;--tyCaLine:#E2B654;--tyOt:#8A5CB8;--tyOtBg:#EFE7F6;--tyOtFg:#5A3D78;--shadow:0 10px 30px rgba(28,27,24,.16);
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#141412;--panel:#1D1C19;--panel2:#262521;--pill:#2A2925;--line:#35332E;--line2:#2A2925;
+  --ink:#EDE8DC;--ink2:#CFC9BB;--muted:#A39D90;--faint:#7E786C;--input:#121210;--inputLine:#45423B;
+  --accent:#6CC39A;--accentBg:#1C2E25;--pos:#6CC39A;--neg:#EE9A74;--posBar:#4FAE82;--negBar:#D07A55;
+  --btn:#EDE8DC;--btnInk:#141412;--warnBg:#2E2618;--warnFg:#D9AE6A;--grid:#2A2925;--lockBg:#2A2925;
+  --p1:#3987e5;--p2:#d95926;--p3:#199e70;--p4:#c98500;--p5:#d55181;--p6:#9085e9;--tw:#B8B0A0;--spy:#8F897D;
+  --focus:#3987e5;--segOn:#3A3833;--segOnFg:#F3F0E8;--segOnLine:#8A8478;--tyEq:#4FAE82;--tyEqBg:#1C2E25;--tyEqFg:#8FD3B0;--tyBd:#7E9FD6;--tyBdBg:#1F2838;--tyBdFg:#A9BEE6;--tyCa:#E0A93A;--tyCaBg:#3A2E14;--tyCaFg:#F4C27A;--tyCaLine:#8A6A24;--tyOt:#B08BDA;--tyOtBg:#2C2238;--tyOtFg:#CDB2EA;--shadow:0 10px 30px rgba(0,0,0,.5);
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#141412;--panel:#1D1C19;--panel2:#262521;--pill:#2A2925;--line:#35332E;--line2:#2A2925;
+  --ink:#EDE8DC;--ink2:#CFC9BB;--muted:#A39D90;--faint:#7E786C;--input:#121210;--inputLine:#45423B;
+  --accent:#6CC39A;--accentBg:#1C2E25;--pos:#6CC39A;--neg:#EE9A74;--posBar:#4FAE82;--negBar:#D07A55;
+  --btn:#EDE8DC;--btnInk:#141412;--warnBg:#2E2618;--warnFg:#D9AE6A;--grid:#2A2925;--lockBg:#2A2925;
+  --p1:#3987e5;--p2:#d95926;--p3:#199e70;--p4:#c98500;--p5:#d55181;--p6:#9085e9;--tw:#B8B0A0;--spy:#8F897D;
+  --focus:#3987e5;--segOn:#3A3833;--segOnFg:#F3F0E8;--segOnLine:#8A8478;--tyEq:#4FAE82;--tyEqBg:#1C2E25;--tyEqFg:#8FD3B0;--tyBd:#7E9FD6;--tyBdBg:#1F2838;--tyBdFg:#A9BEE6;--tyCa:#E0A93A;--tyCaBg:#3A2E14;--tyCaFg:#F4C27A;--tyCaLine:#8A6A24;--tyOt:#B08BDA;--tyOtBg:#2C2238;--tyOtFg:#CDB2EA;--shadow:0 10px 30px rgba(0,0,0,.5);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 "IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;margin:0}
+.wrap{max-width:1440px;margin:0 auto;padding-inline:clamp(16px,3vw,48px);padding-block:32px 56px;display:flex;flex-direction:column;gap:24px}
+h1,h2{font-family:Newsreader,Georgia,"Times New Roman",serif;font-weight:600;margin:0;text-wrap:balance}
+h1{font-size:clamp(34px,4vw,44px);letter-spacing:-.01em;line-height:1.05}
+h2{font-size:26px;line-height:1.15}
+.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums}
+.eyebrow,.cap{font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.sub{font-size:13px;color:var(--muted);line-height:1.45}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+button:disabled{cursor:not-allowed;opacity:.45}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.pos{color:var(--pos)}.neg{color:var(--neg)}.mut{color:var(--muted)}
+
+header.top{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;padding-bottom:20px;border-bottom:1px solid var(--line)}
+.controls{display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap}
+.ctl{display:flex;flex-direction:column;gap:4px}
+.ctl .cap{display:flex;align-items:center;gap:4px}
+.seg{display:inline-flex;gap:4px;padding:4px;background:var(--pill);border-radius:10px}
+.seg button{border:0;background:transparent;border-radius:7px;min-height:36px;padding:0 12px;font-size:14px;font-weight:500;color:var(--ink2)}
+.seg button[aria-pressed="true"]{background:var(--btn);color:var(--btnInk)}
+.asof{display:flex;flex-direction:column;align-items:flex-end;gap:2px;font-size:13px;color:var(--muted)}
+.asof strong{color:var(--ink);font-weight:500;font-family:"IBM Plex Mono",monospace;font-size:14px}
+.btn{height:44px;padding:0 16px;border-radius:8px;border:1px solid var(--ink);background:transparent;display:inline-flex;align-items:center;gap:8px;font-size:15px;font-weight:500}
+.btn.primary{background:var(--btn);border-color:var(--btn);color:var(--btnInk)}
+.btn.sm{height:40px;padding:0 14px;font-size:14px;border-color:var(--inputLine);background:var(--panel2)}
+.btn svg{width:18px;height:18px}
+
+.banner{padding:12px 16px;border-radius:10px;background:var(--warnBg);color:var(--warnFg);font-size:14px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 28px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.phead{display:flex;justify-content:space-between;align-items:flex-end;gap:12px 20px;flex-wrap:wrap}
+.phead>div:first-child{display:flex;flex-direction:column;gap:2px}
+
+/* info popover */
+.info{width:22px;height:22px;border:0;padding:0;border-radius:50%;background:transparent;color:var(--faint);display:inline-flex;align-items:center;justify-content:center;flex:none;vertical-align:middle}
+.info:hover,.info[aria-expanded="true"]{color:var(--ink);background:var(--pill)}
+.info svg{width:15px;height:15px}
+.pop{position:fixed;z-index:30;width:min(340px,calc(100vw - 32px));background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);padding:14px 16px;font-size:14px;line-height:1.5;text-transform:none;letter-spacing:0;font-weight:400;text-align:left;white-space:normal}
+.pop h3{margin:0 0 6px;font-family:Newsreader,Georgia,serif;font-size:19px;font-weight:600}
+.pop .lbl{font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-top:8px;display:block}
+.pop p{margin:2px 0 0}
+
+/* portfolio list */
+.lrow{display:grid;grid-template-columns:30px minmax(210px,270px) minmax(0,1fr) 190px 76px 124px 78px 64px 100px;column-gap:14px;align-items:center}
+.lhead{padding:8px 0;border-bottom:1px solid var(--line);white-space:nowrap}
+.lhead>*{display:flex;align-items:center;gap:2px}
+.lhead .r{justify-content:flex-end}.lhead .c{justify-content:center}
+.item{border-bottom:1px solid var(--line2)}
+.item.open{background:var(--panel2);border-radius:10px;border-bottom-color:transparent;margin-block:4px}
+.item .lrow{min-height:56px;font-size:15px}
+.rank{padding-left:6px;color:var(--muted)}
+.namebtn{display:flex;align-items:center;gap:10px;min-width:0;min-height:44px;padding:0;border:0;background:none;text-align:left;font-size:15px}
+.namebtn .nm{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.badge{flex:none;font-size:11px;font-weight:600;letter-spacing:.04em;padding:2px 7px;border-radius:10px;background:var(--lockBg);color:var(--ink2)}
+.holds{font-size:13px;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar{position:relative;height:14px;width:190px}
+.bar .z{position:absolute;left:95px;top:-6px;width:1px;height:26px;background:var(--line)}
+.bar .f{position:absolute;top:0;height:14px;border-radius:2px}
+.r{text-align:right}
+.edit{justify-self:end;height:36px;padding:0 10px 0 12px;border-radius:8px;border:1px solid var(--inputLine);background:var(--panel2);font-size:13px;font-weight:600;display:inline-flex;align-items:center;gap:6px}
+.item.open .edit{background:var(--btn);border-color:var(--btn);color:var(--btnInk)}
+.edit svg{width:14px;height:14px;transition:transform .15s}
+.item.open .edit svg{transform:rotate(180deg)}
+.editor{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:28px;padding:4px 12px 20px 44px}
+.erow{display:grid;grid-template-columns:92px minmax(0,1fr) 96px 92px 36px;column-gap:12px;align-items:center;padding:4px 0;border-bottom:1px solid var(--line2)}
+.erow.h{border:0;padding-top:8px}
+.erow .r{justify-content:flex-end}
+.field{height:42px;border:1px solid var(--inputLine);border-radius:8px;background:var(--input);padding:0 12px;font-size:15px;min-width:0}
+.wbox{display:flex;align-items:center;justify-content:flex-end;gap:4px;font-size:13px;color:var(--muted)}
+.tkin{width:100%;height:38px;padding:0 8px;font-family:"IBM Plex Mono",monospace;font-weight:500;text-transform:uppercase}
+.wbox .field{width:64px;height:38px;padding:0 8px;text-align:right;font-family:"IBM Plex Mono",monospace}
+.x{width:36px;height:38px;border:0;background:none;color:var(--muted);display:flex;align-items:center;justify-content:center;border-radius:8px}
+.x:hover{background:var(--pill)}
+.addetf{display:flex;gap:8px;max-width:520px;padding-top:6px}
+.addetf .field{flex:1;text-transform:uppercase;font-family:"IBM Plex Mono",monospace;font-size:14px}
+.plrow{user-select:none;-webkit-user-select:none}
+.total{display:flex;justify-content:space-between;padding:10px 12px;border-radius:8px;font-size:14px;font-weight:500}
+.badge.warnb{background:var(--warnBg);color:var(--warnFg);letter-spacing:0}
+.sub.warnt{color:var(--neg)}
+.scalebox{display:flex;flex-direction:column;gap:8px;align-items:flex-start;font-size:13px;color:var(--ink2);padding:2px 2px 4px}
+.total.ok{background:var(--accentBg);color:var(--accent)}.total.bad{background:var(--warnBg);color:var(--warnFg)}
+.minis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.mini{padding:10px 12px;border-radius:8px;background:var(--panel);border:1px solid var(--line2);display:flex;flex-direction:column;gap:2px}
+.mini .l{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:2px}
+.mini .v{font-family:"IBM Plex Mono",monospace;font-size:17px;font-weight:500}
+.acts{display:flex;gap:8px;flex-wrap:wrap}
+.btn.del{color:var(--neg);border-color:var(--inputLine);background:transparent}
+.btn.ghost{border-color:var(--inputLine);background:transparent}
+.twinfo{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;padding:4px 12px 20px 44px;align-items:start}
+.sigcols{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:24px;align-items:start}
+.sigcols .sig{grid-template-columns:96px 58px 76px auto;column-gap:8px}
+.sigcols .sig>span{white-space:nowrap}
+.sigcols>div:last-child .sig{grid-template-columns:96px 58px 0 auto}
+.sigcols .sig.cap>span:first-child{white-space:nowrap}
+.sigcols .pick{font-size:10px;padding:1px 6px}
+.twlog{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:28px}
+.sig{display:grid;grid-template-columns:70px 80px 90px 1fr;column-gap:12px;align-items:center;font-size:14px;padding:4px 0;border-bottom:1px solid var(--line2)}
+.pick{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:2px 8px;border-radius:10px;background:var(--accentBg);color:var(--accent)}
+.log{display:grid;grid-template-columns:minmax(96px,1.3fr) 1fr 1fr;column-gap:12px;font-size:14px;padding:3px 0;border-bottom:1px solid var(--line2)}
+.addp{margin-top:8px;height:52px;border-radius:10px;border:2px dashed var(--inputLine);background:transparent;color:var(--ink2);font-size:15px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px}
+.addp:hover:not(:disabled){border-color:var(--ink2)}
+
+/* chart */
+.legend{display:flex;flex-wrap:wrap;gap:8px}
+.chip{height:34px;padding:0 12px;border-radius:17px;border:1px solid var(--line);background:var(--panel2);color:var(--ink2);font-size:13px;font-weight:500;display:inline-flex;align-items:center;gap:8px}
+.chip[aria-pressed="false"]{background:transparent;opacity:.55}
+.chartbox{position:relative;touch-action:pan-y}
+.chartbox svg{display:block;width:100%;overflow:visible}
+.tip{position:absolute;top:6px;pointer-events:none;width:280px;background:var(--panel);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);padding:10px 12px;font-size:13px;display:flex;flex-direction:column;gap:5px;z-index:5}
+.tip .d{font-weight:600;margin-bottom:2px}
+.tip .tr{display:grid;grid-template-columns:22px minmax(0,1fr) auto auto;gap:8px;align-items:center}
+.tip .tr span:nth-child(2){white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* table */
+.tablewrap{overflow-x:auto;max-width:100%;min-width:0;position:relative}
+.bstep,#bBody{min-width:0}
+table{width:100%;border-collapse:collapse;font-size:15px;min-width:900px}
+th{padding:8px 6px;border-bottom:1px solid var(--line);white-space:nowrap;font-weight:500;vertical-align:bottom}
+th .hw{display:inline-flex;align-items:center;gap:0}
+th.r .hw{justify-content:flex-end}
+th .sort{border:0;background:none;padding:6px 2px;font-size:12px;letter-spacing:.05em;text-transform:uppercase;font-weight:600;color:var(--muted)}
+th .sort[aria-pressed="true"]{color:var(--ink)}
+td{padding:10px 6px;border-bottom:1px solid var(--line2);white-space:nowrap}
+td.num{text-align:right;font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums}
+td.best{font-weight:700}
+.pn{display:flex;align-items:center;gap:8px;font-weight:600}
+
+/* builder */
+.builder{padding:0;gap:0;overflow:hidden}
+.bhead{display:flex;align-items:center;gap:14px;width:100%;padding:20px 28px;border:0;background:transparent;text-align:left;color:var(--ink)}
+.bhead:hover{background:var(--panel2)}
+.bicon{width:36px;height:36px;border-radius:10px;background:var(--btn);color:var(--btnInk);display:flex;align-items:center;justify-content:center;flex:none}
+.bicon svg,.bchev svg{width:18px;height:18px}
+.bchev{width:36px;height:36px;border-radius:8px;border:1px solid var(--inputLine);display:flex;align-items:center;justify-content:center;flex:none;transition:transform .15s}
+.builder.open .bchev{transform:rotate(180deg)}
+.builder.open .bhead{border-bottom:1px solid var(--line)}
+#bBody{padding:12px 24px 14px;display:flex;flex-direction:column;gap:10px}
+.bstep{display:flex;flex-direction:column;gap:10px}
+.bpick{display:flex;flex-wrap:wrap;gap:12px 16px;align-items:center}
+.echips{display:flex;flex-wrap:wrap;gap:8px}
+.echip{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:18px;background:var(--panel2);height:36px}
+.echip.off{opacity:.5;background:transparent}
+.echip .et{border:0;background:none;display:inline-flex;align-items:center;gap:7px;height:34px;padding:0 4px 0 12px;font-size:14px;font-weight:500}
+.echip .ex{border:0;background:none;width:32px;height:34px;display:flex;align-items:center;justify-content:center;color:var(--muted);border-radius:0 18px 18px 0}
+.echip .ex:hover{color:var(--neg)}
+.btable{min-width:860px}
+.btable th.hl,.btable td.hl{background:var(--panel2)}
+.btable .wbox .field{width:72px}
+.bsaverow{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.bsaverow .total{min-width:220px;align-self:flex-end;height:42px;align-items:center}
+.bsaverow .acts{align-self:flex-end}
+.bsave{padding:14px 16px;border-radius:12px;background:var(--panel2);border:1px solid var(--line2);display:flex;flex-direction:column;gap:8px}
+/* portfolios table */
+.ptable{min-width:1040px}
+.ptable th .sort{white-space:normal;text-align:right;line-height:1.3}
+.ptable th{white-space:normal}
+.momwrap .v{min-width:56px;text-align:right}
+.btn.primary:disabled{background:var(--pill);border-color:var(--line);color:var(--muted);opacity:1}
+.ptable td{padding:8px 6px;vertical-align:middle}
+.ptable .nm{white-space:nowrap}
+.holdcell{font-size:13px;color:var(--ink2);max-width:170px;overflow:hidden;text-overflow:ellipsis}
+.momwrap{display:inline-flex;align-items:center;gap:10px;justify-content:flex-end}
+.actcell{text-align:right}
+.actwrap{display:inline-flex;gap:6px;align-items:center;justify-content:flex-end}
+.ptable .edit{justify-self:auto}
+.delbtn{height:36px;min-width:36px;padding:0 8px;border-radius:8px;border:1px solid var(--inputLine);background:transparent;color:var(--muted);display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:600}
+.delbtn:hover{color:var(--neg);border-color:var(--neg)}
+.delbtn.armed{background:var(--neg);border-color:var(--neg);color:var(--panel)}
+tr.editing td{background:var(--accentBg)}
+tr.twrow td{background:var(--panel2);padding:0}
+tr.twrow .twinfo{padding:16px 12px 20px 12px}
+@media (max-width:640px){.bhead{padding:16px}#bBody{padding:16px}}
+
+tr.editrow td{background:var(--panel2);padding:0;white-space:normal}
+tr.twrow td{white-space:normal}
+.btn.sm.primary{background:var(--btn);border-color:var(--btn);color:var(--btnInk)}
+.btn.sm.primary:disabled{background:var(--pill);border-color:var(--line);color:var(--muted);opacity:1}
+.inlined{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:28px;padding:14px 16px 18px}
+.inlined .erow{grid-template-columns:92px minmax(0,1fr) 96px 80px 36px}
+@media (max-width:900px){.inlined{grid-template-columns:minmax(0,1fr)}}
+
+.bgrid{display:block}
+.btable .tkcell{display:flex;align-items:center;gap:4px}
+.btable .tkin{width:88px;height:28px;font-size:14px}
+.btable tbody td,.btable tfoot td{padding-top:2px;padding-bottom:2px}
+.btable .bdel{height:28px!important}
+.btable .rsw{height:28px!important}
+.btable tbody td.num,.btable tfoot td.num{font-size:14px}
+.btable .rsw{height:30px}
+.btable .x{height:30px;width:30px}
+.btable thead th{padding-top:4px;padding-bottom:6px}
+
+.btable td.wcell,.btable th.wcell{width:1%;white-space:nowrap;padding-left:14px}
+.btable th:first-child,.btable td:first-child{width:1%;white-space:nowrap}
+.btable .wbox .field{width:60px;height:28px;font-size:14px}
+.btable td.xcell{width:44px;text-align:right}
+.btable th.retcol{white-space:nowrap}
+.btable .momwrap svg{width:60px}
+.btable .momwrap{gap:6px}
+.btable .bdel{height:30px;min-width:32px}
+.btable thead tr:not(.grow) th.r:not(.wcell):not(.retcol){width:8.5%}
+.btable th.retcol{width:1%}
+.btable tr.addrow td{border-bottom:0;padding-top:10px;padding-bottom:6px}
+.btable .addetf{display:flex;gap:8px;padding:0;max-width:none}
+.btable .addetf .field{width:132px;flex:none;height:38px}
+.btable td.addnote{text-align:left}
+.bheadwrap{position:relative}
+.bacts{position:absolute;right:76px;top:50%;transform:translateY(-50%);display:none;align-items:center;gap:12px}
+.builder.open .bacts{display:flex}
+.builder.open .bhead{padding-right:1010px;position:relative;padding-top:10px!important;padding-bottom:10px!important}
+.builder.open #bSub{display:none}
+.bacts .picker{gap:8px}
+.bacts .seg button{min-height:32px;padding:0 10px}
+.bacts .daysbox{min-height:40px}
+.bsep{width:1px;height:28px;background:var(--line)}
+.builder.open .bchev{position:absolute;right:24px;top:50%;margin-top:-16px}
+.bacts #bHint{font-size:12px;max-width:220px;text-align:right}
+.bacts #bHint.ok{color:var(--accent)}
+.bacts .btn{height:34px}
+.btable .nmin{width:100px;height:30px;margin:2px 0;font-weight:700;font-size:14px}
+.btable td.nmcell .pn{align-items:center}
+.btable .scl{font-size:12px;margin-right:4px}
+.btable tr.addrow td{padding-top:5px;padding-bottom:5px;border-bottom:0}
+.btable tr.addrow .rsw{color:var(--muted);cursor:default}
+.btable tr.addrow .btn{height:30px}
+.builder.hwrap .bsep{display:none}.builder.hwrap.open .bhead{padding-right:64px!important}.builder.hwrap .bacts{position:static;transform:none;padding:0 24px 10px;justify-content:flex-end;flex-wrap:wrap}
+@media (max-width:900px){.builder .bsep{display:none}}
+@media (max-width:900px){.builder.open .bchev{right:16px}.bacts{position:static;transform:none;padding:0 16px 12px;justify-content:flex-end;flex-wrap:wrap}.builder.open .bhead{padding-right:16px}}
+.bbar{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;padding:8px 10px;border-radius:12px;background:var(--panel2);border:1px solid var(--line2)}
+.bbl{display:flex;gap:8px;align-items:center}
+.bbl .field{width:200px;height:36px;text-transform:uppercase;font-family:"IBM Plex Mono",monospace;font-size:14px}
+.bbl .field::placeholder{text-transform:none;font-family:inherit}
+.bbl .btn{height:36px}
+.bbs{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;flex:1;min-width:0}
+.bbs .total{padding:0 10px;height:36px;align-items:center;gap:12px;min-width:0}
+.bbs #bScaleBox .scalebox{flex-direction:row;align-items:center;flex-wrap:wrap;padding:0;gap:8px}
+.bbs #bScaleBox .btn{height:32px}
+.bbs #bHint{font-size:12px}
+.bbr{display:flex;gap:8px;align-items:center;justify-content:flex-end}
+.bbr .field{width:240px;max-width:100%;height:36px}
+.bbr .btn{height:36px}
+@media (max-width:760px){.bbar{flex-direction:column;align-items:stretch}.bbl .field{flex:1;width:auto}.bbr{flex-wrap:wrap}.bbr .field{width:100%}.bbr .btn{flex:1;justify-content:center}}
+.bfoot{display:flex;flex-wrap:wrap;align-items:center;gap:12px 16px;padding:14px 16px;border-radius:12px;background:var(--panel2);border:1px solid var(--line2)}
+.bfl{display:flex;flex-direction:column;gap:8px;min-width:240px}
+.bfl .scalebox{flex-direction:row;align-items:center;flex-wrap:wrap;padding:0}
+.bfr{display:flex;align-items:center;gap:10px;flex:1;justify-content:flex-end;flex-wrap:wrap}
+.bfr .field{width:280px;max-width:100%}
+.bfoot #bHint{flex-basis:100%;text-align:right}
+@media (max-width:700px){.bfr{justify-content:stretch}.bfr .field{width:100%}.bfr .btn{flex:1;justify-content:center}.bfoot #bHint{text-align:left}}
+.bleft{display:flex;flex-direction:column;gap:10px;min-width:0}
+.brail{display:flex;flex-direction:column;gap:18px;padding:18px;border-radius:12px;background:var(--panel2);border:1px solid var(--line2);position:sticky;top:calc(12px + env(safe-area-inset-top,0px))}
+.rstep{display:flex;flex-direction:column;gap:8px}
+.rhead{display:flex;justify-content:space-between;padding-right:48px}
+.rrows{display:flex;flex-direction:column;gap:6px}
+.rrow{display:grid;grid-template-columns:32px minmax(0,1fr) 92px 32px;gap:6px;align-items:center}
+.rrow.off .tkin,.rrow.off .rsw{opacity:.45}
+.rsw{width:32px;height:38px;border:0;background:none;display:flex;align-items:center;justify-content:center;border-radius:8px;padding:0}
+.rsw:hover{background:var(--pill)}
+.rrow .tkin{width:100%}
+.rrow .wbox .field{width:64px}
+.rrow .x{width:32px}
+.brail .total{margin-top:4px}
+.brail .field{width:100%}
+.rsave{width:100%;justify-content:center;height:46px}
+.btn.primary:disabled{background:var(--pill);border-color:var(--line);color:var(--muted);opacity:1}
+.btable{min-width:600px;table-layout:auto}
+
+.btable th.bm{white-space:normal;line-height:1.25;vertical-align:bottom;min-width:64px}
+.btable th.bm .hw{justify-content:flex-end;align-items:flex-end}
+.btable th.bm .cap{text-align:right}
+.btable td.num{white-space:nowrap}
+.btable .pn .sub2{display:block;font-weight:400;font-size:12px;color:var(--muted);line-height:1.2}
+.btable .pn2{display:flex;flex-direction:column;min-width:0}
+.btable td.num{font-size:14px}
+tr.dim td{opacity:.5}
+@media (max-width:1000px){.bgrid{grid-template-columns:minmax(0,1fr)}.brail{position:static;order:-1}}
+
+.pctl{display:flex;flex-wrap:wrap;gap:12px 18px;align-items:flex-end;padding:4px 0 2px}
+.bcgrid .prail{padding:10px 12px;gap:2px;max-height:344px;overflow:auto;overscroll-behavior:contain}
+.bcgrid .plrow{min-height:28px}
+.bcgrid .plrow.bench{min-height:34px}
+.pgrid{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:24px;align-items:start}
+.pleft{display:flex;flex-direction:column;gap:8px;min-width:0}
+.prail{display:flex;flex-direction:column;gap:8px;padding:16px;border-radius:12px;background:var(--panel2);border:1px solid var(--line2)}
+.plist{display:flex;flex-direction:column;gap:2px}
+.plrow{display:grid;grid-template-columns:24px minmax(0,1fr) auto;gap:10px;align-items:center;min-height:40px;padding:0 8px;border:0;border-radius:8px;background:transparent;text-align:left;font-size:14px;color:var(--ink)}
+.plrow:hover{background:var(--pill)}
+.plrow .pln{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.plrow.bench{margin-top:6px;border-top:1px solid var(--line);border-radius:0 0 8px 8px;padding-top:6px;min-height:46px}
+.plrow.ref{min-height:30px}
+.plrow[aria-pressed="false"]{opacity:.45}
+.plrow[aria-pressed="false"] .pln{text-decoration:line-through}
+#portfolios{gap:16px}
+@media (max-width:1000px){.pgrid{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:700px){.pgrid>.prail{display:none}}
+.mob{display:none}
+.modal{position:fixed;inset:0;z-index:80;display:flex;align-items:center;justify-content:center;padding:16px}
+.modal[hidden]{display:none!important}
+.mback{position:absolute;inset:0;background:rgba(20,18,14,.45)}
+.mpanel{position:relative;width:min(460px,100%);max-height:calc(100vh - 32px);overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.3);padding:18px 18px 16px;display:flex;flex-direction:column;gap:8px}
+.mhead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:4px}
+.mhead h3{font-size:18px}
+.mclose{width:34px;height:34px;border:0;border-radius:8px;background:transparent;color:var(--muted);display:flex;align-items:center;justify-content:center}
+.mclose:hover{background:var(--pill);color:var(--ink)}
+.iolist{display:flex;flex-direction:column;gap:6px}
+.ioopt{display:grid;grid-template-columns:22px minmax(0,1fr);gap:12px;align-items:start;text-align:left;width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:var(--panel2);color:var(--ink)}
+.ioopt:hover{border-color:var(--inputLine);background:var(--pill)}
+.ioopt svg{margin-top:1px;color:var(--ink2)}
+.ioopt>span{display:flex;flex-direction:column;gap:2px}
+.ioopt strong{font-size:14px;font-weight:600}
+.ioopt .sub{font-size:12.5px;line-height:1.35}
+.iofmt{font-size:12px;margin:0 2px 6px}
+#ioBody{display:flex;flex-direction:column;gap:8px}
+.ioset{display:inline-flex;gap:2px;align-items:center}
+.iob{display:inline-flex;align-items:center;gap:5px;height:32px;padding:0 9px;border:0;border-radius:8px;background:transparent;color:var(--ink2);font-size:13px;font-weight:500}
+.iob:hover{background:var(--pill);color:var(--ink)}
+.pctrls .ioset{margin-right:4px}
+.bacts .ioset{margin-right:2px}
+.bacts .seg button{padding:0 7px}
+.bacts{gap:8px!important}
+.bacts .bsep{display:none}
+.bacts .iob{padding:0 7px}
+.bacts .daysbox{padding-left:10px;padding-right:8px}
+header.top .iob svg{width:15px;height:15px}
+.addnw{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.addnw .ioset{margin-left:auto}
+.hexp{width:22px;height:22px;border:0;background:transparent;color:var(--muted);display:inline-flex;align-items:center;justify-content:center;border-radius:6px;padding:0;flex:none}
+.hexp:hover{background:var(--pill);color:var(--ink)}
+.hexp svg{transition:transform .15s}.hexp[aria-expanded="true"] svg{transform:rotate(90deg)}
+.hexp-sp{width:22px;flex:none}
+tr.hrowx td{background:var(--panel2);font-size:14px;padding-top:5px;padding-bottom:5px}
+tr.hrowx .hsub{padding-left:60px;gap:10px;align-items:center}
+tr.hrowx .tkin{width:84px;height:28px;font-size:13px}
+tr.hrowx .wbox .field{width:56px;height:28px;font-size:13px}
+tr.hrowx .bdel{height:28px;min-width:30px}
+tr.hrowx td.hact{text-align:right}
+tr.hadd td{padding-top:6px;padding-bottom:8px}
+.haddw{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;padding-left:60px}
+.haddw .addetf{padding:0;gap:6px}
+.haddw .addetf .field{width:100px;flex:none;height:30px}
+.haddw .btn{height:30px}
+.hname{display:inline-flex;align-items:center;gap:8px}
+.hname .field{width:200px;height:30px}
+.htot{font-size:13px;font-weight:600;font-family:"IBM Plex Mono",monospace}
+.sug{position:fixed;z-index:60;width:300px;max-width:calc(100vw - 16px);overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.18);padding:4px}
+.sugi{display:grid;grid-template-columns:58px minmax(0,1fr) auto;gap:8px;align-items:center;width:100%;border:0;background:transparent;text-align:left;padding:7px 8px;border-radius:7px;font-size:13px;color:var(--ink)}
+.sugi:hover,.sugi.act{background:var(--pill)}
+.sugi .st{font-weight:600}.sugi .sn{color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sugi.added{opacity:.45;cursor:default}.sugi.added:hover{background:transparent}
+.sugi .sa{font-size:11px;font-weight:600;padding:1px 6px;border-radius:8px;background:var(--pill);color:var(--ink2)}
+.btable th .sort{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;white-space:nowrap}
+.btable th .sort[aria-pressed="true"]{color:var(--ink)}
+tr.mdet{display:none}
+.mexp{width:32px;height:32px;border:1px solid var(--inputLine);border-radius:8px;background:transparent;color:var(--ink2);display:inline-flex;align-items:center;justify-content:center}
+.mexp svg{transition:transform .15s}
+.mexp[aria-expanded="true"] svg{transform:rotate(180deg)}
+.mgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 14px;padding:6px 4px 10px;width:0;min-width:100%;box-sizing:border-box}
+.mi .mv{white-space:nowrap}
+.mi{display:flex;justify-content:space-between;gap:8px;font-size:13px;border-bottom:1px dashed var(--line2);padding:3px 0}
+.mi .ml{color:var(--muted)}
+.mi.mact{grid-column:1/-1;border:0;justify-content:flex-end;padding-top:6px}
+@media (max-width:700px){
+  .dsk{display:none!important}
+  .mob{display:table-cell}
+  tr.mdet.open{display:table-row}
+  tr.mdet td{padding:0 6px;border-bottom:1px solid var(--line2);background:var(--panel2)}
+  table,.btable,.ptable{min-width:0!important}
+  thead tr.grow{display:none}
+  .btable th:first-child,.btable td:first-child{width:auto}
+  .btable td.wcell,.btable th.wcell{padding-left:6px}
+  .btable th.retcol .cap{white-space:normal}
+  .momwrap svg,.btable .momwrap svg{width:44px}
+  td.mexpc{width:40px;text-align:right}
+  .ptable .pn{flex-wrap:nowrap;min-width:0}
+  .ptable .pname{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:104px;display:inline-block}
+  .ptable .pn>svg{width:14px}
+  .ptable .pn{gap:4px}
+  .ptable td,.ptable th{padding-left:3px;padding-right:3px}
+  .mgrid{gap:4px 10px}
+  .mi{font-size:12px}
+  .ptable .badge{display:none}
+  .dskl{display:none}.mobl{display:inline}
+  .sigcols,.twlog{grid-template-columns:minmax(0,1fr)!important;gap:14px}
+  .sig{grid-template-columns:52px 64px 70px 1fr;column-gap:8px;font-size:13px}
+  tr.twrow .twinfo{padding:12px 4px 16px}
+  tr.twrow td{max-width:0}
+  .btable .iol{display:none}
+  .btable .iob{padding:0 6px}
+  .addnw>span:first-child{display:none}
+  tr.hrowx .hsub{padding-left:14px;gap:6px}
+  .haddw{padding-left:14px}
+  .hname .field{width:150px}
+  tr.hrowx .tkin{width:70px;padding:0 5px}
+  tr.hrowx .wbox .field{width:44px}
+  tr.hrowx .hsub .sub{display:none}
+  .hexp-sp{width:0}
+  .btable th .sort{white-space:normal;padding:4px 0;font-size:11px;letter-spacing:.04em}
+  .btable td,.btable th{padding-left:3px;padding-right:3px}
+  .btable .tkin{width:62px;padding:0 6px}
+  .btable .rsw{width:22px}
+  .btable .wbox .field{width:44px;padding:0 6px}
+  .btable .nmin{width:84px}
+  .btable td.wcell,.btable th.wcell{padding-left:3px}
+  .btable .momwrap{gap:4px}.btable .momwrap .v{min-width:48px}
+  td.mexpc{width:36px}
+  .btable .momwrap svg{width:34px}
+  .btable tfoot td.wcell{white-space:normal;line-height:1.1}
+  .btable tfoot td.wcell .sub{font-size:11px!important}
+}
+.mobl{display:none}
+@media (max-width:520px){.picker .seg{flex-wrap:nowrap;gap:2px}.picker .seg button{padding:0 6px;font-size:13px;min-height:32px}.builder.open #bSub{display:none!important}.bacts{gap:8px;padding:0 16px 10px}}
+
+.pname{border:0;background:none;padding:2px 0;font:inherit;font-weight:600;color:var(--ink);cursor:help;text-decoration:underline dotted var(--faint);text-underline-offset:4px;text-align:left}
+.pname:hover,.pname[aria-expanded="true"]{text-decoration-color:var(--ink)}
+.hbar{display:flex;height:8px;border-radius:4px;overflow:hidden;gap:2px;margin:4px 0 6px}
+.hb{display:block;height:100%}
+.hleg{display:flex;flex-wrap:wrap;gap:10px;font-size:12px;color:var(--muted);margin-bottom:8px}
+.hli{display:inline-flex;align-items:center;gap:5px}
+.hd{width:9px;height:9px;border-radius:3px}
+.hrows{display:flex;flex-direction:column;gap:4px}
+.hrow{display:grid;grid-template-columns:62px minmax(0,1fr) auto;gap:8px;align-items:center;padding:5px 9px;border-radius:7px;font-size:13px}
+.hrow .hn{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.85}
+.hrow.ty-Equity{background:var(--tyEqBg);color:var(--tyEqFg)}.hrow.ty-Bond{background:var(--tyBdBg);color:var(--tyBdFg)}.hrow.ty-Cash{background:var(--tyCaBg);color:var(--tyCaFg);box-shadow:inset 0 0 0 1.5px var(--tyCaLine)}.hrow.ty-Other{background:var(--tyOtBg);color:var(--tyOtFg)}
+.hb.ty-Equity,.hd.ty-Equity{background:var(--tyEq)}.hb.ty-Bond,.hd.ty-Bond{background:var(--tyBd)}.hb.ty-Cash,.hd.ty-Cash{background:var(--tyCa)}.hb.ty-Other,.hd.ty-Other{background:var(--tyOt)}
+
+.lbgroup{display:inline-flex;align-items:center;gap:8px}
+.lbgroup .cap{display:inline-flex;align-items:center;gap:2px;white-space:nowrap}
+
+.picker{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.daysbox{display:inline-flex;align-items:center;gap:6px;font-size:14px;color:var(--ink2);padding:4px 10px 4px 12px;background:var(--pill);border-radius:10px;min-height:44px}
+.daysbox .field{color:var(--ink);background:var(--panel);width:62px;height:32px;padding:0 8px;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:14px}
+.daysbox.on{background:var(--segOn,var(--btn));color:var(--segOnFg,var(--btnInk));box-shadow:inset 0 0 0 1px var(--segOnLine,transparent)}
+.pctrls .daysbox{min-height:40px}
+.picker .seg{flex-wrap:wrap;max-width:100%}
+@media (max-width:600px){.picker .seg button{padding:0 9px;min-height:34px}.picker{gap:8px}}
+.segdiv{width:1px;align-self:stretch;margin:6px 4px;background:var(--inputLine)}
+.seg .wbtn{padding:0 10px}
+.vinfo{align-self:center;margin-left:-4px}
+
+thead tr.grow th{border-bottom:0;padding-bottom:0}
+th.grp{padding:4px 6px 0}
+th.grp .gl{display:flex;align-items:center;justify-content:center;gap:2px;border-bottom:2px solid var(--line);padding-bottom:3px}
+
+/* compact vertical rhythm so the portfolios panel fits a laptop screen */
+.wrap{padding-block:12px 28px;gap:14px}
+header.top{padding-bottom:10px;align-items:center}
+header.top .eyebrow{display:none}
+h1{font-size:clamp(28px,3vw,36px)}
+.panel{padding:18px 24px}
+.panel h2,.bhead h2{font-size:22px}
+.bhead{padding:12px 24px}
+.bicon{width:30px;height:30px}
+.bchev{width:32px;height:32px}
+.ptop{align-items:center}
+.pctrls{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.pctrls .seg button{min-height:32px}
+#portfolios{gap:10px}
+#portfolios .pleft{gap:4px}
+.prail{padding:12px 14px;gap:4px}
+.plrow{min-height:32px}
+.plrow.bench{min-height:36px;margin-top:4px}
+.prail>.sub{font-size:12px}
+.ptable td{padding:5px 6px}
+.ptable .edit,.ptable .delbtn{height:32px}
+#tableFoot{font-size:12px}
+
+.panel.builder{padding:0}
+thead tr.grow th{padding-top:0}
+.ptable th{padding:4px 6px}
+.ptable td{padding:4px 6px}
+.ptable .edit,.ptable .delbtn{height:30px}
+.plrow{min-height:30px}
+
+@media (min-width:1001px) and (max-height:920px){
+  .wrap{padding-block:10px 20px;gap:12px}
+  header.top{padding-bottom:8px;gap:10px}
+  header.top .eyebrow{display:none}
+  h1{font-size:28px}
+  .btn{height:38px}
+  .bhead{padding:8px 20px}
+  .bhead .sub{display:none}
+  .panel{padding:14px 20px}
+  #portfolios{gap:8px}
+  .plrow{min-height:27px}
+  .prail{padding:10px 12px}
+  .ptable td{padding:3px 6px}
+  .ptable .edit,.ptable .delbtn{height:28px}
+  #tableFoot{display:none}
+}
+
+.ptable{min-width:880px}
+@media (max-width:1200px){.momwrap svg{width:56px}.ptable th,.ptable td{padding-left:3px;padding-right:3px}.momwrap{gap:6px}}
+
+.seg button[aria-pressed="true"]{background:var(--segOn);color:var(--segOnFg);box-shadow:inset 0 0 0 1px var(--segOnLine)}
+
+.btable tfoot td{border-top:2px solid var(--line);border-bottom:0;padding-top:10px}
+.mixrow td.num{font-size:15px}
+@media (min-width:1200px){.btable th.bm{white-space:nowrap}}
+.builder.open .bhead{padding-top:14px;padding-bottom:14px}
+
+footer{font-size:13px;color:var(--muted);line-height:1.55;border-top:1px solid var(--line);padding-top:16px;display:flex;flex-direction:column;gap:6px}
+footer .srcs{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+footer .src{font-family:"IBM Plex Mono",monospace;font-size:12px;padding:3px 8px;border-radius:6px;background:var(--panel2);border:1px solid var(--line)}
+.linkbtn{border:0;background:none;padding:6px 0;color:var(--accent);text-decoration:underline;font-size:13px}
+.toast .tlink{border:0;background:none;color:inherit;font:inherit;font-weight:700;text-decoration:underline;margin-left:10px;padding:0;cursor:pointer}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--btn);color:var(--btnInk);padding:10px 16px;border-radius:8px;font-size:14px;z-index:40}
+.drophint{position:fixed;inset:0;z-index:50;background:color-mix(in srgb,var(--bg) 80%,transparent);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:600;border:3px dashed var(--accent)}
+
+@media (max-width:1180px){
+  .lrow{grid-template-columns:30px minmax(150px,220px) minmax(0,1fr) 150px 72px 72px 60px 96px}
+  .c-spark{display:none!important}
+  .bar{width:150px}.bar .z{left:75px}
+}
+@media (max-width:900px){
+  .editor,.twinfo{grid-template-columns:minmax(0,1fr);padding-left:12px}
+  .lrow{grid-template-columns:26px minmax(0,1fr) 72px 64px 92px}
+  .c-holds,.c-bar,.c-sharpe{display:none!important}
+}
+@media (max-width:560px){
+  .panel{padding:18px 16px}
+  .lrow{grid-template-columns:22px minmax(0,1fr) 66px 84px;column-gap:8px}
+  .c-10y,.badge{display:none!important}
+  .erow{grid-template-columns:84px minmax(0,1fr) 84px 32px}
+  .erow .c-emom{display:none}
+  .controls{gap:10px}
+  .asof{align-items:flex-start}
+  .tip{width:240px}
+}
+@media (prefers-reduced-motion:reduce){.edit svg{transition:none}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <div class="eyebrow">ETF baskets vs. the 12% Solution</div>
+      <h1>Portfolio Lab</h1>
+    </div>
+    <div class="controls">
+      <div class="asof"><span id="asofLabel">Prices through</span><strong id="asofDate">—</strong></div>
+      <input type="file" id="fileInput" accept=".csv,text/csv,text/plain" multiple hidden><input type="file" id="pfFile" accept=".csv,text/csv,text/plain" hidden>
+    </div>
+  </header>
+
+  <div class="banner" id="banner" hidden></div>
+
+  <section class="panel builder" id="builder" aria-labelledby="bTitle">
+<div class="bheadwrap">
+    <button type="button" class="bhead" id="bToggle" aria-expanded="false" aria-controls="bBody">
+      <span class="bicon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+      <span style="display:flex;flex-direction:column;gap:2px;min-width:0;flex:1"><h2 id="bTitle">Build a portfolio</h2><span class="sub" id="bSub"></span></span>
+      <span class="bchev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
+    </button>
+    <div class="bacts" id="bActs"><button type="button" class="iob" data-iomodal="b" aria-haspopup="dialog" title="Import or export"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4v13"/><path d="m3 13 4 4 4-4"/><path d="M17 20V7"/><path d="m21 11-4-4-4 4"/></svg><span class="iol">Import / Export</span></button><div class="picker"><div class="seg" role="group" aria-label="Comparison period" id="bPeriod"></div><label class="daysbox" for="bDays"><span>Last</span><input class="field" id="bDays" data-days="b" inputmode="numeric" autocomplete="off" placeholder="#" maxlength="4"><span>days</span></label><button type="button" class="info vinfo" data-info="period" aria-label="How the time period works"></button></div><span class="bsep" aria-hidden="true"></span><span class="sub" id="bHint"></span><button type="button" class="linkbtn" id="bClear">Clear</button><button type="button" class="btn sm primary" id="bSave">Add to my portfolios</button></div></div>
+    <div id="bBody" hidden>
+      <div class="bgrid">
+        <div class="bleft">
+          
+          <div class="pgrid bcgrid"><div class="chartbox" id="bChartbox"><svg id="bChart" role="img" aria-label="ETF comparison"></svg><div class="tip" id="bTip" hidden></div></div><aside class="prail" aria-label="Chart lines"><span class="cap" id="bListCap"></span><span class="sub" id="bChartCap" style="font-size:12px;margin:-2px 0 4px"></span><div id="bList" class="plist"></div></aside></div>
+          <div class="tablewrap"><table id="bTable" class="btable"></table></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" aria-labelledby="listTitle" id="portfolios">
+    <div class="phead ptop">
+      <h2 id="listTitle">Your portfolios</h2><span class="sub" id="listSub" hidden></span>
+      <div class="pctrls"><button type="button" class="iob" data-iomodal="p" aria-haspopup="dialog" title="Import or export"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4v13"/><path d="m3 13 4 4 4-4"/><path d="M17 20V7"/><path d="m21 11-4-4-4 4"/></svg><span class="iol">Import / Export</span></button><div class="picker"><div class="seg" role="group" aria-label="Time period" id="pPeriod"></div><label class="daysbox" for="pDays"><span>Last</span><input class="field" id="pDays" data-days="p" inputmode="numeric" autocomplete="off" placeholder="#" maxlength="4"><span>days</span></label><button type="button" class="info vinfo" data-info="period" aria-label="How the time period works"></button></div></div>
+    </div>
+    <div class="pgrid">
+      <div class="pleft">
+        <span class="cap" id="chartTitle" hidden>Cumulative %</span><span class="sub" id="chartSub"></span>
+        <div class="chartbox" id="chartbox"><svg id="chart" role="img" aria-label="Portfolio chart"></svg><div class="tip" id="tip" hidden></div></div>
+      </div>
+      <aside class="prail" aria-label="Chart lines">
+        <span class="cap" id="pListCap" title="Click a row to hide or show its line">Momentum now</span>
+        <div id="pList" class="plist"></div>
+      </aside>
+    </div>
+    <div class="tablewrap"><table id="ptable" class="ptable"></table></div>
+    <span class="sub" id="tableFoot"></span>
+  </section>
+
+  <footer id="impFoot" hidden>
+    <div class="srcs"><span>Imported prices:</span><span id="sources"></span><button type="button" class="linkbtn" id="clearImports">Remove imported files</button></div>
+  </footer>
+</div>
+<div class="pop" id="pop" role="tooltip" hidden></div>
+<div class="modal" id="ioModal" hidden><div class="mback" data-ioclose="1"></div><div class="mpanel" role="dialog" aria-modal="true" aria-labelledby="ioTitle"><div class="mhead"><h3 id="ioTitle">Import / Export</h3><button type="button" class="mclose" data-ioclose="1" aria-label="Close"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div><div id="ioBody"></div></div></div>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+<div class="drophint" id="drophint" hidden>Drop CSV files to import prices</div>
+
+<script>
+let UNI={};const LOADING=new Set(),NODATA=new Set(); /* UNI: ticker -> name from data/universe.json */
+const NAMES = {SPY:'S&P 500',QQQ:'Nasdaq 100',MDY:'S&P MidCap 400',IWM:'Russell 2000',EFA:'Developed intl. stocks',VTI:'Total US stock market',VEA:'Developed intl. stocks',VWO:'Emerging markets',TLT:'20+ yr Treasuries',IEF:'7–10 yr Treasuries',JNK:'High-yield corporate bonds',HYG:'High-yield corporate bonds',AGG:'US aggregate bonds',BND:'Total US bond market',LQD:'Investment-grade corporate bonds',TIP:'Inflation-protected Treasuries',SHY:'1–3 yr Treasuries',GLD:'Gold',XLK:'Technology Select Sector',FCNTX:'Fidelity Contrafund (mutual fund)',VT:'Total world stocks',VXUS:'Total intl. stocks ex-US',IJR:'S&P SmallCap 600',ACWI:'MSCI All Country World',ACWX:'MSCI All Country World ex-US',IEUR:'Core MSCI Europe',IEMG:'Core MSCI Emerging Markets'};
+const SAMPLE = [
+  {name:'Tech & growth',rows:[['XLK',25],['QQQ',25],['SPY',25],['FCNTX',25]]},
+  {name:'Small & mid',rows:[['MDY',35],['IJR',35],['IWM',30]]},
+  {name:'Global',rows:[['VTI',45],['VXUS',40],['BND',15]]},
+  {name:'All-World',rows:[['VT',80],['BND',20]]}
+];
+const COLORS = ['var(--p1)','var(--p2)','var(--p3)','var(--p4)','var(--p5)'];
+const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const MAXP = 5, MAXETF = 15;
+const PRESETS=[['1M',1],['3M',3],['6M',6],['YTD',0],['1Y',12],['3Y',36],['5Y',60],['10Y',120]];
+
+/* ---------- info copy ---------- */
+const INFO = {
+  period:{t:()=>'Time period',sec:()=>[['Presets','1M to 10Y go back that many months or years from the latest price. YTD starts at the last close of the prior year.'],['Last … days','Type any number of calendar days, like 30 or 90, and press Enter. It unselects the preset buttons; clicking a preset clears the box.'],['What it changes','The chart, the list beside it and the return column in the table all use this period. The 1Y, 3Y and 5Y columns and the risk stats stay fixed.']]},
+  bret:{t:()=>selLabel(S.b.sel,'adj')+' return',w:()=>`The total gain or loss over the period picked above the chart (${selLabel(S.b.sel,'span')}), from ${dayLabel(selStart(S.b.sel))} to ${dayLabel(D.last)}.`,h:()=>'Each ETF’s price change over the period, dividends included. The Portfolio total row uses your percentages, bought at the start and held without rebalancing.',y:()=>'The little line shows the path over the same period, so you can tell a steady climb from a late spike or a fade from a high.'},
+  ret:{t:L=>selLabel(L,'adj')+' return',w:L=>`The total gain or loss over the period picked above (${selLabel(L,'span')}), from ${dayLabel(selStart(L))} to ${dayLabel(D.last)}.`,h:()=>'Each ETF’s price change over the period (dividends included), weighted by your percentages and held without rebalancing. For the 12% Solution it is the strategy’s actual result.',y:()=>'The little line shows the path over the same period, so you can tell a steady climb from a late spike or a fade from a high.'},
+  y10:{t:()=>'Annual return (10 years)',w:()=>'The average yearly growth if you had bought the portfolio at your percentages 10 years ago and held it.',h:()=>'(Ending value ÷ starting value) raised to the power of 1/10, minus 1. This is often called CAGR, the compound annual growth rate.',y:()=>'It is the simplest "how much did it make" number, and small differences compound. $10,000 growing 10% a year becomes about $25,900 in 10 years; at 12% it becomes about $31,100.'},
+  y1:{t:()=>'1-year return',w:()=>'The total gain or loss if you had bought 12 months ago.',h:()=>'Value today ÷ value one year ago, minus 1.',y:()=>'Shows whether the long-term record is holding up lately.'},
+  y3:{t:()=>'3-year return (per year)',w:()=>'The average yearly return if you had bought 3 years ago.',h:()=>'Same compound-growth math as the 10-year number, over 3 years.',y:()=>'A middle view: long enough to smooth out a single bad quarter, short enough to reflect recent markets.'},
+  y5:{t:()=>'5-year return (per year)',w:()=>'The average yearly return if you had bought 5 years ago.',h:()=>'Same compound-growth math as the 10-year number, over 5 years.',y:()=>'Covers at least one full up-and-down cycle in most periods, so it is harder for luck to carry the number.'},
+  sharpe:{t:()=>'Sharpe ratio',w:()=>'How much return you got for the risk you took. Think of it as a "smoothness score" for your returns.',h:()=>'Take the average monthly return minus what SHY (near-cash) earned, then divide by how much monthly returns bounced around. Scale it to a year. Uses month-end prices.',y:()=>'Two portfolios can both make 10% a year: one with gentle ups and downs, the other on a roller coaster. The higher Sharpe is the smoother ride for the same payoff. Rough guide: under 0.5 is weak, 0.5 to 1 is good, above 1 is very good.'},
+  dd:{t:()=>'Max drawdown',w:()=>'The worst drop from a high point to a low point before it recovered.',h:()=>'Track the highest daily close reached so far; the biggest percentage fall below that high is the max drawdown.',y:()=>'It answers "how much pain would I have had to sit through?" A −30% drawdown means $100,000 fell to $70,000 at some point. This is the number that makes people panic-sell at the bottom.'},
+  vol:{t:()=>'Volatility',w:()=>'How much the portfolio’s value swings around from month to month.',h:()=>'The standard deviation of monthly returns, scaled up to a year.',y:()=>'Higher volatility means bigger swings in both directions. In about two out of three years, the return lands within one volatility of the average. Lower is calmer.'},
+  worst:{t:()=>'Worst calendar year',w:()=>'The worst January-to-December return in the last 10 years, and which year it was.',h:()=>'The return from each December 31 to the next; the lowest one is shown.',y:()=>'A gut check: could you have held on through that year without selling?'},
+  _views:{t:()=>'Cumulative % and Momentum',sec:L=>[['Cumulative %','The total return from the start of the period you pick (3M to 10Y) to today. Every line starts at 0%, so the highest line made the most.'],['Momentum',`At each month-end, the return over the previous ${L} months. Pick 3, 6 or 12 months right next to Momentum. The period buttons only set how far back the chart goes.`],['Which to use','Cumulative % shows who came out ahead. Momentum shows who is gaining or losing strength right now, which is what the 12% Solution trades on (it uses 3 months).']]},
+  returns:{t:()=>'Returns',sec:()=>[['What they show','How much it gained or lost if you had bought at the start of each period and held to today, dividends included.'],['How to read them','3M, 6M and 1Y are total returns. 3Y, 5Y and 10Y are average returns per year, so a long period compares fairly with a short one.'],['Why it matters','Compare recent strength (3M to 1Y) with the long-term record (3Y and up). A fund that is strong on both is more convincing than one strong on only one.']]},
+  holds:{t:()=>'Holds',w:()=>'The ETFs in each portfolio and their target percentages.',h:()=>'For the 12% Solution, what it holds this month based on the last month-end.',y:()=>'Open a portfolio with Edit to change its ETFs or percentages.'}
+};
+
+/* ---------- storage ---------- */
+function load(k,d){try{const v=localStorage.getItem('pl:'+k);return v==null?d:JSON.parse(v)}catch(e){return d}}
+function save(k,v){try{localStorage.setItem('pl:'+k,JSON.stringify(v))}catch(e){}}
+
+/* ---------- CSV ---------- */
+function parseCSV(text){const rows=[];let row=[],cur='',q=false;
+  for(let i=0;i<text.length;i++){const ch=text[i];
+    if(q){if(ch==='"'){if(text[i+1]==='"'){cur+='"';i++}else q=false}else cur+=ch}
+    else if(ch==='"')q=true;else if(ch===','||ch==='\t'||ch===';'){row.push(cur);cur=''}
+    else if(ch==='\n'||ch==='\r'){if(ch==='\r'&&text[i+1]==='\n')i++;row.push(cur);rows.push(row);row=[];cur=''}else cur+=ch}
+  if(cur!==''||row.length){row.push(cur);rows.push(row)}return rows.filter(r=>r.some(c=>c.trim()!==''))}
+function parseDate(s){s=String(s).trim();let m;
+  if((m=s.match(/^(\d{4})[-\/.](\d{1,2})[-\/.](\d{1,2})/)))return{y:+m[1],mo:+m[2],d:+m[3]};
+  if((m=s.match(/^(\d{4})[-\/](\d{1,2})$/)))return{y:+m[1],mo:+m[2],d:null};
+  if((m=s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})/))){let y=+m[3];if(y<100)y+=y<70?2000:1900;return{y,mo:+m[1],d:+m[2]}}
+  const t=Date.parse(s);if(!isNaN(t)){const d=new Date(t);return{y:d.getFullYear(),mo:d.getMonth()+1,d:d.getDate()}}return null}
+function toNum(s){s=String(s??'').replace(/[$,\s"]/g,'');if(!s||/^(null|nan|-|n\/a)$/i.test(s))return null;const v=Number(s);return isFinite(v)&&v>0?v:null}
+function cleanTicker(h){const m=String(h).toUpperCase().match(/[A-Z][A-Z0-9.]{0,7}/);return m?m[0].replace(/\.$/,''):null}
+const ymKey=(y,mo)=>y+'-'+String(mo).padStart(2,'0');
+const dKey=(y,mo,d)=>ymKey(y,mo)+'-'+String(d).padStart(2,'0');
+function readFile(text,filename){
+  const rows=parseCSV(text);if(rows.length<2)throw new Error(filename+': the file is empty or only has a header row.');
+  let hi=rows.findIndex(r=>r.some(c=>/^\s*(date|month|time|period)/i.test(c)));if(hi<0)hi=0;
+  const head=rows[hi].map(c=>c.trim());let di=head.findIndex(c=>/^(date|month|time|period)/i.test(c));
+  if(di<0){if(parseDate(rows[hi+1]?.[0]||''))di=0;else throw new Error(filename+": couldn't find a date column. Name the first column Date.")}
+  const symI=head.findIndex(c=>/^(symbol|ticker)$/i.test(c)),adjI=head.findIndex(c=>/^adj\.?\s*close/i.test(c)),closeI=head.findIndex(c=>/^close\*?$/i.test(c)||/^(price|last)$/i.test(c));
+  const pick=adjI>=0?adjI:closeI;const raw={};
+  const put=(t,ds,rv)=>{const dt=parseDate(ds),v=toNum(rv);if(!t||!dt||v==null)return;(raw[t]=raw[t]||[]).push({...dt,v})};
+  const body=rows.slice(hi+1);
+  if(symI>=0&&pick>=0)body.forEach(r=>put(cleanTicker(r[symI]),r[di],r[pick]));
+  else if(pick>=0){const t=cleanTicker(filename.replace(/\.[^.]+$/,'').replace(/\s*\(\d+\)$/,''));if(!t)throw new Error(filename+': this looks like a single-ticker file, but the file name is not a ticker. Rename it like SPY.csv.');body.forEach(r=>put(t,r[di],r[pick]))}
+  else{const cols=head.map((h,i)=>i===di?null:cleanTicker(h));body.forEach(r=>cols.forEach((t,i)=>{if(t)put(t,r[di],r[i])}))}
+  if(!Object.keys(raw).length)throw new Error(filename+': no price columns found.');
+  const out={};for(const t in raw)out[t]=normObs(raw[t]);return out}
+/* daily files keep their dates; monthly files (one row a month) are placed on each month's last weekday */
+function normObs(obs){const out={};const withDay=obs.filter(o=>o.d!=null).map(o=>Date.UTC(o.y,o.mo-1,o.d)).sort((a,b)=>a-b);
+  let monthly=withDay.length<obs.length*0.5;if(!monthly&&withDay.length>2){const gaps=[];for(let i=1;i<withDay.length;i++)gaps.push((withDay[i]-withDay[i-1])/864e5);gaps.sort((a,b)=>a-b);monthly=gaps[gaps.length>>1]>=20}
+  for(const o of obs){const k=monthly||o.d==null?dKey(o.y,o.mo,lastWeekday(o.y,o.mo)):dKey(o.y,o.mo,o.d);out[k]=o.v}return out}
+
+/* ---------- dataset ---------- */
+let BUILTIN=null,IMPORTED=upgradeImported(load('imported',null)),IMPORT_FILES=load('importFiles',[]),DS=null;
+function lastWeekday(y,mo){const d=new Date(y,mo,0);while(d.getDay()===0||d.getDay()===6)d.setDate(d.getDate()-1);return d.getDate()}
+/* old saved imports were monthly {ym:{v,d}}; convert to {date:v} */
+function upgradeImported(o){if(!o)return o;const out={};for(const t in o){const s=o[t],n={};for(const k in s){const x=s[k];if(x&&typeof x==='object'){const d=x.d||{};const [y,mo]=k.split('-').map(Number);n[dKey(y,mo,d.d||lastWeekday(y,mo))]=x.v}else n[k]=x}out[t]=n}return out}
+let D=null;
+function buildDataset(){
+  const merged=Object.assign({},BUILTIN,IMPORTED||{});const ds=new Set();Object.values(merged).forEach(s=>Object.keys(s).forEach(k=>ds.add(k)));
+  const days=[...ds].sort();const n=days.length;const Pd={};
+  Object.keys(merged).forEach(t=>{const s=merged[t],a=new Array(n).fill(null);let v=null;for(let i=0;i<n;i++){const x=s[days[i]];if(x!=null)v=x;a[i]=v}Pd[t]=a});
+  D={days,P:Pd,n,last:n-1,ms:days.map(k=>Date.UTC(+k.slice(0,4),+k.slice(5,7)-1,+k.slice(8,10)))};
+  // monthly view (last trading day of each month) for the 12% Solution and Sharpe / worst-year stats
+  const months=[],me=[],dm=new Array(n);for(let i=0;i<n;i++){const ym=days[i].slice(0,7);if(!months.length||months[months.length-1]!==ym){months.push(ym);me.push(i)}else me[me.length-1]=i;dm[i]=months.length-1}
+  const P={};Object.keys(Pd).forEach(t=>{P[t]=me.map(i=>Pd[t][i])});
+  const lk=days[n-1],[ly,lm,ld]=lk.split('-').map(Number);const partial=ld<lastWeekday(ly,lm);
+  DS={months,P,me,dm,tickers:Object.keys(merged).sort(),n:months.length,last:months.length-1,partial,lastDay:ld};
+}
+function dLabel(i){const [y,m]=DS.months[i].split('-').map(Number);const d=(i===DS.last&&DS.lastDay)?DS.lastDay:+D.days[DS.me[i]].slice(8);return MON[m-1]+' '+d+', '+y}
+function dayLabel(i){const k=D.days[i];return MON[+k.slice(5,7)-1]+' '+(+k.slice(8))+', '+k.slice(0,4)}
+function mShort(i){const [y,m]=DS.months[i].split('-').map(Number);return MON[m-1]+' '+y}
+
+/* ---------- state ---------- */
+let uid=load('uid',10);
+const S={
+  pfs:load('pfs2',null)||SAMPLE.map((p,i)=>({id:'p'+(i+1),name:p.name,color:i,rows:p.rows.map(([t,w])=>({t,w}))})),
+  sel:load('sel',null),hidden:load('hidden2',null)||(()=>{const h=load('hidden',{});delete h.spy;return h})(),
+  sortKey:load('sortKey','ret'),sortDir:load('sortDir',-1),
+  hover:null,bDraft:'',twOpen:false,delArm:null,pedit:null,paDraft:{},
+  b:load('b',null)
+};
+{const okRows=r=>Array.isArray(r)?r.filter(x=>x&&typeof x.t==='string'&&x.t).map(x=>({...x,t:String(x.t).toUpperCase(),w:x.w===''?'':(Number(x.w)||0)})):[];
+  if(!Array.isArray(S.pfs))S.pfs=null;else S.pfs=S.pfs.filter(p=>p&&typeof p==='object').slice(0,5).map((p,i)=>({id:String(p.id||('p'+(900+i))),name:String(p.name||'Portfolio '+(i+1)),color:Number.isInteger(p.color)&&p.color>=0&&p.color<5?p.color:i%5,rows:okRows(p.rows).map(x=>({t:x.t,w:Number(x.w)||0}))}));
+  if(!S.pfs)S.pfs=SAMPLE.map((p,i)=>({id:'p'+(i+1),name:p.name,color:i,rows:p.rows.map(([t,w])=>({t,w}))}));
+  if(!S.b||typeof S.b!=='object'||Array.isArray(S.b))S.b=null;else{S.b.rows=okRows(S.b.rows).slice(0,15).map((x,j)=>({...x,c:Number.isInteger(x.c)?x.c:j}));S.b.name=typeof S.b.name==='string'?S.b.name:''}
+  if(!S.hidden||typeof S.hidden!=='object')S.hidden={};if(![-1,1].includes(S.sortDir))S.sortDir=-1;
+  if(!['ret','m1','m3','m6','y1','y3','y5','sharpe','dd','worst'].includes(S.sortKey))S.sortKey='ret';if(!Number.isFinite(uid))uid=10;uid=Math.max(uid,...S.pfs.map(p=>parseInt(String(p.id).replace(/\D/g,''))||0));
+  S.sel=validSel(S.sel,{p:'YTD'});
+  {const seen=new Set();S.pfs.forEach(p=>{if(seen.has(p.id))p.id='p'+(++uid);seen.add(p.id)})}}
+if(!S.b)S.b={rows:[{t:'SPY',w:'',c:0},{t:'QQQ',w:'',c:1},{t:'XLK',w:'',c:2}],name:'',period:'1Y',open:S.pfs.length===0,editing:null};
+if(S.b.editing&&!S.pfs.some(p=>p.id===S.b.editing))S.b.editing=null;
+if(window.innerWidth<=700)S.b.open=true;
+S.b.sel=validSel(S.b.sel,{p:'YTD'});delete S.b.period;delete S.b.view;
+function persist(){save('pfs2',S.pfs);save('sel',S.sel);save('hidden2',S.hidden);save('sortKey',S.sortKey);save('sortDir',S.sortDir);save('b',S.b);save('uid',uid);if(DS&&needTickers().length)setTimeout(ensureData,0)}
+
+/* ---------- format ---------- */
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const sg=(v,d=1)=>v==null||!isFinite(v)?'—':(v>0?'+':v<0?'−':'')+Math.abs(v*100).toFixed(d)+'%';
+const un=(v,d=1)=>v==null||!isFinite(v)?'—':(v<0?'−':'')+Math.abs(v*100).toFixed(d)+'%';
+const money=v=>'$'+Math.round(v).toLocaleString('en-US');
+const cls=v=>v==null?'mut':v<0?'neg':'pos';
+const r1=v=>Math.round(v*10)/10;
+const ICON_I='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 7.6v.01"/></svg>';
+const infoBtn=(key,label)=>`<button type="button" class="info" data-info="${key}" aria-label="What is ${esc(label)}?">${ICON_I}</button>`;
+const swatch=(color,dash,w=22)=>`<svg width="${w}" height="10" viewBox="0 0 ${w} 10" aria-hidden="true" style="flex:none"><line x1="1" y1="5" x2="${w-1}" y2="5" stroke="${color}" stroke-width="3" ${dash?`stroke-dasharray="${dash}"`:''} stroke-linecap="round"/></svg>`;
+
+/* ---------- engine ---------- */
+const HAS=t=>!!DS.P[t];
+function px(t,i){const p=DS.P[t];return p?p[i]:null}
+function ret(t,i,L){if(i-L<0)return null;const a=px(t,i),b=px(t,i-L);return a!=null&&b!=null?a/b-1:null}
+function weights(p){const rows=p.rows.filter(r=>(Number(r.w)||0)>0);const tot=rows.reduce((a,r)=>a+Number(r.w),0);return tot>0?rows.map(r=>({t:r.t,w:Number(r.w)/tot})):[]}
+function basketMom(p,i,L){const ws=weights(p);if(!ws.length)return null;let s=0;for(const x of ws){const v=ret(x.t,i,L);if(v==null)return null;s+=x.w*v}return s}
+function firstCommon(ts){for(let i=0;i<DS.n;i++){if(ts.every(t=>px(t,i)!=null))return i}return null}
+/* buy-and-hold value, bought at index s, normalized to 1 */
+function bhSeries(p,s){const ws=weights(p);if(!ws.length)return null;if(ws.some(x=>px(x.t,s)==null))return null;
+  const out=new Array(DS.n).fill(null);for(let i=s;i<DS.n;i++){let v=0,ok=true;for(const x of ws){const a=px(x.t,i);if(a==null){ok=false;break}v+=x.w*a/px(x.t,s)}out[i]=ok?v:null}return out}
+function bhRet(p,s){const ws=weights(p);if(!ws.length||s<0)return null;let v=0;for(const x of ws){const a=px(x.t,DS.last),b=px(x.t,s);if(a==null||b==null)return null;v+=x.w*a/b}return v-1}
+/* ---- daily engine ---- */
+function pxd(t,i){const p=D.P[t];return p?p[i]:null}
+function dFirstCommon(ts){for(let i=0;i<D.n;i++){if(ts.every(t=>pxd(t,i)!=null))return i}return null}
+function bhd(p,s){const ws=weights(p);if(!ws.length||s==null)return null;if(ws.some(x=>pxd(x.t,s)==null))return null;
+  const out=new Array(D.n).fill(null);for(let i=s;i<D.n;i++){let v=0,ok=true;for(const x of ws){const a=pxd(x.t,i);if(a==null){ok=false;break}v+=x.w*a/pxd(x.t,s)}out[i]=ok?v:null}return out}
+function bhdRet(p,s){const ws=weights(p);if(!ws.length||s==null||s<0)return null;let v=0;for(const x of ws){const a=pxd(x.t,D.last),b=pxd(x.t,s);if(a==null||b==null)return null;v+=x.w*a/b}return v-1}
+function dayOnOrBefore(ms){let lo=0,hi=D.n-1;if(ms<D.ms[0])return -1;while(lo<hi){const m=(lo+hi+1)>>1;if(D.ms[m]<=ms)lo=m;else hi=m-1}return lo}
+function monthsBack(m){const d=new Date(D.ms[D.last]);const y=d.getUTCFullYear(),mo=d.getUTCMonth()-m,day=d.getUTCDate();const t=new Date(Date.UTC(y,mo,1));const dim=new Date(Date.UTC(t.getUTCFullYear(),t.getUTCMonth()+1,0)).getUTCDate();return Date.UTC(t.getUTCFullYear(),t.getUTCMonth(),Math.min(day,dim))}
+/* start day index for a window: {p:'1Y'} preset or {d:30} days */
+function selStart(sel){let ms;if(sel.d)ms=D.ms[D.last]-sel.d*864e5;else if(sel.p==='YTD')ms=Date.UTC(new Date(D.ms[D.last]).getUTCFullYear()-1,11,31);else ms=monthsBack((PRESETS.find(x=>x[0]===sel.p)||PRESETS[4])[1]);
+  const i=dayOnOrBefore(ms);return Math.max(0,i)}
+function selLabel(sel,form){ // form: 'adj' (1-year), 'span' (year), 'short' (1Y)
+  if(sel.d){const n=sel.d;return form==='adj'?n+'-day':form==='span'?n+' day'+(n>1?'s':''):n+'D'}
+  if(sel.p==='YTD')return form==='adj'?'Year-to-date':form==='span'?'year to date':'YTD';
+  const m=(PRESETS.find(x=>x[0]===sel.p)||PRESETS[4])[1];const y=m>=12?m/12:null;
+  if(form==='short')return sel.p;if(form==='adj')return y?y+'-year':m+'-month';return y?(y===1?'year':y+' years'):(m===1?'month':m+' months')}
+function validSel(x,dflt){if(x&&Number.isInteger(x.d)&&x.d>0)return {d:x.d};if(x&&PRESETS.some(p=>p[0]===x.p))return {p:x.p};return dflt}
+/* period return by months back, annualized past a year */
+function periodRetD(getRet,m){const s=selStart({p:({1:'1M',3:'3M',6:'6M',12:'1Y',36:'3Y',60:'5Y',120:'10Y'})[m]});const r=getRet(s);if(r==null)return null;if(m<=12)return r;const yrs=(D.ms[D.last]-D.ms[s])/(365.25*864e5);return Math.pow(1+r,1/yrs)-1}
+function ddDaily(V,s){if(!V||s==null||V[s]==null)return null;let pk=V[s],dd=0;for(let i=s;i<D.n;i++){if(V[i]==null)continue;pk=Math.max(pk,V[i]);dd=Math.min(dd,V[i]/pk-1)}return dd}
+/* 12% Solution: monthly rebalance by book rules, fixed 3-month lookback */
+const TW_EQ=['SPY','QQQ','MDY','IWM'],TW_BD=['TLT','JNK'];
+function twPick(i){const c=ret('SHY',i,3);const best=l=>l.map(t=>[t,ret(t,i,3)]).filter(x=>x[1]!=null).sort((a,b)=>b[1]-a[1])[0];
+  const e=best(TW_EQ),b=best(TW_BD);if(!e||!b||c==null)return null;return {e:e[1]>c?e[0]:'SHY',b:b[0]}}
+let TW=null;
+function computeTW(){const need=TW_EQ.concat(TW_BD,['SHY']);if(!need.every(HAS)){TW=null;return}
+  let s=null;for(let i=3;i<DS.n;i++){if(need.every(t=>px(t,i)!=null&&px(t,i-3)!=null)){s=i;break}}if(s==null){TW=null;return}
+  const V=new Array(DS.n).fill(null);V[s]=1;const picks=[];
+  for(let i=s;i<DS.last;i++){const pk=twPick(i);picks[i]=pk;const r=0.6*(px(pk.e,i+1)/px(pk.e,i)-1)+0.4*(px(pk.b,i+1)/px(pk.b,i)-1);V[i+1]=V[i]*(1+r)}
+  const official=DS.partial?DS.last-1:DS.last;
+  const Vd=new Array(D.n).fill(null);const d0=DS.me[s];Vd[d0]=1;
+  for(let m=s;m<DS.last;m++){const pk=picks[m],b0=DS.me[m],b1=DS.me[m+1];for(let i=b0+1;i<=b1;i++)Vd[i]=Vd[b0]*(0.6*pxd(pk.e,i)/pxd(pk.e,b0)+0.4*pxd(pk.b,i)/pxd(pk.b,b0))}
+  TW={V,Vd,picks,start:s,startD:d0,now:twPick(official),official}}
+function shyMonthly(i){const a=px('SHY',i),b=px('SHY',i-1);return a!=null&&b!=null?a/b-1:0}
+function statsFromValues(V,s){ // V normalized values indexed by month, valid from s to last
+  const last=DS.last;if(s==null||V[s]==null)return null;const n=last-s;if(n<12)return null;
+  const mr=[],ex=[];for(let i=s+1;i<=last;i++){const r=V[i]/V[i-1]-1;mr.push(r);ex.push(r-shyMonthly(i))}
+  const mean=a=>a.reduce((x,y)=>x+y,0)/a.length,sd=a=>{const m=mean(a);return Math.sqrt(a.reduce((x,y)=>x+(y-m)**2,0)/(a.length-1))};
+  let pk=V[s],dd=0;for(let i=s;i<=last;i++){pk=Math.max(pk,V[i]);dd=Math.min(dd,V[i]/pk-1)}
+  let worst=null,worstY=null;for(let i=s+12;i<=last;i++){if(DS.months[i].slice(5)==='12'&&V[i-12]!=null){const r=V[i]/V[i-12]-1;if(worst==null||r<worst){worst=r;worstY=DS.months[i].slice(0,4)}}}
+  return {cagr:Math.pow(V[last]/V[s],12/n)-1,sharpe:mean(ex)/sd(ex)*Math.sqrt(12),dd,vol:sd(mr)*Math.sqrt(12),worst,worstY,years:n/12,start:s}
+}
+const ann=(r,yrs)=>r==null?null:Math.pow(1+r,1/yrs)-1;
+
+/* build the list of series shown everywhere */
+let SERIES=[];
+function buildSeries(){
+  const last=DS.last,s10=Math.max(0,last-120),s10d=selStart({p:'10Y'}),w0=selStart(S.sel);
+  const mk=(o,Vfull,fcD,retFrom)=>{ // fill daily-derived fields
+    o.valueFrom=i0=>{if(fcD==null)return null;const s0=Math.max(i0,fcD);return {s0,V:Vfull?Vfull(s0):null}};
+    o.retFrom=s=>fcD==null||s<fcD?null:retFrom(s);
+    o.ret=o.retFrom(w0);o.m1=periodRetD(o.retFrom,1);o.m3=periodRetD(o.retFrom,3);o.m6=periodRetD(o.retFrom,6);o.y1=periodRetD(o.retFrom,12);o.y3=periodRetD(o.retFrom,36);o.y5=periodRetD(o.retFrom,60);
+    if(o.st&&fcD!=null){const sd=Math.max(s10d,fcD);const V=Vfull(sd);o.st.dd=ddDaily(V,sd)}return o};
+  SERIES=S.pfs.map(p=>{
+    const ws=weights(p),ts=ws.map(x=>x.t);const missing=p.rows.filter(r=>!HAS(r.t)).map(r=>r.t);
+    const fc=ts.length&&!missing.length?firstCommon(ts):null;const fcD=ts.length&&!missing.length?dFirstCommon(ts):null;
+    const s=fc==null?null:Math.max(s10,fc);const V=s==null?null:bhSeries(p,s);
+    const st=V?statsFromValues(V,s):null;
+    return mk({id:p.id,p,name:p.name,color:COLORS[p.color],dash:null,sw:2.5,locked:false,ws,missing,fc,
+      st,y10:st&&st.years>=9.99?st.cagr:null,short:st&&st.years<9.99?st:null,
+      holds:p.rows.length?p.rows.map(r=>r.t+' '+r.w+'%').join(' · '):'No ETFs yet'},s0=>bhd(p,s0),fcD,sd=>bhdRet(p,sd));
+  });
+  if(TW){const V=TW.V,s=Math.max(TW.start,last-120);const st=statsFromValues(V,s);const Vd=TW.Vd;
+    SERIES.push(mk({id:'tw',name:'12% Solution',color:'var(--tw)',dash:'6 4',sw:3,locked:true,st,y10:st&&st.years>=9.99?st.cagr:null,
+      holds:TW.now?TW.now.e+' 60% · '+TW.now.b+' 40%':'—'},()=>Vd,TW.startD,sd=>Vd[sd]==null?null:Vd[D.last]/Vd[sd]-1));}
+  if(HAS('SPY')){const sp={id:'spy',name:'SPY buy & hold',color:'var(--spy)',dash:'2 4',sw:2,ref:true,p:{rows:[{t:'SPY',w:100}]}};
+    const fc=firstCommon(['SPY']);const s=Math.max(fc,last-120);const V=bhSeries(sp.p,s);sp.st=statsFromValues(V,s);sp.y10=sp.st?sp.st.cagr:null;
+    mk(sp,s0=>bhd(sp.p,s0),dFirstCommon(['SPY']),sd=>bhdRet(sp.p,sd));SPYS=sp}else SPYS=null;
+}
+let SPYS=null;
+
+/* ---------- render: builder ---------- */
+const PERIODS=[['3M',3],['6M',6],['1Y',12],['3Y',36],['5Y',60],['10Y',120]];
+const ECOL=['var(--p1)','var(--p2)','var(--p3)','var(--p4)','var(--p5)','var(--p6)'];
+const pLabel=(p,m)=>p;
+function tRetD(t,s){const a=pxd(t,D.last),b=pxd(t,s);return a!=null&&b!=null?a/b-1:null}
+function periodRet(t,m){return periodRetD(s=>tRetD(t,s),m)}
+function ecol(c){return ECOL[(c||0)%6]}
+function edash(c){c=c||0;return c<6?null:c<12?'7 4':'1.5 4'}
+function bFreeColor(){const used=S.b.rows.map(r=>r.c);for(let k=0;k<MAXETF;k++)if(!used.includes(k))return k;return 0}
+function bTotal(){return r1(S.b.rows.reduce((a,r)=>a+(Number(r.w)||0),0))}
+const FINE=!!(window.matchMedia&&matchMedia('(hover:hover) and (pointer:fine)').matches);
+function withFocus(fn){const fid=document.activeElement&&document.activeElement.id;fn();if(fid&&$(fid)&&document.activeElement!==$(fid))$(fid).focus()}
+function mixEq(){return !S.b.rows.some(r=>HAS(r.t)&&(Number(r.w)||0)>0)}
+function mixP(){if(mixEq())return {rows:S.b.rows.filter(r=>HAS(r.t)).map(r=>({t:r.t,w:1}))};return {rows:S.b.rows.filter(r=>HAS(r.t)&&(Number(r.w)||0)>0).map(r=>({t:r.t,w:Number(r.w)}))}}
+const TPER=[['1M',1]].concat(PERIODS.slice(0,5));
+function mixName(){const n=(S.b.name||'').trim();return n||'Portfolio total'}
+function mixRet(m){const p=mixP();if(!weights(p).length)return null;return periodRetD(s=>bhdRet(p,s),m)}
+function mixRowHTML(){const p=mixP();const ok=weights(p).length>0;const tot=bTotal();const scaled=ok&&!mixEq()&&Math.abs(tot-100)>=0.05;
+  const B=S.b;return `<td class="nmcell"><span class="pn">${swatch('var(--ink)',null,18)}<span class="pn2"><label class="sr" for="bName">Portfolio name</label><input class="field nmin" id="bName" placeholder="Name it" autocomplete="off" value="${esc(B.name||'')}"></span></span></td><td class="num momcell" style="font-weight:700">${ok?(()=>{const st0=selStart(B.sel),v=wRetMix(st0);return `<span class="momwrap">${sparkMix(st0)}<span class="v ${cls(v)}">${sg(v)}</span></span>`})():''}</td>${dsk(`${TPER.map(([p2,m])=>{const v=ok?mixRet(m):null;return `<td class="num ${cls(v)}${p2===B.sel.p?' hl':''}" style="font-weight:700">${ok?sg(v):''}</td>`}).join('')}${(()=>{const o=ok?pStats(p):null;return BM.map(([k])=>ok?bmCell(o,k,null,true):'<td></td>').join('')})()}`)}<td class="num wcell" style="font-weight:700">${mixEq()?(ok?'<span class="sub" style="font-size:12px;font-weight:400" title="Each ETF counts equally until you set percentages">equal split</span>':''):`${Math.abs(tot-100)>=0.05&&tot>0?`<button type="button" class="linkbtn scl" id="bScale" title="Scale to ${scalePreview(B.rows)}">Scale</button> `:''}<span class="${Math.abs(tot-100)<0.05?'pos':'neg'}">${tot}%</span>`}</td>${mexpBtn('bmix','Portfolio total')}<td class="dsk"></td>`}
+const BM=[['sharpe',()=>'Sharpe','sharpe'],['dd',()=>'Max drawdown','dd'],['worst',()=>'Worst year','worst']];
+function pStats(p){const ws=weights(p);if(!ws.length)return null;const ts=ws.map(x=>x.t);const fc=firstCommon(ts);if(fc==null)return null;
+  const s=Math.max(fc,DS.last-120);const V=bhSeries(p,s);const st=V?statsFromValues(V,s):null;
+  if(st){const fd=dFirstCommon(ts);const sd=Math.max(fd,selStart({p:'10Y'}));st.dd=ddDaily(bhd(p,sd),sd)}return {st}}
+function bmVal(o,k){if(!o)return null;return o.st?o.st[k]:null}
+function bmCell(o,k,best,bold){const v=bmVal(o,k);const neg=(k!=='sharpe')&&v!=null&&v<0?' neg':'';const b=best&&best[k]!=null&&v===best[k]?' best':'';
+  const txt=v==null?'—':k==='sharpe'?v.toFixed(2):k==='worst'?un(v)+' <span class="mut">’'+o.st.worstY.slice(2)+'</span>':k==='mom'?sg(v):un(v);
+  return `<td class="num${v==null?' mut':neg}${b}${k==='sharpe'?' bmfirst':''}"${bold?' style="font-weight:700"':''}>${txt}</td>`}
+function refreshMixRow(){const r=$('bMixRow');if(!r)return;const tmp=document.createElement('tbody');tmp.innerHTML='<tr>'+mixRowHTML()+'</tr>';const nt=tmp.firstChild;
+  const oldSub=r.children[0].querySelector('.sub2'),newSub=nt.children[0].querySelector('.sub2');const pn2=r.children[0].querySelector('.pn2');if(oldSub)oldSub.remove();if(newSub&&pn2)pn2.appendChild(newSub);
+  for(let k=r.children.length-1;k>=1;k--)r.children[k].remove();[...nt.children].slice(1).forEach(c=>r.appendChild(c))}
+function mixDetail(){const p=mixP();if(!weights(p).length)return '<span class="sub">Set percentages to see the total.</span>';return TPER.map(([pp,m])=>{const v=mixRet(m);return mItem(pp,sg(v),cls(v))}).join('')+(()=>{const o=pStats(p),st=o&&o.st;return mItem('Sharpe',st?st.sharpe.toFixed(2):'—')+mItem('Max drawdown',st?un(st.dd):'—','neg')+mItem('Worst year',st&&st.worst!=null?un(st.worst)+' ’'+st.worstY.slice(2):'—','neg')})()}
+function renderMixLive(){clearTimeout(renderMixLive._t);renderMixLive._t=setTimeout(()=>{renderBChart();refreshMixRow();const d=document.querySelector('[data-mdet="bmix"] .mgrid');if(d)d.innerHTML=mixDetail()},180)}
+function selOf(sc){return sc==='b'?S.b.sel:S.sel}
+const LASTD={b:null,p:null};
+document.addEventListener('click',e=>{const sp=e.target.closest('.daysbox>span');if(!sp)return;const inp=sp.parentElement.querySelector('input[data-days]');if(!inp)return;const sc=inp.dataset.days,n=parseInt(inp.value,10);if(n&&selOf(sc).d!==n)setSel(sc,{d:Math.min(n,maxDays())});else inp.focus()});
+function renderPicker(sc){const sel=selOf(sc);if(sel.d)LASTD[sc]=sel.d;const seg=$(sc+'Period');if(!seg)return;
+  seg.innerHTML=PRESETS.map(([p])=>`<button type="button" data-psel="${p}" data-scope="${sc}" aria-pressed="${sel.p===p}">${p}</button>`).join('');
+  const inp=$(sc+'Days');if(inp&&document.activeElement!==inp)inp.value=sel.d?String(sel.d):(LASTD[sc]?String(LASTD[sc]):'');inp&&inp.closest('.daysbox').classList.toggle('on',!!sel.d)}
+function maxDays(){return Math.round((D.ms[D.last]-D.ms[0])/864e5)}
+function setSel(sc,sel){if(sc==='b')S.b.sel=sel;else S.sel=sel;persist();
+  if(sc==='b'){bHideHover();renderPicker('b');renderBChart();renderBTable()}else{hideHover();buildSeries();renderPicker('p');renderChart();renderPortfolios()}}
+function fitBHead(){const bd=$('builder');if(!bd||!S.b.open)return;bd.classList.remove('hwrap');const a=$('bActs').getBoundingClientRect(),rg=document.createRange();rg.selectNodeContents($('bTitle'));const t=rg.getBoundingClientRect();if(a.left<t.right+20||window.innerWidth<=900)bd.classList.add('hwrap')}
+function renderBuilder(){withFocus(()=>{
+  document.querySelectorAll('#builder button.info:empty').forEach(b=>{b.innerHTML=ICON_I});
+  const B=S.b,open=B.open,ed=B.editing&&pf(B.editing);
+  $('bToggle').setAttribute('aria-expanded',open);$('bBody').hidden=!open;$('builder').classList.toggle('open',open);
+  $('bTitle').textContent=ed?'Edit portfolio':'Build a portfolio';
+  $('bSub').textContent=ed?`Editing ${ed.name}. Change ETFs or percentages, then save changes.`:open?'Compare ETFs, set your percentages, then add it to your portfolios.':(S.pfs.length>=MAXP?'You have five portfolios. Delete one below to build another.':'Compare ETFs side by side, pick your mix, and add it to your portfolios.');
+  if(!open)return;
+  renderPicker('b');fitBHead();renderBChart();renderBTable();
+  $('bSave').textContent=ed?'Save changes':'Add to my portfolios';$('bClear').textContent=ed?'Cancel editing':'Clear';
+  updateSave();
+})}
+/* phone layout: rows show the essentials; tap the arrow to open the rest */
+const MEXP=new Set();
+const dsk=h=>h.replace(/<td class="/g,'<td class="dsk ').replace(/<td>/g,'<td class="dsk">').replace(/<th class="/g,'<th class="dsk ').replace(/<th>/g,'<th class="dsk">');
+const mexpBtn=(k,label)=>`<td class="mob mexpc"><button type="button" class="mexp" data-mexp="${k}" aria-expanded="${MEXP.has(k)}" aria-label="More for ${esc(label)}"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button></td>`;
+const mItem=(lab,val,c)=>`<div class="mi"><span class="ml">${lab}</span><span class="mv mono ${c||''}">${val}</span></div>`;
+function mdetRow(k,inner){return `<tr class="mdet${MEXP.has(k)?' open':''}" data-mdet="${k}"><td colspan="20"><div class="mgrid">${inner}</div></td></tr>`}
+function bDetail(t,o){const tp=TPER.map(([p,m])=>{const v=periodRet(t,m);return mItem(p,sg(v),cls(v))}).join('');
+  const st=o&&o.st;return tp+mItem('Sharpe',st?st.sharpe.toFixed(2):'—')+mItem('Max drawdown',st?un(st.dd):'—',st&&st.dd<0?'neg':'')+mItem('Worst year',st&&st.worst!=null?un(st.worst)+' ’'+st.worstY.slice(2):'—',st&&st.worst<0?'neg':'')}
+/* builder table sort: click cycles high-to-low, low-to-high, then back to your order */
+const BSORT={k:null,dir:0};
+function bsBtn(k,label){const on=BSORT.k===k;const arrow=on?(BSORT.dir<0?' ↓':' ↑'):'';return `<button type="button" class="sort" data-bsort="${k}" aria-pressed="${on}" title="Sort">${label}${arrow}</button>`}
+function bOrder(WR,ES){const B=S.b;const idx=B.rows.map((r,j)=>j);if(!BSORT.k||!BSORT.dir)return idx;const k=BSORT.k;
+  const val=j=>{const r=B.rows[j];if(k==='t')return r.t;if(k==='ret')return WR[j];if(k==='w')return Number(r.w)||0;const tp=TPER.find(x=>x[0]===k);if(tp)return periodRet(r.t,tp[1]);const st=ES[j]&&ES[j].st;return st?st[k]:null};
+  return idx.sort((a,b)=>{const va=val(a),vb=val(b);if(va==null&&vb==null)return a-b;if(va==null)return 1;if(vb==null)return -1;const c=typeof va==='string'?va.localeCompare(vb):va-vb;return (c||a-b)*BSORT.dir})}
+function renderBTable(){const B=S.b;if(!B.open)return;const hp=B.sel.p;
+  const best={};TPER.forEach(([p,m])=>{const vs=B.rows.map(r=>periodRet(r.t,m)).filter(v=>v!=null);if(vs.length>1)best[p]=Math.max(...vs)});
+  const ES=B.rows.map(r=>HAS(r.t)?pStats({rows:[{t:r.t,w:100}]}):null);const bb={};BM.forEach(([k])=>{const vs=ES.map(o=>bmVal(o,k)).filter(v=>v!=null);if(vs.length>1)bb[k]=Math.max(...vs)});
+  const NC=TPER.length+BM.length+4;const full=B.rows.length>=MAXETF;
+  const addRow=`<tr class="addrow"><td><span class="tkcell"><span class="rsw" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span><label class="sr" for="bAdd">Ticker to add</label><input class="field tkin" id="bAdd" role="combobox" aria-autocomplete="list" aria-controls="bSug" aria-expanded="false" placeholder="${full?'15 max':'Ticker'}" autocomplete="off" spellcheck="false" value="${esc(S.bDraft||'')}" ${full?'disabled':''}></span></td><td><button type="button" class="btn sm" id="bAddBtn" ${full?'disabled':''}>Add</button></td><td colspan="${NC-2}" class="sub addnote"><span class="addnw"><span>${B.rows.length?'':'Type a ticker and press Enter to add it, then set its % of the portfolio.'}</span></span></td></tr>`;const st0=selStart(B.sel);const WR=B.rows.map(r=>HAS(r.t)?wRetT(r.t,st0):null);const wBest=WR.filter(v=>v!=null).length>1?Math.max(...WR.filter(v=>v!=null)):null;
+  const etfRow=(r,j)=>`<tr class="${r.hidden?'dim':''}"><td><span class="tkcell"><button type="button" class="rsw" data-bhide="${j}" aria-pressed="${!r.hidden}" aria-label="${r.hidden?'Show':'Hide'} ${esc(r.t)} on the chart" title="${r.hidden?'Show':'Hide'} on chart">${swatch(ecol(r.c),edash(r.c),20)}</button><label class="sr" for="bt-${j}">Ticker ${j+1}</label><input class="field tkin" id="bt-${j}" data-btk="${j}" list="tickers" autocomplete="off" spellcheck="false" value="${esc(r.t)}" title="${esc(NAMES[r.t]||'Imported prices')}"></span></td>
+    <td class="num momcell${wBest!=null&&WR[j]===wBest?' best':''}"><span class="momwrap">${HAS(r.t)?sparkT(r.t,st0,ecol(r.c)):''}<span class="v ${cls(WR[j])}">${sg(WR[j])}</span></span></td>
+    ${dsk(TPER.map(([p,m])=>{const v=periodRet(r.t,m);return `<td class="num ${cls(v)}${p===hp?' hl':''}${best[p]!=null&&v===best[p]?' best':''}">${sg(v)}</td>`}).join('')+BM.map(([k])=>bmCell(ES[j],k,bb)).join(''))}<td class="wcell"><span class="wbox"><label class="sr" for="bw-${j}">${esc(r.t)} percent</label><input class="field" id="bw-${j}" data-bw="${j}" inputmode="decimal" autocomplete="off" placeholder="0" value="${r.w===''||r.w==null?'':esc(r.w)}">%</span></td>${mexpBtn('b'+j,r.t)}
+    <td class="xcell dsk"><button type="button" class="delbtn bdel" id="bx-${j}" data-brm="${j}" aria-label="Remove ${esc(r.t)}" title="Remove ${esc(r.t)}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M6 7l1 13h10l1-13"/></svg></button></td></tr>${mdetRow('b'+j,bDetail(r.t,ES[j])+`<div class="mi mact"><button type="button" class="btn sm" data-brm="${j}">Remove ${esc(r.t)}</button></div>`)}`;
+  $('bTable').innerHTML=`<thead><tr><th style="text-align:left"><span class="hw">${bsBtn('t','ETF')}</span></th><th class="r retcol"><span class="hw">${bsBtn('ret',selLabel(B.sel,'short')+' return')}${infoBtn('bret','return')}</span></th>${TPER.map(([p,m],k)=>`<th class="dsk r${p===hp?' hl':''}"><span class="hw">${bsBtn(p,pLabel(p,m))}${k===TPER.length-1?infoBtn('returns','returns'):''}</span></th>`).join('')}${BM.map(([k,lab,info])=>`<th class="dsk r bm${k==='sharpe'?' bmfirst':''}"><span class="hw">${bsBtn(k,lab())}${infoBtn(info,lab())}</span></th>`).join('')}<th class="r wcell"><span class="hw">${bsBtn('w','<span class="dskl">% of portfolio</span><span class="mobl">%</span>')}</span></th><th class="mob"></th><th class="dsk"></th></tr></thead>
+    <tbody>${bOrder(WR,ES).map(j=>etfRow(B.rows[j],j)).join('')}${addRow}</tbody>${B.rows.length?`<tfoot><tr class="mixrow" id="bMixRow">${mixRowHTML()}</tr>${mdetRow('bmix',mixDetail())}</tfoot>`:''}`;
+  document.querySelectorAll('#bTable button.info:empty').forEach(b=>{b.innerHTML=ICON_I});
+}
+function updateSave(){const B=S.b,ed=B.editing&&pf(B.editing),tot=bTotal(),left=r1(100-tot);
+  let why='';const used=B.rows.filter(r=>(Number(r.w)||0)>0);
+  if(!B.rows.length)why='Add an ETF';else if(!used.length)why='Set percentages';else if(Math.abs(left)>=0.05)why=left>0?`${left}% left`:`Over by ${r1(-left)}%`;else if(!(B.name||'').trim())why='Name it';else if(!ed&&S.pfs.length>=MAXP)why='Five max: delete one first';
+  $('bSave').disabled=!!why;$('bSave').title=why||'';$('bHint').textContent=why||'Ready';$('bHint').classList.toggle('ok',!why);fitBHead()}
+
+let BCH=null;
+function thin(pts,maxN){if(pts.length<=maxN)return pts;const k=Math.ceil(pts.length/maxN);const out=[];for(let j=0;j<pts.length;j+=k)out.push(pts[j]);if(out[out.length-1]!==pts[pts.length-1])out.push(pts[pts.length-1]);return out}
+function ptAt(l,i){const o=i-l.pts[0][0];const p=l.pts[o];return p&&p[0]===i?p:l.pts.find(q=>q[0]===i)}
+/* x-axis labels for a daily window */
+function dayTicks(st0,last,W){const spanD=(D.ms[last]-D.ms[st0])/864e5,narrow=W<600,out=[];
+  const md=i=>{const k=D.days[i];return {y:+k.slice(0,4),m:+k.slice(5,7),d:+k.slice(8)}};
+  if(spanD<=50){const every=spanD<=14?1:narrow?10:5;let c=0;for(let i=last;i>=st0;i--){if(c%every===0){const x=md(i);out.unshift([i,MON[x.m-1]+' '+x.d])}c++}return out}
+  let stepM=spanD<=200?1:spanD<=400?(narrow?3:2):spanD<=800?3:spanD<=1500?6:0;
+  if(stepM){for(let i=st0+1;i<=last;i++){const a=md(i),b=md(i-1);if(a.m!==b.m&&(a.m-1)%stepM===0)out.push([i,MON[a.m-1]+(a.m===1||out.length===0?' ’'+String(a.y).slice(2):'')])}return out}
+  const yrs=spanD/365,ev=yrs>8?(narrow?4:2):narrow?2:1;for(let i=st0+1;i<=last;i++){const a=md(i),b=md(i-1);if(a.y!==b.y&&a.y%ev===0)out.push([i,String(a.y)])}return out}
+function wRetT(t,st0){let s0=st0;while(s0<D.last&&pxd(t,s0)==null)s0++;return tRetD(t,s0)}
+function wRetMix(st0){const p=mixP();if(!weights(p).length)return null;const fc=dFirstCommon(p.rows.map(r=>r.t));if(fc==null)return null;return bhdRet(p,Math.max(st0,fc))}
+function sparkPath(get,s0,color,label){const last=D.last,n=last-s0;if(n<1)return '';const b=get(s0);if(b==null)return '';const K=40,ser=[];for(let k=0;k<=K;k++){const i=s0+Math.round(k*n/K);const v=get(i);ser.push(v==null?null:v/b-1)}
+  const g=ser.filter(v=>v!=null);if(g.length<2)return '';const lo=Math.min(0,...g),hi=Math.max(0,...g),span=hi-lo||1;const X=k=>3+k*(94/K),Y=q=>24-(q-lo)/span*20;
+  const pts=ser.map((q,k)=>q==null?null:X(k).toFixed(1)+','+Y(q).toFixed(1)).filter(Boolean).join(' ');
+  return `<svg width="80" height="22" viewBox="0 0 100 28" role="img" aria-label="${esc(label)}"><line x1="2" x2="98" y1="${Y(0).toFixed(1)}" y2="${Y(0).toFixed(1)}" stroke="var(--faint)" stroke-dasharray="2 3"/><polyline points="${pts}" fill="none" stroke="${color}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>${ser[K]!=null?`<circle cx="${X(K).toFixed(1)}" cy="${Y(ser[K]).toFixed(1)}" r="3" fill="${color}"/>`:''}</svg>`}
+function sparkT(t,st0,color){let s0=st0;while(s0<D.last&&pxd(t,s0)==null)s0++;return sparkPath(i=>pxd(t,i),s0,color,t+' path over the period')}
+function sparkMix(st0){const p=mixP();if(!weights(p).length)return '';const fc=dFirstCommon(p.rows.map(r=>r.t));if(fc==null)return '';const s0=Math.max(st0,fc);const V=bhd(p,s0);return V?sparkPath(i=>V[i],s0,'var(--ink)','Portfolio total path over the period'):''}
+function renderBList(st0){const B=S.b;const cap=$('bListCap');if(!cap)return;cap.textContent=`${selLabel(B.sel,'adj')} return`;
+  const items=B.rows.map((r,j)=>({j,r,v:HAS(r.t)?wRetT(r.t,st0):null})).sort((a,b)=>(b.v??-9)-(a.v??-9));
+  const mv=wRetMix(st0);
+  $('bList').innerHTML=items.map(o=>`<button type="button" class="plrow" data-bhide="${o.j}" aria-pressed="${!o.r.hidden}" aria-label="${o.r.hidden?'Show':'Hide'} ${esc(o.r.t)} on the chart" title="Click to show or hide. Double-click to show only this one.">${swatch(ecol(o.r.c),edash(o.r.c),22)}<span class="pln mono">${esc(o.r.t)}</span><span class="mono ${cls(o.v)}">${sg(o.v)}</span></button>`).join('')
+    +(B.rows.length?`<button type="button" class="plrow bench" data-bmixhide="1" aria-pressed="${!B.mixHidden}" aria-label="${B.mixHidden?'Show':'Hide'} ${esc(mixName())} on the chart" title="Click to show or hide. Double-click to show only this one.">${swatch('var(--ink)',null,22)}<span class="pln">${esc(mixName())}</span><span class="mono ${cls(mv)}">${sg(mv)}</span></button>`:'<span class="sub">Add ETFs to see them ranked here.</span>')}
+/* click toggles a line; double-click shows only that line (again: show all) */
+let bRailClick=null;
+function bVis(){const v={mix:!S.b.mixHidden};S.b.rows.forEach((r,j)=>{v['r'+j]=!r.hidden});return v}
+function bSetVis(v){S.b.mixHidden=!v.mix;S.b.rows.forEach((r,j)=>{r.hidden=!v['r'+j]})}
+function bRailToggle(key){const now=Date.now(),lc=bRailClick;
+  if(lc&&lc.key===key&&now-lc.t<450){const prev=lc.prev,keys=Object.keys(prev);const alone=keys.every(k=>k===key?prev[k]:!prev[k]);
+    const v={};keys.forEach(k=>{v[k]=alone?true:k===key});bSetVis(v);bRailClick=null}
+  else{bRailClick={key,t:now,prev:bVis()};const v=bVis();v[key]=!v[key];bSetVis(v)}
+  persist();bHideHover();renderBuilder()}
+function renderBChart(){
+  const B=S.b,last=D.last,st0=selStart(B.sel);
+  $('bChartCap').textContent=`${dayLabel(st0)} to ${dayLabel(last)}`;
+  const lines=[];B.rows.forEach(r=>{if(r.hidden||!HAS(r.t))return;const pts=[];
+    let s0=st0;while(s0<last&&pxd(r.t,s0)==null)s0++;const b=pxd(r.t,s0);if(b==null)return;for(let i=s0;i<=last;i++){const a=pxd(r.t,i);if(a!=null)pts.push([i,(a/b-1)*100])}
+    if(pts.length>1)lines.push({r:{name:r.t,color:ecol(r.c),dash:edash(r.c),sw:2.5},pts})});
+  {const p=mixP();if(weights(p).length&&!S.b.mixHidden){const pts=[];
+    const fc=dFirstCommon(p.rows.map(r=>r.t));const s0=Math.max(st0,fc??st0);const V=bhd(p,s0);if(V)for(let i=s0;i<=last;i++){if(V[i]!=null)pts.push([i,(V[i]/V[s0]-1)*100])}
+    if(pts.length>1)lines.push({r:{name:mixName(),color:'var(--ink)',sw:3.5,mix:true},pts})}}
+  const box=$('bChartbox');const W=Math.max(300,box.clientWidth||900),H=W<600?220:320,mg={l:W<600?48:60,r:16,t:10,b:28};
+  let vals=lines.flatMap(l=>l.pts.map(p=>p[1]));if(!vals.length)vals=[-1,1];let lo=Math.min(0,...vals),hi=Math.max(0,...vals);const pad=(hi-lo)*0.06||1;lo-=pad;hi+=pad;
+  const ticks=niceTicks(lo,hi,5);lo=Math.min(lo,ticks[0]);hi=Math.max(hi,ticks[ticks.length-1]);
+  const X=i=>mg.l+(i-st0)/((last-st0)||1)*(W-mg.l-mg.r),Y=v=>mg.t+(1-(v-lo)/(hi-lo))*(H-mg.t-mg.b);
+  const xt=dayTicks(st0,last,W);const maxN=Math.round(W);
+  const svg=$('bChart');svg.setAttribute('viewBox',`0 0 ${W} ${H}`);svg.setAttribute('height',H);
+  svg.innerHTML=`${ticks.map(v=>`<line x1="${mg.l}" x2="${W-mg.r}" y1="${Y(v).toFixed(1)}" y2="${Y(v).toFixed(1)}" stroke="${v===0?'var(--faint)':'var(--grid)'}"/><text x="${mg.l-8}" y="${(Y(v)+4).toFixed(1)}" text-anchor="end" font-size="12" fill="var(--muted)" font-family="IBM Plex Mono,monospace">${(v>0?'+':'')+v+'%'}</text>`).join('')}
+    ${xt.map(([i,l])=>`<text x="${X(i).toFixed(1)}" y="${H-8}" text-anchor="middle" font-size="12" fill="var(--muted)" font-family="IBM Plex Mono,monospace">${l}</text>`).join('')}
+    ${lines.map(l=>`<polyline points="${thin(l.pts,maxN).map(p=>X(p[0]).toFixed(1)+','+Y(p[1]).toFixed(1)).join(' ')}" fill="none" stroke="${l.r.color}" stroke-width="${l.r.sw||2.5}"${l.r.dash?` stroke-dasharray="${l.r.dash}"`:''} stroke-linejoin="round" stroke-linecap="round"/>`).join('')}
+    ${lines.map(l=>{const p=l.pts[l.pts.length-1];return `<circle cx="${X(p[0]).toFixed(1)}" cy="${Y(p[1]).toFixed(1)}" r="4" fill="${l.r.color}" stroke="var(--panel)" stroke-width="2"/>`}).join('')}
+    ${lines.length?'':`<text x="${W/2}" y="${H/2}" text-anchor="middle" font-size="14" fill="var(--muted)">Add ETFs above the table to compare them here</text>`}
+    <line id="bxh" y1="${mg.t}" y2="${H-mg.b}" stroke="var(--faint)" visibility="hidden"/><g id="bhdots"></g>`;
+  BCH={lines,X,Y,W,H,m:mg,st0,last};$('bTip').hidden=true;
+  renderBList(st0);
+}
+function bShowHover(i){if(!BCH||!BCH.lines.length)return;i=Math.max(BCH.st0,Math.min(BCH.last,i));const x=BCH.X(i);
+  const xh=$('bxh');xh.setAttribute('x1',x);xh.setAttribute('x2',x);xh.setAttribute('visibility','visible');
+  const rows=BCH.lines.map(l=>{const p=ptAt(l,i);return p?{r:l.r,v:p[1]}:null}).filter(Boolean).sort((a,b)=>b.v-a.v);
+  $('bhdots').innerHTML=rows.map(o=>`<circle cx="${x}" cy="${BCH.Y(o.v).toFixed(1)}" r="4.5" fill="${o.r.color}" stroke="var(--panel)" stroke-width="2"/>`).join('');
+  const tip=$('bTip');tip.hidden=false;
+  tip.innerHTML=`<span class="d">${dayLabel(i)}</span>`+rows.map(o=>`<div class="tr">${swatch(o.r.color,o.r.dash||null,20)}<span class="mono">${esc(o.r.name)}</span><span></span><span class="mono ${cls(o.v)}" style="min-width:62px;text-align:right">${sg(o.v/100)}</span></div>`).join('')+`<span class="sub" style="font-size:12px">Cumulative % since ${dayLabel(BCH.st0)}</span>`;
+  const bw=$('bChartbox').clientWidth,px_=x/BCH.W*bw,tw=tip.offsetWidth;tip.style.left=Math.max(0,Math.min(bw-tw,px_+16+tw>bw?px_-tw-16:px_+16))+'px'}
+function bHideHover(){$('bTip').hidden=true;const xh=$('bxh');if(xh)xh.setAttribute('visibility','hidden');const hd=$('bhdots');if(hd)hd.innerHTML=''}
+function bHoverFromEvent(e){if(!BCH)return;const r=$('bChart').getBoundingClientRect();const sx=(e.clientX-r.left)/r.width*BCH.W;const f=(sx-BCH.m.l)/(BCH.W-BCH.m.l-BCH.m.r);if(f<-0.02||f>1.02){bHideHover();return}bShowHover(BCH.st0+Math.round(f*(BCH.last-BCH.st0)))}
+
+/* ---------- render: portfolios table ---------- */
+function sparkSVG(r){const st0=selStart(S.sel),last=D.last;const vf=r.valueFrom(st0);if(!vf||!vf.V||vf.V[vf.s0]==null)return '';
+  const base=vf.V[vf.s0],n=last-vf.s0;if(n<1)return '';const K=40,ser=[];for(let k=0;k<=K;k++){const i=vf.s0+Math.round(k*n/K);ser.push(vf.V[i]==null?null:vf.V[i]/base-1)}
+  const g=ser.filter(v=>v!=null);if(g.length<2)return '';
+  const lo=Math.min(0,...g),hi=Math.max(0,...g),span=hi-lo||1;const X=k=>3+k*(94/K),Y=q=>24-(q-lo)/span*20;
+  const pts=ser.map((q,k)=>q==null?null:X(k).toFixed(1)+','+Y(q).toFixed(1)).filter(Boolean).join(' ');
+  return `<svg width="80" height="22" viewBox="0 0 100 28" role="img" aria-label="${esc(r.name)} return path over the ${esc(selLabel(S.sel,'span'))}"><line x1="2" x2="98" y1="${Y(0).toFixed(1)}" y2="${Y(0).toFixed(1)}" stroke="var(--faint)" stroke-dasharray="2 3"/><polyline points="${pts}" fill="none" stroke="${r.color}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>${ser[K]!=null?`<circle cx="${X(K).toFixed(1)}" cy="${Y(ser[K]).toFixed(1)}" r="3" fill="${r.color}"/>`:''}</svg>`}
+function twSignal(){
+  const off=TW.official,c=ret('SHY',off,3);
+  const eq=TW_EQ.map(t=>({t,v:ret(t,off,3)})).sort((x,y)=>y.v-x.v),bd=TW_BD.map(t=>({t,v:ret(t,off,3)})).sort((x,y)=>y.v-x.v);
+  const row=(o,pick,note)=>`<div class="sig"><span class="mono" style="font-weight:600">${o.t}</span><span class="mono r ${cls(o.v)}">${sg(o.v)}</span><span class="mono r mut">${note}</span><span>${pick?'<span class="pick">Picked</span>':''}</span></div>`;
+  const eqPick=TW.now.e,bdPick=TW.now.b;
+  let prev='';if(DS.partial){const pv=twPick(DS.last);if(pv)prev=`<span class="sub">If the month ended today (${dLabel(DS.last)}), it would hold <strong class="mono" style="color:var(--ink)">${pv.e} · ${pv.b}</strong>${pv.e===TW.now.e&&pv.b===TW.now.b?', the same as now':''}. The next real check is the last trading day of the month.</span>`}
+  return `<span class="cap" style="margin-top:6px">This month's signal · ${dLabel(off)} close · 3-month returns</span>
+    <div class="sigcols"><div>
+    <div class="sig cap" style="border:0"><span>Stocks (60%)</span><span class="r">3-mo</span><span class="r">vs SHY</span><span></span></div>
+    ${eq.map(o=>row(o,o.t===eqPick,(o.v-c>0?'+':'−')+Math.abs((o.v-c)*100).toFixed(1)+' pts')).join('')}
+    ${row({t:'SHY',v:c},eqPick==='SHY','hurdle')}</div><div>
+    <div class="sig cap" style="border:0"><span>Bonds (40%)</span><span class="r">3-mo</span><span></span><span></span></div>
+    ${bd.map(o=>row(o,o.t===bdPick,'')).join('')}</div></div>
+    <span class="sub" style="margin-top:4px">${eqPick==='SHY'?'No stock ETF beat SHY, so the 60% sits in SHY.':`${eqPick} had the best 3-month return and beat SHY, so the 60% goes there.`} ${bdPick} beat ${bdPick==='TLT'?'JNK':'TLT'}, so the 40% goes there.</span>
+    ${prev}
+    <span class="sub"><strong style="color:var(--ink2)">Why its return can be negative while it holds stocks:</strong> the return in the table is the 12% Solution’s own result over the period you picked, from the ETFs it actually held month to month. The signal above looks at the candidates, not at the strategy’s own results.</span>`}
+function twPanel(){
+  if(!TW)return '';const rows=[];for(let i=TW.official;i>=Math.max(TW.start,TW.official-35);i--){const pk=TW.picks[i]||twPick(i);const pr=TW.picks[i-1]||(i-1>=TW.start?twPick(i-1):null);
+    rows.push(`<div class="log"><span class="mut">${dLabel(i)}</span><span class="mono" style="font-weight:${pr&&pr.e!==pk.e?700:400}">${pk.e}</span><span class="mono" style="font-weight:${pr&&pr.b!==pk.b?700:400}">${pk.b}</span></div>`)}
+  return `<div class="twinfo">
+    <div style="display:flex;flex-direction:column;gap:8px;min-width:0">
+      <span class="cap">How it decides</span>
+      <span style="font-size:14px;color:var(--ink2);line-height:1.55">At each month-end, 60% goes to whichever of SPY, QQQ, MDY and IWM had the best 3-month return, or to SHY if none of them beat SHY. The other 40% goes to the better of TLT and JNK. It always uses a 3-month lookback. You can't edit this one; it's the line to beat.</span>
+      ${twSignal()}
+      <span class="sub">Reconstructed from the book's rules and month-end prices. Carter's published figures may differ slightly.</span>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:4px;min-width:0">
+      <div class="twlog">${[rows.slice(0,18),rows.slice(18)].filter(x=>x.length).map(col=>`<div><div class="log cap" style="border:0"><span>Rebalanced</span><span>60% in</span><span>40% in</span></div>${col.join('')}</div>`).join('')}</div>
+      <span class="sub" style="padding-top:4px">The last three years, newest first. Bold marks a switch from the month before.</span>
+    </div></div>`}
+
+/* ---------- render: chart ---------- */
+let CH=null,fitH=null,fitPass=false;
+let railClick=null;
+function chartSeries(){return SERIES.concat(SPYS?[SPYS]:[]).filter(r=>!S.hidden[r.id])}
+function renderChart(){
+  const last=D.last,st0=selStart(S.sel);renderPicker('p');
+  const all=SERIES.concat(SPYS?[SPYS]:[]);
+  const rv=r=>r.ret;
+  const railOrder=all.filter(r=>!r.locked&&!r.ref).sort((x,y)=>(rv(y)??-9)-(rv(x)??-9)).concat(all.filter(r=>r.locked),all.filter(r=>r.ref));
+  $('pListCap').textContent=`${selLabel(S.sel,'adj')} return`;
+  $('pList').innerHTML=railOrder.map(r=>`<button type="button" class="plrow${r.locked?' bench':''}${r.ref?' ref':''}" data-hide="${r.id}" aria-pressed="${!S.hidden[r.id]}" aria-label="${S.hidden[r.id]?'Show':'Hide'} ${esc(r.name)} on the chart" title="Click to show or hide. Double-click to show only this one.">${swatch(r.color,r.dash,22)}<span class="pln">${esc(r.name)}</span><span class="mono ${cls(rv(r))}">${sg(rv(r))}</span></button>`).join('');
+  $('chartTitle').textContent='Cumulative %';
+  $('chartSub').textContent=`Total % return if you had bought each on ${dayLabel(st0)} and held it to ${dayLabel(last)}.`;
+  const lines=[];const isG=true;
+  chartSeries().forEach(r=>{const pts=[];
+    const vf=r.valueFrom(st0);if(!vf||!vf.V||vf.V[vf.s0]==null)return;const base=vf.V[vf.s0];for(let i=vf.s0;i<=last;i++)if(vf.V[i]!=null)pts.push([i,(vf.V[i]/base-1)*100,vf.s0]);
+    if(pts.length>1)lines.push({r,pts})});
+  const box=$('chartbox');const W=Math.max(300,box.clientWidth||900),H=W<600?220:(fitH||260);const m={l:W<600?48:64,r:16,t:12,b:30};
+  let vals=lines.flatMap(l=>l.pts.map(p=>p[1]));if(!vals.length)vals=[-1,1];
+  let lo=Math.min(...vals),hi=Math.max(...vals);lo=Math.min(lo,0);hi=Math.max(hi,0);const pad=(hi-lo)*0.06||1;lo-=pad;hi+=pad;
+  const ticks=niceTicks(lo,hi,5);lo=Math.min(lo,ticks[0]);hi=Math.max(hi,ticks[ticks.length-1]);
+  const X=i=>m.l+(i-st0)/((last-st0)||1)*(W-m.l-m.r),Y=v=>m.t+(1-(v-lo)/(hi-lo))*(H-m.t-m.b);
+  const xt=dayTicks(st0,last,W);const maxN=Math.round(W);
+  const fmtY=v=>(v>0?'+':'')+v+'%';
+  const svg=$('chart');svg.setAttribute('viewBox',`0 0 ${W} ${H}`);svg.setAttribute('height',H);
+  const ordered=lines.slice().sort((a,b)=>(a.r.locked?1:0)-(b.r.locked?1:0));
+  svg.innerHTML=`${ticks.map(v=>`<line x1="${m.l}" x2="${W-m.r}" y1="${Y(v).toFixed(1)}" y2="${Y(v).toFixed(1)}" stroke="${v===0?'var(--faint)':'var(--grid)'}"/><text x="${m.l-8}" y="${(Y(v)+4).toFixed(1)}" text-anchor="end" font-size="12" fill="var(--muted)" font-family="IBM Plex Mono,monospace">${fmtY(v)}</text>`).join('')}
+    ${xt.map(([i,l])=>`<text x="${X(i).toFixed(1)}" y="${H-8}" text-anchor="middle" font-size="12" fill="var(--muted)" font-family="IBM Plex Mono,monospace">${l}</text>`).join('')}
+    ${ordered.map(l=>`<polyline points="${thin(l.pts,maxN).map(p=>X(p[0]).toFixed(1)+','+Y(p[1]).toFixed(1)).join(' ')}" fill="none" stroke="${l.r.color}" stroke-width="${l.r.sw}" ${l.r.dash?`stroke-dasharray="${l.r.dash}"`:''} stroke-linejoin="round" stroke-linecap="round"/>`).join('')}
+    ${ordered.map(l=>{const p=l.pts[l.pts.length-1];return `<circle cx="${X(p[0]).toFixed(1)}" cy="${Y(p[1]).toFixed(1)}" r="4" fill="${l.r.color}" stroke="var(--panel)" stroke-width="2"/>`}).join('')}
+    <line id="xh" y1="${m.t}" y2="${H-m.b}" stroke="var(--faint)" visibility="hidden"/><g id="hdots"></g>`;
+  svg.setAttribute('aria-label',$('chartTitle').textContent);
+  CH={lines,X,Y,W,H,m,st0,last,isG};
+  if(W>=600&&!fitPass){const sec=$('portfolios');const nonChart=sec.offsetHeight-box.offsetHeight;const top=S.b.open?16:sec.getBoundingClientRect().top+window.scrollY;
+    const target=Math.round(Math.max(200,Math.min(480,window.innerHeight-top-nonChart-14)));
+    if(Math.abs(target-H)>3){fitH=target;fitPass=true;renderChart();fitPass=false;return}}
+  if(S.hover!=null)showHover(S.hover);
+}
+function tickMoney(v,step){if(step>=1000&&v>=1000){const k=v/1000;return '$'+(Number.isInteger(k)?k:k.toFixed(step%1000===0?0:1))+'k'}return '$'+Math.round(v).toLocaleString('en-US')}
+function niceTicks(lo,hi,n){const span=hi-lo||1,s0=span/n,mag=Math.pow(10,Math.floor(Math.log10(s0)));const step=[1,2,2.5,5,10].map(x=>x*mag).find(s=>s>=s0);const out=[];for(let v=Math.ceil(lo/step)*step;v<=hi+1e-9;v+=step)out.push(+v.toFixed(6));return out}
+function showHover(i){
+  if(!CH)return;i=Math.max(CH.st0,Math.min(CH.last,i));S.hover=i;const x=CH.X(i);
+  const xh=$('xh');xh.setAttribute('x1',x);xh.setAttribute('x2',x);xh.setAttribute('visibility','visible');
+  const rows=CH.lines.map(l=>{const p=ptAt(l,i);return p?{r:l.r,v:p[1],s0:p[2]}:null}).filter(Boolean).sort((a,b)=>b.v-a.v);
+  $('hdots').innerHTML=rows.map(o=>`<circle cx="${x}" cy="${CH.Y(o.v).toFixed(1)}" r="4.5" fill="${o.r.color}" stroke="var(--panel)" stroke-width="2"/>`).join('');
+  const tip=$('tip');tip.hidden=false;
+  tip.innerHTML=`<span class="d">${dayLabel(i)}</span>`+(rows.length?rows.map(o=>`<div class="tr">${swatch(o.r.color,o.r.dash,20)}<span>${esc(o.r.name)}</span>${CH.isG?`<span></span><span class="mono ${cls(o.v)}" style="min-width:62px;text-align:right">${sg(o.v/100)}</span>`:`<span></span><span class="mono ${cls(o.v)}" style="min-width:62px;text-align:right">${sg(o.v/100)}</span>`}</div>`).join(''):'<span class="mut">No data on this date</span>')
+    +`<span class="sub" style="font-size:12px">Cumulative % since ${dayLabel(CH.st0)}</span>`;
+  const bw=$('chartbox').clientWidth,px_=x/CH.W*bw,tw=tip.offsetWidth;
+  tip.style.left=Math.max(0,Math.min(bw-tw,px_+16+tw>bw?px_-tw-16:px_+16))+'px';
+}
+function hideHover(){S.hover=null;$('tip').hidden=true;const xh=$('xh');if(xh)xh.setAttribute('visibility','hidden');const hd=$('hdots');if(hd)hd.innerHTML=''}
+function hoverFromEvent(e){if(!CH)return;const r=$('chart').getBoundingClientRect();const sx=(e.clientX-r.left)/r.width*CH.W;
+  const f=(sx-CH.m.l)/(CH.W-CH.m.l-CH.m.r);if(f<-0.02||f>1.02){hideHover();return}showHover(CH.st0+Math.round(f*(CH.last-CH.st0)))}
+
+function scaleRows(rows){const idx=rows.map((r,j)=>j).filter(j=>(Number(rows[j].w)||0)>0);const tot=idx.reduce((a,j)=>a+Number(rows[j].w),0);if(!tot)return;
+  const raw=idx.map(j=>Number(rows[j].w)/tot*100);const fl=raw.map(Math.floor);let left=100-fl.reduce((a,b)=>a+b,0);
+  const ord=raw.map((v,k)=>[v-fl[k],k]).sort((a,b)=>b[0]-a[0]);for(const [,k] of ord){if(left<=0)break;fl[k]++;left--}
+  idx.forEach((j,k)=>{rows[j].w=fl[k]})}
+function scalePreview(rows){const c=rows.map(r=>({w:r.w}));scaleRows(c);return c.filter(r=>(Number(r.w)||0)>0).map(r=>r.w).join(' / ')}
+function scaleBox(rows,attr){const on=rows.filter(r=>(Number(r.w)||0)>0);const tot=r1(on.reduce((a,r)=>a+Number(r.w),0));if(!on.length||Math.abs(tot-100)<0.05)return '';
+  return `<div class="scalebox"><span>Adds up to ${tot}%, not 100%. Scale to <span style="${on.length<=4?'white-space:nowrap':''}">${scalePreview(rows)}</span>?</span><button type="button" class="btn sm" ${attr}>Scale to 100%</button></div>`}
+function pTot(p){return r1(p.rows.reduce((a,x)=>a+(Number(x.w)||0),0))}
+function pOk(p){return !!p&&p.rows.length>0&&Math.abs(pTot(p)-100)<0.05}
+function inlineEditor(r){const p=r.p,L=S.sel,tot=r1(p.rows.reduce((a,x)=>a+(Number(x.w)||0),0)),left=r1(100-tot);
+  const w0=selStart(S.sel);const rows=p.rows.map((x,j)=>{const v=HAS(x.t)?tRetD(x.t,w0):null;return `<div class="erow">
+    <span><label class="sr" for="pt-${p.id}-${j}">Ticker ${j+1}</label><input class="field tkin" id="pt-${p.id}-${j}" data-ptk="${j}" data-pf="${p.id}" list="tickers" autocomplete="off" spellcheck="false" value="${esc(x.t)}"></span>
+    <span class="${HAS(x.t)?'mut':'neg'}" style="font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${HAS(x.t)?esc(NAMES[x.t]||'Imported prices'):(LOADING.has(x.t)?'Loading prices…':'No price data. Import a CSV with '+esc(x.t)+'.')}</span>
+    <span class="wbox"><label class="sr" for="pw-${p.id}-${j}">${esc(x.t)} percent</label><input class="field" id="pw-${p.id}-${j}" data-pw="${j}" data-pf="${p.id}" inputmode="decimal" autocomplete="off" value="${esc(x.w)}">%</span>
+    <span class="r mono c-emom ${cls(v)}" style="font-size:14px">${sg(v)}</span>
+    <button type="button" class="x" id="px-${p.id}-${j}" data-prm="${j}" data-pf="${p.id}" aria-label="Remove ${esc(x.t)}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>`}).join('');
+  return `<div class="inlined">
+    <div style="display:flex;flex-direction:column;gap:6px;min-width:0">
+      <div style="display:flex;flex-direction:column;gap:4px;max-width:360px"><label class="cap" for="pn-${p.id}">Name</label><input class="field" id="pn-${p.id}" data-pname="${p.id}" autocomplete="off" value="${esc(p.name)}" style="font-weight:500"></div>
+      <div class="erow h cap"><span>ETF</span><span>Tracks</span><span class="r" style="display:flex">Weight</span><span class="r c-emom" style="display:flex">${selLabel(L,'short')}</span><span></span></div>
+      ${rows||'<span class="sub" style="padding:6px 0">No ETFs. Add one below.</span>'}
+      <div class="addetf"><label class="sr" for="pa-${p.id}">Ticker to add</label><input class="field" id="pa-${p.id}" data-padd-in="${p.id}" list="tickers" placeholder="Add ticker, e.g. EFA" autocomplete="off" value="${esc(S.paDraft[p.id]||'')}">
+        <button type="button" class="btn sm" data-padd="${p.id}" ${p.rows.length>=MAXETF?'disabled':''}>Add ETF</button></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div class="total ${Math.abs(left)<0.05?'ok':'bad'}"><span>${Math.abs(left)<0.05?'Adds up to 100%':left>0?left+'% left to assign':'Over by '+r1(-left)+'%'}</span><span class="mono">${tot}%</span></div>
+      ${scaleBox(p.rows,`data-pscale="${p.id}"`)}
+      <span class="sub">Changes save as you go and update every number on the page.</span>
+      <div class="acts"><button type="button" class="btn sm primary" data-pin="${p.id}" ${pOk(p)?'':'disabled'}>Done</button><button type="button" class="btn sm ghost" data-pedit="${p.id}" ${pOk(p)?'':'disabled'}>Compare in builder</button></div>
+    </div></div>`}
+/* ---------- render: portfolios table ---------- */
+const PCOLS=[['ret',L=>selLabel(L,'short')+' return','ret'],['m1',()=>'1M','m1'],['m3',()=>'3M','m3'],['m6',()=>'6M','m6'],['y1',()=>'1Y','y1'],['y3',()=>'3Y','y3'],['y5',()=>'5Y','y5'],['sharpe',()=>'Sharpe','sharpe'],['dd',()=>'Max drawdown','dd'],['worst',()=>'Worst year','worst']];
+function colVal(r,k){if(k==='ret')return r.ret;if(['m1','m3','m6','y1','y3','y5'].includes(k))return r[k];if(k==='y10')return r.y10;return r.st?r.st[k]:null}
+/* holdings sub-rows under a portfolio: each ETF with the same columns */
+const HEXP=new Set();
+function holdList(r){if(r.id==='tw')return TW&&TW.now?[{t:TW.now.e,w:60},{t:TW.now.b,w:40}]:[];if(r.ref)return [];return r.p?r.p.rows.map(x=>({t:x.t,w:Number(x.w)||0})):[]}
+function hasHold(r){return holdList(r).length>0}
+function etfVal(t,k,st0,ES){if(!HAS(t))return null;if(k==='ret')return wRetT(t,st0);const m={m1:1,m3:3,m6:6,y1:12,y3:36,y5:60}[k];if(m)return periodRet(t,m);const st=ES&&ES.st;return st?st[k]:null}
+function holdRows(r,L,best){const st0=selStart(S.sel);const ed=!r.locked&&!r.ref&&r.p;const pid=r.id;
+  let list=holdList(r).map((h,ix)=>({...h,ix}));if(!ed)list.sort((a,b)=>b.w-a.w);
+  const rows=list.map(h=>{const ES=HAS(h.t)?pStats({rows:[{t:h.t,w:100}]}):null;
+    const cells=PCOLS.map(([k])=>{const v=etfVal(h.t,k,st0,ES);const neg=k!=='sharpe'&&v!=null&&v<0?' neg':'';
+      const txt=v==null?'—':k==='sharpe'?v.toFixed(2):k==='worst'?un(v)+' <span class="mut">’'+ES.st.worstY.slice(2)+'</span>':['ret','m1','m3','m6','y1'].includes(k)?sg(v):un(v);
+      if(k==='ret')return `<td class="num momcell"><span class="momwrap">${HAS(h.t)?sparkT(h.t,st0,r.color):''}<span class="v${neg}">${txt}</span></span></td>`;
+      return `<td class="dsk num${v==null?' mut':neg}">${txt}</td>`}).join('');
+    const name=ed?`<span class="pn hsub"><label class="sr" for="pt-${pid}-${h.ix}">Ticker</label><input class="field tkin" id="pt-${pid}-${h.ix}" data-ptk="${h.ix}" data-pf="${pid}" list="tickers" autocomplete="off" spellcheck="false" value="${esc(h.t)}" title="${esc(NAMES[h.t]||'')}"><span class="wbox"><label class="sr" for="pw-${pid}-${h.ix}">${esc(h.t)} percent</label><input class="field" id="pw-${pid}-${h.ix}" data-pw="${h.ix}" data-pf="${pid}" inputmode="decimal" autocomplete="off" value="${esc(h.w)}">%</span></span>`
+      :`<span class="pn hsub"><span class="mono" style="font-weight:600" title="${esc(NAMES[h.t]||'')}">${esc(h.t)}</span><span class="mut mono" style="font-size:12px">${r1(h.w)}%</span>${r.id==='tw'?'<span class="sub" style="font-size:11px">holding this month</span>':''}</span>`;
+    const act=ed?`<button type="button" class="delbtn bdel" data-prm="${h.ix}" data-pf="${pid}" aria-label="Remove ${esc(h.t)}" title="Remove ${esc(h.t)}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M6 7l1 13h10l1-13"/></svg></button>`:'';
+    return `<tr class="hrowx"><td>${name}</td>${cells}<td class="dsk hact">${act}</td><td class="mob">${ed?act:''}</td></tr>`}).join('');
+  if(!ed)return rows;
+  const p=r.p,tot=pTot(p),full=p.rows.length>=MAXETF;
+  const add=`<tr class="hrowx hadd"><td colspan="20"><span class="haddw"><span class="addetf"><label class="sr" for="pa-${pid}">Ticker to add</label><input class="field tkin" id="pa-${pid}" data-padd-in="${pid}" list="tickers" placeholder="${full?'15 max':'Ticker'}" autocomplete="off" value="${esc(S.paDraft[pid]||'')}" ${full?'disabled':''}><button type="button" class="btn sm" data-padd="${pid}" ${full?'disabled':''}>Add</button></span>
+    <span class="hname"><label class="cap" for="pn-${pid}">Name</label><input class="field" id="pn-${pid}" data-pname="${pid}" autocomplete="off" value="${esc(p.name)}"></span>
+    <span class="htot ${Math.abs(tot-100)<0.05?'pos':'neg'}">${Math.abs(tot-100)>=0.05&&tot>0?`<button type="button" class="linkbtn" data-pscale="${pid}">Scale to 100%</button> `:''}Total ${tot}%</span>
+    <button type="button" class="linkbtn" data-pedit="${pid}">Open in builder</button></span></td></tr>`;
+  return rows+add}
+function renderPortfolios(){
+  const L=S.sel;const rows=SERIES.concat(SPYS?[SPYS]:[]);const isBench=r=>r.locked||r.ref;
+  $('listSub').textContent='';$('listSub').hidden=true;
+  const best={};PCOLS.forEach(([k])=>{const vs=rows.map(r=>colVal(r,k)).filter(v=>v!=null);if(vs.length>1)best[k]=Math.max(...vs)});
+  const sorted=rows.filter(r=>!isBench(r)).sort((a,b)=>{const va=colVal(a,S.sortKey),vb=colVal(b,S.sortKey);if(va==null&&vb==null)return 0;if(va==null)return 1;if(vb==null)return -1;return S.sortDir<0?vb-va:va-vb}).concat(rows.filter(r=>r.locked),rows.filter(r=>r.ref));
+  const fmt=(k,v,r)=>v==null?'—':k==='sharpe'?v.toFixed(2):k==='worst'?un(v)+' <span class="mut">’'+r.st.worstY.slice(2)+'</span>':(['ret','m1','m3','m6','y1'].includes(k))?sg(v):un(v);
+  const color=(k,v)=>v==null?'mut':(['ret','m1','m3','m6','y1','dd','worst'].includes(k))&&v<0?'neg':'';
+  const ncol=PCOLS.length+2;
+  const body=sorted.map(r=>{
+    const editing=S.pedit===r.id||(S.b.editing===r.id&&S.b.open);
+    const cells=PCOLS.map(([k])=>{const v=colVal(r,k);const b=best[k]!=null&&v===best[k]?' best':'';
+      if(k==='ret')return `<td class="num momcell${b}"><span class="momwrap">${sparkSVG(r)}<span class="v ${color(k,v)}">${fmt(k,v,r)}</span></span></td>`;
+      return `<td class="dsk num ${color(k,v)}${b}">${fmt(k,v,r)}</td>`}).join('');
+    const det=PCOLS.filter(([k])=>k!=='ret').map(([k,lab])=>{const v=colVal(r,k);return mItem(lab(L),fmt(k,v,r),color(k,v))}).join('');
+    const acts=r.ref?'':r.locked
+      ?`<button type="button" class="edit" data-twd="1" aria-expanded="${!!S.twOpen}" aria-label="${S.twOpen?'Hide':'Show'} 12% Solution details">${S.twOpen?'Close':'Details'}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="transform:${S.twOpen?'rotate(180deg)':'none'}"><path d="m6 9 6 6 6-6"/></svg></button>`
+      :`<button type="button" class="delbtn${S.delArm===r.id?' armed':''}" data-pdel="${r.id}" aria-label="${S.delArm===r.id?'Confirm delete '+esc(r.name):'Delete '+esc(r.name)}">${S.delArm===r.id?'Delete?':'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M6 7l1 13h10l1-13"/></svg>'}</button>`;
+    const main=`<tr class="${editing?'editing':''}${isBench(r)?' bench':''}"><td><span class="pn">${hasHold(r)?`<button type="button" class="hexp" data-hexp="${r.id}" aria-expanded="${HEXP.has(r.id)}" aria-label="Show the ETFs in ${esc(r.name)}"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button>`:'<span class="hexp-sp"></span>'}${swatch(r.color,r.dash)}<button type="button" class="pname nm" data-hold="${r.id}" aria-label="${esc(r.name)}: show holdings">${esc(r.name)}</button>${isBench(r)?'<span class="badge">BENCHMARK</span>':''}${r.short?'<span class="mut" style="font-weight:400" title="Less than 10 years of data">*</span>':''}${r.p&&!r.ref&&!r.locked&&!pOk(r.p)?`<span class="badge warnb" title="Percentages add to ${pTot(r.p)}%. Click Edit to fix.">${pTot(r.p)}%</span>`:''}</span></td>
+      ${cells}<td class="actcell dsk"><span class="actwrap">${acts}</span></td>${mexpBtn('p'+r.id,r.name)}</tr>`+mdetRow('p'+r.id,det+(acts?`<div class="mi mact"><span class="actwrap">${acts}</span></div>`:''));
+    return main+(HEXP.has(r.id)?holdRows(r,L,best):'')+(!r.locked&&S.pedit===r.id?`<tr class="editrow"><td colspan="${ncol}">${inlineEditor(r)}</td></tr>`:'')+(r.locked&&S.twOpen?`<tr class="twrow"><td colspan="${ncol}">${twPanel()}</td></tr>`:'');
+  }).join('');
+  $('ptable').innerHTML=`<thead><tr class="grow"><th></th><th></th><th class="grp" colspan="6"><span class="gl"><span class="cap">Returns</span>${infoBtn('returns','returns')}</span></th><th></th><th></th><th></th><th></th></tr><tr><th style="text-align:left"><span class="cap">Portfolio</span></th>${PCOLS.map(([k,lab,info])=>`<th class="r${k==='ret'?'':' dsk'}"><span class="hw"><button type="button" class="sort" data-sort="${k}" aria-pressed="${S.sortKey===k}">${lab(L)}${S.sortKey===k?(S.sortDir<0?' ↓':' ↑'):''}</button>${['m1','m3','m6','y1','y3','y5'].includes(k)?'':infoBtn(info,lab(L))}</span></th>`).join('')}<th class="dsk"></th><th class="mob"></th></tr></thead>
+    <tbody>${body}${S.pfs.length?'':`<tr><td colspan="${ncol}" class="mut" style="padding:18px 6px">No portfolios yet. Open Build a portfolio above to make your first one.</td></tr>`}</tbody>`;
+  const shorts=rows.filter(r=>r.short);
+  $('tableFoot').textContent=`Buy and hold, no rebalancing, costs or taxes. Sharpe, max drawdown and worst year cover the last 10 years; Sharpe uses SHY as the risk-free return. Bold is best in each column.`+(shorts.length?` * Less than 10 years of shared price history for ${shorts.map(r=>r.name).join(', ')}; stats cover what's available.`:'');
+}
+
+/* ---------- render all ---------- */
+function render(opts={}){
+  const fid=document.activeElement&&document.activeElement.id;
+  buildSeries();persist();
+  $('asofLabel').textContent='Prices through';$('asofLabel').title='Daily closes from Yahoo Finance, adjusted for dividends and splits';$('asofDate').textContent=dayLabel(D.last);
+  const warn=[];const miss=[...new Set(S.pfs.flatMap(p=>p.rows.filter(r=>!HAS(r.t)&&!LOADING.has(r.t)&&!(UNI[r.t]&&!NODATA.has(r.t))).map(r=>r.t)))];
+  if(miss.length)warn.push(`No price data for ${miss.join(', ')}. Import a CSV that includes ${miss.length>1?'them':'it'} to see results for the portfolios that hold ${miss.length>1?'them':'it'}.`);
+  if(!TW)warn.push('The 12% Solution line needs SPY, QQQ, MDY, IWM, TLT, JNK and SHY prices.');
+  $('banner').hidden=!warn.length;$('banner').textContent=warn.join(' ');
+  renderBuilder();renderPortfolios();renderChart();renderSources();
+  document.querySelectorAll('button.info:empty').forEach(b=>{b.innerHTML=ICON_I});
+  if(fid&&$(fid)&&document.activeElement!==$(fid)){const el=$(fid);el.focus();if(el.select&&opts.select)el.select()}
+  $('tickers')||document.body.insertAdjacentHTML('beforeend','<datalist id="tickers"></datalist>');
+  $('tickers').innerHTML=allTickers().filter(t=>t!=='SHY').map(t=>`<option value="${t}">${esc(NAMES[t]||'')}</option>`).join('');
+}
+function renderSources(){
+  $('impFoot').hidden=!IMPORT_FILES.length;
+  $('sources').innerHTML=IMPORT_FILES.map(f=>` <span class="src">${esc(f.name)} · ${esc(f.tickers.slice(0,6).join(', '))}${f.tickers.length>6?'…':''}</span>`).join('');
+}
+
+/* ---------- actions ---------- */
+function pf(id){return S.pfs.find(p=>p.id===id)}
+function freeColor(){const used=S.pfs.map(p=>p.color);return [0,1,2,3,4].find(k=>!used.includes(k))??0}
+function toast(m,link){const t=$('toast');t.textContent=m;if(link){const b=document.createElement('button');b.type='button';b.className='tlink';b.textContent='See it';b.onclick=()=>{t.hidden=true;$('portfolios').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'})};t.append(' ',b)}t.hidden=false;clearTimeout(toast._t);toast._t=setTimeout(()=>t.hidden=true,link?5000:2800)}
+/* ticker suggestions: already-added ETFs are grayed out */
+let sugIdx=-1;
+function sugItems(q){q=String(q||'').trim().toUpperCase();const added=new Set(S.b.rows.map(r=>r.t));
+  const all=allTickers().map(t=>({t,n:NAMES[t]||'Imported prices',a:added.has(t)}));
+  const hit=all.filter(o=>!q||o.t.startsWith(q)||o.n.toUpperCase().includes(q));
+  hit.sort((x,y)=>(x.a-y.a)||((y.t.startsWith(q))-(x.t.startsWith(q)))||x.t.localeCompare(y.t));return hit.slice(0,40)}
+function showSug(){const inp=$('bAdd');if(!inp||inp.disabled){hideSug();return}let box=$('bSug');
+  if(!box){document.body.insertAdjacentHTML('beforeend','<div class="sug" id="bSug" role="listbox" hidden></div>');box=$('bSug')}
+  const items=sugItems(inp.value);if(!items.length){hideSug();return}
+  sugIdx=Math.min(sugIdx,items.length-1);
+  box.innerHTML=items.map((o,k)=>`<button type="button" role="option" class="sugi${o.a?' added':''}${k===sugIdx?' act':''}" data-sug="${o.t}" aria-disabled="${o.a}" tabindex="-1"><span class="mono st">${o.t}</span><span class="sn">${esc(o.n)}</span>${o.a?'<span class="sa">Added</span>':''}</button>`).join('');
+  const r=inp.getBoundingClientRect();box.style.left=Math.max(8,Math.min(r.left,innerWidth-300))+'px';
+  const below=innerHeight-r.bottom;box.style.maxHeight=Math.max(160,Math.min(320,(below>220?below:r.top)-16))+'px';
+  box.hidden=false;const h=box.offsetHeight;box.style.top=(below>220||r.top<h+12?r.bottom+4:r.top-h-4)+'px';inp.setAttribute('aria-expanded','true')}
+function hideSug(){const box=$('bSug');if(box)box.hidden=true;sugIdx=-1;$('bAdd')?.setAttribute('aria-expanded','false')}
+function pickSug(t){if(S.b.rows.some(r=>r.t===t)){toast(t+' is already added');return}S.bDraft=t;bAddTicker();setTimeout(showSug,30)}
+document.addEventListener('focusin',e=>{if(e.target.id==='bAdd'){sugIdx=-1;showSug()}});
+document.addEventListener('focusout',e=>{if(e.target.id==='bAdd')setTimeout(()=>{if(document.activeElement?.id!=='bAdd')hideSug()},150)});
+document.addEventListener('mousedown',e=>{if(e.target.closest('#bSug'))e.preventDefault()});
+window.addEventListener('scroll',()=>{if($('bSug')&&!$('bSug').hidden)showSug()},{passive:true});
+function bAddTicker(){const t=cleanTicker(S.bDraft||'');if(!t)return;const B=S.b;
+  if(B.rows.some(r=>r.t===t)){toast(t+' is already added');return}
+  if(B.rows.length>=MAXETF){toast('Up to 15 ETFs per portfolio');return}
+  if(!HAS(t)&&!UNI[t]){toast(`${t} isn't in the ETF list. Import a CSV with its prices to use it.`);return}
+  B.rows.push({t,w:'',c:bFreeColor()});S.bDraft='';$('bAdd').value='';persist();renderBuilder();$('bAdd').focus()}
+function pAddTicker(id){const p=pf(id);const t=cleanTicker(S.paDraft[id]||'');if(!t)return;
+  if(p.rows.some(r=>r.t===t)){toast(t+' is already in this portfolio');return}
+  if(p.rows.length>=MAXETF){toast('Up to 15 ETFs per portfolio');return}
+  const left=Math.max(0,r1(100-p.rows.reduce((a,x)=>a+(Number(x.w)||0),0)));p.rows.push({t,w:left});S.paDraft[id]='';render();$('pa-'+id)?.focus();
+  if(!HAS(t)&&!UNI[t])toast(`${t} isn't in the ETF list. Import a CSV with its prices to use it.`)}
+function swapTicker(rows,j,el,needData){const t=cleanTicker(el.value||'');if(!t||t===rows[j].t){el.value=rows[j].t;return false}
+  if(rows.some(r=>r.t===t)){toast(t+' is already in this list');el.value=rows[j].t;return false}
+  if(needData&&!HAS(t)&&!UNI[t]){toast(`${t} isn't in the ETF list. Import a CSV with its prices to use it.`);el.value=rows[j].t;return false}
+  rows[j].t=t;if(!HAS(t)&&!UNI[t])toast(`${t} isn't in the ETF list. Import a CSV with its prices to use it.`);return true}
+function bReset(){S.b.rows=[];S.b.name='';S.b.editing=null}
+function bSave(){updateSave();if($('bSave').disabled)return;const B=S.b;const rows=B.rows.filter(r=>(Number(r.w)||0)>0).map(r=>({t:r.t,w:Number(r.w)}));const name=B.name.trim();
+  if(B.editing&&pf(B.editing)){const p=pf(B.editing);p.name=name;p.rows=rows;toast('Saved changes to '+name)}
+  else{S.pfs.push({id:'p'+(++uid),name,color:freeColor(),rows});
+    if(S.pfs.length<MAXP){bReset();S.bDraft='';render();toast('Added '+name+' to your portfolios.',true);setTimeout(()=>FINE&&$('bAdd')?.focus({preventScroll:true}),50);return}
+    toast('Added '+name+'. That makes five, so delete one to build another.')}
+  bReset();B.open=false;render();$('portfolios').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'})}
+function bEdit(id){const p=pf(id);if(!p)return;S.b.rows=p.rows.map((r,j)=>({t:r.t,w:r.w,c:j}));S.b.name=p.name;S.b.editing=id;S.b.open=true;S.bDraft='';render();
+  $('builder').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});setTimeout(()=>FINE&&$('bw-0')?.focus({preventScroll:true}),300)}
+
+/* ---------- info popover ---------- */
+let popFor=null,popPinned=false;
+const BONDS=['TLT','IEF','IEI','JNK','HYG','LQD','BND','AGG','TIP','EDV','GOVT','VGLT','VGIT','BNDX','EMB','MUB','VCIT','VCSH','SCHZ','SPTL','SPAB','SJNK','USHY','FLOT','TLH','ZROZ','VCLT','IGIB','SCHP','STIP','BIV','BLV','BSV','BNDW','VTEB'];
+const CASHLIKE=['SHY','BIL','SGOV','SHV','USFR','TFLO','VGSH','SCHO','MINT','JPST'];
+const OTHER=['GLD','IAU','SLV','DBC','GSG','PDBC','VNQ','USO'];
+function assetType(t){return CASHLIKE.includes(t)?'Cash':BONDS.includes(t)?'Bond':OTHER.includes(t)?'Other':'Equity'}
+function holdHTML(id){let rows,name,note='';
+  if(id==='spy'){rows=[{t:'SPY',w:100}];name='SPY buy & hold';note='The whole market in one fund, bought once and held. A simple yardstick for any portfolio.'}
+  else if(id==='tw'){if(!TW)return '';rows=[{t:TW.now.e,w:60},{t:TW.now.b,w:40}];name='12% Solution';note=`Holding now, from the ${dLabel(TW.official)} close. It changes monthly.`}
+  else{const p=pf(id);if(!p)return '';name=p.name;const tot=p.rows.reduce((a,r)=>a+(Number(r.w)||0),0)||1;rows=p.rows.map(r=>({t:r.t,w:Number(r.w)||0}));if(Math.abs(tot-100)>0.05)note=`Percentages add up to ${r1(tot)}%.`}
+  const order={Equity:0,Bond:1,Cash:2,Other:3};const typed=rows.map(r=>({...r,type:assetType(r.t)})).sort((a,b)=>order[a.type]-order[b.type]||b.w-a.w);
+  const sum={};typed.forEach(r=>{sum[r.type]=(sum[r.type]||0)+r.w});const total=Object.values(sum).reduce((a,b)=>a+b,0)||1;
+  const bar=Object.keys(order).filter(k=>sum[k]).map(k=>`<span class="hb ty-${k}" style="width:${sum[k]/total*100}%"></span>`).join('');
+  const legend=Object.keys(order).filter(k=>sum[k]).map(k=>`<span class="hli"><span class="hd ty-${k}"></span>${k} ${r1(sum[k])}%</span>`).join('');
+  return `<h3>${esc(name)}</h3><div class="hbar">${bar}</div><div class="hleg">${legend}</div>
+    <div class="hrows">${typed.map(r=>`<div class="hrow ty-${r.type}"><span class="mono" style="font-weight:600">${esc(r.t)}</span><span class="hn">${esc(NAMES[r.t]||'')}</span><span class="mono">${r1(r.w)}%</span></div>`).join('')}</div>${note?`<p class="sub" style="margin-top:8px">${esc(note)}</p>`:''}`}
+function showPop(btn){const L=S.sel;const pop=$('pop');
+  if(btn.dataset.hold){const h=holdHTML(btn.dataset.hold);if(!h)return;pop.innerHTML=h}
+  else{const d=INFO[btn.dataset.info];if(!d)return;if(d.sec){pop.innerHTML=`<h3>${esc(d.t(L))}</h3>`+d.sec(L).map(([h,t])=>`<span class="lbl">${esc(h)}</span><p>${esc(t)}</p>`).join('')}else pop.innerHTML=`<h3>${esc(d.t(L))}</h3><span class="lbl">What it is</span><p>${esc(d.w(L))}</p><span class="lbl">How it's calculated</span><p>${esc(d.h(L))}</p><span class="lbl">Why it matters</span><p>${esc(d.y(L))}</p>`}
+  pop.hidden=false;if(popFor&&popFor!==btn)popFor.setAttribute('aria-expanded','false');popFor=btn;btn.setAttribute('aria-expanded','true');
+  const r=btn.getBoundingClientRect(),pw=pop.offsetWidth,ph=pop.offsetHeight,vw=window.innerWidth,vh=window.innerHeight;
+  let left=Math.min(vw-pw-16,Math.max(16,r.left+r.width/2-pw/2));let top=r.bottom+8;if(top+ph>vh-12)top=Math.max(12,r.top-ph-8);
+  pop.style.left=left+'px';pop.style.top=top+'px'}
+function hidePop(){if(popPinned)return;$('pop').hidden=true;if(popFor)popFor.setAttribute('aria-expanded','false');popFor=null}
+document.addEventListener('mouseover',e=>{const b=e.target.closest('.info,.pname');if(b&&!popPinned)showPop(b)});
+document.addEventListener('mouseout',e=>{const b=e.target.closest('.info,.pname');if(b&&!b.contains(e.relatedTarget))hidePop()});
+document.addEventListener('focusin',e=>{const b=e.target.closest('.info,.pname');if(b)showPop(b)});
+document.addEventListener('focusout',e=>{if(e.target.closest('.info,.pname')){popPinned=false;hidePop()}});
+window.addEventListener('scroll',()=>{if(popFor&&!$('pop').hidden){const r=popFor.getBoundingClientRect();if(r.bottom<0||r.top>window.innerHeight){popPinned=false;hidePop()}else showPop(popFor)}},{passive:true});
+
+/* ---------- events ---------- */
+document.addEventListener('click',e=>{
+  const b=e.target.closest('button');
+  if(!b){if(e.target.closest('.mback')){closeIO();return}if(popPinned&&!e.target.closest('#pop')){popPinned=false;hidePop()}return}
+  const d=b.dataset;
+  if(d.info!=null||d.hold!=null){e.preventDefault();if(popPinned&&popFor===b){popPinned=false;hidePop()}else{showPop(b);popPinned=true}return}
+  if(popPinned){popPinned=false;hidePop()}
+  if(b.id==='bToggle'){S.b.open=!S.b.open;persist();renderBuilder();renderChart()}
+  else if(b.id==='bAddBtn')bAddTicker()
+  else if(d.bhide!=null){bRailToggle('r'+d.bhide)}
+  else if(d.brm!=null){S.b.rows.splice(+d.brm,1);persist();renderBuilder()}
+  else if(d.mexp){const k=d.mexp;if(MEXP.has(k))MEXP.delete(k);else MEXP.add(k);const on=MEXP.has(k);b.setAttribute('aria-expanded',on);const row=document.querySelector(`[data-mdet="${CSS.escape(k)}"]`);if(row)row.classList.toggle('open',on)}
+  else if(d.bsort){const k=d.bsort;if(BSORT.k!==k){BSORT.k=k;BSORT.dir=k==='t'?1:-1}else if(BSORT.dir===(k==='t'?1:-1))BSORT.dir=-BSORT.dir;else{BSORT.k=null;BSORT.dir=0}renderBTable()}
+  else if(d.hexp){const id=d.hexp;if(HEXP.has(id))HEXP.delete(id);else HEXP.add(id);renderPortfolios();document.querySelector(`[data-hexp="${id}"]`)?.focus()}
+  else if(d.sug){pickSug(d.sug)}
+  else if(d.psel){setSel(d.scope,{p:d.psel})}
+  else if(d.bmixhide){bRailToggle('mix')}
+  else if(b.id==='bSave')bSave()
+  else if(b.id==='bScale'){scaleRows(S.b.rows);persist();renderBuilder();toast('Scaled to 100%')}
+  else if(d.pscale){const p=pf(d.pscale);if(p){scaleRows(p.rows);persist();render();toast('Scaled '+p.name+' to 100%')}}
+  else if(b.id==='bClear'){const was=S.b.editing;bReset();if(was)S.b.open=false;persist();render()}
+  else if(false){const p=pf(S.pedit);toast(`${p.name} adds up to ${pTot(p)}%. Get it to 100% first.`);$('pw-'+p.id+'-0')?.focus()}
+  else if(d.pedit){S.pedit=null;bEdit(d.pedit)}
+  else if(d.pin){S.pedit=S.pedit===d.pin?null:d.pin;renderPortfolios();const f=S.pedit?$('pw-'+S.pedit+'-0'):document.querySelector(`[data-pin="${d.pin}"]`);f&&f.focus()}
+  else if(d.prm!=null){pf(d.pf).rows.splice(+d.prm,1);render()}
+  else if(d.padd)pAddTicker(d.padd)
+  else if(d.pdel){if(S.delArm===d.pdel){const p=pf(d.pdel);S.pfs=S.pfs.filter(x=>x.id!==d.pdel);if(S.b.editing===d.pdel)bReset();if(S.pedit===d.pdel)S.pedit=null;S.delArm=null;render();toast('Deleted '+p.name)}else{S.delArm=d.pdel;renderPortfolios();document.querySelector(`[data-pdel="${d.pdel}"]`)?.focus();clearTimeout(S._da);S._da=setTimeout(()=>{S.delArm=null;renderPortfolios()},4000)}}
+  else if(d.twd){S.twOpen=!S.twOpen;renderPortfolios();document.querySelector('[data-twd]')?.focus()}
+  else if(d.hide){const now=Date.now(),lc=railClick;
+    if(lc&&lc.id===d.hide&&now-lc.t<450){const all=SERIES.concat(SPYS?[SPYS]:[]).map(r=>r.id);const alone=all.every(id=>id===d.hide?!lc.prev[id]:!!lc.prev[id]);
+      S.hidden=alone?{}:Object.fromEntries(all.map(id=>[id,id!==d.hide]));railClick=null}
+    else{railClick={id:d.hide,t:now,prev:{...S.hidden}};S.hidden={...S.hidden,[d.hide]:!S.hidden[d.hide]}}
+    persist();renderChart()}
+  else if(d.sort){if(S.sortKey===d.sort)S.sortDir=-S.sortDir;else{S.sortKey=d.sort;S.sortDir=-1}persist();renderPortfolios();document.querySelector(`[data-sort="${d.sort}"]`)?.focus()}
+  else if(d.iomodal){openIO(d.iomodal,b);return}
+  else if(d.ioclose){closeIO();return}
+  else if(b.id==='importBtn'){closeIO();$('fileInput').click()}
+  else if(b.id==='bImport'||b.id==='pImport'){closeIO();pfTarget=b.id==='bImport'?'b':'p';$('pfFile').click()}
+  else if(b.id==='bExport'){closeIO();const rows=S.b.rows.filter(r=>r.t);if(!rows.length){toast('Add some ETFs first');return}const nm=(S.b.name||'').trim()||'portfolio';offer(nm.replace(/[^A-Za-z0-9 _-]+/g,'').trim().replace(/\s+/g,'-').toLowerCase()+'.csv',builderCSV())}
+  else if(b.id==='pExport'){closeIO();if(!S.pfs.length){toast('No portfolios to export yet');return}offer(`my-portfolios-${D.days[D.last]}.csv`,portfoliosCSV())}
+  else if(b.id==='exportBtn'){closeIO();offer(`portfolio-lab-daily-${D.days[D.last]}.csv`,monthlyCSV())}
+  else if(b.id==='exportTable')offer(`portfolio-lab-comparison-${D.days[D.last]}.csv`,tableCSV());
+  else if(b.id==='clearImports'){IMPORTED=null;IMPORT_FILES=[];save('imported',null);save('importFiles',[]);buildDataset();computeTW();render();toast('Imported files removed')}
+});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){popPinned=false;hidePop();closeIO()}
+  if(e.target.id==='bAdd'&&(e.key==='ArrowDown'||e.key==='ArrowUp')){e.preventDefault();const n=sugItems(e.target.value).length;if(n){sugIdx=e.key==='ArrowDown'?Math.min(n-1,sugIdx+1):Math.max(-1,sugIdx-1);showSug();$('bSug').querySelector('.act')?.scrollIntoView({block:'nearest'})}}
+  if(e.key==='Escape'&&e.target.id==='bAdd')hideSug();
+  if(e.key==='Enter'&&e.target.id==='bAdd'){e.preventDefault();const it=sugIdx>=0?sugItems(e.target.value)[sugIdx]:null;if(it){pickSug(it.t);return}S.bDraft=e.target.value;bAddTicker();setTimeout(showSug,30)}
+  if(e.key==='Enter'&&e.target.id==='bName'){e.preventDefault();bSave()}
+  if(e.key==='Enter'&&e.target.dataset&&e.target.dataset.days){e.preventDefault();daysInput(e.target,true)}
+  if(e.key==='Enter'&&e.target.dataset&&e.target.dataset.paddIn){e.preventDefault();S.paDraft[e.target.dataset.paddIn]=e.target.value;pAddTicker(e.target.dataset.paddIn)}
+});
+function daysInput(el,commit){const sc=el.dataset.days;const digits=String(el.value).replace(/\D/g,'');if(digits!==el.value)el.value=digits;
+  clearTimeout(daysInput._t);const n=parseInt(digits,10);if(!n)return;
+  const go=()=>{const v=Math.min(n,maxDays());if(commit&&v!==n)el.value=String(v);const cur=selOf(sc);if(cur.d!==v)setSel(sc,{d:v})};
+  if(commit)go();else daysInput._t=setTimeout(go,400)}
+document.addEventListener('input',e=>{const el=e.target;
+  if(el.dataset&&el.dataset.days){daysInput(el,false);return}
+  if(el.id==='bAdd'){S.bDraft=el.value;sugIdx=-1;showSug()}
+  else if(el.dataset&&el.dataset.paddIn)S.paDraft[el.dataset.paddIn]=el.value;
+  else if(el.id==='bName'){S.b.name=el.value;save('b',S.b);updateSave();renderMixLive()}
+  else if(el.dataset&&el.dataset.bw!=null){const v=String(el.value).replace(/[^0-9.]/g,'');S.b.rows[+el.dataset.bw].w=v===''?'':Math.round(parseFloat(v)*100)/100;save('b',S.b);updateSave();renderMixLive()}
+});
+document.addEventListener('change',e=>{const el=e.target;const d=el.dataset||{};
+  if(d.btk!=null){if(swapTicker(S.b.rows,+d.btk,el,true)){persist();setTimeout(renderBuilder)}}
+  else if(d.ptk!=null){if(swapTicker(pf(d.pf).rows,+d.ptk,el,false))setTimeout(render)}
+  else if(d.pw!=null){const v=parseFloat(String(el.value).replace(/[^0-9.]/g,''));pf(d.pf).rows[+d.pw].w=isNaN(v)?0:Math.round(v*100)/100;setTimeout(render)}
+  else if(d.pname){pf(d.pname).name=el.value.trim()||'Untitled portfolio';setTimeout(render)}
+  else if(el.id==='fileInput'&&el.files.length){importFiles([...el.files]);el.value=''}
+  else if(el.id==='pfFile'&&el.files.length){pfImport(el.files[0]);el.value=''}
+  else if(d.days){daysInput(el,true);if(!el.value)renderPicker(d.days)}
+});
+/* charts: hover on desktop; on touch, tap to show the tooltip, drag sideways to scrub, and it hides when you scroll or tap elsewhere */
+function wireChart(box,show,hide){
+  if(FINE){box.addEventListener('mousemove',show);box.addEventListener('mouseleave',hide);return}
+  let t0=null,scrub=false;
+  box.addEventListener('touchstart',e=>{const t=e.touches[0];t0={x:t.clientX,y:t.clientY,on:!box.querySelector('.tip').hidden};scrub=false},{passive:true});
+  box.addEventListener('touchmove',e=>{if(!t0)return;const t=e.touches[0],dx=Math.abs(t.clientX-t0.x),dy=Math.abs(t.clientY-t0.y);
+    if(!scrub&&t0.on&&dx>8&&dx>dy*1.5)scrub=true;if(scrub){e.preventDefault();show(t)}else if(dy>6){hide();t0=null}},{passive:false});
+  box.addEventListener('touchend',e=>{if(t0&&!scrub){const t=e.changedTouches[0];if(Math.abs(t.clientX-t0.x)<8&&Math.abs(t.clientY-t0.y)<8){if(t0.on)hide();else show(t)}}t0=null;scrub=false});
+  document.addEventListener('touchstart',e=>{if(!box.contains(e.target))hide()},{passive:true});
+  window.addEventListener('scroll',()=>{if(!scrub)hide()},{passive:true})}
+const cb=$('chartbox'),bcb=$('bChartbox');wireChart(cb,hoverFromEvent,hideHover);wireChart(bcb,bHoverFromEvent,bHideHover);
+let rz=null;window.addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(()=>{fitBHead();renderChart();if(S.b.open)renderBChart()},150)});
+let dragDepth=0;
+document.addEventListener('dragenter',e=>{if([...(e.dataTransfer?.types||[])].includes('Files')){dragDepth++;$('drophint').hidden=false}});
+document.addEventListener('dragleave',()=>{dragDepth=Math.max(0,dragDepth-1);if(!dragDepth)$('drophint').hidden=true});
+document.addEventListener('dragover',e=>e.preventDefault());
+document.addEventListener('drop',e=>{e.preventDefault();dragDepth=0;$('drophint').hidden=true;const f=[...(e.dataTransfer?.files||[])];if(f.length)importFiles(f)});
+
+/* ---------- import / export ---------- */
+async function importFiles(files){const add={},done=[],errs=[];
+  for(const f of files){try{const d=readFile(await f.text(),f.name);Object.assign(add,d);done.push({name:f.name,tickers:Object.keys(d)})}catch(err){errs.push(err.message)}}
+  if(done.length){const slim=add;
+    IMPORTED=Object.assign({},IMPORTED||{},slim);IMPORT_FILES=IMPORT_FILES.filter(f=>!done.some(d=>d.name===f.name)).concat(done);
+    save('imported',IMPORTED);save('importFiles',IMPORT_FILES);buildDataset();computeTW();render();
+    toast(`Imported ${(n=>n+' ticker'+(n===1?'':'s'))(done.reduce((a,d)=>a+d.tickers.length,0))} from ${done.length} file${done.length>1?'s':''}`)}
+  if(errs.length){$('banner').hidden=false;$('banner').textContent=errs.join(' ')}}
+const cell=v=>{v=v==null?'':String(v);return /[",;\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
+function monthlyCSV(){const st0=selStart(S.sel);const ser=SERIES.concat(SPYS?[SPYS]:[]);
+  const vf=ser.map(r=>r.valueFrom(st0));const head=['date'];ser.forEach(r=>head.push(r.name+' value ($10k at start)'));
+  const lines=[head.map(cell).join(',')];
+  for(let i=st0;i<=D.last;i++){const row=[D.days[i]];
+    ser.forEach((r,j)=>{const o=vf[j];const v=o&&o.V&&o.V[i]!=null&&i>=o.s0?o.V[i]/o.V[o.s0]*10000:null;row.push(v==null?'':v.toFixed(2))});lines.push(row.map(cell).join(','))}
+  lines.push('');lines.push('Portfolio,Holdings');S.pfs.forEach(p=>lines.push([p.name,p.rows.map(r=>r.t+' '+r.w+'%').join('; ')].map(cell).join(',')));
+  if(TW)lines.push(['12% Solution','Holding now: '+TW.now.e+' 60%; '+TW.now.b+' 40%'].map(cell).join(','));
+  return lines.join('\n')+'\n'}
+function tableCSV(){const rows=SERIES.concat(SPYS?[SPYS]:[]);
+  const head=['portfolio','holdings',selLabel(S.sel,'adj')+' return %','1Y %','3Y per yr %','5Y per yr %','10Y per yr %','sharpe','max drawdown %','volatility %','worst year %','worst year','years of data'];
+  const f=v=>v==null?'':(v*100).toFixed(2);
+  return [head.join(',')].concat(rows.map(r=>[r.name,r.holds.replace(/ · /g,'; '),f(r.ret),f(r.y1),f(r.y3),f(r.y5),f(r.y10),r.st?r.st.sharpe.toFixed(2):'',r.st?f(r.st.dd):'',r.st?f(r.st.vol):'',r.st?f(r.st.worst):'',r.st?r.st.worstY||'':'',r.st?r.st.years.toFixed(1):''].map(cell).join(','))).join('\n')+'\n'}
+/* portfolio files: Portfolio,Ticker,Percent (one row per ETF) */
+function pfCSV(list){const out=['Portfolio,Ticker,Percent'];list.forEach(p=>p.rows.forEach(r=>out.push([p.name,r.t,r.w===''||r.w==null?0:r.w].map(cell).join(','))));return out.join('\n')+'\n'}
+function parsePfCSV(text,filename){const rows=parseCSV(text);if(!rows.length)throw new Error('The file is empty.');
+  const head=rows[0].map(c=>c.trim().toLowerCase());let ti=head.findIndex(c=>/^(ticker|symbol|etf|fund)/.test(c)),wi=head.findIndex(c=>/(percent|weight|alloc|%|share)/.test(c)),ni=head.findIndex(c=>/^(portfolio|name|basket)/.test(c));
+  const hi=head.findIndex(c=>/^holding/.test(c));const base=String(filename||'Imported').replace(/\.[^.]+$/,'').replace(/[-_]+/g,' ').trim()||'Imported';const map=new Map();
+  if(hi>=0&&ti<0){rows.slice(1).forEach(r=>{const n=(ni>=0?String(r[ni]||'').trim():'')||base;if(/^(12% solution|spy buy & hold)$/i.test(n))return;const list=[];
+      r.slice(hi).join(';').split(/[;|]/).forEach(x=>{const m=x.trim().match(/^([A-Za-z][A-Za-z0-9.]{0,7})\s+([0-9.]+)\s*%?/);if(m){const t=cleanTicker(m[1]);if(t&&!list.some(y=>y.t===t))list.push({t,w:parseFloat(m[2])})}});
+      if(list.length)map.set(n,list)})}
+  else{wi=head.findIndex(c=>/^(%|percent|weight|alloc|share)|% of portfolio/.test(c));if(wi<0)wi=head.findIndex(c=>/(percent|weight|alloc|%)/.test(c));
+  let body=rows.slice(1);if(ti<0){ti=0;wi=1;body=rows}if(wi<0)wi=ti+1;
+  let fileName=base;body.forEach(r=>{const m=String(r[ti]||'').trim().match(/^portfolio total \((.+)\)$/i);if(m)fileName=m[1]});const base2=fileName;
+  body.forEach(r=>{if(/^portfolio total/i.test(String(r[ti]||'').trim()))return;const t=cleanTicker(r[ti]||'');if(!t)return;const w=parseFloat(String(r[wi]??'').replace(/[^0-9.\-]/g,''));const n=(ni>=0?String(r[ni]||'').trim():'')||base2;
+    if(!map.has(n))map.set(n,[]);const list=map.get(n);if(!list.some(x=>x.t===t))list.push({t,w:isFinite(w)?w:0})})}
+  const out=[...map].map(([name,rows])=>{const tot=rows.reduce((a,r)=>a+r.w,0);if(tot>0&&tot<=1.001)rows.forEach(r=>r.w=Math.round(r.w*10000)/100);return {name,rows:rows.slice(0,MAXETF)}}).filter(p=>p.rows.length);
+  if(!out.length)throw new Error("Couldn't find tickers in that file. Use columns like Portfolio, Ticker, Percent.");return out}
+let pfTarget=null;
+/* table exports: same columns as on screen */
+const pc=v=>v==null||!isFinite(v)?'':(v*100).toFixed(2)+'%';
+function expCols(sel){const tp=[['1M',1],['3M',3],['6M',6],['1Y',12],['3Y',36],['5Y',60]];const extra=!(sel.p&&tp.some(x=>x[0]===sel.p));
+  return {extra,label:selLabel(sel,'short')+' return',tp}}
+function statTail(st){return [st?st.sharpe.toFixed(2):'',st?pc(st.dd):'',st&&st.worst!=null?pc(st.worst):'',st&&st.worstY?st.worstY:'']}
+const TAILH=['Sharpe','Max drawdown','Worst year','Worst year (year)'];
+function builderCSV(){const B=S.b,C=expCols(B.sel),st0=selStart(B.sel);
+  const head=['ETF'].concat(C.extra?[C.label]:[],C.tp.map(([p,m])=>m>12?p+' return (per yr)':p+' return'),TAILH,['% of portfolio']);
+  const out=[head.map(cell).join(',')];
+  B.rows.forEach(r=>{const has=HAS(r.t);const st=has?(pStats({rows:[{t:r.t,w:100}]})||{}).st:null;
+    out.push([r.t].concat(C.extra?[pc(has?wRetT(r.t,st0):null)]:[],C.tp.map(([p,m])=>pc(has?periodRet(r.t,m):null)),statTail(st),[r.w===''||r.w==null?0:r.w]).map(cell).join(','))});
+  const p=mixP();if(weights(p).length){const st=(pStats(p)||{}).st;out.push(['Portfolio total'+((B.name||'').trim()?' ('+B.name.trim()+')':'')].concat(C.extra?[pc(wRetMix(st0))]:[],C.tp.map(([pp,m])=>pc(mixRet(m))),statTail(st),[bTotal()]).map(cell).join(','))}
+  return out.join('\n')+'\n'}
+function portfoliosCSV(){const C=expCols(S.sel);const key={'1M':'m1','3M':'m3','6M':'m6','1Y':'y1','3Y':'y3','5Y':'y5'};
+  const head=['Portfolio'].concat(C.extra?[C.label]:[],C.tp.map(([p,m])=>m>12?p+' return (per yr)':p+' return'),TAILH,['Holdings']);
+  const out=[head.map(cell).join(',')];
+  SERIES.concat(SPYS?[SPYS]:[]).forEach(r=>{const hold=r.id==='tw'?holdList(r).map(h=>h.t+' '+h.w+'% (this month)').join('; '):r.ref?'SPY 100%':holdList(r).map(h=>h.t+' '+r1(h.w)+'%').join('; ');
+    out.push([r.name].concat(C.extra?[pc(r.ret)]:[],C.tp.map(([p])=>pc(r[key[p]])),statTail(r.st),[hold]).map(cell).join(','))});
+  return out.join('\n')+'\n'}
+/* import rules
+   Build a portfolio: ETF, then % (header and % both optional; blank % stays blank = equal split preview)
+   Your portfolios: portfolio name, ETF, % (header optional; a portfolio with no % gets equal weights) */
+const HDR=/^(portfolio|name|basket|ticker|symbol|etf|fund|percent|weight|alloc|%|% of portfolio|holdings?)\b/i;
+const numOrNull=v=>{const x=parseFloat(String(v??'').replace(/[^0-9.\-]/g,''));return isFinite(x)?x:null};
+function fixPct(rows){const got=rows.filter(r=>r.w!=null);if(!got.length)return rows;const tot=got.reduce((a,r)=>a+r.w,0);if(tot>0&&tot<=1.001)got.forEach(r=>r.w=Math.round(r.w*10000)/100);rows.forEach(r=>{if(r.w==null)r.w=0});return rows}
+function parseBuilderCSV(text,filename){const rows=parseCSV(text).filter(r=>r.some(c=>String(c).trim()));if(!rows.length)throw new Error('The file is empty.');
+  let ti=0,wi=1,body=rows;const h=rows[0].map(c=>String(c).trim().toLowerCase());
+  if(h.some(c=>HDR.test(c))){body=rows.slice(1);const t=h.findIndex(c=>/^(ticker|symbol|etf|fund)/.test(c));ti=t>=0?t:0;
+    const w=h.findIndex(c=>/% of portfolio|^%$|^(percent|weight|alloc)/.test(c));wi=w>=0?w:(h.length>1&&!h[1].includes('return')?1:-1)}
+  let name=String(filename||'Imported').replace(/\.[^.]+$/,'').replace(/[-_]+/g,' ').trim()||'Imported';const out=[];
+  body.forEach(r=>{const raw=String(r[ti]||'').trim();const m=raw.match(/^portfolio total(?: \((.+)\))?$/i);if(m){if(m[1])name=m[1];return}
+    const t=cleanTicker(raw);if(!t||out.some(x=>x.t===t))return;out.push({t,w:wi>=0?numOrNull(r[wi]):null})});
+  if(!out.length)throw new Error("Couldn't find any tickers. Put the ETF in the first column and its % in the second.");
+  const any=out.some(r=>r.w!=null);if(any)fixPct(out);else out.forEach(r=>r.w='');
+  return [{name,rows:out.slice(0,MAXETF)}]}
+function parsePortfoliosCSV(text,filename){const rows=parseCSV(text).filter(r=>r.some(c=>String(c).trim()));if(!rows.length)throw new Error('The file is empty.');
+  const h=rows[0].map(c=>String(c).trim().toLowerCase());const hasH=h.some(c=>HDR.test(c));const body=hasH?rows.slice(1):rows;const map=new Map();
+  const hi=hasH?h.findIndex(c=>/^holding/.test(c)):-1;
+  if(hi>=0){body.forEach(r=>{const n=String(r[0]||'').trim();if(!n||/^(12% solution|spy buy & hold)$/i.test(n))return;const list=[];
+      r.slice(hi).join(';').split(/[;|]/).forEach(x=>{const m=x.trim().match(/^([A-Za-z][A-Za-z0-9.]{0,7})\s*([0-9.]+)?\s*%?/);if(m){const t=cleanTicker(m[1]);if(t&&!list.some(y=>y.t===t))list.push({t,w:m[2]!=null?parseFloat(m[2]):null})}});
+      if(list.length)map.set(n,list)})}
+  else{let ni=0,ti=1,wi=2;if(hasH){const a=h.findIndex(c=>/^(portfolio|name|basket)/.test(c)),b=h.findIndex(c=>/^(ticker|symbol|etf|fund)/.test(c)),w=h.findIndex(c=>/^(%|percent|weight|alloc)|% of portfolio/.test(c));if(a>=0)ni=a;if(b>=0)ti=b;wi=w>=0?w:(h.length>2?2:-1)}
+    body.forEach(r=>{const n=String(r[ni]||'').trim();const t=cleanTicker(r[ti]||'');if(!n||!t)return;if(!map.has(n))map.set(n,[]);const list=map.get(n);if(!list.some(x=>x.t===t))list.push({t,w:wi>=0?numOrNull(r[wi]):null})})}
+  const out=[...map].map(([name,list])=>{list=list.slice(0,MAXETF);if(list.some(r=>r.w!=null))fixPct(list);else{list.forEach(r=>r.w=1);scaleRows(list)}return {name,rows:list}}).filter(p=>p.rows.length);
+  if(!out.length)throw new Error("Couldn't read any portfolios. Put the portfolio name in the first column, the ETF in the second, and its % in the third.");return out}
+async function pfImport(file){try{const txt=await file.text();const list=pfTarget==='b'?parseBuilderCSV(txt,file.name):parsePortfoliosCSV(txt,file.name);const missing=new Set();list.forEach(p=>p.rows.forEach(r=>{if(!HAS(r.t)&&!UNI[r.t])missing.add(r.t)}));
+  const miss=missing.size?` No prices for ${[...missing].slice(0,4).join(', ')}${missing.size>4?'…':''}; import their prices to see them.`:'';
+  if(pfTarget==='b'){const p=list[0];S.b.rows=p.rows.map((r,j)=>({t:r.t,w:r.w,c:j}));S.b.name=p.name;S.b.editing=null;S.b.open=true;BSORT.k=null;BSORT.dir=0;persist();render();
+    toast(`Loaded ${p.rows.length} ETFs into the builder${p.rows.every(r=>r.w==='')?'. No percentages in the file, so it shows an equal split until you set them.':'.'}`+miss)}
+  else{let added=0,updated=0,skipped=0;list.forEach(p=>{const ex=S.pfs.find(x=>x.name.trim().toLowerCase()===p.name.trim().toLowerCase());
+      if(ex){ex.rows=p.rows.map(r=>({t:r.t,w:r.w}));updated++}else if(S.pfs.length<MAXP){S.pfs.push({id:'p'+(++uid),name:p.name,color:freeColor(),rows:p.rows.map(r=>({t:r.t,w:r.w}))});added++}else skipped++});
+    persist();render();toast([added?`Added ${added}`:'',updated?`updated ${updated}`:'',skipped?`skipped ${skipped} (five max)`:''].filter(Boolean).join(', ').replace(/^./,c=>c.toUpperCase())+' from '+file.name+'.'+miss)}}
+  catch(err){toast(err.message||"Couldn't read that file")}}
+/* Import / Export dialog, one per section */
+let ioLast=null;
+function ioOpt(id,icon,title,desc){return `<button type="button" class="ioopt" id="${id}">${icon}<span><strong>${title}</strong><span class="sub">${desc}</span></span></button>`}
+function openIO(sc,from){ioLast=from||null;const up='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3"/><path d="m7 8 5-5 5 5"/><path d="M5 21h14"/></svg>',dn='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>';
+  const pf=sc==='b'?[ioOpt('bImport',up,'Import a portfolio','A CSV with the ETF in column 1 and its % in column 2. Header row and % are optional.'),ioOpt('bExport',dn,'Export this portfolio','A CSV of the table: each ETF with its returns, Sharpe, drawdown, worst year and %.')]
+    :[ioOpt('pImport',up,'Import portfolios','A CSV with the portfolio name, ETF and % in columns 1 to 3. Header optional; no % means equal weights.'),ioOpt('pExport',dn,'Export my portfolios','A CSV of the table: each portfolio with its returns and stats, plus its ETFs and weights.')];
+  const data=sc==='p'?[ioOpt('exportBtn',dn,'Export chart data','Daily values for each line on the chart over the picked period.')]:[];
+  $('ioTitle').textContent=sc==='b'?'Build a portfolio: import / export':'Your portfolios: import / export';
+  $('ioBody').innerHTML=`<span class="cap">Portfolios</span><div class="iolist">${pf.join('')}</div><span class="sub iofmt">Exports open in Excel and can be imported back in. Portfolios with a name already in your list are updated; five max.</span>${data.length?`<span class="cap" style="margin-top:6px">Chart data</span><div class="iolist">${data.join('')}</div>`:''}`;
+  $('ioModal').hidden=false;$('ioModal').querySelector('.ioopt').focus()}
+function closeIO(){if($('ioModal').hidden)return;$('ioModal').hidden=true;ioLast&&ioLast.focus&&ioLast.focus()}
+let DL=null;
+async function offer(name,data){try{DL=DL||await window.claude?.use?.('downloads')}catch(e){DL=null}
+  if(!DL){try{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data],{type:'text/csv'}));a.download=name;document.body.append(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1000);toast('Saved '+name)}catch(e){toast('Couldn’t save the file')}return}
+  try{await DL.save({filename:name,data});toast('Saved '+name)}catch(e){if(e&&e.code==='declined')return;toast(e&&e.code==='rate_limited'?'A save prompt is already open':'Couldn’t save the file')}}
+
+/* ---------- theme + boot ---------- */
+try{localStorage.removeItem('pl:theme')}catch(e){}
+if(window.matchMedia){const mq=window.matchMedia('(prefers-color-scheme: dark)');const f=()=>renderChart();mq.addEventListener?mq.addEventListener('change',f):mq.addListener&&mq.addListener(f)}
+function allTickers(){return [...new Set(DS.tickers.concat(Object.keys(UNI)))].sort()}
+function needTickers(){const s=new Set();S.pfs.forEach(p=>p.rows.forEach(r=>s.add(r.t)));S.b.rows.forEach(r=>s.add(r.t));
+  return [...s].filter(t=>!HAS(t)&&UNI[t]&&!LOADING.has(t)&&!NODATA.has(t))}
+async function ensureData(){const ts=needTickers();if(!ts.length)return;ts.forEach(t=>LOADING.add(t));const got={};
+  await Promise.all(ts.map(async t=>{try{const r=await fetch('data/t/'+encodeURIComponent(t)+'.csv');if(!r.ok)throw new Error(r.status);Object.assign(got,readFile(await r.text(),t+'.csv'))}catch(e){NODATA.add(t)}}));
+  ts.forEach(t=>LOADING.delete(t));Object.assign(BUILTIN,got);buildDataset();computeTW();render();const bad=ts.filter(t=>NODATA.has(t));if(bad.length)toast(`Couldn’t load prices for ${bad.join(', ')}.`)}
+(async function boot(){
+  try{
+    const [c,u]=await Promise.all([fetch('data/core.csv'),fetch('data/universe.json')]);
+    if(!c.ok)throw new Error('core '+c.status);
+    BUILTIN=readFile(await c.text(),'core.csv');
+    if(u.ok){const j=await u.json();(j.etfs||[]).forEach(([t,n])=>{UNI[t]=n;if(!NAMES[t])NAMES[t]=n})}
+  }catch(e){$('banner').hidden=false;$('banner').textContent='Couldn’t load prices. Refresh the page to try again.';return}
+  buildDataset();computeTW();render();
+})();
+</script>
