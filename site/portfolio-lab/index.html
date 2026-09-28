@@ -1187,7 +1187,7 @@ function render(opts={}){
   document.querySelectorAll('button.info:empty').forEach(b=>{b.innerHTML=ICON_I});
   if(fid&&$(fid)&&document.activeElement!==$(fid)){const el=$(fid);el.focus();if(el.select&&opts.select)el.select()}
   $('tickers')||document.body.insertAdjacentHTML('beforeend','<datalist id="tickers"></datalist>');
-  $('tickers').innerHTML=allTickers().filter(t=>t!=='SHY').map(t=>`<option value="${t}">${esc(NAMES[t]||'')}</option>`).join('');
+  {const TL=allTickers().filter(t=>t!=='SHY'),dl=$('tickers');if(dl.dataset.n!=TL.length){dl.dataset.n=TL.length;dl.innerHTML=TL.map(t=>`<option value="${t}">${esc(NAMES[t]||'')}</option>`).join('')}}
 }
 function renderSources(){
   $('impFoot').hidden=!IMPORT_FILES.length;
