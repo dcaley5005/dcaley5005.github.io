@@ -382,10 +382,10 @@ tr.hadd td{padding-top:6px;padding-bottom:8px}
 .hname{display:inline-flex;align-items:center;gap:8px}
 .hname .field{width:200px;height:30px}
 .htot{font-size:13px;font-weight:600;font-family:"IBM Plex Mono",monospace}
-.sug{position:fixed;z-index:60;width:300px;max-width:calc(100vw - 16px);overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.18);padding:4px}
+.sug{position:fixed;z-index:60;width:420px;max-width:calc(100vw - 16px);overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.18);padding:4px}
 .sugi{display:grid;grid-template-columns:58px minmax(0,1fr) auto;gap:8px;align-items:center;width:100%;border:0;background:transparent;text-align:left;padding:7px 8px;border-radius:7px;font-size:13px;color:var(--ink)}
 .sugi:hover,.sugi.act{background:var(--pill)}
-.sugi .st{font-weight:600}.sugi .sn{color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sugi .st{font-weight:600}.sugi .sn{color:var(--muted);line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .sugi.added{opacity:.45;cursor:default}.sugi.added:hover{background:transparent}
 .sugi .sa{font-size:11px;font-weight:600;padding:1px 6px;border-radius:8px;background:var(--pill);color:var(--ink2)}
 .btable th .sort{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;white-space:nowrap}
@@ -638,7 +638,7 @@ footer .src{font-family:"IBM Plex Mono",monospace;font-size:12px;padding:3px 8px
 
 <script>
 let UNI={};const LOADING=new Set(),NODATA=new Set(); /* UNI: ticker -> name from data/universe.json */
-const NAMES = {SPY:'S&P 500',QQQ:'Nasdaq 100',MDY:'S&P MidCap 400',IWM:'Russell 2000',EFA:'Developed intl. stocks',VTI:'Total US stock market',VEA:'Developed intl. stocks',VWO:'Emerging markets',TLT:'20+ yr Treasuries',IEF:'7–10 yr Treasuries',JNK:'High-yield corporate bonds',HYG:'High-yield corporate bonds',AGG:'US aggregate bonds',BND:'Total US bond market',LQD:'Investment-grade corporate bonds',TIP:'Inflation-protected Treasuries',SHY:'1–3 yr Treasuries',GLD:'Gold',XLK:'Technology Select Sector',FCNTX:'Fidelity Contrafund (mutual fund)',VT:'Total world stocks',VXUS:'Total intl. stocks ex-US',IJR:'S&P SmallCap 600',ACWI:'MSCI All Country World',ACWX:'MSCI All Country World ex-US',IEUR:'Core MSCI Europe',IEMG:'Core MSCI Emerging Markets'};
+const NAMES = {SPY:'S&P 500',QQQ:'Nasdaq 100',MDY:'S&P MidCap 400',IWM:'Russell 2000',EFA:'Developed intl. stocks',VTI:'Total US stock market',VEA:'Developed intl. stocks',VWO:'Emerging markets',TLT:'20+ yr Treasuries',IEF:'7–10 yr Treasuries',JNK:'High-yield corporate bonds',HYG:'High-yield corporate bonds',AGG:'US aggregate bonds',BND:'Total US bond market',LQD:'Investment-grade corporate bonds',TIP:'Inflation-protected Treasuries',SHY:'1–3 yr Treasuries',GLD:'Gold',XLK:'Technology Select Sector',FCNTX:'Fidelity Contrafund (mutual fund)',VT:'Total world stocks',VXUS:'Total intl. stocks ex-US',IJR:'S&P SmallCap 600',ACWI:'MSCI All Country World',ACWX:'MSCI All Country World ex-US',IEUR:'Core MSCI Europe',TPS:'The 12 Percent Solution ETF',IEMG:'Core MSCI Emerging Markets'};
 const SAMPLE = [
   {name:'Tech & growth',rows:[['XLK',25],['QQQ',25],['SPY',25],['FCNTX',25]]},
   {name:'Small & mid',rows:[['MDY',35],['IJR',35],['IWM',30]]},
@@ -801,14 +801,16 @@ const TW_EQ=['SPY','QQQ','MDY','IWM'],TW_BD=['TLT','JNK'];
 function twPick(i){const c=ret('SHY',i,3);const best=l=>l.map(t=>[t,ret(t,i,3)]).filter(x=>x[1]!=null).sort((a,b)=>b[1]-a[1])[0];
   const e=best(TW_EQ),b=best(TW_BD);if(!e||!b||c==null)return null;return {e:e[1]>c?e[0]:'SHY',b:b[0]}}
 let TW=null;
-function computeTW(){const need=TW_EQ.concat(TW_BD,['SHY']);if(!need.every(HAS)){TW=null;return}
+function computeTW(){delete D.P.TPS;delete DS.P.TPS;DS.tickers=DS.tickers.filter(t=>t!=='TPS');const need=TW_EQ.concat(TW_BD,['SHY']);if(!need.every(HAS)){TW=null;return}
   let s=null;for(let i=3;i<DS.n;i++){if(need.every(t=>px(t,i)!=null&&px(t,i-3)!=null)){s=i;break}}if(s==null){TW=null;return}
   const V=new Array(DS.n).fill(null);V[s]=1;const picks=[];
   for(let i=s;i<DS.last;i++){const pk=twPick(i);picks[i]=pk;const r=0.6*(px(pk.e,i+1)/px(pk.e,i)-1)+0.4*(px(pk.b,i+1)/px(pk.b,i)-1);V[i+1]=V[i]*(1+r)}
   const official=DS.partial?DS.last-1:DS.last;
   const Vd=new Array(D.n).fill(null);const d0=DS.me[s];Vd[d0]=1;
   for(let m=s;m<DS.last;m++){const pk=picks[m],b0=DS.me[m],b1=DS.me[m+1];for(let i=b0+1;i<=b1;i++)Vd[i]=Vd[b0]*(0.6*pxd(pk.e,i)/pxd(pk.e,b0)+0.4*pxd(pk.b,i)/pxd(pk.b,b0))}
-  TW={V,Vd,picks,start:s,startD:d0,now:twPick(official),official}}
+  TW={V,Vd,picks,start:s,startD:d0,now:twPick(official),official};
+  /* TPS: the 12% Solution as a holdable ETF that only exists here */
+  D.P.TPS=Vd;DS.P.TPS=DS.me.map(i=>Vd[i]);if(!DS.tickers.includes('TPS')){DS.tickers.push('TPS');DS.tickers.sort()}}
 function shyMonthly(i){const a=px('SHY',i),b=px('SHY',i-1);return a!=null&&b!=null?a/b-1:0}
 function statsFromValues(V,s){ // V normalized values indexed by month, valid from s to last
   const last=DS.last;if(s==null||V[s]==null)return null;const n=last-s;if(n<12)return null;
@@ -1209,7 +1211,7 @@ function showSug(){const inp=$('bAdd');if(!inp||inp.disabled){hideSug();return}l
   const items=sugItems(inp.value);if(!items.length){hideSug();return}
   sugIdx=Math.min(sugIdx,items.length-1);
   box.innerHTML=items.map((o,k)=>`<button type="button" role="option" class="sugi${o.a?' added':''}${k===sugIdx?' act':''}" data-sug="${o.t}" aria-disabled="${o.a}" tabindex="-1"><span class="mono st">${o.t}</span><span class="sn">${esc(o.n)}</span>${o.a?'<span class="sa">Added</span>':''}</button>`).join('');
-  const r=inp.getBoundingClientRect();box.style.left=Math.max(8,Math.min(r.left,innerWidth-300))+'px';
+  const r=inp.getBoundingClientRect();box.style.left=Math.max(8,Math.min(r.left,innerWidth-428))+'px';
   const below=innerHeight-r.bottom;box.style.maxHeight=Math.max(160,Math.min(320,(below>220?below:r.top)-16))+'px';
   box.hidden=false;const h=box.offsetHeight;box.style.top=(below>220||r.top<h+12?r.bottom+4:r.top-h-4)+'px';inp.setAttribute('aria-expanded','true')}
 function hideSug(){const box=$('bSug');if(box)box.hidden=true;sugIdx=-1;$('bAdd')?.setAttribute('aria-expanded','false')}
