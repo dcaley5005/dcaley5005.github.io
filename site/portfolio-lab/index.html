@@ -741,6 +741,8 @@ const S={
   {const seen=new Set();S.pfs.forEach(p=>{if(seen.has(p.id))p.id='p'+(++uid);seen.add(p.id)})}}
 if(!S.b)S.b={rows:['SPY','QQQ','ACWX','MDY','IWM','IEMG','IEUR'].map((t,c)=>({t,w:'',c})),name:'',period:'1Y',open:S.pfs.length===0,editing:null};
 if(S.b.editing&&!S.pfs.some(p=>p.id===S.b.editing))S.b.editing=null;
+/* an untouched builder still holding the old default list gets the new one */
+if(!S.b.editing&&!S.b.name&&S.b.rows.map(r=>r.t).join()==='SPY,QQQ,XLK'&&S.b.rows.every(r=>r.w===''||r.w==null))S.b.rows=['SPY','QQQ','ACWX','MDY','IWM','IEMG','IEUR'].map((t,c)=>({t,w:'',c}));
 if(window.innerWidth<=700)S.b.open=true;
 S.b.sel=validSel(S.b.sel,{p:'YTD'});delete S.b.period;delete S.b.view;
 function persist(){save('pfs2',S.pfs);save('sel',S.sel);save('hidden2',S.hidden);save('sortKey',S.sortKey);save('sortDir',S.sortDir);save('b',S.b);save('uid',uid);if(DS&&needTickers().length)setTimeout(ensureData,0)}
