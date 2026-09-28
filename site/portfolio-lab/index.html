@@ -1,3 +1,8 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Build ETF portfolios, compare returns and risk, and follow a 12% Solution style momentum strategy.">
 <title>Portfolio Lab</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -431,7 +436,7 @@ tr.mdet{display:none}
   .hexp-sp{width:0}
   .btable th .sort{white-space:normal;padding:4px 0;font-size:11px;letter-spacing:.04em}
   .btable td,.btable th{padding-left:3px;padding-right:3px}
-  .btable .tkin{width:62px;padding:0 6px}
+  .btable .tkin{width:66px;padding:0 5px}
   .btable .rsw{width:22px}
   .btable .wbox .field{width:44px;padding:0 6px}
   .btable .nmin{width:84px}
@@ -734,7 +739,7 @@ const S={
   if(!['ret','m1','m3','m6','y1','y3','y5','sharpe','dd','worst'].includes(S.sortKey))S.sortKey='ret';if(!Number.isFinite(uid))uid=10;uid=Math.max(uid,...S.pfs.map(p=>parseInt(String(p.id).replace(/\D/g,''))||0));
   S.sel=validSel(S.sel,{p:'YTD'});
   {const seen=new Set();S.pfs.forEach(p=>{if(seen.has(p.id))p.id='p'+(++uid);seen.add(p.id)})}}
-if(!S.b)S.b={rows:[{t:'SPY',w:'',c:0},{t:'QQQ',w:'',c:1},{t:'XLK',w:'',c:2}],name:'',period:'1Y',open:S.pfs.length===0,editing:null};
+if(!S.b)S.b={rows:['SPY','QQQ','ACWX','MDY','IWM','IEMG','IEUR'].map((t,c)=>({t,w:'',c})),name:'',period:'1Y',open:S.pfs.length===0,editing:null};
 if(S.b.editing&&!S.pfs.some(p=>p.id===S.b.editing))S.b.editing=null;
 if(window.innerWidth<=700)S.b.open=true;
 S.b.sel=validSel(S.b.sel,{p:'YTD'});delete S.b.period;delete S.b.view;
