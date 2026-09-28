@@ -569,6 +569,8 @@ footer .src{font-family:"IBM Plex Mono",monospace;font-size:12px;padding:3px 8px
 @media (prefers-reduced-motion:reduce){.edit svg{transition:none}}
 .mrm{display:inline-flex;align-items:center;gap:7px}
 .mrm.armed{background:var(--neg);border-color:var(--neg);color:var(--panel)}
+
+.dform{display:contents}
 @media (pointer:coarse){input,select,textarea{font-size:16px!important}}
 @media (max-width:380px){.btable .tkin{width:60px;padding:0 4px}.btable .wbox .field{width:40px;padding:0 4px}#bName{width:64px;padding:0 5px}tr.hrowx .tkin{width:66px}}
 </style>
@@ -594,7 +596,7 @@ footer .src{font-family:"IBM Plex Mono",monospace;font-size:12px;padding:3px 8px
       <span style="display:flex;flex-direction:column;gap:2px;min-width:0;flex:1"><h2 id="bTitle">Build a portfolio</h2><span class="sub" id="bSub"></span></span>
       <span class="bchev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
     </button>
-    <div class="bacts" id="bActs"><button type="button" class="iob" data-iomodal="b" aria-haspopup="dialog" title="Import or export"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4v13"/><path d="m3 13 4 4 4-4"/><path d="M17 20V7"/><path d="m21 11-4-4-4 4"/></svg><span class="iol">Import / Export</span></button><div class="picker"><div class="seg" role="group" aria-label="Comparison period" id="bPeriod"></div><label class="daysbox" for="bDays"><span>Last</span><input class="field" id="bDays" data-days="b" inputmode="numeric" enterkeyhint="done" autocomplete="off" placeholder="#" maxlength="4"><span>days</span></label><button type="button" class="info vinfo" data-info="period" aria-label="How the time period works"></button></div><span class="bsep" aria-hidden="true"></span><span class="sub" id="bHint"></span><button type="button" class="linkbtn" id="bClear">Clear</button><button type="button" class="btn sm primary" id="bSave">Add to my portfolios</button></div></div>
+    <div class="bacts" id="bActs"><button type="button" class="iob" data-iomodal="b" aria-haspopup="dialog" title="Import or export"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4v13"/><path d="m3 13 4 4 4-4"/><path d="M17 20V7"/><path d="m21 11-4-4-4 4"/></svg><span class="iol">Import / Export</span></button><div class="picker"><div class="seg" role="group" aria-label="Comparison period" id="bPeriod"></div><form class="dform" action="javascript:void 0" onsubmit="return false"><label class="daysbox" for="bDays"><span>Last</span><input class="field" id="bDays" data-days="b" inputmode="numeric" enterkeyhint="done" autocomplete="off" placeholder="#" maxlength="4"><span>days</span></label></form><button type="button" class="info vinfo" data-info="period" aria-label="How the time period works"></button></div><span class="bsep" aria-hidden="true"></span><span class="sub" id="bHint"></span><button type="button" class="linkbtn" id="bClear">Clear</button><button type="button" class="btn sm primary" id="bSave">Add to my portfolios</button></div></div>
     <div id="bBody" hidden>
       <div class="bgrid">
         <div class="bleft">
@@ -609,7 +611,7 @@ footer .src{font-family:"IBM Plex Mono",monospace;font-size:12px;padding:3px 8px
   <section class="panel" aria-labelledby="listTitle" id="portfolios">
     <div class="phead ptop">
       <h2 id="listTitle">Your portfolios</h2><span class="sub" id="listSub" hidden></span>
-      <div class="pctrls"><button type="button" class="iob" data-iomodal="p" aria-haspopup="dialog" title="Import or export"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4v13"/><path d="m3 13 4 4 4-4"/><path d="M17 20V7"/><path d="m21 11-4-4-4 4"/></svg><span class="iol">Import / Export</span></button><div class="picker"><div class="seg" role="group" aria-label="Time period" id="pPeriod"></div><label class="daysbox" for="pDays"><span>Last</span><input class="field" id="pDays" data-days="p" inputmode="numeric" enterkeyhint="done" autocomplete="off" placeholder="#" maxlength="4"><span>days</span></label><button type="button" class="info vinfo" data-info="period" aria-label="How the time period works"></button></div></div>
+      <div class="pctrls"><button type="button" class="iob" data-iomodal="p" aria-haspopup="dialog" title="Import or export"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4v13"/><path d="m3 13 4 4 4-4"/><path d="M17 20V7"/><path d="m21 11-4-4-4 4"/></svg><span class="iol">Import / Export</span></button><div class="picker"><div class="seg" role="group" aria-label="Time period" id="pPeriod"></div><form class="dform" action="javascript:void 0" onsubmit="return false"><label class="daysbox" for="pDays"><span>Last</span><input class="field" id="pDays" data-days="p" inputmode="numeric" enterkeyhint="done" autocomplete="off" placeholder="#" maxlength="4"><span>days</span></label></form><button type="button" class="info vinfo" data-info="period" aria-label="How the time period works"></button></div></div>
     </div>
     <div class="pgrid">
       <div class="pleft">
@@ -892,7 +894,7 @@ function renderBuilder(){withFocus(()=>{
   const B=S.b,open=B.open,ed=B.editing&&pf(B.editing);
   $('bToggle').setAttribute('aria-expanded',open);$('bBody').hidden=!open;$('builder').classList.toggle('open',open);
   $('bTitle').textContent=ed?'Edit portfolio':'Build a portfolio';
-  $('bSub').textContent=ed?`Editing ${ed.name}. Change ETFs or percentages, then save changes.`:open?'Compare ETFs, set your percentages, then add it to your portfolios.':(S.pfs.length>=MAXP?'You have five portfolios. Delete one below to build another.':'Compare ETFs side by side, pick your mix, and add it to your portfolios.');
+  $('bSub').textContent=ed?`Editing ${ed.name}. Change ETFs or percentages, then save changes.`:open?'Compare ETFs, set your percentages, then add it to your portfolios.':(S.pfs.length>=MAXP?'You have five portfolios. Remove one below to build another.':'Compare ETFs side by side, pick your mix, and add it to your portfolios.');
   if(!open)return;
   renderPicker('b');fitBHead();renderBChart();renderBTable();
   $('bSave').textContent=ed?'Save changes':'Add to my portfolios';$('bClear').textContent=ed?'Cancel editing':'Clear';
@@ -927,7 +929,7 @@ function renderBTable(){const B=S.b;if(!B.open)return;const hp=B.sel.p;
 }
 function updateSave(){const B=S.b,ed=B.editing&&pf(B.editing),tot=bTotal(),left=r1(100-tot);
   let why='';const used=B.rows.filter(r=>(Number(r.w)||0)>0);
-  if(!B.rows.length)why='Add an ETF';else if(!used.length)why='Set percentages';else if(Math.abs(left)>=0.05)why=left>0?`${left}% left`:`Over by ${r1(-left)}%`;else if(!(B.name||'').trim())why='Name it';else if(!ed&&S.pfs.length>=MAXP)why='Five max: delete one first';
+  if(!B.rows.length)why='Add an ETF';else if(!used.length)why='Set percentages';else if(Math.abs(left)>=0.05)why=left>0?`${left}% left`:`Over by ${r1(-left)}%`;else if(!(B.name||'').trim())why='Name it';else if(!ed&&S.pfs.length>=MAXP)why='Five max: remove one first';
   $('bSave').disabled=!!why;$('bSave').title=why||'';$('bHint').textContent=why||'Ready';$('bHint').classList.toggle('ok',!why);fitBHead()}
 
 let BCH=null;
@@ -1161,9 +1163,9 @@ function renderPortfolios(){
     const det=PCOLS.filter(([k])=>k!=='ret').map(([k,lab])=>{const v=colVal(r,k);return mItem(lab(L),fmt(k,v,r),color(k,v))}).join('');
     const acts=r.ref?'':r.locked
       ?`<button type="button" class="edit" data-twd="1" aria-expanded="${!!S.twOpen}" aria-label="${S.twOpen?'Hide':'Show'} 12% Solution details">${S.twOpen?'Close':'Details'}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="transform:${S.twOpen?'rotate(180deg)':'none'}"><path d="m6 9 6 6 6-6"/></svg></button>`
-      :`<button type="button" class="delbtn${S.delArm===r.id?' armed':''}" data-pdel="${r.id}" aria-label="${S.delArm===r.id?'Confirm delete '+esc(r.name):'Delete '+esc(r.name)}">${S.delArm===r.id?'Delete?':'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M6 7l1 13h10l1-13"/></svg>'}</button>`;
+      :`<button type="button" class="delbtn${S.delArm===r.id?' armed':''}" data-pdel="${r.id}" aria-label="${S.delArm===r.id?'Confirm remove '+esc(r.name):'Remove '+esc(r.name)}">${S.delArm===r.id?'Remove?':'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M6 7l1 13h10l1-13"/></svg>'}</button>`;
     const main=`<tr class="${editing?'editing':''}${isBench(r)?' bench':''}"><td><span class="pn">${hasHold(r)?`<button type="button" class="hexp" data-hexp="${r.id}" aria-expanded="${HEXP.has(r.id)}" aria-label="Show the ETFs in ${esc(r.name)}"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button>`:'<span class="hexp-sp"></span>'}${swatch(r.color,r.dash)}<button type="button" class="pname nm" data-hold="${r.id}" aria-label="${esc(r.name)}: show holdings">${esc(r.name)}</button>${isBench(r)?'<span class="badge">BENCHMARK</span>':''}${r.short?'<span class="mut" style="font-weight:400" title="Less than 10 years of data">*</span>':''}${r.p&&!r.ref&&!r.locked&&!pOk(r.p)?`<span class="badge warnb" title="Percentages add to ${pTot(r.p)}%. Click Edit to fix.">${pTot(r.p)}%</span>`:''}</span></td>
-      ${cells}<td class="actcell dsk"><span class="actwrap">${acts}</span></td>${mexpBtn('p'+r.id,r.name)}</tr>`+mdetRow('p'+r.id,det+(r.ref?'':r.locked?`<div class="mi mact"><span class="actwrap">${acts}</span></div>`:`<div class="mi mact"><button type="button" class="btn sm mrm${S.delArm===r.id?' armed':''}" data-pdel="${r.id}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M6 7l1 13h10l1-13"/></svg>${S.delArm===r.id?'Tap again to delete':'Delete '+esc(r.name)}</button></div>`));
+      ${cells}<td class="actcell dsk"><span class="actwrap">${acts}</span></td>${mexpBtn('p'+r.id,r.name)}</tr>`+mdetRow('p'+r.id,det+(r.ref?'':r.locked?`<div class="mi mact"><span class="actwrap">${acts}</span></div>`:`<div class="mi mact"><button type="button" class="btn sm mrm${S.delArm===r.id?' armed':''}" data-pdel="${r.id}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M6 7l1 13h10l1-13"/></svg>${S.delArm===r.id?'Tap again to remove':'Remove '+esc(r.name)}</button></div>`));
     return main+(HEXP.has(r.id)?holdRows(r,L,best):'')+(!r.locked&&S.pedit===r.id?`<tr class="editrow"><td colspan="${ncol}">${inlineEditor(r)}</td></tr>`:'')+(r.locked&&S.twOpen?`<tr class="twrow"><td colspan="${ncol}">${twPanel()}</td></tr>`:'');
   }).join('');
   $('ptable').innerHTML=`<thead><tr class="grow"><th></th><th></th><th class="grp" colspan="6"><span class="gl"><span class="cap">Returns</span>${infoBtn('returns','returns')}</span></th><th></th><th></th><th></th><th></th></tr><tr><th style="text-align:left"><span class="cap">Portfolio</span></th>${PCOLS.map(([k,lab,info])=>`<th class="r${k==='ret'?'':' dsk'}"><span class="hw"><button type="button" class="sort" data-sort="${k}" aria-pressed="${S.sortKey===k}">${lab(L)}${S.sortKey===k?(S.sortDir<0?' ↓':' ↑'):''}</button>${['m1','m3','m6','y1','y3','y5'].includes(k)?'':infoBtn(info,lab(L))}</span></th>`).join('')}<th class="dsk"></th><th class="mob"></th></tr></thead>
@@ -1235,7 +1237,7 @@ function bSave(){updateSave();if($('bSave').disabled)return;const B=S.b;const ro
   if(B.editing&&pf(B.editing)){const p=pf(B.editing);p.name=name;p.rows=rows;toast('Saved changes to '+name)}
   else{S.pfs.push({id:'p'+(++uid),name,color:freeColor(),rows});
     if(S.pfs.length<MAXP){bReset();S.bDraft='';render();toast('Added '+name+' to your portfolios.',true);setTimeout(()=>FINE&&$('bAdd')?.focus({preventScroll:true}),50);return}
-    toast('Added '+name+'. That makes five, so delete one to build another.')}
+    toast('Added '+name+'. That makes five, so remove one to build another.')}
   bReset();B.open=false;render();$('portfolios').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'})}
 function bEdit(id){const p=pf(id);if(!p)return;S.b.rows=p.rows.map((r,j)=>({t:r.t,w:r.w,c:j}));S.b.name=p.name;S.b.editing=id;S.b.open=true;S.bDraft='';render();
   $('builder').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});setTimeout(()=>FINE&&$('bw-0')?.focus({preventScroll:true}),300)}
@@ -1296,7 +1298,7 @@ document.addEventListener('click',e=>{
   else if(d.pin){S.pedit=S.pedit===d.pin?null:d.pin;renderPortfolios();const f=S.pedit?$('pw-'+S.pedit+'-0'):document.querySelector(`[data-pin="${d.pin}"]`);f&&f.focus()}
   else if(d.prm!=null){pf(d.pf).rows.splice(+d.prm,1);render()}
   else if(d.padd)pAddTicker(d.padd)
-  else if(d.pdel){if(S.delArm===d.pdel){const p=pf(d.pdel);S.pfs=S.pfs.filter(x=>x.id!==d.pdel);if(S.b.editing===d.pdel)bReset();if(S.pedit===d.pdel)S.pedit=null;S.delArm=null;render();toast('Deleted '+p.name)}else{S.delArm=d.pdel;renderPortfolios();document.querySelector(`[data-pdel="${d.pdel}"]`)?.focus();clearTimeout(S._da);S._da=setTimeout(()=>{S.delArm=null;renderPortfolios()},4000)}}
+  else if(d.pdel){if(S.delArm===d.pdel){const p=pf(d.pdel);S.pfs=S.pfs.filter(x=>x.id!==d.pdel);if(S.b.editing===d.pdel)bReset();if(S.pedit===d.pdel)S.pedit=null;S.delArm=null;render();toast('Removed '+p.name)}else{S.delArm=d.pdel;renderPortfolios();document.querySelector(`[data-pdel="${d.pdel}"]`)?.focus();clearTimeout(S._da);S._da=setTimeout(()=>{S.delArm=null;renderPortfolios()},4000)}}
   else if(d.twd){S.twOpen=!S.twOpen;renderPortfolios();document.querySelector('[data-twd]')?.focus()}
   else if(d.hide){const now=Date.now(),lc=railClick;
     if(lc&&lc.id===d.hide&&now-lc.t<450){const all=SERIES.concat(SPYS?[SPYS]:[]).map(r=>r.id);const alone=all.every(id=>id===d.hide?!lc.prev[id]:!!lc.prev[id]);
@@ -1323,6 +1325,11 @@ document.addEventListener('keydown',e=>{
   if(e.key==='Enter'&&e.target.dataset&&e.target.dataset.days){e.preventDefault();daysInput(e.target,true);if(!FINE)e.target.blur()}
   if(e.key==='Enter'&&e.target.dataset&&e.target.dataset.paddIn){e.preventDefault();S.paDraft[e.target.dataset.paddIn]=e.target.value;pAddTicker(e.target.dataset.paddIn)}
 });
+const DSNAP={};
+document.addEventListener('focusin',e=>{const el=e.target;if(!el.dataset||!el.dataset.days)return;const sc=el.dataset.days;DSNAP[sc]={sel:{...selOf(sc)},val:el.value};el.value=''});
+document.addEventListener('focusout',e=>{const el=e.target;if(!el.dataset||!el.dataset.days)return;const sc=el.dataset.days,snap=DSNAP[sc];delete DSNAP[sc];
+  if(String(el.value).trim()!==''||!snap)return;clearTimeout(daysInput._t);el.value=snap.val;
+  const cur=selOf(sc);if(JSON.stringify(cur)!==JSON.stringify(snap.sel))setSel(sc,snap.sel);else renderPicker(sc)});
 function daysInput(el,commit){const sc=el.dataset.days;const digits=String(el.value).replace(/\D/g,'');if(digits!==el.value)el.value=digits;
   clearTimeout(daysInput._t);const n=parseInt(digits,10);if(!n)return;
   const go=()=>{const v=Math.min(n,maxDays());if(commit&&v!==n)el.value=String(v);const cur=selOf(sc);if(cur.d!==v)setSel(sc,{d:v})};
