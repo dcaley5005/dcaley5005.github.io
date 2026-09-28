@@ -1,0 +1,68 @@
+name: Refresh prices and deploy
+
+on:
+  schedule:
+    # 12:17 UTC = 5:17am Pacific (4:17am in winter), Tuesday to Saturday,
+    # so each run picks up the prior trading day's close.
+    - cron: "17 12 * * 2-6"
+  workflow_dispatch:
+    inputs:
+      rebuild_universe:
+        description: "Re-rank the ETF list now"
+        type: boolean
+        default: false
+  push:
+    branches: [main]
+    paths: ["site/**"]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: scripts/requirements.txt
+
+      - run: pip install -r scripts/requirements.txt
+
+      - name: Build data and site
+        run: python scripts/build_data.py
+        env:
+          REBUILD_UNIVERSE: ${{ inputs.rebuild_universe }}
+
+      - name: Save the ETF list if it changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/universe.json
+          git diff --cached --quiet || (git commit -m "Update ETF list" && git push)
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
