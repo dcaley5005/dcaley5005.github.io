@@ -571,6 +571,26 @@ footer .src{font-family:"IBM Plex Mono",monospace;font-size:12px;padding:3px 8px
 .mrm.armed{background:var(--neg);border-color:var(--neg);color:var(--panel)}
 
 .dform{display:contents}
+.duo{display:contents}
+@media (min-width:1880px){
+  .wrap{max-width:2800px}
+  .duo{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:start}
+}
+/* side by side on ~24in screens: the tables use the expandable rows from the phone layout */
+@media (min-width:1880px) and (max-width:2479px){
+  .dsk{display:none!important}
+  .mob{display:table-cell}
+  tr.mdet.open{display:table-row}
+  tr.mdet td{padding:0 6px;border-bottom:1px solid var(--line2);background:var(--panel2)}
+  table,.btable,.ptable{min-width:0!important}
+  thead tr.grow{display:none}
+  td.mexpc{width:48px;text-align:right}
+  .mgrid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media (min-width:2480px){.momwrap svg{width:56px}.momwrap{gap:6px}.ptable th,.ptable td,.btable th,.btable td{padding-left:3px;padding-right:3px}.ptable .badge{display:none}}
+.mrm,.pclr{display:inline-flex;align-items:center;gap:7px}
+.pclr.armed,#bClear.armed{background:var(--neg);border-color:var(--neg);color:var(--panel)}
+.mi.mact{gap:8px;flex-wrap:wrap}
 @media (pointer:coarse){input,select,textarea{font-size:16px!important}}
 @media (max-width:380px){.btable .tkin{width:60px;padding:0 4px}.btable .wbox .field{width:40px;padding:0 4px}#bName{width:64px;padding:0 5px}tr.hrowx .tkin{width:66px}}
 </style>
@@ -589,6 +609,7 @@ footer .src{font-family:"IBM Plex Mono",monospace;font-size:12px;padding:3px 8px
 
   <div class="banner" id="banner" hidden></div>
 
+  <div class="duo">
   <section class="panel builder" id="builder" aria-labelledby="bTitle">
 <div class="bheadwrap">
     <button type="button" class="bhead" id="bToggle" aria-expanded="false" aria-controls="bBody">
@@ -596,7 +617,7 @@ footer .src{font-family:"IBM Plex Mono",monospace;font-size:12px;padding:3px 8px
       <span style="display:flex;flex-direction:column;gap:2px;min-width:0;flex:1"><h2 id="bTitle">Build a portfolio</h2><span class="sub" id="bSub"></span></span>
       <span class="bchev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
     </button>
-    <div class="bacts" id="bActs"><button type="button" class="iob" data-iomodal="b" aria-haspopup="dialog" title="Import or export"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4v13"/><path d="m3 13 4 4 4-4"/><path d="M17 20V7"/><path d="m21 11-4-4-4 4"/></svg><span class="iol">Import / Export</span></button><div class="picker"><div class="seg" role="group" aria-label="Comparison period" id="bPeriod"></div><form class="dform" action="javascript:void 0" onsubmit="return false"><label class="daysbox" for="bDays"><span>Last</span><input class="field" id="bDays" data-days="b" inputmode="numeric" enterkeyhint="done" autocomplete="off" placeholder="#" maxlength="4"><span>days</span></label></form><button type="button" class="info vinfo" data-info="period" aria-label="How the time period works"></button></div><span class="bsep" aria-hidden="true"></span><span class="sub" id="bHint"></span><button type="button" class="linkbtn" id="bClear">Clear</button><button type="button" class="btn sm primary" id="bSave">Add to my portfolios</button></div></div>
+    <div class="bacts" id="bActs"><button type="button" class="iob" data-iomodal="b" aria-haspopup="dialog" title="Import or export"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4v13"/><path d="m3 13 4 4 4-4"/><path d="M17 20V7"/><path d="m21 11-4-4-4 4"/></svg><span class="iol">Import / Export</span></button><div class="picker"><div class="seg" role="group" aria-label="Comparison period" id="bPeriod"></div><form class="dform" action="javascript:void 0" onsubmit="return false"><label class="daysbox" for="bDays"><span>Last</span><input class="field" id="bDays" data-days="b" inputmode="numeric" enterkeyhint="done" autocomplete="off" placeholder="#" maxlength="4"><span>days</span></label></form><button type="button" class="info vinfo" data-info="period" aria-label="How the time period works"></button></div><span class="bsep" aria-hidden="true"></span><span class="sub" id="bHint"></span><button type="button" class="btn sm" id="bClear">Clear</button><button type="button" class="btn sm primary" id="bSave">Add to my portfolios</button></div></div>
     <div id="bBody" hidden>
       <div class="bgrid">
         <div class="bleft">
@@ -611,7 +632,7 @@ footer .src{font-family:"IBM Plex Mono",monospace;font-size:12px;padding:3px 8px
   <section class="panel" aria-labelledby="listTitle" id="portfolios">
     <div class="phead ptop">
       <h2 id="listTitle">Your portfolios</h2><span class="sub" id="listSub" hidden></span>
-      <div class="pctrls"><button type="button" class="iob" data-iomodal="p" aria-haspopup="dialog" title="Import or export"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4v13"/><path d="m3 13 4 4 4-4"/><path d="M17 20V7"/><path d="m21 11-4-4-4 4"/></svg><span class="iol">Import / Export</span></button><div class="picker"><div class="seg" role="group" aria-label="Time period" id="pPeriod"></div><form class="dform" action="javascript:void 0" onsubmit="return false"><label class="daysbox" for="pDays"><span>Last</span><input class="field" id="pDays" data-days="p" inputmode="numeric" enterkeyhint="done" autocomplete="off" placeholder="#" maxlength="4"><span>days</span></label></form><button type="button" class="info vinfo" data-info="period" aria-label="How the time period works"></button></div></div>
+      <div class="pctrls"><button type="button" class="btn sm pclr" id="pClear">Clear</button><button type="button" class="iob" data-iomodal="p" aria-haspopup="dialog" title="Import or export"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4v13"/><path d="m3 13 4 4 4-4"/><path d="M17 20V7"/><path d="m21 11-4-4-4 4"/></svg><span class="iol">Import / Export</span></button><div class="picker"><div class="seg" role="group" aria-label="Time period" id="pPeriod"></div><form class="dform" action="javascript:void 0" onsubmit="return false"><label class="daysbox" for="pDays"><span>Last</span><input class="field" id="pDays" data-days="p" inputmode="numeric" enterkeyhint="done" autocomplete="off" placeholder="#" maxlength="4"><span>days</span></label></form><button type="button" class="info vinfo" data-info="period" aria-label="How the time period works"></button></div></div>
     </div>
     <div class="pgrid">
       <div class="pleft">
@@ -626,6 +647,7 @@ footer .src{font-family:"IBM Plex Mono",monospace;font-size:12px;padding:3px 8px
     <div class="tablewrap"><table id="ptable" class="ptable"></table></div>
     <span class="sub" id="tableFoot"></span>
   </section>
+  </div>
 
   <footer id="impFoot" hidden>
     <div class="srcs"><span>Imported prices:</span><span id="sources"></span><button type="button" class="linkbtn" id="clearImports">Remove imported files</button></div>
@@ -647,7 +669,7 @@ const SAMPLE = [
 ];
 const COLORS = ['var(--p1)','var(--p2)','var(--p3)','var(--p4)','var(--p5)'];
 const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-const MAXP = 5, MAXETF = 15;
+const MAXP = 15, MAXETF = 15;
 const PRESETS=[['1M',1],['3M',3],['6M',6],['YTD',0],['1Y',12],['3Y',36],['5Y',60],['10Y',120]];
 
 /* ---------- info copy ---------- */
@@ -738,7 +760,7 @@ const S={
   b:load('b',null)
 };
 {const okRows=r=>Array.isArray(r)?r.filter(x=>x&&typeof x.t==='string'&&x.t).map(x=>({...x,t:String(x.t).toUpperCase(),w:x.w===''?'':(Number(x.w)||0)})):[];
-  if(!Array.isArray(S.pfs))S.pfs=null;else S.pfs=S.pfs.filter(p=>p&&typeof p==='object').slice(0,5).map((p,i)=>({id:String(p.id||('p'+(900+i))),name:String(p.name||'Portfolio '+(i+1)),color:Number.isInteger(p.color)&&p.color>=0&&p.color<5?p.color:i%5,rows:okRows(p.rows).map(x=>({t:x.t,w:Number(x.w)||0}))}));
+  if(!Array.isArray(S.pfs))S.pfs=null;else S.pfs=S.pfs.filter(p=>p&&typeof p==='object').slice(0,MAXP).map((p,i)=>({id:String(p.id||('p'+(900+i))),name:String(p.name||'Portfolio '+(i+1)),color:Number.isInteger(p.color)&&p.color>=0&&p.color<MAXP?p.color:i%MAXP,rows:okRows(p.rows).map(x=>({t:x.t,w:Number(x.w)||0}))}));
   if(!S.pfs)S.pfs=SAMPLE.map((p,i)=>({id:'p'+(i+1),name:p.name,color:i,rows:p.rows.map(([t,w])=>({t,w}))}));
   if(!S.b||typeof S.b!=='object'||Array.isArray(S.b))S.b=null;else{S.b.rows=okRows(S.b.rows).slice(0,15).map((x,j)=>({...x,c:Number.isInteger(x.c)?x.c:j}));S.b.name=typeof S.b.name==='string'?S.b.name:''}
   if(!S.hidden||typeof S.hidden!=='object')S.hidden={};if(![-1,1].includes(S.sortDir))S.sortDir=-1;
@@ -849,7 +871,7 @@ function buildSeries(){
     const fc=ts.length&&!missing.length?firstAny(ts):null;const fcD=ts.length&&!missing.length?dFirstAny(ts):null;
     const s=fc==null?null:Math.max(s10,fc);const V=s==null?null:bhSeries(p,s);
     const st=V?statsFromValues(V,s):null;
-    return mk({id:p.id,p,name:p.name,color:COLORS[p.color],dash:null,sw:2.5,locked:false,ws,missing,fc,
+    return mk({id:p.id,p,name:p.name,color:ecol(p.color),dash:edash(p.color),sw:2.5,locked:false,ws,missing,fc,
       st,y10:st&&st.years>=9.99?st.cagr:null,short:st&&st.years<9.99?st:null,
       holds:p.rows.length?p.rows.map(r=>r.t+' '+r.w+'%').join(' · '):'No ETFs yet'},s0=>bhd(p,s0),fcD,sd=>bhdRet(p,sd));
   });
@@ -909,10 +931,10 @@ function renderBuilder(){withFocus(()=>{
   const B=S.b,open=B.open,ed=B.editing&&pf(B.editing);
   $('bToggle').setAttribute('aria-expanded',open);$('bBody').hidden=!open;$('builder').classList.toggle('open',open);
   $('bTitle').textContent=ed?'Edit portfolio':'Build a portfolio';
-  $('bSub').textContent=ed?`Editing ${ed.name}. Change ETFs or percentages, then save changes.`:open?'Compare ETFs, set your percentages, then add it to your portfolios.':(S.pfs.length>=MAXP?'You have five portfolios. Remove one below to build another.':'Compare ETFs side by side, pick your mix, and add it to your portfolios.');
+  $('bSub').textContent=ed?`Editing ${ed.name}. Change ETFs or percentages, then save changes.`:open?'Compare ETFs, set your percentages, then add it to your portfolios.':(S.pfs.length>=MAXP?'You have '+MAXP+' portfolios. Remove one below to build another.':'Compare ETFs side by side, pick your mix, and add it to your portfolios.');
   if(!open)return;
   renderPicker('b');fitBHead();renderBChart();renderBTable();
-  $('bSave').textContent=ed?'Save changes':'Add to my portfolios';$('bClear').textContent=ed?'Cancel editing':'Clear';
+  $('bSave').textContent=ed?'Save changes':'Add to my portfolios';{const c=$('bClear');c.textContent=ed?'Cancel editing':CLR==='b'?'Clear all?':'Clear';c.classList.toggle('armed',!ed&&CLR==='b');c.disabled=!ed&&!S.b.rows.length&&!(S.b.name||'').trim()}
   updateSave();
 })}
 /* phone layout: rows show the essentials; tap the arrow to open the rest */
@@ -944,7 +966,7 @@ function renderBTable(){const B=S.b;if(!B.open)return;const hp=B.sel.p;
 }
 function updateSave(){const B=S.b,ed=B.editing&&pf(B.editing),tot=bTotal(),left=r1(100-tot);
   let why='';const used=B.rows.filter(r=>(Number(r.w)||0)>0);
-  if(!B.rows.length)why='Add an ETF';else if(!used.length)why='Set percentages';else if(Math.abs(left)>=0.05)why=left>0?`${left}% left`:`Over by ${r1(-left)}%`;else if(!(B.name||'').trim())why='Name it';else if(!ed&&S.pfs.length>=MAXP)why='Five max: remove one first';
+  if(!B.rows.length)why='Add an ETF';else if(!used.length)why='Set percentages';else if(Math.abs(left)>=0.05)why=left>0?`${left}% left`:`Over by ${r1(-left)}%`;else if(!(B.name||'').trim())why='Name it';else if(!ed&&S.pfs.length>=MAXP)why=MAXP+' max: remove one first';
   $('bSave').disabled=!!why;$('bSave').title=why||'';$('bHint').textContent=why||'Ready';$('bHint').classList.toggle('ok',!why);fitBHead()}
 
 let BCH=null;
@@ -1178,9 +1200,9 @@ function renderPortfolios(){
     const det=PCOLS.filter(([k])=>k!=='ret').map(([k,lab])=>{const v=colVal(r,k);return mItem(lab(L),fmt(k,v,r),color(k,v))}).join('');
     const acts=r.ref?'':r.locked
       ?`<button type="button" class="edit" data-twd="1" aria-expanded="${!!S.twOpen}" aria-label="${S.twOpen?'Hide':'Show'} 12% Solution details">${S.twOpen?'Close':'Details'}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="transform:${S.twOpen?'rotate(180deg)':'none'}"><path d="m6 9 6 6 6-6"/></svg></button>`
-      :`<button type="button" class="delbtn${S.delArm===r.id?' armed':''}" data-pdel="${r.id}" aria-label="${S.delArm===r.id?'Confirm remove '+esc(r.name):'Remove '+esc(r.name)}">${S.delArm===r.id?'Remove?':'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M6 7l1 13h10l1-13"/></svg>'}</button>`;
+      :`<button type="button" class="delbtn" data-pdup="${r.id}" aria-label="Duplicate ${esc(r.name)}" title="${S.pfs.length>=MAXP?MAXP+' max: remove one first':'Duplicate'}" ${S.pfs.length>=MAXP?'disabled':''}><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg></button><button type="button" class="delbtn${S.delArm===r.id?' armed':''}" data-pdel="${r.id}" aria-label="${S.delArm===r.id?'Confirm remove '+esc(r.name):'Remove '+esc(r.name)}">${S.delArm===r.id?'Remove?':'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M6 7l1 13h10l1-13"/></svg>'}</button>`;
     const main=`<tr class="${editing?'editing':''}${isBench(r)?' bench':''}"><td><span class="pn">${hasHold(r)?`<button type="button" class="hexp" data-hexp="${r.id}" aria-expanded="${HEXP.has(r.id)}" aria-label="Show the ETFs in ${esc(r.name)}"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button>`:'<span class="hexp-sp"></span>'}${swatch(r.color,r.dash)}<button type="button" class="pname nm" data-hold="${r.id}" aria-label="${esc(r.name)}: show holdings">${esc(r.name)}</button>${isBench(r)?'<span class="badge">BENCHMARK</span>':''}${r.short?'<span class="mut" style="font-weight:400" title="Less than 10 years of data">*</span>':''}${r.p&&!r.ref&&!r.locked&&!pOk(r.p)?`<span class="badge warnb" title="Percentages add to ${pTot(r.p)}%. Click Edit to fix.">${pTot(r.p)}%</span>`:''}</span></td>
-      ${cells}<td class="actcell dsk"><span class="actwrap">${acts}</span></td>${mexpBtn('p'+r.id,r.name)}</tr>`+mdetRow('p'+r.id,det+(r.ref?'':r.locked?`<div class="mi mact"><span class="actwrap">${acts}</span></div>`:`<div class="mi mact"><button type="button" class="btn sm mrm${S.delArm===r.id?' armed':''}" data-pdel="${r.id}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M6 7l1 13h10l1-13"/></svg>${S.delArm===r.id?'Tap again to remove':'Remove '+esc(r.name)}</button></div>`));
+      ${cells}<td class="actcell dsk"><span class="actwrap">${acts}</span></td>${mexpBtn('p'+r.id,r.name)}</tr>`+mdetRow('p'+r.id,det+(r.ref?'':r.locked?`<div class="mi mact"><span class="actwrap">${acts}</span></div>`:`<div class="mi mact"><button type="button" class="btn sm mrm" data-pdup="${r.id}" ${S.pfs.length>=MAXP?'disabled':''}><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg>Duplicate</button><button type="button" class="btn sm mrm${S.delArm===r.id?' armed':''}" data-pdel="${r.id}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M6 7l1 13h10l1-13"/></svg>${S.delArm===r.id?'Tap again to remove':'Remove '+esc(r.name)}</button></div>`));
     return main+(HEXP.has(r.id)?holdRows(r,L,best):'')+(!r.locked&&S.pedit===r.id?`<tr class="editrow"><td colspan="${ncol}">${inlineEditor(r)}</td></tr>`:'')+(r.locked&&S.twOpen?`<tr class="twrow"><td colspan="${ncol}">${twPanel()}</td></tr>`:'');
   }).join('');
   $('ptable').innerHTML=`<thead><tr class="grow"><th></th><th></th><th class="grp" colspan="6"><span class="gl"><span class="cap">Returns</span>${infoBtn('returns','returns')}</span></th><th></th><th></th><th></th><th></th></tr><tr><th style="text-align:left"><span class="cap">Portfolio</span></th>${PCOLS.map(([k,lab,info])=>`<th class="r${k==='ret'?'':' dsk'}"><span class="hw"><button type="button" class="sort" data-sort="${k}" aria-pressed="${S.sortKey===k}">${lab(L)}${S.sortKey===k?(S.sortDir<0?' ↓':' ↑'):''}</button>${['m1','m3','m6','y1','y3','y5'].includes(k)?'':infoBtn(info,lab(L))}</span></th>`).join('')}<th class="dsk"></th><th class="mob"></th></tr></thead>
@@ -1198,7 +1220,7 @@ function render(opts={}){
   if(miss.length)warn.push(`No price data for ${miss.join(', ')}. Import a CSV that includes ${miss.length>1?'them':'it'} to see results for the portfolios that hold ${miss.length>1?'them':'it'}.`);
   if(!TW)warn.push('The 12% Solution line needs SPY, QQQ, MDY, IWM, TLT, JNK and SHY prices.');
   $('banner').hidden=!warn.length;$('banner').textContent=warn.join(' ');
-  renderBuilder();renderPortfolios();renderChart();renderSources();
+  renderBuilder();renderPortfolios();renderChart();renderSources();paintClear();
   document.querySelectorAll('button.info:empty').forEach(b=>{b.innerHTML=ICON_I});
   if(fid&&$(fid)&&document.activeElement!==$(fid)){const el=$(fid);el.focus();if(el.select&&opts.select)el.select()}
   $('tickers')||document.body.insertAdjacentHTML('beforeend','<datalist id="tickers"></datalist>');
@@ -1211,8 +1233,19 @@ function renderSources(){
 
 /* ---------- actions ---------- */
 function pf(id){return S.pfs.find(p=>p.id===id)}
-function freeColor(){const used=S.pfs.map(p=>p.color);return [0,1,2,3,4].find(k=>!used.includes(k))??0}
-function toast(m,link){const t=$('toast');t.textContent=m;if(link){const b=document.createElement('button');b.type='button';b.className='tlink';b.textContent='See it';b.onclick=()=>{t.hidden=true;$('portfolios').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'})};t.append(' ',b)}t.hidden=false;clearTimeout(toast._t);toast._t=setTimeout(()=>t.hidden=true,link?5000:2800)}
+/* Clear buttons take two clicks: the first arms it for a few seconds */
+let CLR=null;function armClear(k){CLR=k;paintClear();clearTimeout(armClear._t);armClear._t=setTimeout(disarmClear,4000)}
+function disarmClear(){CLR=null;clearTimeout(armClear._t);paintClear()}
+function paintClear(){const pc=$('pClear');if(pc){pc.textContent=CLR==='p'?'Clear all?':'Clear';pc.classList.toggle('armed',CLR==='p');pc.disabled=!S.pfs.length}
+  const bc=$('bClear');if(bc&&!S.b.editing){bc.textContent=CLR==='b'?'Clear all?':'Clear';bc.classList.toggle('armed',CLR==='b')}}
+/* duplicate a portfolio right below the original and open its ETFs so the percentages can be changed */
+function dupPf(id){const p=pf(id);if(!p)return;if(S.pfs.length>=MAXP){toast(MAXP+' max: remove one first');return}
+  const base=p.name.replace(/ \(copy( \d+)?\)$/,'');let n=base+' (copy)',k=2;while(S.pfs.some(x=>x.name===n))n=base+' (copy '+(k++)+')';
+  const np={id:'p'+(++uid),name:n,color:freeColor(),rows:p.rows.map(r=>({t:r.t,w:r.w}))};S.pfs.splice(S.pfs.indexOf(p)+1,0,np);HEXP.add(np.id);
+  persist();render();toast('Made '+n+'. Change its percentages below.');
+  setTimeout(()=>{const el=$('pw-'+np.id+'-0');if(!el)return;el.scrollIntoView({block:'center',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});if(FINE)el.focus({preventScroll:true})},60)}
+function freeColor(){const used=S.pfs.map(p=>p.color);for(let k=0;k<MAXP;k++)if(!used.includes(k))return k;return 0}
+function toast(m,link){const t=$('toast');t.textContent=m;if(link&&typeof link==='object'){const b=document.createElement('button');b.type='button';b.className='tlink';b.textContent=link.label;b.onclick=()=>{t.hidden=true;link.fn()};t.append(' ',b);t.hidden=false;clearTimeout(toast._t);toast._t=setTimeout(()=>t.hidden=true,6000);return}if(link){const b=document.createElement('button');b.type='button';b.className='tlink';b.textContent='See it';b.onclick=()=>{t.hidden=true;$('portfolios').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'})};t.append(' ',b)}t.hidden=false;clearTimeout(toast._t);toast._t=setTimeout(()=>t.hidden=true,link?5000:2800)}
 /* ticker suggestions: already-added ETFs are grayed out */
 let sugIdx=-1;
 function sugItems(q){q=String(q||'').trim().toUpperCase();const added=new Set(S.b.rows.map(r=>r.t));
@@ -1256,7 +1289,7 @@ function bSave(){updateSave();if($('bSave').disabled)return;const B=S.b;const ro
   if(B.editing&&pf(B.editing)){const p=pf(B.editing);p.name=name;p.rows=rows;toast('Saved changes to '+name)}
   else{S.pfs.push({id:'p'+(++uid),name,color:freeColor(),rows});
     if(S.pfs.length<MAXP){bReset();S.bDraft='';render();toast('Added '+name+' to your portfolios.',true);setTimeout(()=>FINE&&$('bAdd')?.focus({preventScroll:true}),50);return}
-    toast('Added '+name+'. That makes five, so remove one to build another.')}
+    toast('Added '+name+'. That makes '+MAXP+', so remove one to build another.')}
   bReset();B.open=false;render();$('portfolios').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'})}
 function bEdit(id){const p=pf(id);if(!p)return;S.b.rows=p.rows.map((r,j)=>({t:r.t,w:r.w,c:j}));S.b.name=p.name;S.b.editing=id;S.b.open=true;S.bDraft='';render();
   $('builder').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});setTimeout(()=>FINE&&$('bw-0')?.focus({preventScroll:true}),300)}
@@ -1311,7 +1344,13 @@ document.addEventListener('click',e=>{
   else if(b.id==='bSave')bSave()
   else if(b.id==='bScale'){scaleRows(S.b.rows);persist();renderBuilder();toast('Scaled to 100%')}
   else if(d.pscale){const p=pf(d.pscale);if(p){scaleRows(p.rows);persist();render();toast('Scaled '+p.name+' to 100%')}}
-  else if(b.id==='bClear'){const was=S.b.editing;bReset();if(was)S.b.open=false;persist();render()}
+  else if(b.id==='bClear'){const was=S.b.editing;if(was){bReset();S.b.open=false;persist();render();return}
+    if(CLR!=='b'){armClear('b');return}disarmClear();const snap=JSON.parse(JSON.stringify({rows:S.b.rows,name:S.b.name}));bReset();persist();render();
+    toast('Cleared the builder.',{label:'Undo',fn:()=>{S.b.rows=snap.rows;S.b.name=snap.name;persist();render()}})}
+  else if(b.id==='pClear'){if(!S.pfs.length)return;if(CLR!=='p'){armClear('p');return}disarmClear();const snap=JSON.parse(JSON.stringify(S.pfs));const n=snap.length;
+    if(S.b.editing)S.b.editing=null;S.pfs=[];S.pedit=null;persist();render();
+    toast(`Removed ${n} portfolio${n===1?'':'s'}.`,{label:'Undo',fn:()=>{S.pfs=snap;persist();render()}})}
+  else if(d.pdup){dupPf(d.pdup)}
   else if(false){const p=pf(S.pedit);toast(`${p.name} adds up to ${pTot(p)}%. Get it to 100% first.`);$('pw-'+p.id+'-0')?.focus()}
   else if(d.pedit){S.pedit=null;bEdit(d.pedit)}
   else if(d.pin){S.pedit=S.pedit===d.pin?null:d.pin;renderPortfolios();const f=S.pedit?$('pw-'+S.pedit+'-0'):document.querySelector(`[data-pin="${d.pin}"]`);f&&f.focus()}
@@ -1475,7 +1514,7 @@ async function pfImport(file){try{const txt=await file.text();const list=pfTarge
     toast(`Loaded ${p.rows.length} ETFs into the builder${p.rows.every(r=>r.w==='')?'. No percentages in the file, so it shows an equal split until you set them.':'.'}`+miss)}
   else{let added=0,updated=0,skipped=0;list.forEach(p=>{const ex=S.pfs.find(x=>x.name.trim().toLowerCase()===p.name.trim().toLowerCase());
       if(ex){ex.rows=p.rows.map(r=>({t:r.t,w:r.w}));updated++}else if(S.pfs.length<MAXP){S.pfs.push({id:'p'+(++uid),name:p.name,color:freeColor(),rows:p.rows.map(r=>({t:r.t,w:r.w}))});added++}else skipped++});
-    persist();render();toast([added?`Added ${added}`:'',updated?`updated ${updated}`:'',skipped?`skipped ${skipped} (five max)`:''].filter(Boolean).join(', ').replace(/^./,c=>c.toUpperCase())+' from '+file.name+'.'+miss)}}
+    persist();render();toast([added?`Added ${added}`:'',updated?`updated ${updated}`:'',skipped?`skipped ${skipped} (${MAXP} max)`:''].filter(Boolean).join(', ').replace(/^./,c=>c.toUpperCase())+' from '+file.name+'.'+miss)}}
   catch(err){toast(err.message||"Couldn't read that file")}}
 /* Import / Export dialog, one per section */
 let ioLast=null;
