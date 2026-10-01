@@ -173,7 +173,7 @@ td.best{font-weight:700}
 .bicon svg,.bchev svg{width:18px;height:18px}
 .bchev{width:36px;height:36px;border-radius:8px;border:1px solid var(--inputLine);display:flex;align-items:center;justify-content:center;flex:none;transition:transform .15s}
 .builder.open .bchev{transform:rotate(180deg)}
-.builder.open .bhead{border-bottom:1px solid var(--line)}
+.builder.open .bheadwrap{border-bottom:1px solid var(--line)}
 #bBody{padding:12px 24px 14px;display:flex;flex-direction:column;gap:10px}
 .bstep{display:flex;flex-direction:column;gap:10px}
 .bpick{display:flex;flex-wrap:wrap;gap:12px 16px;align-items:center}
@@ -317,7 +317,7 @@ tr.dim td{opacity:.5}
 
 .pctl{display:flex;flex-wrap:wrap;gap:12px 18px;align-items:flex-end;padding:4px 0 2px}
 .bcgrid .prail{padding:10px 12px;gap:2px;max-height:344px;overflow:auto;overscroll-behavior:contain}
-.bcgrid .plrow{min-height:28px}
+.bcgrid .plrow{min-height:24px}
 .bcgrid .plrow.bench{min-height:34px}
 .pgrid{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:24px;align-items:start}
 .pleft{display:flex;flex-direction:column;gap:8px;min-width:0}
@@ -606,7 +606,7 @@ tr.addbar td{border:0!important;padding:10px 0 2px!important;background:transpar
 .addbarw{display:flex;justify-content:flex-end;align-items:center;gap:14px;flex-wrap:wrap}
 .addbarw #bHint{font-size:13px}
 .addbarw #bHint.neg{color:var(--neg)}
-#bSave.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--panel);height:40px;padding:0 18px;font-weight:600}
+#bSave.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--panel);font-weight:600}
 #bSave.notready{opacity:.6}
 tr.flash>td{animation:pflash 1.6s ease-out}
 @keyframes pflash{0%,30%{background:color-mix(in srgb,var(--accent) 22%,transparent)}100%{background:transparent}}
@@ -641,7 +641,7 @@ tr.flash>td{animation:pflash 1.6s ease-out}
             <span style="display:flex;flex-direction:column;gap:2px;min-width:0;flex:1"><h2 id="bTitle">Build a portfolio</h2><span class="sub" id="bSub"></span></span>
       <span class="bchev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
     </button>
-    <div class="bacts" id="bActs"><button type="button" class="iob" data-iomodal="b" aria-haspopup="dialog" title="Import or export"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4v13"/><path d="m3 13 4 4 4-4"/><path d="M17 20V7"/><path d="m21 11-4-4-4 4"/></svg><span class="iol">Import / Export</span></button><div class="picker"><div class="seg" role="group" aria-label="Comparison period" id="bPeriod"></div><form class="dform" action="javascript:void 0" onsubmit="return false"><label class="daysbox" for="bDays"><span>Last</span><input class="field" id="bDays" data-days="b" inputmode="numeric" enterkeyhint="done" autocomplete="off" placeholder="#" maxlength="4"><span>days</span></label></form><button type="button" class="info vinfo" data-info="period" aria-label="How the time period works"></button></div><button type="button" class="btn sm" id="bClear">Clear</button></div></div>
+    <div class="bacts" id="bActs"><button type="button" class="iob" data-iomodal="b" aria-haspopup="dialog" title="Import or export"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4v13"/><path d="m3 13 4 4 4-4"/><path d="M17 20V7"/><path d="m21 11-4-4-4 4"/></svg><span class="iol">Import / Export</span></button><div class="picker"><div class="seg" role="group" aria-label="Comparison period" id="bPeriod"></div><form class="dform" action="javascript:void 0" onsubmit="return false"><label class="daysbox" for="bDays"><span>Last</span><input class="field" id="bDays" data-days="b" inputmode="numeric" enterkeyhint="done" autocomplete="off" placeholder="#" maxlength="4"><span>days</span></label></form><button type="button" class="info vinfo" data-info="period" aria-label="How the time period works"></button></div><button type="button" class="btn sm" id="bClear">Clear</button><button type="button" class="btn sm primary" id="bSave">Add to my portfolios</button></div></div>
     <div id="bBody" hidden>
       <div class="bgrid">
         <div class="bleft">
@@ -985,7 +985,7 @@ function renderBTable(){const B=S.b;if(!B.open)return;const hp=B.sel.p;
     ${dsk(TPER.map(([p,m])=>{const v=periodRet(r.t,m);return `<td class="num ${cls(v)}${p===hp?' hl':''}${best[p]!=null&&v===best[p]?' best':''}">${sg(v)}</td>`}).join('')+BM.map(([k])=>bmCell(ES[j],k,bb)).join(''))}<td class="wcell"><span class="wbox"><label class="sr" for="bw-${j}">${esc(r.t)} percent</label><input class="field" id="bw-${j}" data-bw="${j}" inputmode="decimal" autocomplete="off" placeholder="0" value="${r.w===''||r.w==null?'':esc(r.w)}">%</span></td>${mexpBtn('b'+j,r.t)}
     <td class="xcell dsk"><button type="button" class="delbtn bdel" id="bx-${j}" data-brm="${j}" aria-label="Remove ${esc(r.t)}" title="Remove ${esc(r.t)}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M6 7l1 13h10l1-13"/></svg></button></td></tr>${mdetRow('b'+j,bDetail(r.t,ES[j])+`<div class="mi mact"><button type="button" class="btn sm mrm" data-brm="${j}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M6 7l1 13h10l1-13"/></svg>Remove ${esc(r.t)}</button></div>`)}`;
   $('bTable').innerHTML=`<thead><tr><th style="text-align:left"><span class="hw">${bsBtn('t','ETF')}</span></th><th class="r retcol"><span class="hw">${bsBtn('ret',selLabel(B.sel,'short')+' return')}${infoBtn('bret','return')}</span></th>${TPER.map(([p,m],k)=>`<th class="dsk r${p===hp?' hl':''}"><span class="hw">${bsBtn(p,pLabel(p,m))}${k===TPER.length-1?infoBtn('returns','returns'):''}</span></th>`).join('')}${BM.map(([k,lab,info])=>`<th class="dsk r bm${k==='sharpe'?' bmfirst':''}"><span class="hw">${bsBtn(k,lab())}${infoBtn(info,lab())}</span></th>`).join('')}<th class="r wcell"><span class="hw">${bsBtn('w','<span class="dskl">% of portfolio</span><span class="mobl">%</span>')}</span></th><th class="mob"></th><th class="dsk"></th></tr></thead>
-    <tbody>${bOrder(WR,ES).map(j=>etfRow(B.rows[j],j)).join('')}${addRow}</tbody>${B.rows.length?`<tfoot><tr class="mixrow" id="bMixRow">${mixRowHTML()}</tr>${mdetRow('bmix',mixDetail())}<tr class="addbar"><td colspan="20"><div class="addbarw"><span class="sub" id="bHint"></span><button type="button" class="btn primary" id="bSave">Add to my portfolios</button></div></td></tr></tfoot>`:''}`;
+    <tbody>${bOrder(WR,ES).map(j=>etfRow(B.rows[j],j)).join('')}${addRow}</tbody>${B.rows.length?`<tfoot><tr class="mixrow" id="bMixRow">${mixRowHTML()}</tr>${mdetRow('bmix',mixDetail())}</tfoot>`:''}`;
   document.querySelectorAll('#bTable button.info:empty').forEach(b=>{b.innerHTML=ICON_I});
 }
 function updateSave(){const B=S.b,ed=B.editing&&pf(B.editing),tot=bTotal(),left=r1(100-tot);
@@ -1107,9 +1107,17 @@ function twPanel(){
 let CH=null,fitH=null,fitPass=false;
 /* chart heights: the builder chart grows so its list never scrolls; side by side, both charts share one height */
 const CHH={b:null,p:null};const DUO=()=>!!(window.matchMedia&&matchMedia('(min-width:1880px)').matches);let SZ=false;
-function sizeCharts(){if(SZ||!D)return;SZ=true;try{const bb=$('bChartbox'),rb=document.querySelector('.bcgrid .prail'),rp=document.querySelector('#portfolios .pgrid>.prail');
+function alignHeads(){const bw=document.querySelector('#builder .bheadwrap'),pt=document.querySelector('#portfolios .ptop'),ba=$('bActs');if(!bw||!pt||!ba)return;
+  ba.style.paddingBottom='';pt.style.paddingBottom='';if(!DUO()||!S.b.open)return;
+  const d=bw.getBoundingClientRect().bottom-pt.getBoundingClientRect().bottom;
+  if(d>0.5)pt.style.paddingBottom=(parseFloat(getComputedStyle(pt).paddingBottom)+d)+'px';else if(d<-0.5)ba.style.paddingBottom=(parseFloat(getComputedStyle(ba).paddingBottom)-d)+'px'}
+function sizeCharts(){if(SZ||!D)return;alignHeads();SZ=true;try{const bb=$('bChartbox'),rb=document.querySelector('.bcgrid .prail'),rp=document.querySelector('#portfolios .pgrid>.prail');
   const duo=DUO(),bOn=S.b.open&&bb&&(duo||bb.clientWidth>=600),railB=bOn&&rb&&rb.offsetParent?rb.offsetHeight:0,railP=rp&&rp.offsetParent?rp.offsetHeight:0;
   let hb=bOn?Math.max(320,railB):null,hp=null;if(duo){const h=Math.min(640,Math.max(360,railB,railP));hb=h;hp=h}
+  else if(bOn){/* laptops: keep the ETF rows, the add-ticker row and the total on screen; the list scrolls only if it must */
+    const bd=$('builder'),nonChart=bd.offsetHeight-bb.offsetHeight,top=bd.getBoundingClientRect().top+scrollY,room=innerHeight-top-nonChart-10;
+    hb=Math.max(300,Math.min(hb,Math.max(320,room)))}
+  if(rb){const sc=bOn&&!duo&&railB>hb;rb.style.maxHeight=sc?hb+'px':'';rb.style.overflow=sc?'auto':''}
   if(bOn&&hb!==CHH.b){CHH.b=hb;renderBChart()}else CHH.b=hb;
   if(hp!==CHH.p){CHH.p=hp;renderChart()}}finally{SZ=false}}
 let railClick=null;
