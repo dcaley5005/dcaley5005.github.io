@@ -574,7 +574,7 @@ footer .src{font-family:"IBM Plex Mono",monospace;font-size:12px;padding:3px 8px
 .duo{display:contents}
 @media (min-width:1880px){
   .wrap{max-width:2800px}
-  .duo{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:start}
+  .duo{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:stretch}
 }
 /* side by side on ~24in screens: the tables use the expandable rows from the phone layout */
 @media (min-width:1880px) and (max-width:2479px){
@@ -588,8 +588,10 @@ footer .src{font-family:"IBM Plex Mono",monospace;font-size:12px;padding:3px 8px
   .mgrid{grid-template-columns:repeat(3,minmax(0,1fr))}
 }
 @media (min-width:2480px){.momwrap svg{width:56px}.momwrap{gap:6px}.ptable th,.ptable td,.btable th,.btable td{padding-left:3px;padding-right:3px}.ptable .badge{display:none}}
+@media (min-width:701px){.bcgrid .prail{max-height:none;overflow:visible}}
 .mrm,.pclr{display:inline-flex;align-items:center;gap:7px}
 .pclr.armed,#bClear.armed{background:var(--neg);border-color:var(--neg);color:var(--panel)}
+.pclr.undo,#bClear.undo{background:var(--btn);border-color:var(--btn);color:var(--btnInk)}
 .mi.mact{gap:8px;flex-wrap:wrap}
 @media (pointer:coarse){input,select,textarea{font-size:16px!important}}
 @media (max-width:380px){.btable .tkin{width:60px;padding:0 4px}.btable .wbox .field{width:40px;padding:0 4px}#bName{width:64px;padding:0 5px}tr.hrowx .tkin{width:66px}}
@@ -934,7 +936,7 @@ function renderBuilder(){withFocus(()=>{
   $('bSub').textContent=ed?`Editing ${ed.name}. Change ETFs or percentages, then save changes.`:open?'Compare ETFs, set your percentages, then add it to your portfolios.':(S.pfs.length>=MAXP?'You have '+MAXP+' portfolios. Remove one below to build another.':'Compare ETFs side by side, pick your mix, and add it to your portfolios.');
   if(!open)return;
   renderPicker('b');fitBHead();renderBChart();renderBTable();
-  $('bSave').textContent=ed?'Save changes':'Add to my portfolios';{const c=$('bClear');c.textContent=ed?'Cancel editing':CLR==='b'?'Clear all?':'Clear';c.classList.toggle('armed',!ed&&CLR==='b');c.disabled=!ed&&!S.b.rows.length&&!(S.b.name||'').trim()}
+  $('bSave').textContent=ed?'Save changes':'Add to my portfolios';{const c=$('bClear');if(ed){c.textContent='Cancel editing';c.classList.remove('armed','undo');c.disabled=false}else paintClear()}
   updateSave();
 })}
 /* phone layout: rows show the essentials; tap the arrow to open the rest */
@@ -1010,7 +1012,7 @@ function renderBChart(){
   {const p=mixP();if(weights(p).length&&!S.b.mixHidden){const pts=[];
     const fc=dFirstAny(p.rows.map(r=>r.t));const s0=Math.max(st0,fc??st0);const V=bhd(p,s0);if(V)for(let i=s0;i<=last;i++){if(V[i]!=null)pts.push([i,(V[i]/V[s0]-1)*100])}
     if(pts.length>1)lines.push({r:{name:mixName(),color:'var(--ink)',sw:3.5,mix:true},pts})}}
-  const box=$('bChartbox');const W=Math.max(300,box.clientWidth||900),H=W<600?220:320,mg={l:W<600?48:60,r:16,t:10,b:28};
+  const box=$('bChartbox');const W=Math.max(300,box.clientWidth||900),H=CHH.b||(W<600?220:320),mg={l:W<600?48:60,r:16,t:10,b:28};
   let vals=lines.flatMap(l=>l.pts.map(p=>p[1]));if(!vals.length)vals=[-1,1];let lo=Math.min(0,...vals),hi=Math.max(0,...vals);const pad=(hi-lo)*0.06||1;lo-=pad;hi+=pad;
   const ticks=niceTicks(lo,hi,5);lo=Math.min(lo,ticks[0]);hi=Math.max(hi,ticks[ticks.length-1]);
   const X=i=>mg.l+(i-st0)/((last-st0)||1)*(W-mg.l-mg.r),Y=v=>mg.t+(1-(v-lo)/(hi-lo))*(H-mg.t-mg.b);
@@ -1023,7 +1025,7 @@ function renderBChart(){
     ${lines.length?'':`<text x="${W/2}" y="${H/2}" text-anchor="middle" font-size="14" fill="var(--muted)">Add ETFs above the table to compare them here</text>`}
     <line id="bxh" y1="${mg.t}" y2="${H-mg.b}" stroke="var(--faint)" visibility="hidden"/><g id="bhdots"></g>`;
   BCH={lines,X,Y,W,H,m:mg,st0,last};$('bTip').hidden=true;
-  renderBList(st0);
+  renderBList(st0);sizeCharts();
 }
 function bShowHover(i){if(!BCH||!BCH.lines.length)return;i=Math.max(BCH.st0,Math.min(BCH.last,i));const x=BCH.X(i);
   const xh=$('bxh');xh.setAttribute('x1',x);xh.setAttribute('x2',x);xh.setAttribute('visibility','visible');
@@ -1075,6 +1077,13 @@ function twPanel(){
 
 /* ---------- render: chart ---------- */
 let CH=null,fitH=null,fitPass=false;
+/* chart heights: the builder chart grows so its list never scrolls; side by side, both charts share one height */
+const CHH={b:null,p:null};const DUO=()=>!!(window.matchMedia&&matchMedia('(min-width:1880px)').matches);let SZ=false;
+function sizeCharts(){if(SZ||!D)return;SZ=true;try{const bb=$('bChartbox'),rb=document.querySelector('.bcgrid .prail'),rp=document.querySelector('#portfolios .pgrid>.prail');
+  const duo=DUO(),bOn=S.b.open&&bb&&(duo||bb.clientWidth>=600),railB=bOn&&rb&&rb.offsetParent?rb.offsetHeight:0,railP=rp&&rp.offsetParent?rp.offsetHeight:0;
+  let hb=bOn?Math.max(320,railB):null,hp=null;if(duo){const h=Math.min(640,Math.max(360,railB,railP));hb=h;hp=h}
+  if(bOn&&hb!==CHH.b){CHH.b=hb;renderBChart()}else CHH.b=hb;
+  if(hp!==CHH.p){CHH.p=hp;renderChart()}}finally{SZ=false}}
 let railClick=null;
 function chartSeries(){return SERIES.concat(SPYS?[SPYS]:[]).filter(r=>!S.hidden[r.id])}
 function renderChart(){
@@ -1090,7 +1099,7 @@ function renderChart(){
   chartSeries().forEach(r=>{const pts=[];
     const vf=r.valueFrom(st0);if(!vf||!vf.V||vf.V[vf.s0]==null)return;const base=vf.V[vf.s0];for(let i=vf.s0;i<=last;i++)if(vf.V[i]!=null)pts.push([i,(vf.V[i]/base-1)*100,vf.s0]);
     if(pts.length>1)lines.push({r,pts})});
-  const box=$('chartbox');const W=Math.max(300,box.clientWidth||900),H=W<600?220:(fitH||260);const m={l:W<600?48:64,r:16,t:12,b:30};
+  const box=$('chartbox');const W=Math.max(300,box.clientWidth||900),H=CHH.p||(W<600?220:(fitH||260));const m={l:W<600?48:64,r:16,t:12,b:30};
   let vals=lines.flatMap(l=>l.pts.map(p=>p[1]));if(!vals.length)vals=[-1,1];
   let lo=Math.min(...vals),hi=Math.max(...vals);lo=Math.min(lo,0);hi=Math.max(hi,0);const pad=(hi-lo)*0.06||1;lo-=pad;hi+=pad;
   const ticks=niceTicks(lo,hi,5);lo=Math.min(lo,ticks[0]);hi=Math.max(hi,ticks[ticks.length-1]);
@@ -1106,10 +1115,11 @@ function renderChart(){
     <line id="xh" y1="${m.t}" y2="${H-m.b}" stroke="var(--faint)" visibility="hidden"/><g id="hdots"></g>`;
   svg.setAttribute('aria-label',$('chartTitle').textContent);
   CH={lines,X,Y,W,H,m,st0,last,isG};
-  if(W>=600&&!fitPass){const sec=$('portfolios');const nonChart=sec.offsetHeight-box.offsetHeight;const top=S.b.open?16:sec.getBoundingClientRect().top+window.scrollY;
+  if(W>=600&&!fitPass&&!DUO()){const sec=$('portfolios');const nonChart=sec.offsetHeight-box.offsetHeight;const top=S.b.open?16:sec.getBoundingClientRect().top+window.scrollY;
     const target=Math.round(Math.max(200,Math.min(480,window.innerHeight-top-nonChart-14)));
     if(Math.abs(target-H)>3){fitH=target;fitPass=true;renderChart();fitPass=false;return}}
   if(S.hover!=null)showHover(S.hover);
+  sizeCharts();
 }
 function tickMoney(v,step){if(step>=1000&&v>=1000){const k=v/1000;return '$'+(Number.isInteger(k)?k:k.toFixed(step%1000===0?0:1))+'k'}return '$'+Math.round(v).toLocaleString('en-US')}
 function niceTicks(lo,hi,n){const span=hi-lo||1,s0=span/n,mag=Math.pow(10,Math.floor(Math.log10(s0)));const step=[1,2,2.5,5,10].map(x=>x*mag).find(s=>s>=s0);const out=[];for(let v=Math.ceil(lo/step)*step;v<=hi+1e-9;v+=step)out.push(+v.toFixed(6));return out}
@@ -1234,10 +1244,12 @@ function renderSources(){
 /* ---------- actions ---------- */
 function pf(id){return S.pfs.find(p=>p.id===id)}
 /* Clear buttons take two clicks: the first arms it for a few seconds */
-let CLR=null;function armClear(k){CLR=k;paintClear();clearTimeout(armClear._t);armClear._t=setTimeout(disarmClear,4000)}
+let UNDO=null;function startUndo(k,fn){UNDO={k,fn};clearTimeout(startUndo._t);startUndo._t=setTimeout(endUndo,10000)}
+function endUndo(){UNDO=null;clearTimeout(startUndo._t);paintClear()}
+let CLR=null;function armClear(k){if(UNDO)endUndo();CLR=k;paintClear();clearTimeout(armClear._t);armClear._t=setTimeout(disarmClear,4000)}
 function disarmClear(){CLR=null;clearTimeout(armClear._t);paintClear()}
-function paintClear(){const pc=$('pClear');if(pc){pc.textContent=CLR==='p'?'Clear all?':'Clear';pc.classList.toggle('armed',CLR==='p');pc.disabled=!S.pfs.length}
-  const bc=$('bClear');if(bc&&!S.b.editing){bc.textContent=CLR==='b'?'Clear all?':'Clear';bc.classList.toggle('armed',CLR==='b')}}
+function paintClear(){const pc=$('pClear'),u=UNDO&&UNDO.k;if(pc){pc.textContent=u==='p'?'Undo':CLR==='p'?'Clear all?':'Clear';pc.classList.toggle('armed',CLR==='p');pc.classList.toggle('undo',u==='p');pc.disabled=u!=='p'&&!S.pfs.length}
+  const bc=$('bClear');if(bc&&!S.b.editing){bc.textContent=u==='b'?'Undo':CLR==='b'?'Clear all?':'Clear';bc.classList.toggle('armed',CLR==='b');bc.classList.toggle('undo',u==='b');bc.disabled=u!=='b'&&!S.b.rows.length&&!(S.b.name||'').trim()}}
 /* duplicate a portfolio right below the original and open its ETFs so the percentages can be changed */
 function dupPf(id){const p=pf(id);if(!p)return;if(S.pfs.length>=MAXP){toast(MAXP+' max: remove one first');return}
   const base=p.name.replace(/ \(copy( \d+)?\)$/,'');let n=base+' (copy)',k=2;while(S.pfs.some(x=>x.name===n))n=base+' (copy '+(k++)+')';
@@ -1345,11 +1357,13 @@ document.addEventListener('click',e=>{
   else if(b.id==='bScale'){scaleRows(S.b.rows);persist();renderBuilder();toast('Scaled to 100%')}
   else if(d.pscale){const p=pf(d.pscale);if(p){scaleRows(p.rows);persist();render();toast('Scaled '+p.name+' to 100%')}}
   else if(b.id==='bClear'){const was=S.b.editing;if(was){bReset();S.b.open=false;persist();render();return}
-    if(CLR!=='b'){armClear('b');return}disarmClear();const snap=JSON.parse(JSON.stringify({rows:S.b.rows,name:S.b.name}));bReset();persist();render();
-    toast('Cleared the builder.',{label:'Undo',fn:()=>{S.b.rows=snap.rows;S.b.name=snap.name;persist();render()}})}
-  else if(b.id==='pClear'){if(!S.pfs.length)return;if(CLR!=='p'){armClear('p');return}disarmClear();const snap=JSON.parse(JSON.stringify(S.pfs));const n=snap.length;
-    if(S.b.editing)S.b.editing=null;S.pfs=[];S.pedit=null;persist();render();
-    toast(`Removed ${n} portfolio${n===1?'':'s'}.`,{label:'Undo',fn:()=>{S.pfs=snap;persist();render()}})}
+    if(UNDO&&UNDO.k==='b'){const f=UNDO.fn;endUndo();f();return}
+    if(CLR!=='b'){armClear('b');return}disarmClear();const snap=JSON.parse(JSON.stringify({rows:S.b.rows,name:S.b.name}));bReset();persist();
+    startUndo('b',()=>{S.b.rows=snap.rows;S.b.name=snap.name;persist();render();toast('Builder restored')});render()}
+  else if(b.id==='pClear'){if(UNDO&&UNDO.k==='p'){const f=UNDO.fn;endUndo();f();return}
+    if(!S.pfs.length)return;if(CLR!=='p'){armClear('p');return}disarmClear();const snap=JSON.parse(JSON.stringify(S.pfs));const n=snap.length;
+    if(S.b.editing)S.b.editing=null;S.pfs=[];S.pedit=null;persist();
+    startUndo('p',()=>{S.pfs=snap;persist();render();toast(`Restored ${n} portfolio${n===1?'':'s'}`)});render()}
   else if(d.pdup){dupPf(d.pdup)}
   else if(false){const p=pf(S.pedit);toast(`${p.name} adds up to ${pTot(p)}%. Get it to 100% first.`);$('pw-'+p.id+'-0')?.focus()}
   else if(d.pedit){S.pedit=null;bEdit(d.pedit)}
