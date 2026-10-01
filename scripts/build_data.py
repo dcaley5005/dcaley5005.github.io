@@ -5,6 +5,8 @@ Runs in GitHub Actions (see .github/workflows/refresh.yml).
 Output, under _site/portfolio-lab/data/:
   core.csv        daily adjusted closes for the core tickers, one column each
   t/<TICKER>.csv  daily adjusted closes for every other ETF in the universe
+  tw.csv          daily closes without dividends for the 12% Solution's ETFs, so it
+                  matches the newsletter, which reports price change only
   universe.json   the ETF list the app offers (ticker, name)
 
 The universe is every US-listed ETF that is not leveraged or inverse, ranked by
@@ -40,6 +42,7 @@ LEVERAGED = re.compile(
     r"2x|3x|short (qqq|s&p|dow|russell|20)|\bvix\b)",
     re.I,
 )
+TW = "SPY QQQ MDY IWM TLT JNK SHY".split()  # the 12% Solution's ETFs
 UA = {"User-Agent": "Mozilla/5.0 (portfolio-lab data refresh)"}
 
 
@@ -152,8 +155,8 @@ def fmt(v):
     return f"{v:.6g}"
 
 
-def download_closes(tickers):
-    """Adjusted daily closes since START: {ticker: pd.Series}."""
+def download_closes(tickers, adjust=True):
+    """Daily closes since START: {ticker: pd.Series}. adjust=False leaves dividends out (splits are still applied)."""
     got = {}
     todo = list(tickers)
     for rnd in range(3):
@@ -164,7 +167,7 @@ def download_closes(tickers):
         for i in range(0, len(todo), size):
             chunk = todo[i:i + size]
             try:
-                df = yf.download([ysym(t) for t in chunk], start=START, auto_adjust=True,
+                df = yf.download([ysym(t) for t in chunk], start=START, auto_adjust=adjust,
                                  actions=False, threads=True, progress=False, group_by="column")
                 close = df["Close"]
                 if isinstance(close, pd.Series):
@@ -204,6 +207,16 @@ def fallback(url, dest):
     return False
 
 
+def write_table(path, series, cols):
+    df = pd.DataFrame(series)[cols]
+    df.index = pd.to_datetime(df.index).strftime("%Y-%m-%d")
+    lines = ["Date," + ",".join(cols)]
+    for d, row in df.iterrows():
+        lines.append(d + "," + ",".join("" if pd.isna(v) else fmt(v) for v in row))
+    path.write_text("\n".join(lines) + "\n")
+    return df.index[-1]
+
+
 def main():
     if OUT_SITE.exists():
         shutil.rmtree(OUT_SITE)
@@ -223,13 +236,16 @@ def main():
             raise SystemExit("Core prices are incomplete and no previous copy is available.")
         log("Kept the previous core.csv")
     else:
-        df = pd.DataFrame(core)[CORE]
-        df.index = pd.to_datetime(df.index).strftime("%Y-%m-%d")
-        lines = ["Date," + ",".join(CORE)]
-        for d, row in df.iterrows():
-            lines.append(d + "," + ",".join("" if pd.isna(v) else fmt(v) for v in row))
-        (OUT / "core.csv").write_text("\n".join(lines) + "\n")
-        log(f"core.csv through {df.index[-1]}")
+        log(f"core.csv through {write_table(OUT / 'core.csv', core, CORE)}")
+
+    log("Downloading 12% Solution prices without dividends…")
+    tw, tw_missing = download_closes(TW, adjust=False)
+    if tw_missing:
+        log(f"12% Solution tickers missing: {tw_missing}")
+        log("Kept the previous tw.csv" if fallback(f"{LIVE}/tw.csv", OUT / "tw.csv")
+            else "No tw.csv this run; the app falls back to prices with dividends")
+    else:
+        log(f"tw.csv through {write_table(OUT / 'tw.csv', tw, TW)}")
 
     log("Downloading the rest of the universe…")
     got, missing = download_closes(others)
