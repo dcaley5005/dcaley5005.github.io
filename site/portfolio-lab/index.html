@@ -857,8 +857,9 @@ let TW=null;
 function computeTW(){delete D.P.TPS;delete DS.P.TPS;DS.tickers=DS.tickers.filter(t=>t!=='TPS');const need=TW_EQ.concat(TW_BD,['SHY']);if(!need.every(HAS)){TW=null;return}
   let s=null;for(let i=0;i<DS.last;i++){const d=DS.me[i];if(d-TW_LB>=0&&d+1<D.n&&need.every(t=>pxd(t,d)!=null&&pxd(t,d-TW_LB)!=null)){s=i;break}}if(s==null){TW=null;return}
   const picks=[],sw=new Map();for(let i=s;i<=DS.last;i++){const pk=twPick(i);picks[i]=pk;const d=DS.me[i]+1;if(pk&&d<D.n)sw.set(d,pk)}
-  const d0=DS.me[s]+1,Vd=new Array(D.n).fill(null);Vd[d0]=1;let cur=sw.get(d0);
-  for(let i=d0+1;i<D.n;i++){Vd[i]=Vd[i-1]*(1+0.6*(pxd(cur.e,i)/pxd(cur.e,i-1)-1)+0.4*(pxd(cur.b,i)/pxd(cur.b,i-1)-1));if(sw.has(i))cur=sw.get(i)}
+  /* buy 60/40 on the trade day and hold it through the month (weights drift), like the newsletter's trade history */
+  const d0=DS.me[s]+1,Vd=new Array(D.n).fill(null);Vd[d0]=1;let cur=sw.get(d0),b0=d0;
+  for(let i=d0+1;i<D.n;i++){Vd[i]=Vd[b0]*(0.6*pxd(cur.e,i)/pxd(cur.e,b0)+0.4*pxd(cur.b,i)/pxd(cur.b,b0));if(sw.has(i)){cur=sw.get(i);b0=i}}
   const V=DS.me.map(d=>Vd[d]);const start=V.findIndex(v=>v!=null);
   const official=DS.partial?DS.last-1:DS.last;
   TW={V,Vd,picks,start,startD:d0,now:twPick(official),official};
@@ -1090,7 +1091,7 @@ function twPanel(){
       <span class="cap">How it decides</span>
       <span style="font-size:14px;color:var(--ink2);line-height:1.55">At each month-end close, 60% goes to whichever of SPY, QQQ, MDY and IWM had the best return over the last 63 trading days (about 3 months), or to SHY if none of them beat SHY. The other 40% goes to the better of TLT and JNK. Trades happen at the close on the first trading day of the next month. You can't edit this one; it's the line to beat.</span>
       ${twSignal()}
-      <span class="sub">Matches the newsletter's Members Page: first-trading-day trades, 63-day lookback, dividends included. Small differences from Carter's figures come from price data sources.</span>
+      <span class="sub">Matches the newsletter's Members Page trade history: first-trading-day trades, 63-day lookback, dividends included. Every month's pick since 2008 matches.</span>
     </div>
     <div style="display:flex;flex-direction:column;gap:4px;min-width:0">
       <div class="twlog">${[rows.slice(0,18),rows.slice(18)].filter(x=>x.length).map(col=>`<div><div class="log cap" style="border:0"><span>Rebalanced</span><span>60% in</span><span>40% in</span></div>${col.join('')}</div>`).join('')}</div>
