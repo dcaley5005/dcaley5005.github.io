@@ -332,7 +332,7 @@ tr.dim td{opacity:.5}
 .plrow[aria-pressed="false"]{opacity:.45}
 .plrow[aria-pressed="false"] .pln{text-decoration:line-through}
 #portfolios{gap:16px}
-@media (max-width:1000px){.pgrid{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:1000px){.pgrid{grid-template-columns:minmax(0,1fr)}.pgrid>.prail{display:none}} /* when the return box can't sit beside the chart it would only repeat the table, so hide it */
 @media (max-width:700px){.pgrid>.prail{display:none}}
 .mob{display:none}
 .modal{position:fixed;inset:0;z-index:80;display:flex;align-items:center;justify-content:center;padding:16px}
