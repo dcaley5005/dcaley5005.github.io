@@ -573,20 +573,10 @@ footer .src{font-family:"IBM Plex Mono",monospace;font-size:12px;padding:3px 8px
 
 .dform{display:contents}
 .duo{display:contents}
-@media (min-width:1880px){
+/* side by side only when both full tables fit (about 27in / 2560px screens and up); narrower screens stack */
+@media (min-width:2480px){
   .wrap{max-width:2800px}
   .duo{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:stretch}
-}
-/* side by side on ~24in screens: the tables use the expandable rows from the phone layout */
-@media (min-width:1880px) and (max-width:2479px){
-  .dsk{display:none!important}
-  .mob{display:table-cell}
-  tr.mdet.open{display:table-row}
-  tr.mdet td{padding:0 6px;border-bottom:1px solid var(--line2);background:var(--panel2)}
-  table,.btable,.ptable{min-width:0!important}
-  thead tr.grow{display:none}
-  td.mexpc{width:48px;text-align:right}
-  .mgrid{grid-template-columns:repeat(3,minmax(0,1fr))}
 }
 @media (min-width:2480px){.momwrap svg{width:56px}.momwrap{gap:6px}.ptable th,.ptable td,.btable th,.btable td{padding-left:3px;padding-right:3px}.ptable .badge{display:none}}
 @media (min-width:701px){.bcgrid .prail{max-height:none;overflow:visible}}
@@ -611,7 +601,7 @@ tr.addbar td{border:0!important;padding:10px 0 2px!important;background:transpar
 #bSave.notready{opacity:.6}
 tr.flash>td{animation:pflash 1.6s ease-out}
 @keyframes pflash{0%,30%{background:color-mix(in srgb,var(--accent) 22%,transparent)}100%{background:transparent}}
-@media (min-width:1880px){#builder .bchev{display:none}#builder .bhead{cursor:default}}
+@media (min-width:2480px){#builder .bchev{display:none}#builder .bhead{cursor:default}}
 
 .mrm,.pclr{display:inline-flex;align-items:center;gap:7px}
 .pclr.armed,#bClear.armed{background:var(--neg);border-color:var(--neg);color:var(--panel)}
@@ -686,12 +676,9 @@ tr.flash>td{animation:pflash 1.6s ease-out}
 <script>
 let UNI={};const LOADING=new Set(),NODATA=new Set(); /* UNI: ticker -> name from data/universe.json */
 const NAMES = {SPY:'S&P 500',QQQ:'Nasdaq 100',MDY:'S&P MidCap 400',IWM:'Russell 2000',EFA:'Developed intl. stocks',VTI:'Total US stock market',VEA:'Developed intl. stocks',VWO:'Emerging markets',TLT:'20+ yr Treasuries',IEF:'7–10 yr Treasuries',JNK:'High-yield corporate bonds',HYG:'High-yield corporate bonds',AGG:'US aggregate bonds',BND:'Total US bond market',LQD:'Investment-grade corporate bonds',TIP:'Inflation-protected Treasuries',SHY:'1–3 yr Treasuries',GLD:'Gold',XLK:'Technology Select Sector',FCNTX:'Fidelity Contrafund (mutual fund)',VT:'Total world stocks',VXUS:'Total intl. stocks ex-US',IJR:'S&P SmallCap 600',ACWI:'MSCI All Country World',ACWX:'MSCI All Country World ex-US',IEUR:'Core MSCI Europe',TPS:'The 12 Percent Solution ETF',IEMG:'Core MSCI Emerging Markets'};
-const SAMPLE = [
-  {name:'Tech & growth',rows:[['XLK',25],['QQQ',25],['SPY',25],['FCNTX',25]]},
-  {name:'Small & mid',rows:[['MDY',35],['IJR',35],['IWM',30]]},
-  {name:'Global',rows:[['VTI',45],['VXUS',40],['BND',15]]},
-  {name:'All-World',rows:[['VT',80],['BND',20]]}
-];
+const SAMPLE = [];
+/* the four starter portfolios we used to ship; removed once from browsers that still have them unchanged */
+const OLD_SAMPLES = {'Tech & growth':'XLK25,QQQ25,SPY25,FCNTX25','Small & mid':'MDY35,IJR35,IWM30','Global':'VTI45,VXUS40,BND15','All-World':'VT80,BND20'};
 const COLORS = ['var(--p1)','var(--p2)','var(--p3)','var(--p4)','var(--p5)'];
 const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const MAXP = 15, MAXETF = 15;
@@ -790,6 +777,7 @@ const S={
 {const okRows=r=>Array.isArray(r)?r.filter(x=>x&&typeof x.t==='string'&&x.t).map(x=>({...x,t:String(x.t).toUpperCase(),w:x.w===''?'':(Number(x.w)||0)})):[];
   if(!Array.isArray(S.pfs))S.pfs=null;else S.pfs=S.pfs.filter(p=>p&&typeof p==='object').slice(0,MAXP).map((p,i)=>({id:String(p.id||('p'+(900+i))),name:String(p.name||'Portfolio '+(i+1)),color:Number.isInteger(p.color)&&p.color>=0&&p.color<MAXP?p.color:i%MAXP,rows:okRows(p.rows).map(x=>({t:x.t,w:Number(x.w)||0}))}));
   if(!S.pfs)S.pfs=SAMPLE.map((p,i)=>({id:'p'+(i+1),name:p.name,color:i,rows:p.rows.map(([t,w])=>({t,w}))}));
+  if(!load('samplesGone',false)){S.pfs=S.pfs.filter(p=>OLD_SAMPLES[p.name]!==p.rows.map(r=>r.t+r.w).join());save('pfs2',S.pfs);save('samplesGone',true)}
   if(!S.b||typeof S.b!=='object'||Array.isArray(S.b))S.b=null;else{S.b.rows=okRows(S.b.rows).slice(0,15).map((x,j)=>({...x,c:Number.isInteger(x.c)?x.c:j}));S.b.name=typeof S.b.name==='string'?S.b.name:''}
   if(!S.hidden||typeof S.hidden!=='object')S.hidden={};if(![-1,1].includes(S.sortDir))S.sortDir=-1;
   if(!['ret','m1','m3','m6','y1','y3','y5','sharpe','dd','worst'].includes(S.sortKey))S.sortKey='ret';if(!Number.isFinite(uid))uid=10;uid=Math.max(uid,...S.pfs.map(p=>parseInt(String(p.id).replace(/\D/g,''))||0));
@@ -1114,7 +1102,7 @@ function twPanel(){
 /* ---------- render: chart ---------- */
 let CH=null,fitH=null,fitPass=false;
 /* chart heights: the builder chart grows so its list never scrolls; side by side, both charts share one height */
-const CHH={b:null,p:null};const DUO=()=>!!(window.matchMedia&&matchMedia('(min-width:1880px)').matches);let SZ=false;
+const CHH={b:null,p:null};const DUO=()=>!!(window.matchMedia&&matchMedia('(min-width:2480px)').matches);let SZ=false;
 function alignHeads(){const bw=document.querySelector('#builder .bheadwrap'),pt=document.querySelector('#portfolios .ptop'),ba=$('bActs');if(!bw||!pt||!ba)return;
   const bh=bw.querySelector('.bhead');ba.style.paddingBottom='';pt.style.paddingBottom='';if(bh)bh.style.minHeight='';if(!DUO()||!S.b.open)return;
   const d=bw.getBoundingClientRect().bottom-pt.getBoundingClientRect().bottom;
