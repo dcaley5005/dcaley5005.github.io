@@ -742,7 +742,6 @@ function normObs(obs){const out={};const withDay=obs.filter(o=>o.d!=null).map(o=
   for(const o of obs){const k=monthly||o.d==null?dKey(o.y,o.mo,lastWeekday(o.y,o.mo)):dKey(o.y,o.mo,o.d);out[k]=o.v}return out}
 
 /* ---------- dataset ---------- */
-let TWRAW=null,RAWP=null;/* TWRAW: the 12% Solution's ETFs without dividends, to match the newsletter */
 let BUILTIN=null,IMPORTED=upgradeImported(load('imported',null)),IMPORT_FILES=load('importFiles',[]),DS=null;
 function lastWeekday(y,mo){const d=new Date(y,mo,0);while(d.getDay()===0||d.getDay()===6)d.setDate(d.getDate()-1);return d.getDate()}
 /* old saved imports were monthly {ym:{v,d}}; convert to {date:v} */
@@ -758,8 +757,6 @@ function buildDataset(){
   const P={};Object.keys(Pd).forEach(t=>{P[t]=me.map(i=>Pd[t][i])});
   const lk=days[n-1],[ly,lm,ld]=lk.split('-').map(Number);const partial=ld<lastWeekday(ly,lm);
   DS={months,P,me,dm,tickers:Object.keys(merged).sort(),n:months.length,last:months.length-1,partial,lastDay:ld};
-  RAWP=null;const tw=['SPY','QQQ','MDY','IWM','TLT','JNK','SHY'];
-  if(TWRAW&&tw.every(t=>TWRAW[t])){const d={},m={};tw.forEach(t=>{const s=TWRAW[t],a=new Array(n).fill(null);let v=null;for(let i=0;i<n;i++){const x=s[days[i]];if(x!=null)v=x;a[i]=v}d[t]=a;m[t]=me.map(i=>a[i])});RAWP={d,m}}
 }
 function dLabel(i){const [y,m]=DS.months[i].split('-').map(Number);const d=(i===DS.last&&DS.lastDay)?DS.lastDay:+D.days[DS.me[i]].slice(8);return MON[m-1]+' '+d+', '+y}
 function dayLabel(i){const k=D.days[i];return MON[+k.slice(5,7)-1]+' '+(+k.slice(8))+', '+k.slice(0,4)}
@@ -849,23 +846,24 @@ function periodRetD(getRet,m){const s=selStart({p:({1:'1M',3:'3M',6:'6M',12:'1Y'
 function ddDaily(V,s){if(!V||s==null||V[s]==null)return null;let pk=V[s],dd=0;for(let i=s;i<D.n;i++){if(V[i]==null)continue;pk=Math.max(pk,V[i]);dd=Math.min(dd,V[i]/pk-1)}return dd}
 /* 12% Solution: monthly rebalance by book rules, fixed 3-month lookback */
 const TW_EQ=['SPY','QQQ','MDY','IWM'],TW_BD=['TLT','JNK'];
-/* the 12% Solution picks on total return (ret) but reports price change only (tpx) when RAWP is loaded; that matches the newsletter's 2025 figure */
-function tpx(t,i){return RAWP?RAWP.m[t][i]:px(t,i)}
-function tpxd(t,i){return RAWP?RAWP.d[t][i]:pxd(t,i)}
-function tret(t,i,L){if(i-L<0)return null;const a=tpx(t,i),b=tpx(t,i-L);return a!=null&&b!=null?a/b-1:null}
-function twPick(i){const c=ret('SHY',i,3);const best=l=>l.map(t=>[t,ret(t,i,3)]).filter(x=>x[1]!=null).sort((a,b)=>b[1]-a[1])[0];
+/* The 12% Solution, the way the newsletter's Members Page runs it: at each month's last close, rank by return over
+   the last 63 trading days (about 3 months); trade at the close on the first trading day of the next month; dividends included. */
+const TW_LB=63;
+function twRetD(t,d){if(d-TW_LB<0)return null;const a=pxd(t,d),b=pxd(t,d-TW_LB);return a!=null&&b!=null?a/b-1:null}
+function twRet(t,i){return twRetD(t,DS.me[i])}
+function twPick(i){const d=DS.me[i],c=twRetD('SHY',d);const best=l=>l.map(t=>[t,twRetD(t,d)]).filter(x=>x[1]!=null).sort((a,b)=>b[1]-a[1])[0];
   const e=best(TW_EQ),b=best(TW_BD);if(!e||!b||c==null)return null;return {e:e[1]>c?e[0]:'SHY',b:b[0]}}
 let TW=null;
 function computeTW(){delete D.P.TPS;delete DS.P.TPS;DS.tickers=DS.tickers.filter(t=>t!=='TPS');const need=TW_EQ.concat(TW_BD,['SHY']);if(!need.every(HAS)){TW=null;return}
-  let s=null;for(let i=3;i<DS.n;i++){if(need.every(t=>tpx(t,i)!=null&&tpx(t,i-3)!=null)){s=i;break}}if(s==null){TW=null;return}
-  const V=new Array(DS.n).fill(null);V[s]=1;const picks=[];
-  for(let i=s;i<DS.last;i++){const pk=twPick(i);picks[i]=pk;const r=0.6*(tpx(pk.e,i+1)/tpx(pk.e,i)-1)+0.4*(tpx(pk.b,i+1)/tpx(pk.b,i)-1);V[i+1]=V[i]*(1+r)}
+  let s=null;for(let i=0;i<DS.last;i++){const d=DS.me[i];if(d-TW_LB>=0&&d+1<D.n&&need.every(t=>pxd(t,d)!=null&&pxd(t,d-TW_LB)!=null)){s=i;break}}if(s==null){TW=null;return}
+  const picks=[],sw=new Map();for(let i=s;i<=DS.last;i++){const pk=twPick(i);picks[i]=pk;const d=DS.me[i]+1;if(pk&&d<D.n)sw.set(d,pk)}
+  const d0=DS.me[s]+1,Vd=new Array(D.n).fill(null);Vd[d0]=1;let cur=sw.get(d0);
+  for(let i=d0+1;i<D.n;i++){Vd[i]=Vd[i-1]*(1+0.6*(pxd(cur.e,i)/pxd(cur.e,i-1)-1)+0.4*(pxd(cur.b,i)/pxd(cur.b,i-1)-1));if(sw.has(i))cur=sw.get(i)}
+  const V=DS.me.map(d=>Vd[d]);const start=V.findIndex(v=>v!=null);
   const official=DS.partial?DS.last-1:DS.last;
-  const Vd=new Array(D.n).fill(null);const d0=DS.me[s];Vd[d0]=1;
-  for(let m=s;m<DS.last;m++){const pk=picks[m],b0=DS.me[m],b1=DS.me[m+1];for(let i=b0+1;i<=b1;i++)Vd[i]=Vd[b0]*(0.6*tpxd(pk.e,i)/tpxd(pk.e,b0)+0.4*tpxd(pk.b,i)/tpxd(pk.b,b0))}
-  TW={V,Vd,picks,start:s,startD:d0,now:twPick(official),official};
+  TW={V,Vd,picks,start,startD:d0,now:twPick(official),official};
   /* TPS: the 12% Solution as a holdable ETF that only exists here */
-  D.P.TPS=Vd;DS.P.TPS=DS.me.map(i=>Vd[i]);if(!DS.tickers.includes('TPS')){DS.tickers.push('TPS');DS.tickers.sort()}}
+  D.P.TPS=Vd;DS.P.TPS=V.slice();if(!DS.tickers.includes('TPS')){DS.tickers.push('TPS');DS.tickers.sort()}}
 function shyMonthly(i){const a=px('SHY',i),b=px('SHY',i-1);return a!=null&&b!=null?a/b-1:0}
 function statsFromValues(V,s){ // V normalized values indexed by month, valid from s to last
   const last=DS.last;if(s==null||V[s]==null)return null;const n=last-s;if(n<12)return null;
@@ -1069,12 +1067,12 @@ function sparkSVG(r){const st0=selStart(S.sel),last=D.last;const vf=r.valueFrom(
   const pts=ser.map((q,k)=>q==null?null:X(k).toFixed(1)+','+Y(q).toFixed(1)).filter(Boolean).join(' ');
   return `<svg width="80" height="22" viewBox="0 0 100 28" role="img" aria-label="${esc(r.name)} return path over the ${esc(selLabel(S.sel,'span'))}"><line x1="2" x2="98" y1="${Y(0).toFixed(1)}" y2="${Y(0).toFixed(1)}" stroke="var(--faint)" stroke-dasharray="2 3"/><polyline points="${pts}" fill="none" stroke="${r.color}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>${ser[K]!=null?`<circle cx="${X(K).toFixed(1)}" cy="${Y(ser[K]).toFixed(1)}" r="3" fill="${r.color}"/>`:''}</svg>`}
 function twSignal(){
-  const off=TW.official,c=ret('SHY',off,3);
-  const eq=TW_EQ.map(t=>({t,v:ret(t,off,3)})).sort((x,y)=>y.v-x.v),bd=TW_BD.map(t=>({t,v:ret(t,off,3)})).sort((x,y)=>y.v-x.v);
+  const off=TW.official,c=twRet('SHY',off);
+  const eq=TW_EQ.map(t=>({t,v:twRet(t,off)})).sort((x,y)=>y.v-x.v),bd=TW_BD.map(t=>({t,v:twRet(t,off)})).sort((x,y)=>y.v-x.v);
   const row=(o,pick,note)=>`<div class="sig"><span class="mono" style="font-weight:600">${o.t}</span><span class="mono r ${cls(o.v)}">${sg(o.v)}</span><span class="mono r mut">${note}</span><span>${pick?'<span class="pick">Picked</span>':''}</span></div>`;
   const eqPick=TW.now.e,bdPick=TW.now.b;
   let prev='';if(DS.partial){const pv=twPick(DS.last);if(pv)prev=`<span class="sub">If the month ended today (${dLabel(DS.last)}), it would hold <strong class="mono" style="color:var(--ink)">${pv.e} · ${pv.b}</strong>${pv.e===TW.now.e&&pv.b===TW.now.b?', the same as now':''}. The next real check is the last trading day of the month.</span>`}
-  return `<span class="cap" style="margin-top:6px">This month's signal · ${dLabel(off)} close · 3-month returns</span>
+  return `<span class="cap" style="margin-top:6px">This month's signal · ${dLabel(off)} close · 63-trading-day returns</span>
     <div class="sigcols"><div>
     <div class="sig cap" style="border:0"><span>Stocks (60%)</span><span class="r">3-mo</span><span class="r">vs SHY</span><span></span></div>
     ${eq.map(o=>row(o,o.t===eqPick,(o.v-c>0?'+':'−')+Math.abs((o.v-c)*100).toFixed(1)+' pts')).join('')}
@@ -1090,9 +1088,9 @@ function twPanel(){
   return `<div class="twinfo">
     <div style="display:flex;flex-direction:column;gap:8px;min-width:0">
       <span class="cap">How it decides</span>
-      <span style="font-size:14px;color:var(--ink2);line-height:1.55">At each month-end, 60% goes to whichever of SPY, QQQ, MDY and IWM had the best 3-month return, or to SHY if none of them beat SHY. The other 40% goes to the better of TLT and JNK. It always uses a 3-month lookback. You can't edit this one; it's the line to beat.</span>
+      <span style="font-size:14px;color:var(--ink2);line-height:1.55">At each month-end close, 60% goes to whichever of SPY, QQQ, MDY and IWM had the best return over the last 63 trading days (about 3 months), or to SHY if none of them beat SHY. The other 40% goes to the better of TLT and JNK. Trades happen at the close on the first trading day of the next month. You can't edit this one; it's the line to beat.</span>
       ${twSignal()}
-      <span class="sub">${RAWP?'Its returns are price changes only, without dividends, to match how the newsletter reports its results. The other ETFs on this page include dividends.':'Reconstructed from the book\'s rules and month-end prices. Carter\'s published figures may differ slightly.'}</span>
+      <span class="sub">Matches the newsletter's Members Page: first-trading-day trades, 63-day lookback, dividends included. Small differences from Carter's figures come from price data sources.</span>
     </div>
     <div style="display:flex;flex-direction:column;gap:4px;min-width:0">
       <div class="twlog">${[rows.slice(0,18),rows.slice(18)].filter(x=>x.length).map(col=>`<div><div class="log cap" style="border:0"><span>Rebalanced</span><span>60% in</span><span>40% in</span></div>${col.join('')}</div>`).join('')}</div>
@@ -1597,7 +1595,6 @@ async function ensureData(){const ts=needTickers();if(!ts.length)return;ts.forEa
     if(!c.ok)throw new Error('core '+c.status);
     BUILTIN=readFile(await c.text(),'core.csv');
     if(u.ok){const j=await u.json();(j.etfs||[]).forEach(([t,n])=>{UNI[t]=n;if(!NAMES[t])NAMES[t]=n})}
-    try{const w=await fetch('data/tw.csv');if(w.ok)TWRAW=readFile(await w.text(),'tw.csv')}catch(e){}
   }catch(e){$('banner').hidden=false;$('banner').textContent='Couldn’t load prices. Refresh the page to try again.';return}
   buildDataset();computeTW();render();
 })();
