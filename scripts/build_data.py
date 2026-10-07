@@ -181,33 +181,35 @@ def update_fund_info(tickers):
 
     todo = sorted([t for t in tickers if age(t) >= FUND_MAX_AGE_DAYS], key=age, reverse=True)
     log(f"Fund details: {len(tickers) - len(todo)} fresh, {len(todo)} to refresh (budget {FUND_MINUTES:.0f} min)")
-    start, done, failed, streak = time.time(), 0, 0, 0
-    with ThreadPoolExecutor(max_workers=8) as pool:
-        it = iter(todo)
-        futs = {}
-        for t in it:
-            futs[pool.submit(fetch_fund, t)] = t
-            if len(futs) >= 16:
-                break
-        while futs:
-            fut = next(as_completed(futs))
-            t = futs.pop(fut)
-            try:
-                old[t] = fut.result()
-                done, streak = done + 1, 0
-            except Exception:
-                failed, streak = failed + 1, streak + 1
-            if streak >= 60:
-                log("  many failures in a row (likely rate limited); stopping for this run")
-                break
-            if time.time() - start < FUND_MINUTES * 60:
-                nxt = next(it, None)
-                if nxt:
-                    futs[pool.submit(fetch_fund, nxt)] = nxt
-            if (done + failed) % 250 == 0:
-                log(f"  fund details {done + failed}/{len(todo)} ({failed} failed)")
-        for f in futs:
-            f.cancel()
+    # Yahoo starts refusing after several hundred quick requests, so go steadily and,
+    # when refused, pause and pick up again (up to a few times) within the time budget.
+    def paced(t):
+        time.sleep(0.4)
+        return fetch_fund(t)
+
+    start, done, failed, pauses = time.time(), 0, 0, 0
+    queue = list(todo)
+    while queue and time.time() - start < FUND_MINUTES * 60 and pauses <= 4:
+        batch, queue = queue[:40], queue[40:]
+        errs = []
+        with ThreadPoolExecutor(max_workers=4) as pool:
+            futs = {pool.submit(paced, t): t for t in batch}
+            for fut in as_completed(futs):
+                t = futs[fut]
+                try:
+                    old[t] = fut.result()
+                    done += 1
+                except Exception:
+                    errs.append(t)
+        if len(errs) > len(batch) * 0.6:      # mostly refused: back off and retry this batch later
+            pauses += 1
+            queue = errs + queue
+            log(f"  refused by Yahoo; pausing 90s (pause {pauses})")
+            time.sleep(90)
+        else:
+            failed += len(errs)
+        if (done + failed) // 250 != (done + failed - len(batch)) // 250:
+            log(f"  fund details {done + failed}/{len(todo)} ({failed} failed)")
     keep = {t: old[t] for t in tickers if t in old}
     FUND_FILE.parent.mkdir(parents=True, exist_ok=True)
     FUND_FILE.write_text(json.dumps({
