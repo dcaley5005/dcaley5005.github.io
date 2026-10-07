@@ -8,6 +8,8 @@ Output, under _site/portfolio-lab/data/:
   tw.csv          daily closes without dividends for the 12% Solution's ETFs, so it
                   matches the newsletter, which reports price change only
   universe.json   the ETF list the app offers (ticker, name)
+  peers/<T>.json  "Explore alternatives" picks for each ETF, from the last 3 years of prices
+  er.json         expense ratio per ETF (percent)
   fund_info.json  per-ETF details from Yahoo: fund size, expense ratio, average volume, price,
                   category, fund family, inception date (refreshed weekly, a slice per run)
 
@@ -219,6 +221,104 @@ def update_fund_info(tickers):
     log(f"Fund details: refreshed {done}, failed {failed}, have {len(keep)} of {len(tickers)}")
 
 
+# ---------- explore alternatives ----------
+EXPLORE_DAYS = 756            # about 3 years of trading days
+COMPLEX_CAT = re.compile(r"^(Defined Outcome|Derivative Income|Trading)")
+COMPLEX_NAME = re.compile(r"buffer|defined outcome|option income|covered call|premium income|"
+                          r"yieldmax|single.stock|autocallable", re.I)
+
+
+def load_fund_info():
+    if not FUND_FILE.exists():
+        return {}
+    j = json.loads(FUND_FILE.read_text())
+    return {t: dict(zip(j["fields"], row)) for t, row in j["f"].items()}
+
+
+def period_returns(s, last):
+    """1M 3M 6M 1Y return, then 3Y and 5Y per year; None where history is too short."""
+    out = []
+    for m in (1, 3, 6, 12, 36, 60):
+        cut = last - pd.DateOffset(months=m)
+        prev = s[:cut]
+        if prev.empty or s.index[0] > cut:
+            out.append(None)
+            continue
+        r = float(s.iloc[-1] / prev.iloc[-1] - 1)
+        out.append(round((1 + r) ** (12 / m) - 1 if m > 12 else r, 4))
+    return out
+
+
+def build_explore(series, names, fund):
+    """For every ETF with 3 years of prices: up to 3 that track it and beat it on return and
+    Sharpe, up to 3 that move differently with a Sharpe within 20% of it, and its closest peers."""
+    import numpy as np
+    spy = series["SPY"]
+    cut = spy.index[-1] - pd.DateOffset(years=3)
+    idx = spy.index[spy.index >= spy[:cut].index[-1]]   # same 3-year window as the 3Y column
+    start, end = idx[0], idx[-1]
+    cols = {t: s.reindex(idx).ffill(limit=5) for t, s in series.items()
+            if len(s) and s.index[0] <= start and s.index[-1] >= end - pd.Timedelta(days=7)}
+    px = pd.DataFrame(cols).dropna(axis=1)
+    rets = px.pct_change().iloc[1:]
+    tick = list(px.columns)
+    years = (end - start).days / 365.25
+    growth = px.iloc[-1] / px.iloc[0]
+    r3 = growth ** (1 / years) - 1
+    vol = rets.std() * np.sqrt(252)
+    rf = rets["SHY"] if "SHY" in rets else 0.0
+    sharpe = rets.sub(rf, axis=0).mean() * 252 / vol
+    dd = (px / px.cummax() - 1).min()
+    z = ((rets - rets.mean()) / rets.std(ddof=0)).to_numpy()
+    n = z.shape[0]
+
+    def ok(t):
+        f = fund.get(t) or {}
+        return ((f.get("aum") or 0) >= 50e6 and (f.get("type") or "").upper() != "MUTUALFUND"
+                and not COMPLEX_CAT.search(f.get("cat") or "")
+                and not COMPLEX_NAME.search(names.get(t, "")))
+
+    cand = [i for i, t in enumerate(tick) if ok(t)]
+    zc = z[:, cand]
+    pts = [round(k * (len(px) - 1) / 24) for k in range(25)]
+    spark = {t: [round(float(v) * 100) for v in (px[t].iloc[pts] / px[t].iloc[0] - 1)] for t in tick}
+    last = series["SPY"].index[-1]
+    pr = {t: period_returns(series[t], last) for t in tick}
+
+    def card(t, c=None):
+        f = fund.get(t) or {}
+        d = {"t": t, "n": names.get(t, ""), "er": f.get("er"), "r": pr[t],
+             "r3": round(float(r3[t]), 4), "sh": round(float(sharpe[t]), 3),
+             "dd": round(float(dd[t]), 4), "vol": round(float(vol[t]), 4), "sp": spark[t]}
+        if c is not None:
+            d["c"] = round(float(c), 3)
+        return d
+
+    out = OUT / "peers"
+    out.mkdir(parents=True, exist_ok=True)
+    meta = {"asof": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+            "from": start.strftime("%Y-%m-%d"), "to": end.strftime("%Y-%m-%d")}
+    written = 0
+    for i, t in enumerate(tick):
+        if t not in names:
+            continue
+        corr = (z[:, i] @ zc) / n
+        rows = [(tick[cand[k]], float(corr[k])) for k in range(len(cand)) if tick[cand[k]] != t]
+        sb, rb = float(sharpe[t]), float(r3[t])
+        same = sorted([(u, c) for u, c in rows if c >= 0.9 and r3[u] > rb and sharpe[u] > sb],
+                      key=lambda x: -sharpe[x[0]])[:3]
+        closest = [] if same else sorted([(u, c) for u, c in rows if c >= 0.9], key=lambda x: -x[1])[:3]
+        floor = sb * 0.8 if sb > 0 else sb
+        div = sorted([(u, c) for u, c in rows if c < 0.6 and sharpe[u] >= floor],
+                     key=lambda x: -sharpe[x[0]])[:3]
+        doc = dict(meta, self=card(t), same=[card(u, c) for u, c in same],
+                   closest=[card(u, c) for u, c in closest], div=[card(u, c) for u, c in div],
+                   divFloor=round(floor, 3), pool=len(cand))
+        (out / f"{t}.json").write_text(json.dumps(doc, separators=(",", ":")))
+        written += 1
+    log(f"Explore: {written} ETFs with 3 years of prices, {len(cand)} candidates to suggest")
+
+
 def load_universe():
     force = os.environ.get("REBUILD_UNIVERSE", "").lower() in ("1", "true", "yes")
     uni = None
@@ -361,6 +461,13 @@ def main():
     (OUT / "universe.json").write_text(json.dumps(
         {"asof": uni["asof"], "built": datetime.now(timezone.utc).isoformat(timespec="minutes"),
          "etfs": avail}, separators=(",", ":")))
+    try:
+        fund = load_fund_info()
+        (OUT / "er.json").write_text(json.dumps(
+            {t: f["er"] for t, f in fund.items() if f.get("er") is not None}, separators=(",", ":")))
+        build_explore({**core, **got}, names, fund)
+    except Exception as e:  # never let this block the price refresh
+        log(f"Explore step failed: {e}")
     log("Done.")
 
 
