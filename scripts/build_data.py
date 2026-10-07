@@ -228,7 +228,7 @@ COMPLEX_CAT = re.compile(r"^(Defined Outcome|Derivative Income|Trading)")
 # what they hold; left out of the explore picks along with funds charging more than 1% a year
 STRATEGY_CAT = re.compile(r"^(Tactical Allocation|Equity Hedged|Long-Short Equity|Event Driven|Macro Trading|"
                           r"Equity Market Neutral|Multistrategy|Systematic Trend|Options Trading|Relative Value Arbitrage)")
-STRATEGY_NAME = re.compile(r"hedged equity|tactical|long.short|managed futures", re.I)
+STRATEGY_NAME = re.compile(r"hedged equity|tactical|long.short|managed futures|\bETNs?\b", re.I)
 MAX_FEE = 1.0
 COMPLEX_NAME = re.compile(r"buffer|defined outcome|option income|covered call|premium income|"
                           r"yieldmax|single.stock|autocallable", re.I)
@@ -275,6 +275,8 @@ def build_explore(series, names, fund):
     rf = rets["SHY"] if "SHY" in rets else 0.0
     sharpe = rets.sub(rf, axis=0).mean() * 252 / vol
     dd = (px / px.cummax() - 1).min()
+    # 3-month return averaged over the last 10 trading days, so one hot or cold week can't flip a pick
+    m3s = sum(px.iloc[-1 - k] / px.iloc[-1 - k - 63] - 1 for k in range(10)) / 10
     z = ((rets - rets.mean()) / rets.std(ddof=0)).to_numpy()
     n = z.shape[0]
 
@@ -307,7 +309,7 @@ def build_explore(series, names, fund):
         d = {"t": t, "n": names.get(t, ""), "er": f.get("er"), "r": pr[t],
              "r3": round(float(r3[t]), 4), "sh": round(float(sharpe[t]), 3),
              "dd": round(float(dd[t]), 4), "vol": round(float(vol[t]), 4),
-             "d": lines[t][0], "w": lines[t][1]}
+             "m3": round(float(m3s[t]), 4), "d": lines[t][0], "w": lines[t][1]}
         if c is not None:
             d["c"] = round(float(c), 3)
         return d
@@ -333,8 +335,14 @@ def build_explore(series, names, fund):
         # best Sharpe first
         div = sorted([(u, c) for u, c in rows if vol[u] <= bv * 0.85 and r3[u] >= rb - 0.02],
                      key=lambda x: -sharpe[x[0]])[:3]
+        # Momentum: moves 85%+ in step, ahead by 2+ points over 3 months (10-day average), swings no
+        # more than 25% more, and a 3-year return within 3 points; strongest 3 months first
+        mb = float(m3s[t])
+        mom = sorted([(u, c) for u, c in rows if c >= 0.85 and vol[u] <= bv * 1.25 and r3[u] >= rb - 0.03
+                      and m3s[u] >= mb + 0.02], key=lambda x: -m3s[x[0]])[:3]
         doc = dict(meta, self=card(t), same=[card(u, c) for u, c in same],
                    closest=[card(u, c) for u, c in closest], div=[card(u, c) for u, c in div],
+                   mom=[card(u, c) for u, c in mom],
                    pool=len(cand))
         (out / f"{t}.json").write_text(json.dumps(doc, separators=(",", ":")))
         written += 1
