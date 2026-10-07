@@ -224,6 +224,12 @@ def update_fund_info(tickers):
 # ---------- explore alternatives ----------
 EXPLORE_DAYS = 756            # about 3 years of trading days
 COMPLEX_CAT = re.compile(r"^(Defined Outcome|Derivative Income|Trading)")
+# strategy funds that get calm or strong numbers from trading, shorting or options rather than from
+# what they hold; left out of the explore picks along with funds charging more than 1% a year
+STRATEGY_CAT = re.compile(r"^(Tactical Allocation|Equity Hedged|Long-Short Equity|Event Driven|Macro Trading|"
+                          r"Equity Market Neutral|Multistrategy|Systematic Trend|Options Trading|Relative Value Arbitrage)")
+STRATEGY_NAME = re.compile(r"hedged equity|tactical|long.short|managed futures", re.I)
+MAX_FEE = 1.0
 COMPLEX_NAME = re.compile(r"buffer|defined outcome|option income|covered call|premium income|"
                           r"yieldmax|single.stock|autocallable", re.I)
 
@@ -276,7 +282,10 @@ def build_explore(series, names, fund):
         f = fund.get(t) or {}
         return ((f.get("aum") or 0) >= 50e6 and (f.get("type") or "").upper() != "MUTUALFUND"
                 and not COMPLEX_CAT.search(f.get("cat") or "")
-                and not COMPLEX_NAME.search(names.get(t, "")))
+                and not STRATEGY_CAT.search(f.get("cat") or "")
+                and not (f.get("er") is not None and f["er"] > MAX_FEE)
+                and not COMPLEX_NAME.search(names.get(t, ""))
+                and not STRATEGY_NAME.search(names.get(t, "")))
 
     cand = [i for i, t in enumerate(tick) if ok(t)]
     zc = z[:, cand]
@@ -314,20 +323,19 @@ def build_explore(series, names, fund):
             continue
         corr = (z[:, i] @ zc) / n
         rows = [(tick[cand[k]], float(corr[k])) for k in range(len(cand)) if tick[cand[k]] != t]
-        sb, rb = float(sharpe[t]), float(r3[t])
-        same = sorted([(u, c) for u, c in rows if c >= 0.9 and r3[u] > rb and sharpe[u] > sb],
+        sb, rb, bv = float(sharpe[t]), float(r3[t]), float(vol[t])
+        # Higher return, similar ride: moves 85%+ in step, 1+ point a year more return,
+        # swings no more than 25% more; best Sharpe first
+        same = sorted([(u, c) for u, c in rows if c >= 0.85 and r3[u] >= rb + 0.01 and vol[u] <= bv * 1.25],
                       key=lambda x: -sharpe[x[0]])[:3]
-        closest = [] if same else sorted([(u, c) for u, c in rows if c >= 0.9], key=lambda x: -x[1])[:3]
-        floor = sb * 0.8 if sb > 0 else sb
-        # keep diversifiers in a sensible risk band around the ETF: cash and T-bill funds barely move
-        # (so their Sharpe looks huge), and single-coin or freight funds swing wildly
-        bv = float(vol[t])
-        vmin, vmax = max(0.04, 0.35 * bv), max(1.5 * bv, bv + 0.10)
-        div = sorted([(u, c) for u, c in rows if c < 0.6 and sharpe[u] >= floor and vmin <= vol[u] <= vmax],
+        closest = [] if same else sorted([(u, c) for u, c in rows if c >= 0.85], key=lambda x: -x[1])[:3]
+        # Smoother ride, similar return: swings 15%+ less, return no more than 2 points a year lower;
+        # best Sharpe first
+        div = sorted([(u, c) for u, c in rows if vol[u] <= bv * 0.85 and r3[u] >= rb - 0.02],
                      key=lambda x: -sharpe[x[0]])[:3]
         doc = dict(meta, self=card(t), same=[card(u, c) for u, c in same],
                    closest=[card(u, c) for u, c in closest], div=[card(u, c) for u, c in div],
-                   divFloor=round(floor, 3), pool=len(cand))
+                   pool=len(cand))
         (out / f"{t}.json").write_text(json.dumps(doc, separators=(",", ":")))
         written += 1
     log(f"Explore: {written} ETFs with 3 years of prices, {len(cand)} candidates to suggest")
