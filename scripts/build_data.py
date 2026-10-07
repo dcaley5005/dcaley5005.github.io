@@ -8,6 +8,8 @@ Output, under _site/portfolio-lab/data/:
   tw.csv          daily closes without dividends for the 12% Solution's ETFs, so it
                   matches the newsletter, which reports price change only
   universe.json   the ETF list the app offers (ticker, name)
+  fund_info.json  per-ETF details from Yahoo: fund size, expense ratio, average volume, price,
+                  category, fund family, inception date (refreshed weekly, a slice per run)
 
 The universe is every US-listed ETF that is not leveraged or inverse, ranked by
 3-month average dollar volume (set UNIVERSE_SIZE to keep only the top N), plus the core tickers. It is
@@ -20,6 +22,7 @@ import shutil
 import sys
 import time
 import urllib.request
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -31,6 +34,10 @@ SITE_SRC = ROOT / "site"
 OUT_SITE = ROOT / "_site"
 OUT = OUT_SITE / "portfolio-lab" / "data"
 UNIVERSE_FILE = ROOT / "data" / "universe.json"
+FUND_FILE = ROOT / "data" / "fund_info.json"
+FUND_FIELDS = ["aum", "er", "er_ann", "vol", "px", "cat", "fam", "type", "inc", "asof"]
+FUND_MAX_AGE_DAYS = 7
+FUND_MINUTES = float(os.environ.get("FUND_INFO_MINUTES", "30"))
 LIVE = "https://danielcaley.com/portfolio-lab/data"  # previous deploy, used as a fallback
 
 UNIVERSE_SIZE = int(os.environ.get("UNIVERSE_SIZE", "0"))  # 0 = every non-leveraged ETF
@@ -124,6 +131,90 @@ def build_universe():
         "coverage": round(sum(dv[t] for t in top) / total, 4),
         "etfs": etfs_list,
     }
+
+
+# ---------- fund details ----------
+def _num(x):
+    try:
+        x = float(x)
+        return x if x == x else None
+    except (TypeError, ValueError):
+        return None
+
+
+def fetch_fund(t):
+    """One ETF's details from Yahoo. Raises on a failed request."""
+    info = yf.Ticker(ysym(t)).get_info() or {}
+    if not info or (info.get("quoteType") is None and info.get("totalAssets") is None):
+        raise ValueError("empty response")
+    inc = info.get("fundInceptionDate")
+    inc = datetime.fromtimestamp(inc, timezone.utc).strftime("%Y-%m-%d") if isinstance(inc, (int, float)) else None
+    px = _num(info.get("navPrice")) or _num(info.get("regularMarketPrice")) or _num(info.get("previousClose"))
+    return {
+        "aum": _num(info.get("totalAssets")),
+        "er": _num(info.get("netExpenseRatio")),          # percent, e.g. 0.09 = 0.09%
+        "er_ann": _num(info.get("annualReportExpenseRatio")),
+        "vol": _num(info.get("averageVolume")),            # 3-month average shares a day
+        "px": px,
+        "cat": info.get("category"),
+        "fam": info.get("fundFamily"),
+        "type": info.get("legalType") or info.get("quoteType"),
+        "inc": inc,
+        "asof": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+    }
+
+
+def update_fund_info(tickers):
+    """Refresh the oldest or missing entries within a time budget; keep everything else."""
+    old = {}
+    if FUND_FILE.exists():
+        try:
+            j = json.loads(FUND_FILE.read_text())
+            old = {t: dict(zip(j["fields"], row)) for t, row in j["f"].items()}
+        except Exception as e:
+            log(f"Couldn't read the saved fund details ({e}); starting fresh.")
+    today = datetime.now(timezone.utc).date()
+
+    def age(t):
+        a = old.get(t, {}).get("asof")
+        return 9999 if not a else (today - datetime.strptime(a, "%Y-%m-%d").date()).days
+
+    todo = sorted([t for t in tickers if age(t) >= FUND_MAX_AGE_DAYS], key=age, reverse=True)
+    log(f"Fund details: {len(tickers) - len(todo)} fresh, {len(todo)} to refresh (budget {FUND_MINUTES:.0f} min)")
+    start, done, failed, streak = time.time(), 0, 0, 0
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        it = iter(todo)
+        futs = {}
+        for t in it:
+            futs[pool.submit(fetch_fund, t)] = t
+            if len(futs) >= 16:
+                break
+        while futs:
+            fut = next(as_completed(futs))
+            t = futs.pop(fut)
+            try:
+                old[t] = fut.result()
+                done, streak = done + 1, 0
+            except Exception:
+                failed, streak = failed + 1, streak + 1
+            if streak >= 60:
+                log("  many failures in a row (likely rate limited); stopping for this run")
+                break
+            if time.time() - start < FUND_MINUTES * 60:
+                nxt = next(it, None)
+                if nxt:
+                    futs[pool.submit(fetch_fund, nxt)] = nxt
+            if (done + failed) % 250 == 0:
+                log(f"  fund details {done + failed}/{len(todo)} ({failed} failed)")
+        for f in futs:
+            f.cancel()
+    keep = {t: old[t] for t in tickers if t in old}
+    FUND_FILE.parent.mkdir(parents=True, exist_ok=True)
+    FUND_FILE.write_text(json.dumps({
+        "asof": today.isoformat(), "fields": FUND_FIELDS,
+        "f": {t: [v.get(k) for k in FUND_FIELDS] for t, v in sorted(keep.items())},
+    }, separators=(",", ":")))
+    log(f"Fund details: refreshed {done}, failed {failed}, have {len(keep)} of {len(tickers)}")
 
 
 def load_universe():
@@ -227,6 +318,13 @@ def main():
     names = {t: n for t, n in uni["etfs"]}
     others = [t for t in names if t not in CORE]
     log(f"Universe: {len(names)} ETFs ({len(others)} beyond the core)")
+
+    try:
+        update_fund_info(list(names))
+    except Exception as e:  # never let this block the price refresh
+        log(f"Fund details step failed: {e}")
+    if FUND_FILE.exists():
+        shutil.copy(FUND_FILE, OUT / "fund_info.json")
 
     log("Downloading core prices…")
     core, core_missing = download_closes(CORE)
