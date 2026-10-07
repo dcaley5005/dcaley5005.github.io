@@ -309,10 +309,11 @@ def build_explore(series, names, fund):
                       key=lambda x: -sharpe[x[0]])[:3]
         closest = [] if same else sorted([(u, c) for u, c in rows if c >= 0.9], key=lambda x: -x[1])[:3]
         floor = sb * 0.8 if sb > 0 else sb
-        # cash and T-bill funds barely move, so their Sharpe looks huge; a diversifier has to swing
-        # at least a third as much as the ETF (and 4% a year) to count
-        vmin = max(0.04, 0.35 * float(vol[t]))
-        div = sorted([(u, c) for u, c in rows if c < 0.6 and sharpe[u] >= floor and vol[u] >= vmin],
+        # keep diversifiers in a sensible risk band around the ETF: cash and T-bill funds barely move
+        # (so their Sharpe looks huge), and single-coin or freight funds swing wildly
+        bv = float(vol[t])
+        vmin, vmax = max(0.04, 0.35 * bv), max(1.5 * bv, bv + 0.10)
+        div = sorted([(u, c) for u, c in rows if c < 0.6 and sharpe[u] >= floor and vmin <= vol[u] <= vmax],
                      key=lambda x: -sharpe[x[0]])[:3]
         doc = dict(meta, self=card(t), same=[card(u, c) for u, c in same],
                    closest=[card(u, c) for u, c in closest], div=[card(u, c) for u, c in div],
