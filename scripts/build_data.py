@@ -280,10 +280,12 @@ def build_explore(series, names, fund):
 
     cand = [i for i, t in enumerate(tick) if ok(t)]
     zc = z[:, cand]
-    # line chart data, as price / latest price x 10000: the last 127 trading days daily (covers
+    # line chart data, as price / latest price x 10000: the last 140 trading days daily (covers
     # 1M 3M 6M) and the whole 3 years weekly (YTD 1Y 3Y); the site rebases to the range picked
-    nd = min(127, len(px))
-    wk = sorted(set(range(len(px) - 1, -1, -5)) | {0})
+    nd = min(140, len(px))
+    cuts = [pd.Timestamp(end.year - 1, 12, 31), end - pd.DateOffset(years=1)]
+    anchors = {int(px.index.searchsorted(c, side="right")) - 1 for c in cuts}
+    wk = sorted((set(range(len(px) - 1, -1, -5)) | {0} | anchors) - {-1})
     rel = (px / px.iloc[-1] * 10000).round().astype(int)
     lines = {t: (rel[t].iloc[-nd:].tolist(), rel[t].iloc[wk].tolist()) for t in tick}
     day_dates = [d.strftime("%Y-%m-%d") for d in px.index[-nd:]]
