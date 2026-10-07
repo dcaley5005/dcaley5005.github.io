@@ -229,7 +229,7 @@ tr.twrow td{white-space:normal}
 .btable tbody td.num,.btable tfoot td.num{font-size:14px}
 .btable .rsw{height:30px}
 .btable .x{height:30px;width:30px}
-.btable thead th{padding-top:4px;padding-bottom:6px}
+.btable thead th{padding-top:4px;padding-bottom:6px;vertical-align:middle}
 
 .btable td.wcell,.btable th.wcell{width:1%;white-space:nowrap;padding-left:14px}
 .btable th:first-child,.btable td:first-child{width:1%;white-space:nowrap}
@@ -306,7 +306,7 @@ tr.twrow td{white-space:normal}
 .btn.primary:disabled{background:var(--pill);border-color:var(--line);color:var(--muted);opacity:1}
 .btable{min-width:600px;table-layout:auto}
 
-.btable th.bm{white-space:normal;line-height:1.25;vertical-align:bottom;min-width:64px}
+.btable th.bm{white-space:normal;line-height:1.25;vertical-align:middle;min-width:64px}
 .btable th.bm .hw{justify-content:flex-end;align-items:flex-end}
 .btable th.bm .cap{text-align:right}
 .btable td.num{white-space:nowrap}
@@ -507,7 +507,7 @@ h1{font-size:clamp(28px,3vw,36px)}
 
 .panel.builder{padding:0}
 thead tr.grow th{padding-top:0}
-.ptable th{padding:4px 6px}
+.ptable th{padding:4px 6px}.ptable thead tr:not(.grow) th{vertical-align:middle}
 .ptable td{padding:4px 6px}
 .ptable .edit,.ptable .delbtn{height:30px}
 .plrow{min-height:30px}
@@ -629,8 +629,8 @@ body.xm-open{overflow:hidden}
 .xm{position:fixed;inset:0;z-index:80;display:flex;align-items:center;justify-content:center;padding:12px 2vw}
 .xm[hidden]{display:none}
 .xmback{position:absolute;inset:0;background:rgba(10,10,8,.55)}
-.xmd{position:relative;width:min(1120px,96vw);max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);display:flex;flex-direction:column;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:16px;box-shadow:0 24px 60px rgba(0,0,0,.35);overflow:hidden}
-@media (min-width:1880px){.xmd{width:min(1400px,92vw)}.xm .xfig{max-width:640px}}
+.xmd{position:relative;width:min(1480px,94vw);max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);display:flex;flex-direction:column;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:16px;box-shadow:0 24px 60px rgba(0,0,0,.35);overflow:hidden}
+@media (min-width:1880px){.xmd{width:min(1640px,88vw)}}
 .xmh{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding:18px 28px 14px;border-bottom:1px solid var(--line)}
 .xmh h2{margin:0;font-family:"Source Serif 4",Georgia,serif;font-size:26px;font-weight:600}
 .xmh .sub{font-size:13px;color:var(--muted);margin-top:4px}
@@ -651,14 +651,14 @@ button.xg{cursor:pointer}button.xg:hover{box-shadow:inset 0 0 0 1px var(--inputL
 .xg.p{background:var(--xposBg)}.xg.p b{color:var(--pos)}.xg.n{background:var(--xnegBg)}.xg.n b{color:var(--neg)}
 .xg.key{outline:1px solid var(--accent)}
 .xtop{display:flex;gap:24px;align-items:center}
-.xfig{position:relative;margin:0;flex:1 1 520px;max-width:560px;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:10px 10px 6px}
+.xfig{position:relative;margin:0;flex:1 1 auto;min-width:0;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:10px 10px 6px}
 .xfig svg{display:block;width:100%;height:auto;font-family:"IBM Plex Mono",monospace;overflow:visible}
 .xfig figcaption{font-size:12px;color:var(--faint);padding:2px 6px 4px}
 .xpt{cursor:pointer;transition:opacity .12s}
 .xfade .xpt{opacity:.25}.xfade .xpt.on{opacity:1}
-.xlegend{flex:1 1 280px;display:flex;flex-direction:column;gap:12px;font-size:14px;line-height:1.5;color:var(--ink2)}
+.xlegend{flex:0 0 330px;display:flex;flex-direction:column;gap:10px;font-size:13.5px;line-height:1.5;color:var(--ink2)}
 .xlegend .li{display:flex;gap:10px;align-items:center}
-.xlegend .how{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:12px}
+.xlegend .how{font-size:12.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:12px}
 .xtip{position:absolute;pointer-events:none;z-index:3;min-width:230px;max-width:300px;background:var(--panel);border:1px solid var(--inputLine);border-radius:10px;padding:10px 12px;font-size:12.5px;box-shadow:0 8px 20px rgba(0,0,0,.25);display:flex;flex-direction:column;gap:8px}
 .xth{display:flex;flex-direction:column;gap:1px;padding-bottom:7px;border-bottom:1px solid var(--line)}
 .xth b{font-family:"IBM Plex Mono",monospace;font-size:14px}
@@ -715,8 +715,7 @@ button.xg{cursor:pointer}button.xg:hover{box-shadow:inset 0 0 0 1px var(--inputL
 .xtblw{overflow-x:auto}
 .xskel{height:120px;border-radius:12px;background:linear-gradient(90deg,var(--panel2),var(--line2),var(--panel2));background-size:200% 100%;animation:xsk 1.2s linear infinite}
 @keyframes xsk{to{background-position:-200% 0}}
-@media (max-height:900px){.xfig{max-width:500px}}
-@media (max-width:1000px){.xcards{grid-template-columns:repeat(2,minmax(0,1fr))}.xg{flex-basis:calc((100% - 32px)/5)}.xtop{flex-direction:column;align-items:stretch}.xfig{max-width:620px;width:100%;margin:0 auto;flex:none}}
+@media (max-width:1000px){.xcards{grid-template-columns:repeat(2,minmax(0,1fr))}.xg{flex-basis:calc((100% - 32px)/5)}.xtop{flex-direction:column;align-items:stretch}.xfig{width:100%;flex:none}.xlegend{flex:none}}
 @media (max-width:700px){
   .xm{padding:0}.xmd{width:100vw;max-height:none;height:100%;border-radius:0;border:0}
   .xmh{padding:16px}.xmh h2{font-size:22px}.xmb{padding:16px}.xmf{padding:10px 16px}.xmf .disc{display:none}
@@ -1773,19 +1772,19 @@ function xSetRange(k){XM.rng=k;const d=XM.d;if(!d)return;
   document.querySelectorAll('#xmBody [data-xrng]').forEach(b=>{const on=b.dataset.xrng===k;b.classList.toggle('sel',on);b.setAttribute('aria-pressed',on)})}
 /* return vs volatility dot chart */
 function xChart(d){const s=d.self,pts=[{...s,k:'self'}].concat(d.same.map(c=>({...c,k:'same'})),(d.closest||[]).map(c=>({...c,k:'same'})),d.div.map(c=>({...c,k:'div'})));
-  const ph=innerWidth<=700,W=ph?370:510,H=ph?300:280,L=48,R=W-10,T=16,Bm=H-44;const vs=pts.map(p=>p.vol),rs=pts.map(p=>p.r3);
+  const ph=innerWidth<=1000,W=ph?(innerWidth<=700?370:640):1000,H=ph?300:250,L=48,R=W-10,T=16,Bm=H-44;const vs=pts.map(p=>p.vol),rs=pts.map(p=>p.r3);
   const nice=(lo,hi,n)=>{const st=Math.pow(10,Math.floor(Math.log10((hi-lo)/n||0.01)));const step=[1,2,2.5,5,10].map(m=>m*st).find(x=>(hi-lo)/x<=n)||st*10;return [Math.floor(lo/step)*step,Math.ceil(hi/step)*step,step]};
   const [x0,x1,xs]=nice(Math.max(0,Math.min(...vs)-0.03),Math.max(...vs)+0.03,4),[y0,y1,ys]=nice(Math.min(0,...rs)-0.02,Math.max(...rs)+0.04,4);
   const X=v=>L+(v-x0)/(x1-x0)*(R-L),Y=v=>Bm-(v-y0)/(y1-y0)*(Bm-T);
   let g='';for(let v=y0;v<=y1+1e-9;v+=ys)g+=`<line x1="${L}" x2="${R}" y1="${Y(v).toFixed(1)}" y2="${Y(v).toFixed(1)}" stroke="var(--grid)"/><text x="${L-6}" y="${(Y(v)+4).toFixed(1)}" text-anchor="end" font-size="11" fill="var(--faint)">${Math.round(v*100)}%</text>`;
   for(let v=x0;v<=x1+1e-9;v+=xs)g+=`<text x="${X(v).toFixed(1)}" y="${Bm+16}" text-anchor="middle" font-size="11" fill="var(--faint)">${Math.round(v*100)}%</text>`;
   const sx=X(s.vol),sy=Y(s.r3);
-  const zone=`<g class="xzone" style="display:none"><rect x="${L}" y="${T}" width="${Math.max(0,sx-L).toFixed(1)}" height="${Math.max(0,sy-T).toFixed(1)}" fill="var(--pos)" opacity=".08"/><line x1="${sx.toFixed(1)}" x2="${sx.toFixed(1)}" y1="${T}" y2="${Bm}" stroke="var(--ink)" stroke-opacity=".3" stroke-dasharray="4 4"/><line x1="${L}" x2="${R}" y1="${sy.toFixed(1)}" y2="${sy.toFixed(1)}" stroke="var(--ink)" stroke-opacity=".3" stroke-dasharray="4 4"/><text x="${L+8}" y="${T+16}" font-size="12" font-weight="600" fill="var(--pos)" font-family="IBM Plex Sans,sans-serif">Better than ${esc(s.t)}</text></g>`;
+  const zone=`<g class="xzone" style="display:none"><rect x="${L}" y="${T}" width="${Math.max(0,sx-L).toFixed(1)}" height="${Math.max(0,sy-T).toFixed(1)}" fill="var(--pos)" opacity=".08"/><line x1="${sx.toFixed(1)}" x2="${sx.toFixed(1)}" y1="${T}" y2="${Bm}" stroke="var(--ink)" stroke-opacity=".3" stroke-dasharray="4 4"/><line x1="${L}" x2="${R}" y1="${sy.toFixed(1)}" y2="${sy.toFixed(1)}" stroke="var(--ink)" stroke-opacity=".3" stroke-dasharray="4 4"/><text x="${L+8}" y="${T+16}" font-size="12" font-weight="600" fill="var(--pos)" font-family="IBM Plex Sans,sans-serif">Better than ${esc(s.t)}: more return, calmer</text><rect x="${sx.toFixed(1)}" y="${T}" width="${Math.max(0,R-sx).toFixed(1)}" height="${Math.max(0,sy-T).toFixed(1)}" fill="var(--xd)" opacity=".07"/><text x="${R-8}" y="${T+16}" text-anchor="end" font-size="12" font-weight="600" fill="var(--xd)" font-family="IBM Plex Sans,sans-serif">More return, but bumpier</text></g>`;
   const placed=[];const lab=(p,x,y)=>{let lx=x+10,anchor='start';const w=p.t.length*7.5+4;if(lx+w>R+8){lx=x-10;anchor='end'}let ly=y+4;for(const q of placed){if(Math.abs(q.y-ly)<13&&Math.abs(q.x-lx)<w+10)ly=q.y+(ly>=q.y?13:-13)}placed.push({x:lx,y:ly});return `<text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="${anchor}" font-size="12" font-weight="600" fill="${p.k==='self'?'var(--ink)':p.k==='same'?'var(--xs)':'var(--xd)'}">${esc(p.t)}</text>`};
   const pos=[];const spot=p=>{let x=X(p.vol),y=Y(p.r3);for(let k=0;k<12&&pos.some(q=>Math.hypot(q[0]-x,q[1]-y)<12);k++){const a=k*2.4;x=X(p.vol)+Math.cos(a)*(10+k*2);y=Y(p.r3)+Math.sin(a)*(10+k*2)}pos.push([x,y]);return [x,y]};
   const dots=pts.slice().sort((a,b)=>a.k==='self'?-1:b.k==='self'?1:0).map(p=>{const [x,y]=spot(p);const mark=p.k==='self'?`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="8" fill="var(--ink)"/>`:p.k==='same'?`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="6" fill="var(--xs)"/>`:`<rect x="${(x-5.5).toFixed(1)}" y="${(y-5.5).toFixed(1)}" width="11" height="11" fill="var(--xd)"/>`;
     return `<g class="xpt" data-xt="${esc(p.t)}" tabindex="0" role="button" aria-label="${esc(p.t)}: ${xp(p.r3)} a year, volatility ${xu(p.vol)}"><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="14" fill="transparent"/>${mark}${lab(p,x,y)}</g>`}).join('');
-  return `<figure class="xfig"><svg viewBox="0 0 ${W} ${H+20}" role="img" aria-label="Return versus volatility over 3 years">${g}${zone}<g font-family="IBM Plex Sans,sans-serif" font-size="12" font-weight="600" fill="var(--ink2)"><text x="${(L+R)/2}" y="${H+14}" text-anchor="middle">${ph?'Volatility, 3 years (lower is calmer)':'Volatility: how much it swings, 3 years (lower is calmer)'}</text><text transform="translate(12 ${(T+Bm)/2}) rotate(-90)" text-anchor="middle">3-year return per year</text></g><g class="xdots">${dots}</g></svg><div class="xtip" id="xChartTip" hidden></div><figcaption>Up and to the left is better: more return, calmer ride.</figcaption></figure>`}
+  return `<figure class="xfig"><svg viewBox="0 0 ${W} ${H+20}" role="img" aria-label="Return versus volatility over 3 years">${g}${zone}<g font-family="IBM Plex Sans,sans-serif" font-size="12" font-weight="600" fill="var(--ink2)"><text x="${(L+R)/2}" y="${H+14}" text-anchor="middle">${innerWidth<=700?'Volatility, 3 years (lower is calmer)':'Volatility: how much it swings, 3 years (lower is calmer)'}</text><text transform="translate(12 ${(T+Bm)/2}) rotate(-90)" text-anchor="middle">3-year return per year</text></g><g class="xdots">${dots}</g></svg><div class="xtip" id="xChartTip" hidden></div><figcaption>Up and to the left is better: more return, calmer ride.</figcaption></figure>`}
 function xFind(t){const d=XM.d;if(!d)return null;if(d.self.t===t)return {...d.self,k:'self'};for(const [arr,k] of [[d.same,'same'],[d.closest||[],'same'],[d.div,'div']]){const c=arr.find(x=>x.t===t);if(c)return {...c,k}}return null}
 function xChartTip(t,on){const tip=$('xChartTip'),svg=document.querySelector('#xmBody .xfig svg');if(!tip||!svg)return;const zone=svg.querySelector('.xzone');
   svg.querySelector('.xdots').classList.toggle('xfade',!!on);svg.querySelectorAll('.xpt').forEach(g=>g.classList.toggle('on',on&&g.dataset.xt===t));
