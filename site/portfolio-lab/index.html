@@ -657,7 +657,10 @@ button.xg{cursor:pointer}button.xg:hover{box-shadow:inset 0 0 0 1px var(--inputL
 .xpt{cursor:pointer;transition:opacity .12s}
 .xfade .xpt{opacity:.25}.xfade .xpt.on{opacity:1}
 .xlegend{flex:0 0 330px;display:flex;flex-direction:column;gap:10px;font-size:13.5px;line-height:1.5;color:var(--ink2)}
+.xlegend{position:relative}
 .xlegend .li{display:flex;gap:10px;align-items:center}
+.xlegend .li svg{flex:none}
+.xtip.dock{position:absolute;left:0;right:0;top:0;min-width:0;max-width:none;box-shadow:0 8px 24px rgba(0,0,0,.18)}
 .xlegend .how{font-size:12.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:12px}
 .xtip{position:absolute;pointer-events:none;z-index:3;min-width:230px;max-width:300px;background:var(--panel);border:1px solid var(--inputLine);border-radius:10px;padding:10px 12px;font-size:12.5px;box-shadow:0 8px 20px rgba(0,0,0,.25);display:flex;flex-direction:column;gap:8px}
 .xth{display:flex;flex-direction:column;gap:1px;padding-bottom:7px;border-bottom:1px solid var(--line)}
@@ -1749,9 +1752,13 @@ const xu=(v,d=1)=>v==null?'—':(v<0?'−':'')+Math.abs(v*100).toFixed(d)+'%';
 const xcls=v=>v==null?'':v>0.0005?'p':v<-0.0005?'n':'';
 function xInBuild(t){return S.b.rows.some(r=>r.t===t)}
 function xCanPrice(t){return HAS(t)||(typeof UNI!=='undefined'&&!!UNI[t])}
-async function openExplore(t,from){XM.t=t;XM.d=null;XM.rng='3Y';XM.err=null;XM.added=[];XM.from=from||null;
+/* peers files are fetched on hover so the window opens with its content already in place */
+const XDATA={},XLOAD={};
+function xLoad(t){if(!XLOAD[t])XLOAD[t]=fetch('data/peers/'+encodeURIComponent(t)+'.json').then(r=>{if(!r.ok)throw new Error('none');return r.json()}).then(d=>XDATA[t]=d).catch(e=>{delete XLOAD[t];throw e});return XLOAD[t]}
+async function openExplore(t,from){XM.t=t;XM.d=XDATA[t]||null;XM.rng='3Y';XM.err=null;XM.added=[];XM.from=from||null;
   $('xm').hidden=false;document.body.classList.add('xm-open');$('xmTitle').textContent='Explore alternatives to '+t;$('xmSub').textContent=NAMES[t]||'';xDrawer(false);renderXM();xOpenFx();setTimeout(()=>$('xmClose').focus({preventScroll:true}),0);
-  try{const r=await fetch('data/peers/'+encodeURIComponent(t)+'.json');if(!r.ok)throw new Error('none');const d=await r.json();if(XM.t!==t)return;XM.d=d}
+  if(XM.d){xCascade(true);return}
+  try{const d=await xLoad(t);if(XM.t!==t)return;XM.d=d}
   catch(e){if(XM.t!==t)return;XM.err=t==='TPS'?'TPS is the 12% Solution strategy, not a fund you can buy, so it has no alternatives to show.':`Alternatives aren't available for ${t} yet. It may have less than 3 years of prices, or it isn't in our ETF list.`}
   renderXM();xCascade()}
 /* motion: the window grows out of the compass, its contents settle in, and the row stays lit */
@@ -1761,11 +1768,11 @@ function xSrc(){const t=XM.t;let el=XM.from&&document.contains(XM.from)&&XM.from
 function xDelta(el){const d=$('xm').querySelector('.xmd').getBoundingClientRect();if(!el)return null;const r=el.getBoundingClientRect();return {dx:r.left+r.width/2-(d.left+d.width/2),dy:r.top+r.height/2-(d.top+d.height/2)}}
 function xOpenFx(){const el=xSrc();const row=el&&el.closest('tr');document.querySelectorAll('tr.xecho').forEach(r=>r.classList.remove('xecho'));if(row)row.classList.add('xecho');
   if(XREDUCE.matches||!$('xm').animate)return;const md=$('xm').querySelector('.xmd'),p=xDelta(el);
-  $('xm').querySelector('.xmback').animate([{opacity:0},{opacity:1}],{duration:180,easing:'ease-out'});
-  md.animate(p?[{opacity:0,transform:`translate(${p.dx}px,${p.dy}px) scale(.12)`},{opacity:1,offset:.45},{opacity:1,transform:'none'}]:[{opacity:0,transform:'scale(.96)'},{opacity:1,transform:'none'}],{duration:240,easing:'cubic-bezier(.2,.8,.2,1)'})}
-function xCascade(){if(XREDUCE.matches||!$('xm').animate||!XM.d)return;
-  [...$('xmBody').children].forEach((el,i)=>el.animate([{opacity:0,transform:'translateY(8px)'},{opacity:1,transform:'none'}],{duration:200,delay:60+i*45,easing:'cubic-bezier(.2,.8,.2,1)',fill:'backwards'}));
-  document.querySelectorAll('#xmBody .xpt').forEach((el,i)=>el.animate([{opacity:0},{opacity:1}],{duration:220,delay:160+i*30,easing:'ease-out',fill:'backwards'}))}
+  $('xm').querySelector('.xmback').animate([{opacity:0},{opacity:1}],{duration:220,easing:'ease-out',fill:'backwards'});
+  md.animate(p?[{opacity:0,transform:`translate(${p.dx}px,${p.dy}px) scale(.12)`},{opacity:1,offset:.4},{opacity:1,transform:'none'}]:[{opacity:0,transform:'scale(.96)'},{opacity:1,transform:'none'}],{duration:300,easing:'cubic-bezier(.2,.8,.2,1)',fill:'backwards'})}
+function xCascade(withGrow){if(XREDUCE.matches||!$('xm').animate||!XM.d)return;const d0=withGrow?150:40;
+  [...$('xmBody').children].forEach((el,i)=>el.animate([{opacity:0,transform:'translateY(10px)'},{opacity:1,transform:'none'}],{duration:240,delay:d0+i*55,easing:'cubic-bezier(.2,.8,.2,1)',fill:'backwards'}));
+  document.querySelectorAll('#xmBody .xpt').forEach((el,i)=>el.animate([{opacity:0},{opacity:1}],{duration:240,delay:d0+180+i*35,easing:'ease-out',fill:'backwards'}))}
 function closeExplore(){if($('xm').hidden||XM.closing)return;const el=xSrc(),row=el&&el.closest('tr');
   const finish=()=>{XM.closing=false;$('xm').hidden=true;xFinishClose(row)};
   if(XREDUCE.matches||!$('xm').animate){finish();return}
@@ -1803,7 +1810,7 @@ function xSpark(c,s,col,id){const R=xRange(c,s),n=R.a.length;const all=R.a.conca
 const xpts=v=>v==null?'':(v>=0?'+':'−')+Math.abs(v*100).toFixed(Math.abs(v)<0.001&&v!==0?2:1);
 const XCOL={same:'var(--xs)',div:'var(--xd)',mom:'var(--xm)'};
 function xCard(c,s,kind){const col=XCOL[kind];const dr=c.r3-s.r3;const pct=Math.round(c.c*100);
-  const chips=XR.map(([l,k,i])=>{const v=c.r[i],b=s.r[i],g=v!=null&&b!=null?v-b:null;return `<button type="button" class="xpc ${xcls(v)}${XM.rng===k?' sel':''}${kind==='mom'&&k==='3M'?' why':''}" data-xrng="${k}" aria-pressed="${XM.rng===k}" title="Show ${XRWORD[k]} on the line chart"><span>${l}</span><b>${xp(v)}</b><i class="${g==null?'':g>=0?'pos':'neg'}">${g==null?'&nbsp;':xpts(g)+' vs '+esc(s.t)}</i></button>`}).join('');
+  const chips=XR.map(([l,k,i])=>{const v=c.r[i],b=s.r[i],g=v!=null&&b!=null?v-b:null;return `<button type="button" class="xpc ${xcls(v)}${XM.rng===k?' sel':''}" data-xrng="${k}" aria-pressed="${XM.rng===k}" title="Show ${XRWORD[k]} on the line chart"><span>${l}</span><b>${xp(v)}</b><i class="${g==null?'':g>=0?'pos':'neg'}">${g==null?'&nbsp;':xpts(g)+' vs '+esc(s.t)}</i></button>`}).join('');
   return `<article class="xcard" data-xc="${esc(c.t)}" style="--xc:${col}"><div class="xch"><div><b>${esc(c.t)}</b><span class="nm">${esc(c.n||NAMES[c.t]||'')}</span></div><span class="xchip ${kind==='same'?'s':kind==='mom'?'m':'d'}">Tracks ${esc(s.t)} ${pct}%</span></div>
     ${kind==='mom'&&c.m3!=null?`<div class="xhero"><b class="${c.m3>=0?'pos':'neg'}">${xp(c.m3)}</b><span class="u">last 3 months</span><span class="xchip up">${xpts(c.m3-s.m3)} pts vs ${esc(s.t)}</span></div>`:`<div class="xhero"><b class="${c.r3>=0?'pos':'neg'}">${xp(c.r3)}</b><span class="u">/ yr, 3Y</span><span class="xchip ${dr>=0?'up':'dn'}">${xpts(dr)} pts vs ${esc(s.t)}</span></div>`}
     ${xSpark(c,s,col,c.t)}<div class="xchips">${chips}</div>
@@ -1839,8 +1846,13 @@ function xChartTip(t,on){const tip=$('xChartTip'),svg=document.querySelector('#x
     h=head(s.t,'The ETF you clicked')+`<div class="xtt c2">${row('Return / yr (3Y)',xp(s.r3),null,s.r3>=0?'pos':'neg')}${row('Volatility',xu(s.vol))}${row('Sharpe',s.sh.toFixed(2))}${row('Max DD',xu(s.dd),null,'neg')}${row('Fee',fmtER(s.er))}</div><div class="xtf"><span style="color:var(--xs)">● ${n1?n1+' with higher return':'No higher-return pick'}</span><span style="color:var(--xd)">■ ${n2?n2+' with a smoother ride':'No smoother-ride pick'}</span>${XM.d.mom?`<span style="color:var(--xm)">▲ ${XM.d.mom.length?XM.d.mom.length+' with momentum':'No momentum pick'}</span>`:''}</div>`}
   else{zone.style.display='none';const kc=XCOL[p.k];
     h=head(p.t,p.n)+`<div class="xtt c3"><span></span><span class="v hd" style="color:${kc}">${esc(p.t)}</span><span class="v hd">${esc(s.t)}</span>${row('Return / yr (3Y)',xp(p.r3),xp(s.r3))}${row('Volatility',xu(p.vol),xu(s.vol))}${row('Sharpe',p.sh.toFixed(2),s.sh.toFixed(2))}${row('Max DD',xu(p.dd),xu(s.dd))}${p.k==='mom'&&p.m3!=null?row('Last 3 months',xp(p.m3),xp(s.m3)):''}${row('Fee',fmtER(p.er),fmtER(s.er))}${row('Tracks '+esc(s.t),Math.round(p.c*100)+'%','')}</div><div class="xtf"><span style="color:${kc}">${p.k==='mom'?'Ahead of '+esc(s.t)+' lately; plotted on its 3-year numbers':(p.vol<s.vol?'Less risk than ':'More risk than ')+esc(s.t)+(p.r3>=s.r3?', more return':', less return')}</span></div>`}
-  tip.innerHTML=h;tip.hidden=false;const fig=tip.parentElement.getBoundingClientRect(),g=svg.querySelector(`.xpt[data-xt="${CSS.escape(t)}"]`).getBoundingClientRect();
-  let x=g.right-fig.left+8,y=g.top-fig.top;if(x+tip.offsetWidth>fig.width)x=g.left-fig.left-tip.offsetWidth-8;if(x<4)x=4;if(y+tip.offsetHeight>fig.height)y=fig.height-tip.offsetHeight-4;tip.style.left=x+'px';tip.style.top=Math.max(4,y)+'px'}
+  tip.innerHTML=h;const leg=document.querySelector('#xmBody .xlegend'),side=leg&&leg.getBoundingClientRect().left>svg.getBoundingClientRect().right-4;
+  if(side){/* wide screens: show the details in the column beside the chart so nothing on the chart is covered */
+    if(tip.parentElement!==leg)leg.appendChild(tip);tip.classList.add('dock');tip.style.left='';tip.style.top='';tip.hidden=false;return}
+  const figEl=svg.closest('.xfig');if(tip.parentElement!==figEl)figEl.appendChild(tip);tip.classList.remove('dock');tip.hidden=false;
+  const fig=figEl.getBoundingClientRect(),g=svg.querySelector(`.xpt[data-xt="${CSS.escape(t)}"]`).getBoundingClientRect();
+  /* narrow screens: above the dot when there is room, otherwise below, never over it */
+  let x=g.left+g.width/2-fig.left-tip.offsetWidth/2;x=Math.max(4,Math.min(fig.width-tip.offsetWidth-4,x));let y=g.top-fig.top-tip.offsetHeight-8;if(y<4)y=g.bottom-fig.top+8;tip.style.left=x+'px';tip.style.top=y+'px'}
 function xSparkMove(box,e){const d=XM.d,c=xFind(box.dataset.xsp),s=d.self;if(!c)return;const R=xRange(c,s),n=R.a.length;const svg=box.querySelector('svg'),r=svg.getBoundingClientRect();const i=Math.max(0,Math.min(n-1,Math.round((e.clientX-r.left)/r.width*(n-1))));
   const x=2+i*296/Math.max(1,n-1);const cr=svg.querySelector('.xcross');cr.style.display='';cr.querySelector('line').setAttribute('x1',x);cr.querySelector('line').setAttribute('x2',x);
   const a=Math.round(R.a[i]*1000)/10,b=Math.round(R.b[i]*1000)/10,gap=Math.round((a-b)*10)/10;const tip=box.querySelector('.xtip');const f=v=>`<span class="${v>=0?'pos':'neg'}">${v>=0?'+':'−'}${Math.abs(v).toFixed(1)}%</span>`;
@@ -1879,6 +1891,7 @@ document.addEventListener('click',e=>{const o=e.target.closest('[data-xopen]');i
   const a=e.target.closest('[data-xadd]');if(a&&!a.disabled){xToggleAdd(a.dataset.xadd);return}
   const g=e.target.closest('#xmBody [data-xrng]');if(g){xSetRange(g.dataset.xrng);return}
   const p=e.target.closest('#xmBody .xpt');if(p){const t=p.dataset.xt;xChartTip(t,true);const card=document.querySelector(`#xmBody [data-xc="${CSS.escape(t)}"]`);if(card&&matchMedia('(hover:none)').matches===false)card.scrollIntoView({behavior:'smooth',block:'nearest'});return}});
+document.addEventListener('pointerover',e=>{if(!e.target.closest)return;const tr=e.target.closest('tr');const o=e.target.closest('[data-xopen]')||(tr&&tr.querySelector('[data-xopen]'));if(o&&o.dataset.xopen!=='TPS'&&!XDATA[o.dataset.xopen])xLoad(o.dataset.xopen).catch(()=>{})});
 document.addEventListener('keydown',e=>{if($('xm').hidden)return;if(e.key==='Escape'){e.stopPropagation();if($('xmDrawer').classList.contains('open')){xDrawer(false);$('xmHow').focus()}else closeExplore()}
   if(e.key==='Tab'){const f=[...$('xm').querySelectorAll('button:not(:disabled),[tabindex="0"]')].filter(x=>x.offsetParent);if(!f.length)return;const i=f.indexOf(document.activeElement);if(e.shiftKey&&i<=0){e.preventDefault();f[f.length-1].focus()}else if(!e.shiftKey&&i===f.length-1){e.preventDefault();f[0].focus()}}},true);
 document.addEventListener('mouseover',e=>{if($('xm').hidden)return;const p=e.target.closest('#xmBody .xpt');if(p){xChartTip(p.dataset.xt,true);return}
