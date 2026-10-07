@@ -236,16 +236,16 @@ def load_fund_info():
 
 
 def period_returns(s, last):
-    """1M 3M 6M 1Y return, then 3Y and 5Y per year; None where history is too short."""
+    """1M 3M 6M YTD 1Y return, then 3Y per year; None where history is too short."""
     out = []
-    for m in (1, 3, 6, 12, 36, 60):
-        cut = last - pd.DateOffset(months=m)
+    for m in (1, 3, 6, "ytd", 12, 36):
+        cut = pd.Timestamp(last.year - 1, 12, 31) if m == "ytd" else last - pd.DateOffset(months=m)
         prev = s[:cut]
         if prev.empty or s.index[0] > cut:
             out.append(None)
             continue
         r = float(s.iloc[-1] / prev.iloc[-1] - 1)
-        out.append(round((1 + r) ** (12 / m) - 1 if m > 12 else r, 4))
+        out.append(round((1 + r) ** (12 / m) - 1 if m != "ytd" and m > 12 else r, 4))
     return out
 
 
@@ -280,8 +280,14 @@ def build_explore(series, names, fund):
 
     cand = [i for i, t in enumerate(tick) if ok(t)]
     zc = z[:, cand]
-    pts = [round(k * (len(px) - 1) / 24) for k in range(25)]
-    spark = {t: [round(float(v) * 100) for v in (px[t].iloc[pts] / px[t].iloc[0] - 1)] for t in tick}
+    # line chart data, as price / latest price x 10000: the last 127 trading days daily (covers
+    # 1M 3M 6M) and the whole 3 years weekly (YTD 1Y 3Y); the site rebases to the range picked
+    nd = min(127, len(px))
+    wk = sorted(set(range(len(px) - 1, -1, -5)) | {0})
+    rel = (px / px.iloc[-1] * 10000).round().astype(int)
+    lines = {t: (rel[t].iloc[-nd:].tolist(), rel[t].iloc[wk].tolist()) for t in tick}
+    day_dates = [d.strftime("%Y-%m-%d") for d in px.index[-nd:]]
+    wk_dates = [px.index[i].strftime("%Y-%m-%d") for i in wk]
     last = series["SPY"].index[-1]
     pr = {t: period_returns(series[t], last) for t in tick}
 
@@ -289,7 +295,8 @@ def build_explore(series, names, fund):
         f = fund.get(t) or {}
         d = {"t": t, "n": names.get(t, ""), "er": f.get("er"), "r": pr[t],
              "r3": round(float(r3[t]), 4), "sh": round(float(sharpe[t]), 3),
-             "dd": round(float(dd[t]), 4), "vol": round(float(vol[t]), 4), "sp": spark[t]}
+             "dd": round(float(dd[t]), 4), "vol": round(float(vol[t]), 4),
+             "d": lines[t][0], "w": lines[t][1]}
         if c is not None:
             d["c"] = round(float(c), 3)
         return d
@@ -297,7 +304,8 @@ def build_explore(series, names, fund):
     out = OUT / "peers"
     out.mkdir(parents=True, exist_ok=True)
     meta = {"asof": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
-            "from": start.strftime("%Y-%m-%d"), "to": end.strftime("%Y-%m-%d")}
+            "from": start.strftime("%Y-%m-%d"), "to": end.strftime("%Y-%m-%d"),
+            "dd": day_dates, "wd": wk_dates}
     written = 0
     for i, t in enumerate(tick):
         if t not in names:
