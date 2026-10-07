@@ -626,24 +626,27 @@ tr:hover .xbtn,.xbtn:focus-visible{opacity:1}
 .xbtn:hover{color:var(--accent);background:var(--accentBg)}
 @media (hover:none){.xbtn{display:none}}
 body.xm-open{overflow:hidden}
-.xm{position:fixed;inset:0;z-index:80;display:flex;align-items:center;justify-content:center;padding:3vh 2vw}
+.xm{position:fixed;inset:0;z-index:80;display:flex;align-items:center;justify-content:center;padding:12px 2vw}
 .xm[hidden]{display:none}
 .xmback{position:absolute;inset:0;background:rgba(10,10,8,.55)}
-.xmd{position:relative;width:min(1120px,96vw);max-height:94vh;display:flex;flex-direction:column;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:16px;box-shadow:0 24px 60px rgba(0,0,0,.35);overflow:hidden}
+.xmd{position:relative;width:min(1120px,96vw);max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);display:flex;flex-direction:column;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:16px;box-shadow:0 24px 60px rgba(0,0,0,.35);overflow:hidden}
 @media (min-width:1880px){.xmd{width:min(1400px,92vw)}.xm .xfig{max-width:640px}}
-.xmh{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding:22px 28px 16px;border-bottom:1px solid var(--line)}
+.xmh{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding:18px 28px 14px;border-bottom:1px solid var(--line)}
 .xmh h2{margin:0;font-family:"Source Serif 4",Georgia,serif;font-size:26px;font-weight:600}
 .xmh .sub{font-size:13px;color:var(--muted);margin-top:4px}
 .xclose{width:44px;height:44px;flex:none;border-radius:10px;border:1px solid var(--inputLine);background:transparent;color:var(--ink);display:flex;align-items:center;justify-content:center;cursor:pointer}
-.xmb{overflow:auto;padding:20px 28px 24px;display:flex;flex-direction:column;gap:24px;overscroll-behavior:contain}
+.xmb{overflow:auto;padding:16px 28px 22px;display:flex;flex-direction:column;gap:20px;overscroll-behavior:contain}
 .xmf{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:12px 28px;border-top:1px solid var(--line);background:var(--panel)}
 .xmf .disc{font-size:12px;color:var(--faint)}
 .xmf .cnt{font-size:13px;color:var(--accent);font-weight:600}
 .xmf .btn.primary{background:var(--accent);border-color:var(--accent);color:var(--panel);font-weight:600}
 .xcap{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-.xglance{display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:8px}
-.xg{border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:3px;background:var(--panel2)}
-.xg span:first-child{font-size:11px;letter-spacing:.07em;color:var(--muted);text-transform:uppercase}
+.xcap2{text-transform:none;letter-spacing:0;color:var(--faint)}
+.xglance{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+.xg{flex:0 0 calc((100% - 64px)/9);min-width:0;border:0;border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:3px;background:var(--panel2);color:var(--ink);text-align:left;font:inherit}
+button.xg{cursor:pointer}button.xg:hover{box-shadow:inset 0 0 0 1px var(--inputLine)}
+.xg.sel{box-shadow:inset 0 0 0 2px var(--accent)}
+.xg span:first-child{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11px;letter-spacing:.07em;color:var(--muted);text-transform:uppercase}
 .xg b{font-family:"IBM Plex Mono",monospace;font-size:17px;font-weight:600}
 .xg.p{background:var(--xposBg)}.xg.p b{color:var(--pos)}.xg.n{background:var(--xnegBg)}.xg.n b{color:var(--neg)}
 .xg.key{outline:1px solid var(--accent)}
@@ -656,10 +659,17 @@ body.xm-open{overflow:hidden}
 .xlegend{flex:1 1 280px;display:flex;flex-direction:column;gap:12px;font-size:14px;line-height:1.5;color:var(--ink2)}
 .xlegend .li{display:flex;gap:10px;align-items:center}
 .xlegend .how{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:12px}
-.xtip{position:absolute;pointer-events:none;z-index:3;min-width:190px;background:var(--panel);border:1px solid var(--inputLine);border-radius:8px;padding:9px 11px;font-size:12px;box-shadow:0 8px 20px rgba(0,0,0,.25);display:flex;flex-direction:column;gap:3px}
+.xtip{position:absolute;pointer-events:none;z-index:3;min-width:230px;max-width:300px;background:var(--panel);border:1px solid var(--inputLine);border-radius:10px;padding:10px 12px;font-size:12.5px;box-shadow:0 8px 20px rgba(0,0,0,.25);display:flex;flex-direction:column;gap:8px}
+.xth{display:flex;flex-direction:column;gap:1px;padding-bottom:7px;border-bottom:1px solid var(--line)}
+.xth b{font-family:"IBM Plex Mono",monospace;font-size:14px}
+.xth span{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.xtt{display:grid;column-gap:18px;row-gap:4px;align-items:baseline}
+.xtt.c2{grid-template-columns:1fr auto}.xtt.c3{grid-template-columns:1fr auto auto}
+.xtt .l{color:var(--muted);white-space:nowrap}
+.xtt .v{font-family:"IBM Plex Mono",monospace;text-align:right;white-space:nowrap}
+.xtt .hd{font-weight:600;font-size:12px;color:var(--muted)}
+.xtf{display:flex;flex-direction:column;gap:2px;padding-top:7px;border-top:1px solid var(--line);font-weight:600}
 .xtip[hidden]{display:none}
-.xtip .r{display:grid;grid-template-columns:1fr auto auto;gap:10px}
-.xtip .r span:not(:first-child){font-family:"IBM Plex Mono",monospace;text-align:right}
 .xsec{display:flex;flex-direction:column;gap:12px}
 .xsec h3{margin:0;font-family:"Source Serif 4",Georgia,serif;font-size:21px;font-weight:600;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
 .xsec h3 small{font-family:"IBM Plex Sans",sans-serif;font-size:13px;font-weight:400;color:var(--muted)}
@@ -680,10 +690,13 @@ body.xm-open{overflow:hidden}
 .xspark svg{display:block;width:100%;height:60px}
 .xspark .lg{display:flex;gap:12px;font-size:11px;color:var(--faint);margin-top:2px}
 .xchips{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
-.xchips div{border-radius:8px;padding:6px 9px;display:flex;flex-direction:column;background:var(--panel)}
+.xpc{border:0;border-radius:8px;padding:6px 9px;display:flex;flex-direction:column;align-items:flex-start;background:var(--panel);color:var(--ink);font:inherit;text-align:left;cursor:pointer;min-width:0}
+.xpc:hover{box-shadow:inset 0 0 0 1px var(--inputLine)}
+.xpc.sel{box-shadow:inset 0 0 0 2px var(--xc)}
+.xpc i{font-style:normal;font-family:"IBM Plex Mono",monospace;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 .xchips span{font-size:11px;color:var(--muted)}
 .xchips b{font-family:"IBM Plex Mono",monospace;font-size:14px}
-.xchips .p{background:var(--xposBg)}.xchips .p b{color:var(--pos)}.xchips .n{background:var(--xnegBg)}.xchips .n b{color:var(--neg)}
+.xchips .p{background:var(--xposBg)}.xchips i.pos{color:var(--pos)}.xchips i.neg{color:var(--neg)}.xchips .p b{color:var(--pos)}.xchips .n{background:var(--xnegBg)}.xchips .n b{color:var(--neg)}
 .xstats{display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px 12px;font-size:12.5px;color:var(--muted)}
 .xstats b{font-family:"IBM Plex Mono",monospace;color:var(--ink);font-weight:600}
 .xwhy{margin:0;font-size:14px;line-height:1.45;color:var(--ink2)}
@@ -702,12 +715,12 @@ body.xm-open{overflow:hidden}
 .xtblw{overflow-x:auto}
 .xskel{height:120px;border-radius:12px;background:linear-gradient(90deg,var(--panel2),var(--line2),var(--panel2));background-size:200% 100%;animation:xsk 1.2s linear infinite}
 @keyframes xsk{to{background-position:-200% 0}}
-@media (max-height:900px){.xfig{max-width:470px}}
-@media (max-width:1000px){.xcards{grid-template-columns:repeat(2,minmax(0,1fr))}.xglance{grid-template-columns:repeat(5,minmax(0,1fr))}.xtop{flex-direction:column;align-items:stretch}.xfig{max-width:none;flex:none}}
+@media (max-height:900px){.xfig{max-width:500px}}
+@media (max-width:1000px){.xcards{grid-template-columns:repeat(2,minmax(0,1fr))}.xg{flex-basis:calc((100% - 32px)/5)}.xtop{flex-direction:column;align-items:stretch}.xfig{max-width:620px;width:100%;margin:0 auto;flex:none}}
 @media (max-width:700px){
   .xm{padding:0}.xmd{width:100vw;max-height:none;height:100%;border-radius:0;border:0}
   .xmh{padding:16px}.xmh h2{font-size:22px}.xmb{padding:16px}.xmf{padding:10px 16px}.xmf .disc{display:none}
-  .xcards{grid-template-columns:minmax(0,1fr)}.xglance{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .xcards{grid-template-columns:minmax(0,1fr)}.xg{flex-basis:calc((100% - 16px)/3)}
 }
 </style>
 
@@ -1706,7 +1719,10 @@ async function ensureData(){const ts=needTickers();if(!ts.length)return;ts.forEa
   fetch('data/er.json').then(r=>r.ok?r.json():null).then(j=>{if(j){ER=j;render()}}).catch(()=>{});
 })();
 /* ---------- explore alternatives ---------- */
-const XM={t:null,d:null,err:null,added:[],from:null};
+const XM={t:null,d:null,err:null,added:[],from:null,rng:'3Y'};
+/* return periods: label, range key, index into each card's r[] */
+const XR=[['1M','1M',0],['3M','3M',1],['6M','6M',2],['YTD','YTD',3],['1Y','1Y',4],['3Y / yr','3Y',5]];
+const XRWORD={'1M':'over 1 month','3M':'over 3 months','6M':'over 6 months','YTD':'since Jan 1','1Y':'over 1 year','3Y':'over 3 years'};
 const ICON_X='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg>';
 const xBtn=t=>`<button type="button" class="xbtn" data-xopen="${esc(t)}" aria-label="Explore alternatives to ${esc(t)}" title="Explore alternatives">${ICON_X}</button>`;
 const xMob=t=>`<div class="mi mact"><button type="button" class="btn sm mrm" data-xopen="${esc(t)}">${ICON_X}Explore alternatives</button></div>`;
@@ -1715,7 +1731,7 @@ const xu=(v,d=1)=>v==null?'—':(v<0?'−':'')+Math.abs(v*100).toFixed(d)+'%';
 const xcls=v=>v==null?'':v>0.0005?'p':v<-0.0005?'n':'';
 function xInBuild(t){return S.b.rows.some(r=>r.t===t)}
 function xCanPrice(t){return HAS(t)||(typeof UNI!=='undefined'&&!!UNI[t])}
-async function openExplore(t,from){XM.t=t;XM.d=null;XM.err=null;XM.added=[];XM.from=from||null;
+async function openExplore(t,from){XM.t=t;XM.d=null;XM.rng='3Y';XM.err=null;XM.added=[];XM.from=from||null;
   $('xm').hidden=false;document.body.classList.add('xm-open');$('xmTitle').textContent='Explore alternatives to '+t;$('xmSub').textContent=NAMES[t]||'';renderXM();setTimeout(()=>$('xmClose').focus(),0);
   try{const r=await fetch('data/peers/'+encodeURIComponent(t)+'.json');if(!r.ok)throw new Error('none');const d=await r.json();if(XM.t!==t)return;XM.d=d}
   catch(e){if(XM.t!==t)return;XM.err=t==='TPS'?'TPS is the 12% Solution strategy, not a fund you can buy, so it has no alternatives to show.':`Alternatives aren't available for ${t} yet. It may have less than 3 years of prices, or it isn't in our ETF list.`}
@@ -1736,19 +1752,28 @@ function xWhy(c,s,kind){const b=s.t,dr=c.r3-s.r3,ddw=c.dd<s.dd-0.05,cheaper=c.er
   let w;if(kind==='same'){w=ddw?`Higher return, but <strong class="neg">more risk</strong>: a deeper worst drop than ${b}.`:dr>0.1?`Much higher return and Sharpe than ${b}.`:`Higher return and Sharpe than ${b} with about the same worst drop.`}
   else{w=dr>=0?`Beat ${b}'s return while moving on its own path${ddw?', but with <strong class="neg">bigger drops</strong>.':'.'}`:dr>=-0.05?`Moves differently from ${b}, yet came within ${Math.abs(dr*100).toFixed(1)} points of its return.`:`Lower return than ${b}, but a different engine${c.dd>s.dd+0.03?' and a smaller worst drop.':'.'}`}
   return w+(cheaper?` And it costs less (${c.er.toFixed(2)}% vs ${s.er.toFixed(2)}%).`:'')}
-function xSpark(c,s,col,id){const all=c.sp.concat(s.sp);const lo=Math.min(0,...all),hi=Math.max(...all),rg=(hi-lo)||1;const X=i=>2+i*296/24,Y=v=>4+(hi-v)/rg*52;
+/* the line chart's points for the range picked: daily for 6M and shorter, weekly beyond */
+function xRange(c,s){const d=XM.d,to=new Date(d.to+'T00:00:00Z');let st;
+  if(XM.rng==='YTD')st=Date.UTC(to.getUTCFullYear()-1,11,31);else{const m={'1M':1,'3M':3,'6M':6,'1Y':12,'3Y':36}[XM.rng];const x=new Date(to);x.setUTCMonth(x.getUTCMonth()-m);st=+x}
+  const daily=Date.parse(d.dd[0])<=st,ds=daily?d.dd:d.wd,ka=daily?'d':'w';let i0=0;for(let i=0;i<ds.length;i++){if(Date.parse(ds[i])<=st)i0=i;else break}
+  const a=c[ka].slice(i0),b=s[ka].slice(i0);return {dates:ds.slice(i0),a:a.map(v=>v/a[0]-1),b:b.map(v=>v/b[0]-1)}}
+function xSpark(c,s,col,id){const R=xRange(c,s),n=R.a.length;const all=R.a.concat(R.b);const lo=Math.min(0,...all),hi=Math.max(0,...all),rg=(hi-lo)||1;const X=i=>2+i*296/Math.max(1,n-1),Y=v=>4+(hi-v)/rg*52;
   const pl=a=>a.map((v,i)=>X(i).toFixed(1)+','+Y(v).toFixed(1)).join(' ');
-  return `<div class="xspark" data-xsp="${id}"><svg viewBox="0 0 300 60" preserveAspectRatio="none" role="img" aria-label="${esc(c.t)} versus ${esc(s.t)} over 3 years"><polyline points="${pl(s.sp)}" fill="none" stroke="var(--faint)" stroke-width="1.5" stroke-dasharray="4 3" vector-effect="non-scaling-stroke"/><polyline points="${pl(c.sp)}" fill="none" stroke="${col}" stroke-width="2.2" stroke-linejoin="round" vector-effect="non-scaling-stroke"/><g class="xcross" style="display:none"><line y1="0" y2="60" stroke="var(--ink2)" stroke-opacity=".5" vector-effect="non-scaling-stroke"/></g></svg><div class="xtip" hidden></div><div class="lg"><span style="color:${col}">━ ${esc(c.t)}</span><span>┅ ${esc(s.t)}</span><span>growth over 3 years</span></div></div>`}
-function xCard(c,s,kind){const col=kind==='same'?'var(--xs)':'var(--xd)';const dr=c.r3-s.r3;
-  const chips=[['1M',0],['3M',1],['6M',2],['1Y',3],['3Y / yr',4],['5Y / yr',5]].map(([l,k])=>`<div class="${xcls(c.r[k])}"><span>${l}</span><b>${xp(c.r[k])}</b></div>`).join('');
-  return `<article class="xcard" data-xc="${esc(c.t)}" style="--xc:${col}"><div class="xch"><div><b>${esc(c.t)}</b><span class="nm">${esc(c.n||NAMES[c.t]||'')}</span></div><span class="xchip ${kind==='same'?'s':'d'}">Tracks ${esc(s.t)} ${Math.round(c.c*100)}%</span></div>
-    <div class="xhero"><b class="${c.r3>=0?'pos':'neg'}">${xp(c.r3)}</b><span class="u">/ yr, 3Y</span><span class="xchip ${dr>=0?'up':'dn'}">${dr>=0?'+':'−'}${Math.abs(dr*100).toFixed(Math.abs(dr)<0.001?2:1)} pts vs ${esc(s.t)}</span></div>
+  return `<div class="xspark" data-xsp="${id}"><svg viewBox="0 0 300 60" preserveAspectRatio="none" role="img" aria-label="${esc(c.t)} versus ${esc(s.t)} ${XRWORD[XM.rng]}"><line x1="0" x2="300" y1="${Y(0).toFixed(1)}" y2="${Y(0).toFixed(1)}" stroke="var(--line)" vector-effect="non-scaling-stroke"/><polyline points="${pl(R.b)}" fill="none" stroke="var(--faint)" stroke-width="1.5" stroke-dasharray="4 3" vector-effect="non-scaling-stroke"/><polyline points="${pl(R.a)}" fill="none" stroke="${col}" stroke-width="2.2" stroke-linejoin="round" vector-effect="non-scaling-stroke"/><g class="xcross" style="display:none"><line y1="0" y2="60" stroke="var(--ink2)" stroke-opacity=".5" vector-effect="non-scaling-stroke"/></g></svg><div class="xtip" hidden></div><div class="lg"><span style="color:${col}">━ ${esc(c.t)}</span><span>┅ ${esc(s.t)}</span><span class="rw">growth ${XRWORD[XM.rng]}</span></div></div>`}
+const xpts=v=>v==null?'':(v>=0?'+':'−')+Math.abs(v*100).toFixed(Math.abs(v)<0.001&&v!==0?2:1);
+function xCard(c,s,kind){const col=kind==='same'?'var(--xs)':'var(--xd)';const dr=c.r3-s.r3;const pct=kind==='div'?Math.min(59,Math.round(c.c*100)):Math.round(c.c*100);
+  const chips=XR.map(([l,k,i])=>{const v=c.r[i],b=s.r[i],g=v!=null&&b!=null?v-b:null;return `<button type="button" class="xpc ${xcls(v)}${XM.rng===k?' sel':''}" data-xrng="${k}" aria-pressed="${XM.rng===k}" title="Show ${XRWORD[k]} on the line chart"><span>${l}</span><b>${xp(v)}</b><i class="${g==null?'':g>=0?'pos':'neg'}">${g==null?'&nbsp;':xpts(g)+' vs '+esc(s.t)}</i></button>`}).join('');
+  return `<article class="xcard" data-xc="${esc(c.t)}" style="--xc:${col}"><div class="xch"><div><b>${esc(c.t)}</b><span class="nm">${esc(c.n||NAMES[c.t]||'')}</span></div><span class="xchip ${kind==='same'?'s':'d'}">Tracks ${esc(s.t)} ${pct}%</span></div>
+    <div class="xhero"><b class="${c.r3>=0?'pos':'neg'}">${xp(c.r3)}</b><span class="u">/ yr, 3Y</span><span class="xchip ${dr>=0?'up':'dn'}">${xpts(dr)} pts vs ${esc(s.t)}</span></div>
     ${xSpark(c,s,col,c.t)}<div class="xchips">${chips}</div>
     <div class="xstats"><span>Sharpe <b>${c.sh.toFixed(2)}</b> vs ${s.sh.toFixed(2)}</span><span>Max DD <b class="neg">${xu(c.dd)}</b> vs ${xu(s.dd)}</span><span>Fee <b>${fmtER(c.er)}</b> vs ${fmtER(s.er)}</span></div>
     <p class="xwhy">${xWhy(c,s,kind)}</p><button type="button" class="xadd" data-xadd="${esc(c.t)}"></button></article>`}
+function xSetRange(k){XM.rng=k;const d=XM.d;if(!d)return;
+  document.querySelectorAll('#xmBody .xspark').forEach(box=>{const c=xFind(box.dataset.xsp);if(!c)return;const col=box.closest('.xcard').style.getPropertyValue('--xc');box.outerHTML=xSpark(c,d.self,col,c.t)});
+  document.querySelectorAll('#xmBody [data-xrng]').forEach(b=>{const on=b.dataset.xrng===k;b.classList.toggle('sel',on);b.setAttribute('aria-pressed',on)})}
 /* return vs volatility dot chart */
 function xChart(d){const s=d.self,pts=[{...s,k:'self'}].concat(d.same.map(c=>({...c,k:'same'})),(d.closest||[]).map(c=>({...c,k:'same'})),d.div.map(c=>({...c,k:'div'})));
-  const ph=innerWidth<=700,W=ph?370:510,H=ph?300:320,L=48,R=W-10,T=16,Bm=276;const vs=pts.map(p=>p.vol),rs=pts.map(p=>p.r3);
+  const ph=innerWidth<=700,W=ph?370:510,H=ph?300:280,L=48,R=W-10,T=16,Bm=H-44;const vs=pts.map(p=>p.vol),rs=pts.map(p=>p.r3);
   const nice=(lo,hi,n)=>{const st=Math.pow(10,Math.floor(Math.log10((hi-lo)/n||0.01)));const step=[1,2,2.5,5,10].map(m=>m*st).find(x=>(hi-lo)/x<=n)||st*10;return [Math.floor(lo/step)*step,Math.ceil(hi/step)*step,step]};
   const [x0,x1,xs]=nice(Math.max(0,Math.min(...vs)-0.03),Math.max(...vs)+0.03,4),[y0,y1,ys]=nice(Math.min(0,...rs)-0.02,Math.max(...rs)+0.04,4);
   const X=v=>L+(v-x0)/(x1-x0)*(R-L),Y=v=>Bm-(v-y0)/(y1-y0)*(Bm-T);
@@ -1767,28 +1792,31 @@ function xChartTip(t,on){const tip=$('xChartTip'),svg=document.querySelector('#x
   document.querySelectorAll('#xmBody .xcard').forEach(c=>c.classList.toggle('hl',on&&c.dataset.xc===t));document.querySelectorAll('#xmBody .xcards').forEach(c=>c.classList.toggle('dim',!!on&&!!c.querySelector('.xcard.hl')));
   if(!on){tip.hidden=true;zone.style.display='none';return}
   const p=xFind(t),s=XM.d.self;if(!p)return;let h;
-  if(p.k==='self'){zone.style.display='';const n1=XM.d.same.length,n2=XM.d.div.length;h=`<b>${esc(s.t)} <span class="mut" style="font-weight:400">· the ETF you clicked</span></b><span class="mono pos" style="font-size:14px;font-weight:600">${xp(s.r3)} / yr <span class="mut" style="font-size:11px;font-weight:400">over 3Y</span></span><span>Volatility ${xu(s.vol)} · Sharpe ${s.sh.toFixed(2)}</span><span style="color:var(--xs)">● ${n1?n1+' similar ETF'+(n1>1?'s':'')+' beat it':'Nothing similar beat it'}</span><span style="color:var(--xd)">■ ${n2?n2+' diversifier'+(n2>1?'s':'')+' came close':'No diversifiers came close'}</span>`}
-  else{zone.style.display='none';const better=p.vol<s.vol?'Calmer than ':'Bumpier than ';h=`<b>${esc(p.t)} <span class="mut" style="font-weight:400">· ${esc((p.n||'').slice(0,34))}</span></b><div class="r"><span></span><span style="color:${p.k==='same'?'var(--xs)':'var(--xd)'};font-weight:600">${esc(p.t)}</span><span class="mut" style="font-weight:600">${esc(s.t)}</span></div><div class="r"><span class="mut">Return / yr</span><span>${xp(p.r3)}</span><span>${xp(s.r3)}</span></div><div class="r"><span class="mut">Volatility</span><span>${xu(p.vol)}</span><span>${xu(s.vol)}</span></div><div class="r"><span class="mut">Sharpe</span><span>${p.sh.toFixed(2)}</span><span>${s.sh.toFixed(2)}</span></div><span style="color:${p.k==='same'?'var(--xs)':'var(--xd)'}">${better+esc(s.t)}${p.r3>=s.r3?', more return':', less return'}</span>`}
+  const row=(l,a,b,cl)=>`<span class="l">${l}</span><span class="v ${cl||''}">${a}</span>${b==null?'':`<span class="v">${b}</span>`}`;
+  const head=(q,nm)=>`<div class="xth"><b>${esc(q)}</b><span>${esc(nm||NAMES[q]||'')}</span></div>`;
+  if(p.k==='self'){zone.style.display='';const n1=XM.d.same.length,n2=XM.d.div.length;
+    h=head(s.t,'The ETF you clicked')+`<div class="xtt c2">${row('Return / yr (3Y)',xp(s.r3),null,s.r3>=0?'pos':'neg')}${row('Volatility',xu(s.vol))}${row('Sharpe',s.sh.toFixed(2))}${row('Max DD',xu(s.dd),null,'neg')}${row('Fee',fmtER(s.er))}</div><div class="xtf"><span style="color:var(--xs)">● ${n1?n1+' similar ETF'+(n1>1?'s':'')+' beat it':'Nothing similar beat it'}</span><span style="color:var(--xd)">■ ${n2?n2+' diversifier'+(n2>1?'s':'')+' came close':'No diversifiers came close'}</span></div>`}
+  else{zone.style.display='none';const kc=p.k==='same'?'var(--xs)':'var(--xd)';
+    h=head(p.t,p.n)+`<div class="xtt c3"><span></span><span class="v hd" style="color:${kc}">${esc(p.t)}</span><span class="v hd">${esc(s.t)}</span>${row('Return / yr (3Y)',xp(p.r3),xp(s.r3))}${row('Volatility',xu(p.vol),xu(s.vol))}${row('Sharpe',p.sh.toFixed(2),s.sh.toFixed(2))}${row('Max DD',xu(p.dd),xu(s.dd))}${row('Fee',fmtER(p.er),fmtER(s.er))}${row('Tracks '+esc(s.t),Math.round(p.c*100)+'%','')}</div><div class="xtf"><span style="color:${kc}">${p.vol<s.vol?'Calmer than ':'Bumpier than '}${esc(s.t)}${p.r3>=s.r3?', more return':', less return'}</span></div>`}
   tip.innerHTML=h;tip.hidden=false;const fig=tip.parentElement.getBoundingClientRect(),g=svg.querySelector(`.xpt[data-xt="${CSS.escape(t)}"]`).getBoundingClientRect();
   let x=g.right-fig.left+8,y=g.top-fig.top;if(x+tip.offsetWidth>fig.width)x=g.left-fig.left-tip.offsetWidth-8;if(x<4)x=4;if(y+tip.offsetHeight>fig.height)y=fig.height-tip.offsetHeight-4;tip.style.left=x+'px';tip.style.top=Math.max(4,y)+'px'}
-function xSparkMove(box,e){const d=XM.d,c=xFind(box.dataset.xsp),s=d.self;if(!c)return;const svg=box.querySelector('svg'),r=svg.getBoundingClientRect();const i=Math.max(0,Math.min(24,Math.round((e.clientX-r.left)/r.width*24)));
-  const x=2+i*296/24;const cr=svg.querySelector('.xcross');cr.style.display='';cr.querySelector('line').setAttribute('x1',x);cr.querySelector('line').setAttribute('x2',x);
-  const t0=Date.parse(d.from),t1=Date.parse(d.to),dt=new Date(t0+(t1-t0)*i/24);const lab=MON[dt.getUTCMonth()]+' '+dt.getUTCDate()+', '+dt.getUTCFullYear();
-  const a=c.sp[i],b=s.sp[i],gap=a-b;const tip=box.querySelector('.xtip');
-  tip.innerHTML=`<span class="mut">${lab} · since ${MON[new Date(t0).getUTCMonth()]} ${new Date(t0).getUTCFullYear()}</span><div class="r"><span style="font-weight:600;color:var(--xc)">${esc(c.t)}</span><span></span><span class="${a>=0?'pos':'neg'}">${a>=0?'+':'−'}${Math.abs(a)}%</span></div><div class="r"><span style="font-weight:600">${esc(s.t)}</span><span></span><span class="${b>=0?'pos':'neg'}">${b>=0?'+':'−'}${Math.abs(b)}%</span></div><span style="color:var(--xc);border-top:1px solid var(--line);padding-top:3px">${gap===0?'Even':esc(gap>0?c.t:s.t)+' ahead by '+Math.abs(gap)+' pts'}</span>`;
+function xSparkMove(box,e){const d=XM.d,c=xFind(box.dataset.xsp),s=d.self;if(!c)return;const R=xRange(c,s),n=R.a.length;const svg=box.querySelector('svg'),r=svg.getBoundingClientRect();const i=Math.max(0,Math.min(n-1,Math.round((e.clientX-r.left)/r.width*(n-1))));
+  const x=2+i*296/Math.max(1,n-1);const cr=svg.querySelector('.xcross');cr.style.display='';cr.querySelector('line').setAttribute('x1',x);cr.querySelector('line').setAttribute('x2',x);
+  const a=Math.round(R.a[i]*1000)/10,b=Math.round(R.b[i]*1000)/10,gap=Math.round((a-b)*10)/10;const tip=box.querySelector('.xtip');const f=v=>`<span class="${v>=0?'pos':'neg'}">${v>=0?'+':'−'}${Math.abs(v).toFixed(1)}%</span>`;
+  tip.innerHTML=`<div class="xth"><b>${dayFmt(R.dates[i])}</b><span>growth since ${dayFmt(R.dates[0])}</span></div><div class="xtt c2"><span class="l" style="color:var(--xc);font-weight:600">${esc(c.t)}</span><span class="v">${f(a)}</span><span class="l" style="color:var(--ink);font-weight:600">${esc(s.t)}</span><span class="v">${f(b)}</span></div><div class="xtf"><span style="color:var(--xc)">${gap===0?'Even':esc(gap>0?c.t:s.t)+' ahead by '+Math.abs(gap).toFixed(1)+' pts'}</span></div>`;
   tip.hidden=false;const bx=box.getBoundingClientRect();let tx=e.clientX-bx.left+12;if(tx+tip.offsetWidth>bx.width)tx=e.clientX-bx.left-tip.offsetWidth-12;tip.style.left=Math.max(0,tx)+'px';tip.style.top=(-tip.offsetHeight-6)+'px'}
 function xSparkOut(box){const cr=box.querySelector('.xcross');if(cr)cr.style.display='none';const tip=box.querySelector('.xtip');if(tip)tip.hidden=true}
 function renderXM(){const b=$('xmBody');renderXMFoot();
   if(XM.err){b.innerHTML=`<div class="xnote"><b>Nothing to show</b><span>${esc(XM.err)}</span></div>`;return}
   const d=XM.d;if(!d){b.innerHTML='<div class="xskel" style="height:70px"></div><div class="xskel" style="height:300px"></div><div class="xskel" style="height:260px"></div>';return}
   const s=d.self,t=s.t;$('xmSub').textContent=(s.n||NAMES[t]||'')+' · alternatives are picked on the last 3 years ('+dayFmt(d.from)+' to '+dayFmt(d.to)+')';
-  const gl=[['1M',s.r[0]],['3M',s.r[1]],['6M',s.r[2]],['1Y',s.r[3]],['3Y / yr',s.r[4],1],['5Y / yr',s.r[5]]].map(([l,v,k])=>`<div class="xg ${xcls(v)}${k?' key':''}"><span>${l}</span><b>${xp(v)}</b></div>`).join('')+`<div class="xg"><span>Sharpe (3Y)</span><b>${s.sh.toFixed(2)}</b></div><div class="xg n"><span>Max DD (3Y)</span><b>${xu(s.dd)}</b></div><div class="xg"><span>Fee</span><b>${fmtER(s.er)}</b></div>`;
+  const gl=XR.map(([l,k,i])=>`<button type="button" class="xg ${xcls(s.r[i])}${XM.rng===k?' sel':''}" data-xrng="${k}" aria-pressed="${XM.rng===k}" title="Show ${XRWORD[k]} on the line charts"><span>${l}</span><b>${xp(s.r[i])}</b></button>`).join('')+`<div class="xg"><span>Sharpe (3Y)</span><b>${s.sh.toFixed(2)}</b></div><div class="xg n"><span>Max DD (3Y)</span><b>${xu(s.dd)}</b></div><div class="xg"><span>Fee</span><b>${fmtER(s.er)}</b></div>`;
   const floorTxt=s.sh>0?`a Sharpe within 20% of its ${s.sh.toFixed(2)}`:`a Sharpe at least ${s.sh.toFixed(2)}`;
   const same=d.same.length?`<div class="xcards">${d.same.map(c=>xCard(c,s,'same')).join('')}</div>`
-    :`<div class="xahead"><div class="top"><span class="ck"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l4.8 4.8L19.5 7"/></svg></span><div><b style="font-size:16px">Nothing similar did better than ${esc(t)}</b><div class="mut" style="font-size:14px">None of the ETFs that move like ${esc(t)} beat it on both 3-year return and Sharpe.${(d.closest||[]).length?' Here are the closest ones for reference.':''}</div></div></div>${(d.closest||[]).length?`<div class="xtblw"><table class="xtbl"><thead><tr><th>ETF</th><th>1M</th><th>3M</th><th>6M</th><th>1Y</th><th>3Y / yr</th><th>5Y / yr</th><th>Sharpe</th><th>Max DD</th><th>Fee</th><th></th></tr></thead><tbody>${d.closest.map(c=>`<tr data-xc="${esc(c.t)}"><td><b>${esc(c.t)}</b> <span style="color:var(--xs);font-size:12px">tracks ${Math.round(c.c*100)}%</span></td>${c.r.map(v=>`<td class="${v==null?'mut':v>=0?'pos':'neg'}">${xp(v)}</td>`).join('')}<td>${c.sh.toFixed(2)}</td><td class="neg">${xu(c.dd)}</td><td>${fmtER(c.er)}</td><td><button type="button" class="xadd" style="height:32px;padding:0 10px;font-size:12px" data-xadd="${esc(c.t)}"></button></td></tr>`).join('')}</tbody></table></div>`:''}</div>`;
+    :`<div class="xahead"><div class="top"><span class="ck"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l4.8 4.8L19.5 7"/></svg></span><div><b style="font-size:16px">Nothing similar did better than ${esc(t)}</b><div class="mut" style="font-size:14px">None of the ETFs that move like ${esc(t)} beat it on both 3-year return and Sharpe.${(d.closest||[]).length?' Here are the closest ones for reference.':''}</div></div></div>${(d.closest||[]).length?`<div class="xtblw"><table class="xtbl"><thead><tr><th>ETF</th><th>1M</th><th>3M</th><th>6M</th><th>YTD</th><th>1Y</th><th>3Y / yr</th><th>Sharpe</th><th>Max DD</th><th>Fee</th><th></th></tr></thead><tbody>${d.closest.map(c=>`<tr data-xc="${esc(c.t)}"><td><b>${esc(c.t)}</b> <span style="color:var(--xs);font-size:12px">tracks ${Math.round(c.c*100)}%</span></td>${c.r.map(v=>`<td class="${v==null?'mut':v>=0?'pos':'neg'}">${xp(v)}</td>`).join('')}<td>${c.sh.toFixed(2)}</td><td class="neg">${xu(c.dd)}</td><td>${fmtER(c.er)}</td><td><button type="button" class="xadd" style="height:32px;padding:0 10px;font-size:12px" data-xadd="${esc(c.t)}"></button></td></tr>`).join('')}</tbody></table></div>`:''}</div>`;
   const dv=d.div.length?`<div class="xcards">${d.div.map(c=>xCard(c,s,'div')).join('')}${d.div.length<3?`<div class="xnote"><b>Only ${d.div.length} came close</b><span>Nothing else that moves differently from ${esc(t)} had ${floorTxt}.</span></div>`:''}</div>`
     :`<div class="xnote"><b>Nothing that moves differently came close</b><span>No ETF with less than 60% overlap with ${esc(t)} had ${floorTxt} over the last 3 years.</span></div>`;
-  b.innerHTML=`<div style="display:flex;flex-direction:column;gap:8px"><div class="xcap">${esc(t)} at a glance</div><div class="xglance">${gl}</div></div>
+  b.innerHTML=`<div style="display:flex;flex-direction:column;gap:8px"><div class="xcap">${esc(t)} at a glance <span class="xcap2">· click a period to change the line charts</span></div><div class="xglance">${gl}</div></div>
     <div class="xtop">${xChart(d)}<div class="xlegend"><div class="li"><svg width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="6" fill="var(--ink)"/></svg><span>${esc(t)}, the ETF you clicked</span></div><div class="li"><svg width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="6" fill="var(--xs)"/></svg><span>Same kind of exposure: moves 90%+ in step with ${esc(t)}</span></div><div class="li"><svg width="14" height="14" aria-hidden="true"><rect x="1" y="1" width="12" height="12" fill="var(--xd)"/></svg><span>Diversification: moves less than 60% in step with ${esc(t)}</span></div>
     <div class="how">How these were picked: from ${d.pool.toLocaleString()} ETFs with 3+ years of history, at least $50M in assets, and no buffer, option-income or trading funds. Same kind of exposure: beat ${esc(t)} on both 3-year return and Sharpe. Diversification: moves differently but came close, with ${floorTxt} and swings in the same ballpark as ${esc(t)} (so no cash funds or wild single-asset bets). Hover a dot or a card to compare.</div></div></div>
     <section class="xsec"><h3>Same kind of exposure <small>Beat ${esc(t)} on 3-year return and Sharpe</small></h3>${same}</section>
@@ -1799,6 +1827,7 @@ document.addEventListener('click',e=>{const o=e.target.closest('[data-xopen]');i
   if($('xm').hidden)return;
   if(e.target.closest('[data-xclose]')){closeExplore();return}
   const a=e.target.closest('[data-xadd]');if(a&&!a.disabled){xToggleAdd(a.dataset.xadd);return}
+  const g=e.target.closest('#xmBody [data-xrng]');if(g){xSetRange(g.dataset.xrng);return}
   const p=e.target.closest('#xmBody .xpt');if(p){const t=p.dataset.xt;xChartTip(t,true);const card=document.querySelector(`#xmBody [data-xc="${CSS.escape(t)}"]`);if(card&&matchMedia('(hover:none)').matches===false)card.scrollIntoView({behavior:'smooth',block:'nearest'});return}});
 document.addEventListener('keydown',e=>{if($('xm').hidden)return;if(e.key==='Escape'){e.stopPropagation();closeExplore()}
   if(e.key==='Tab'){const f=[...$('xm').querySelectorAll('button:not(:disabled),[tabindex="0"]')].filter(x=>x.offsetParent);if(!f.length)return;const i=f.indexOf(document.activeElement);if(e.shiftKey&&i<=0){e.preventDefault();f[f.length-1].focus()}else if(!e.shiftKey&&i===f.length-1){e.preventDefault();f[0].focus()}}},true);
