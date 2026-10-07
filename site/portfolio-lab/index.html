@@ -609,6 +609,106 @@ tr.flash>td{animation:pflash 1.6s ease-out}
 .mi.mact{gap:8px;flex-wrap:wrap}
 @media (pointer:coarse){input,select,textarea{font-size:16px!important}}
 @media (max-width:380px){.btable .tkin{width:60px;padding:0 4px}.btable .wbox .field{width:40px;padding:0 4px}#bName{width:64px;padding:0 5px}tr.hrowx .tkin{width:66px}}
+
+/* long builder headers wrap to two lines so the fee column fits without sideways scrolling */
+#bTable th.bm .sort,#bTable th.wcell .sort{white-space:normal;max-width:84px;line-height:1.25;text-align:right}
+#bTable th.bm .hw,#bTable th.wcell .hw{align-items:center}
+#bTable th.wcell .sort{max-width:72px}
+
+/* ---------- explore alternatives ---------- */
+:root{--xs:#2f6fdb;--xsBg:#E4ECFA;--xd:#a8650a;--xdBg:#F6EAD6;--xposBg:#E6F0E9;--xnegBg:#F7E5DD}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--xs:#6aa6f5;--xsBg:#1f2a3a;--xd:#e8a33d;--xdBg:#3a2e1b;--xposBg:#1d2c24;--xnegBg:#34241d}}
+:root[data-theme="dark"]{--xs:#6aa6f5;--xsBg:#1f2a3a;--xd:#e8a33d;--xdBg:#3a2e1b;--xposBg:#1d2c24;--xnegBg:#34241d}
+.tkcell{position:relative}
+.xbtn{position:absolute;right:4px;top:50%;transform:translateY(-50%);width:24px;height:24px;border:0;border-radius:6px;padding:0;background:var(--panel2);color:var(--ink2);display:flex;align-items:center;justify-content:center;opacity:0;cursor:pointer;transition:opacity .12s}
+.hsub .xbtn{position:static;transform:none;margin-left:2px}
+tr:hover .xbtn,.xbtn:focus-visible{opacity:1}
+.xbtn:hover{color:var(--accent);background:var(--accentBg)}
+@media (hover:none){.xbtn{display:none}}
+body.xm-open{overflow:hidden}
+.xm{position:fixed;inset:0;z-index:80;display:flex;align-items:center;justify-content:center;padding:3vh 2vw}
+.xm[hidden]{display:none}
+.xmback{position:absolute;inset:0;background:rgba(10,10,8,.55)}
+.xmd{position:relative;width:min(1120px,96vw);max-height:94vh;display:flex;flex-direction:column;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:16px;box-shadow:0 24px 60px rgba(0,0,0,.35);overflow:hidden}
+@media (min-width:1880px){.xmd{width:min(1400px,92vw)}.xm .xfig{max-width:640px}}
+.xmh{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding:22px 28px 16px;border-bottom:1px solid var(--line)}
+.xmh h2{margin:0;font-family:"Source Serif 4",Georgia,serif;font-size:26px;font-weight:600}
+.xmh .sub{font-size:13px;color:var(--muted);margin-top:4px}
+.xclose{width:44px;height:44px;flex:none;border-radius:10px;border:1px solid var(--inputLine);background:transparent;color:var(--ink);display:flex;align-items:center;justify-content:center;cursor:pointer}
+.xmb{overflow:auto;padding:20px 28px 24px;display:flex;flex-direction:column;gap:24px;overscroll-behavior:contain}
+.xmf{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:12px 28px;border-top:1px solid var(--line);background:var(--panel)}
+.xmf .disc{font-size:12px;color:var(--faint)}
+.xmf .cnt{font-size:13px;color:var(--accent);font-weight:600}
+.xmf .btn.primary{background:var(--accent);border-color:var(--accent);color:var(--panel);font-weight:600}
+.xcap{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.xglance{display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:8px}
+.xg{border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:3px;background:var(--panel2)}
+.xg span:first-child{font-size:11px;letter-spacing:.07em;color:var(--muted);text-transform:uppercase}
+.xg b{font-family:"IBM Plex Mono",monospace;font-size:17px;font-weight:600}
+.xg.p{background:var(--xposBg)}.xg.p b{color:var(--pos)}.xg.n{background:var(--xnegBg)}.xg.n b{color:var(--neg)}
+.xg.key{outline:1px solid var(--accent)}
+.xtop{display:flex;gap:24px;align-items:center}
+.xfig{position:relative;margin:0;flex:1 1 520px;max-width:560px;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:10px 10px 6px}
+.xfig svg{display:block;width:100%;height:auto;font-family:"IBM Plex Mono",monospace;overflow:visible}
+.xfig figcaption{font-size:12px;color:var(--faint);padding:2px 6px 4px}
+.xpt{cursor:pointer;transition:opacity .12s}
+.xfade .xpt{opacity:.25}.xfade .xpt.on{opacity:1}
+.xlegend{flex:1 1 280px;display:flex;flex-direction:column;gap:12px;font-size:14px;line-height:1.5;color:var(--ink2)}
+.xlegend .li{display:flex;gap:10px;align-items:center}
+.xlegend .how{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:12px}
+.xtip{position:absolute;pointer-events:none;z-index:3;min-width:190px;background:var(--panel);border:1px solid var(--inputLine);border-radius:8px;padding:9px 11px;font-size:12px;box-shadow:0 8px 20px rgba(0,0,0,.25);display:flex;flex-direction:column;gap:3px}
+.xtip[hidden]{display:none}
+.xtip .r{display:grid;grid-template-columns:1fr auto auto;gap:10px}
+.xtip .r span:not(:first-child){font-family:"IBM Plex Mono",monospace;text-align:right}
+.xsec{display:flex;flex-direction:column;gap:12px}
+.xsec h3{margin:0;font-family:"Source Serif 4",Georgia,serif;font-size:21px;font-weight:600;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.xsec h3 small{font-family:"IBM Plex Sans",sans-serif;font-size:13px;font-weight:400;color:var(--muted)}
+.xcards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.xcard{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:11px;transition:box-shadow .12s,border-color .12s,opacity .12s}
+.xcard.hl{border-color:var(--xc);box-shadow:0 0 0 3px color-mix(in srgb,var(--xc) 22%,transparent)}
+.xcards.dim .xcard:not(.hl){opacity:.55}
+.xch{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.xch b{font-family:"IBM Plex Mono",monospace;font-size:19px}
+.xch .nm{font-size:12px;color:var(--muted);display:block;max-width:220px}
+.xchip{font-size:12px;font-weight:600;border-radius:99px;padding:3px 9px;white-space:nowrap}
+.xchip.s{color:var(--xs);background:var(--xsBg)}.xchip.d{color:var(--xd);background:var(--xdBg)}
+.xchip.up{color:var(--pos);background:var(--xposBg)}.xchip.dn{color:var(--xd);background:var(--xdBg)}
+.xhero{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.xhero b{font-family:"IBM Plex Mono",monospace;font-size:28px;font-weight:600}
+.xhero .u{font-size:12px;color:var(--muted)}.xhero .xchip{margin-left:auto}
+.xspark{position:relative}
+.xspark svg{display:block;width:100%;height:60px}
+.xspark .lg{display:flex;gap:12px;font-size:11px;color:var(--faint);margin-top:2px}
+.xchips{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.xchips div{border-radius:8px;padding:6px 9px;display:flex;flex-direction:column;background:var(--panel)}
+.xchips span{font-size:11px;color:var(--muted)}
+.xchips b{font-family:"IBM Plex Mono",monospace;font-size:14px}
+.xchips .p{background:var(--xposBg)}.xchips .p b{color:var(--pos)}.xchips .n{background:var(--xnegBg)}.xchips .n b{color:var(--neg)}
+.xstats{display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px 12px;font-size:12.5px;color:var(--muted)}
+.xstats b{font-family:"IBM Plex Mono",monospace;color:var(--ink);font-weight:600}
+.xwhy{margin:0;font-size:14px;line-height:1.45;color:var(--ink2)}
+.xadd{height:40px;border-radius:9px;border:1px solid var(--inputLine);background:transparent;color:var(--ink);font:600 14px "IBM Plex Sans",sans-serif;cursor:pointer;margin-top:auto}
+.xadd.on{background:var(--accent);border-color:var(--accent);color:var(--panel)}
+.xadd:disabled{opacity:.55;cursor:default}
+.xnote{border:1px dashed var(--inputLine);border-radius:12px;padding:16px;font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:6px;justify-content:center}
+.xnote b{color:var(--ink2)}
+.xahead{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:14px}
+.xahead .top{display:flex;gap:14px;align-items:center}
+.xahead .ck{width:42px;height:42px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;background:var(--accentBg);color:var(--accent)}
+.xtbl{width:100%;border-collapse:collapse;font-size:13px}
+.xtbl th{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;text-align:right;padding:8px 10px;border-bottom:1px solid var(--line)}
+.xtbl th:first-child,.xtbl td:first-child{text-align:left}
+.xtbl td{padding:9px 10px;border-bottom:1px solid var(--line2);text-align:right;font-family:"IBM Plex Mono",monospace}
+.xtblw{overflow-x:auto}
+.xskel{height:120px;border-radius:12px;background:linear-gradient(90deg,var(--panel2),var(--line2),var(--panel2));background-size:200% 100%;animation:xsk 1.2s linear infinite}
+@keyframes xsk{to{background-position:-200% 0}}
+@media (max-height:900px){.xfig{max-width:470px}}
+@media (max-width:1000px){.xcards{grid-template-columns:repeat(2,minmax(0,1fr))}.xglance{grid-template-columns:repeat(5,minmax(0,1fr))}.xtop{flex-direction:column;align-items:stretch}.xfig{max-width:none;flex:none}}
+@media (max-width:700px){
+  .xm{padding:0}.xmd{width:100vw;max-height:none;height:100%;border-radius:0;border:0}
+  .xmh{padding:16px}.xmh h2{font-size:22px}.xmb{padding:16px}.xmf{padding:10px 16px}.xmf .disc{display:none}
+  .xcards{grid-template-columns:minmax(0,1fr)}.xglance{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
 </style>
 
 <div class="wrap">
@@ -670,6 +770,7 @@ tr.flash>td{animation:pflash 1.6s ease-out}
 </div>
 <div class="pop" id="pop" role="tooltip" hidden></div>
 <div class="modal" id="ioModal" hidden><div class="mback" data-ioclose="1"></div><div class="mpanel" role="dialog" aria-modal="true" aria-labelledby="ioTitle"><div class="mhead"><h3 id="ioTitle">Import / Export</h3><button type="button" class="mclose" data-ioclose="1" aria-label="Close"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div><div id="ioBody"></div></div></div>
+<div class="xm" id="xm" hidden><div class="xmback" data-xclose></div><div class="xmd" role="dialog" aria-modal="true" aria-labelledby="xmTitle"><div class="xmh"><div><h2 id="xmTitle">Explore alternatives</h2><div class="sub" id="xmSub"></div></div><button type="button" class="xclose" id="xmClose" data-xclose aria-label="Close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div><div class="xmb" id="xmBody"></div><div class="xmf"><span class="disc">Past performance doesn't guarantee future results. Ideas to research, not advice.</span><span class="cnt" id="xmCount"></span><button type="button" class="btn primary" data-xclose>Done</button></div></div></div>
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 <div class="drophint" id="drophint" hidden>Drop CSV files to import prices</div>
 
@@ -694,6 +795,7 @@ const INFO = {
   y3:{t:()=>'3-year return (per year)',w:()=>'The average yearly return if you had bought 3 years ago.',h:()=>'Same compound-growth math as the 10-year number, over 3 years.',y:()=>'A middle view: long enough to smooth out a single bad quarter, short enough to reflect recent markets.'},
   y5:{t:()=>'5-year return (per year)',w:()=>'The average yearly return if you had bought 5 years ago.',h:()=>'Same compound-growth math as the 10-year number, over 5 years.',y:()=>'Covers at least one full up-and-down cycle in most periods, so it is harder for luck to carry the number.'},
   sharpe:{t:()=>'Sharpe ratio',w:()=>'Higher is better. How much return you got for the risk you took. Think of it as a "smoothness score" for your returns.',h:()=>'Take the average monthly return minus what SHY (near-cash) earned, then divide by how much monthly returns bounced around. Scale it to a year. Uses month-end prices.',y:()=>'Two portfolios can both make 10% a year: one with gentle ups and downs, the other on a roller coaster. The higher Sharpe is the smoother ride for the same payoff. Rough guide: under 0.5 is weak, 0.5 to 1 is good, above 1 is very good.'},
+  er:{t:()=>'Expense ratio (fee)',w:()=>'Lower is better. The yearly fee the fund charges, taken out of its returns automatically.',h:()=>'From Yahoo Finance, refreshed weekly. The total row is the fee of your mix, weighted by your percentages.',y:()=>'On $10,000, a 0.10% fee costs $10 a year and a 0.75% fee costs $75. Small differences add up over decades.'},
   dd:{t:()=>'Max drawdown',w:()=>'Closer to 0% is better. The worst drop from a high point to a low point before it recovered.',h:()=>'Track the highest daily close reached so far; the biggest percentage fall below that high is the max drawdown.',y:()=>'It answers "how much pain would I have had to sit through?" A −30% drawdown means $100,000 fell to $70,000 at some point. This is the number that makes people panic-sell at the bottom.'},
   vol:{t:()=>'Volatility',w:()=>'Lower is calmer. How much the portfolio’s value swings around from month to month.',h:()=>'The standard deviation of monthly returns, scaled up to a year.',y:()=>'Higher volatility means bigger swings in both directions. In about two out of three years, the return lands within one volatility of the average. Lower is calmer.'},
   worst:{t:()=>'Worst calendar year',w:()=>'Closer to 0% (or positive) is better. The worst January-to-December return in the last 10 years, and which year it was.',h:()=>'The return from each December 31 to the next; the lowest one is shown.',y:()=>'A gut check: could you have held on through that year without selling?'},
@@ -921,8 +1023,11 @@ const TPER=[['1M',1]].concat(PERIODS.slice(0,5));
 function mixName(){const n=(S.b.name||'').trim();return n||'Portfolio total'}
 function mixRet(m){const p=mixP();if(!weights(p).length)return null;return periodRetD(s=>bhdRet(p,s),m)}
 function mixRowHTML(){const p=mixP();const ok=weights(p).length>0;const tot=bTotal();const scaled=ok&&!mixEq()&&Math.abs(tot-100)>=0.05;
-  const B=S.b;return `<td class="nmcell"><span class="pn">${swatch('var(--ink)',null,18)}<span class="pn2"><label class="sr" for="bName">Portfolio name</label><input class="field nmin" id="bName" placeholder="Name it" autocomplete="off" value="${esc(B.name||'')}"></span></span></td><td class="num momcell" style="font-weight:700">${ok?(()=>{const st0=selStart(B.sel),v=wRetMix(st0);return `<span class="momwrap">${sparkMix(st0)}<span class="v ${cls(v)}">${sg(v)}</span></span>`})():''}</td>${dsk(`${TPER.map(([p2,m])=>{const v=ok?mixRet(m):null;return `<td class="num ${cls(v)}${p2===B.sel.p?' hl':''}" style="font-weight:700">${ok?sg(v):''}</td>`}).join('')}${(()=>{const o=ok?pStats(p):null;return BM.map(([k])=>ok?bmCell(o,k,null,true):'<td></td>').join('')})()}`)}<td class="num wcell" style="font-weight:700">${mixEq()?(ok?'<span class="sub" style="font-size:12px;font-weight:400" title="Each ETF counts equally until you set percentages">equal split</span>':''):`${Math.abs(tot-100)>=0.05&&tot>0?`<button type="button" class="linkbtn scl" id="bScale" title="Scale to ${scalePreview(B.rows)}">Scale</button> `:''}<span class="${Math.abs(tot-100)<0.05?'pos':'neg'}">${tot}%</span>`}</td>${mexpBtn('bmix','Portfolio total')}<td class="dsk"></td>`}
+  const B=S.b;return `<td class="nmcell"><span class="pn">${swatch('var(--ink)',null,18)}<span class="pn2"><label class="sr" for="bName">Portfolio name</label><input class="field nmin" id="bName" placeholder="Name it" autocomplete="off" value="${esc(B.name||'')}"></span></span></td><td class="num momcell" style="font-weight:700">${ok?(()=>{const st0=selStart(B.sel),v=wRetMix(st0);return `<span class="momwrap">${sparkMix(st0)}<span class="v ${cls(v)}">${sg(v)}</span></span>`})():''}</td>${dsk(`${TPER.map(([p2,m])=>{const v=ok?mixRet(m):null;return `<td class="num ${cls(v)}${p2===B.sel.p?' hl':''}" style="font-weight:700">${ok?sg(v):''}</td>`}).join('')}${(()=>{const o=ok?pStats(p):null;return BM.map(([k])=>ok?bmCell(o,k,null,true):'<td></td>').join('')})()}<td class="num ercol" style="font-weight:700">${ok?fmtER(mixER()):''}</td>`)}<td class="num wcell" style="font-weight:700">${mixEq()?(ok?'<span class="sub" style="font-size:12px;font-weight:400" title="Each ETF counts equally until you set percentages">equal split</span>':''):`${Math.abs(tot-100)>=0.05&&tot>0?`<button type="button" class="linkbtn scl" id="bScale" title="Scale to ${scalePreview(B.rows)}">Scale</button> `:''}<span class="${Math.abs(tot-100)<0.05?'pos':'neg'}">${tot}%</span>`}</td>${mexpBtn('bmix','Portfolio total')}<td class="dsk"></td>`}
 const BM=[['sharpe',()=>'Sharpe','sharpe'],['dd',()=>'Max drawdown','dd'],['worst',()=>'Worst year','worst']];
+let ER={};/* expense ratio in percent per ticker (data/er.json on the website) */
+const fmtER=v=>v==null?'—':v.toFixed(2)+'%';
+function mixER(){const p=mixP();const ws=weights(p);if(!ws.length)return null;let a=0,tw=0;ws.forEach(x=>{if(ER[x.t]!=null){a+=ER[x.t]*x.w;tw+=x.w}});return tw>0.999?a/tw:null}
 function pStats(p){const ws=weights(p);if(!ws.length)return null;const ts=ws.map(x=>x.t);const fc=firstAny(ts);if(fc==null)return null;
   const s=Math.max(fc,DS.last-120);const V=bhSeries(p,s);const st=V?statsFromValues(V,s):null;
   if(st){const fd=dFirstAny(ts);const sd=Math.max(fd,selStart({p:'10Y'}));st.dd=ddDaily(bhd(p,sd),sd)}return {st}}
@@ -933,7 +1038,7 @@ function bmCell(o,k,best,bold){const v=bmVal(o,k);const neg=(k!=='sharpe')&&v!=n
 function refreshMixRow(){const r=$('bMixRow');if(!r)return;const tmp=document.createElement('tbody');tmp.innerHTML='<tr>'+mixRowHTML()+'</tr>';const nt=tmp.firstChild;
   const oldSub=r.children[0].querySelector('.sub2'),newSub=nt.children[0].querySelector('.sub2');const pn2=r.children[0].querySelector('.pn2');if(oldSub)oldSub.remove();if(newSub&&pn2)pn2.appendChild(newSub);
   for(let k=r.children.length-1;k>=1;k--)r.children[k].remove();[...nt.children].slice(1).forEach(c=>r.appendChild(c))}
-function mixDetail(){const p=mixP();if(!weights(p).length)return '<span class="sub">Set percentages to see the total.</span>';return TPER.map(([pp,m])=>{const v=mixRet(m);return mItem(pp,sg(v),cls(v))}).join('')+(()=>{const o=pStats(p),st=o&&o.st;return mItem('Sharpe',st?st.sharpe.toFixed(2):'—')+mItem('Max drawdown',st?un(st.dd):'—','neg')+mItem('Worst year',st&&st.worst!=null?un(st.worst)+' ’'+st.worstY.slice(2):'—','neg')})()}
+function mixDetail(){const p=mixP();if(!weights(p).length)return '<span class="sub">Set percentages to see the total.</span>';return TPER.map(([pp,m])=>{const v=mixRet(m);return mItem(pp,sg(v),cls(v))}).join('')+(()=>{const o=pStats(p),st=o&&o.st;return mItem('Sharpe',st?st.sharpe.toFixed(2):'—')+mItem('Max drawdown',st?un(st.dd):'—','neg')+mItem('Worst year',st&&st.worst!=null?un(st.worst)+' ’'+st.worstY.slice(2):'—','neg')+mItem('Fee',fmtER(mixER()))})()}
 function renderMixLive(){clearTimeout(renderMixLive._t);renderMixLive._t=setTimeout(()=>{renderBChart();refreshMixRow();const d=document.querySelector('[data-mdet="bmix"] .mgrid');if(d)d.innerHTML=mixDetail()},180)}
 function selOf(sc){return sc==='b'?S.b.sel:S.sel}
 const LASTD={b:null,p:null};
@@ -963,23 +1068,23 @@ const mexpBtn=(k,label)=>`<td class="mob mexpc"><button type="button" class="mex
 const mItem=(lab,val,c)=>`<div class="mi"><span class="ml">${lab}</span><span class="mv mono ${c||''}">${val}</span></div>`;
 function mdetRow(k,inner){return `<tr class="mdet${MEXP.has(k)?' open':''}" data-mdet="${k}"><td colspan="20"><div class="mgrid">${inner}</div></td></tr>`}
 function bDetail(t,o){const tp=TPER.map(([p,m])=>{const v=periodRet(t,m);return mItem(p,sg(v),cls(v))}).join('');
-  const st=o&&o.st;return tp+mItem('Sharpe',st?st.sharpe.toFixed(2):'—')+mItem('Max drawdown',st?un(st.dd):'—',st&&st.dd<0?'neg':'')+mItem('Worst year',st&&st.worst!=null?un(st.worst)+' ’'+st.worstY.slice(2):'—',st&&st.worst<0?'neg':'')}
+  const st=o&&o.st;return tp+mItem('Sharpe',st?st.sharpe.toFixed(2):'—')+mItem('Max drawdown',st?un(st.dd):'—',st&&st.dd<0?'neg':'')+mItem('Worst year',st&&st.worst!=null?un(st.worst)+' ’'+st.worstY.slice(2):'—',st&&st.worst<0?'neg':'')+mItem('Fee',fmtER(ER[t]))}
 /* builder table sort: click cycles high-to-low, low-to-high, then back to your order */
 const BSORT={k:null,dir:0};
 function bsBtn(k,label){const on=BSORT.k===k;const arrow=on?(BSORT.dir<0?' ↓':' ↑'):'';return `<button type="button" class="sort" data-bsort="${k}" aria-pressed="${on}" title="Sort">${label}${arrow}</button>`}
 function bOrder(WR,ES){const B=S.b;const idx=B.rows.map((r,j)=>j);if(!BSORT.k||!BSORT.dir)return idx;const k=BSORT.k;
-  const val=j=>{const r=B.rows[j];if(k==='t')return r.t;if(k==='ret')return WR[j];if(k==='w')return Number(r.w)||0;const tp=TPER.find(x=>x[0]===k);if(tp)return periodRet(r.t,tp[1]);const st=ES[j]&&ES[j].st;return st?st[k]:null};
+  const val=j=>{const r=B.rows[j];if(k==='t')return r.t;if(k==='ret')return WR[j];if(k==='w')return Number(r.w)||0;if(k==='er')return ER[r.t]??null;const tp=TPER.find(x=>x[0]===k);if(tp)return periodRet(r.t,tp[1]);const st=ES[j]&&ES[j].st;return st?st[k]:null};
   return idx.sort((a,b)=>{const va=val(a),vb=val(b);if(va==null&&vb==null)return a-b;if(va==null)return 1;if(vb==null)return -1;const c=typeof va==='string'?va.localeCompare(vb):va-vb;return (c||a-b)*BSORT.dir})}
 function renderBTable(){const B=S.b;if(!B.open)return;const hp=B.sel.p;
   const best={};TPER.forEach(([p,m])=>{const vs=B.rows.map(r=>periodRet(r.t,m)).filter(v=>v!=null);if(vs.length>1)best[p]=Math.max(...vs)});
   const ES=B.rows.map(r=>HAS(r.t)?pStats({rows:[{t:r.t,w:100}]}):null);const bb={};BM.forEach(([k])=>{const vs=ES.map(o=>bmVal(o,k)).filter(v=>v!=null);if(vs.length>1)bb[k]=Math.max(...vs)});
-  const NC=TPER.length+BM.length+4;const full=B.rows.length>=MAXETF;
+  const NC=TPER.length+BM.length+5;const full=B.rows.length>=MAXETF;
   const addRow=`<tr class="addrow"><td><span class="tkcell"><span class="rsw" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span><label class="sr" for="bAdd">Ticker to add</label><input class="field tkin" id="bAdd" role="combobox" aria-autocomplete="list" aria-controls="bSug" aria-expanded="false" placeholder="${full?'15 max':'Ticker'}" autocomplete="off" spellcheck="false" value="${esc(S.bDraft||'')}" ${full?'disabled':''}></span></td><td><button type="button" class="btn sm" id="bAddBtn" ${full?'disabled':''}>Add</button></td><td colspan="${NC-2}" class="sub addnote"><span class="addnw"><span>${B.rows.length?'':'Type a ticker and press Enter to add it, then set its % of the portfolio.'}</span></span></td></tr>`;const st0=selStart(B.sel);const WR=B.rows.map(r=>HAS(r.t)?wRetT(r.t,st0):null);const wBest=WR.filter(v=>v!=null).length>1?Math.max(...WR.filter(v=>v!=null)):null;
-  const etfRow=(r,j)=>`<tr class="${r.hidden?'dim':''}"><td><span class="tkcell"><button type="button" class="rsw" data-bhide="${j}" aria-pressed="${!r.hidden}" aria-label="${r.hidden?'Show':'Hide'} ${esc(r.t)} on the chart" title="${r.hidden?'Show':'Hide'} on chart">${swatch(ecol(r.c),edash(r.c),20)}</button><label class="sr" for="bt-${j}">Ticker ${j+1}</label><input class="field tkin" id="bt-${j}" data-btk="${j}" list="tickers" autocomplete="off" spellcheck="false" value="${esc(r.t)}" title="${esc(NAMES[r.t]||'Imported prices')}"></span></td>
+  const etfRow=(r,j)=>`<tr class="${r.hidden?'dim':''}" data-bt="${esc(r.t)}"><td><span class="tkcell"><button type="button" class="rsw" data-bhide="${j}" aria-pressed="${!r.hidden}" aria-label="${r.hidden?'Show':'Hide'} ${esc(r.t)} on the chart" title="${r.hidden?'Show':'Hide'} on chart">${swatch(ecol(r.c),edash(r.c),20)}</button><label class="sr" for="bt-${j}">Ticker ${j+1}</label><input class="field tkin" id="bt-${j}" data-btk="${j}" list="tickers" autocomplete="off" spellcheck="false" value="${esc(r.t)}" title="${esc(NAMES[r.t]||'Imported prices')}">${xBtn(r.t)}</span></td>
     <td class="num momcell${wBest!=null&&WR[j]===wBest?' best':''}"><span class="momwrap">${HAS(r.t)?sparkT(r.t,st0,ecol(r.c)):''}<span class="v ${cls(WR[j])}">${sg(WR[j])}</span></span></td>
-    ${dsk(TPER.map(([p,m])=>{const v=periodRet(r.t,m);return `<td class="num ${cls(v)}${p===hp?' hl':''}${best[p]!=null&&v===best[p]?' best':''}">${sg(v)}</td>`}).join('')+BM.map(([k])=>bmCell(ES[j],k,bb)).join(''))}<td class="wcell"><span class="wbox"><label class="sr" for="bw-${j}">${esc(r.t)} percent</label><input class="field" id="bw-${j}" data-bw="${j}" inputmode="decimal" autocomplete="off" placeholder="0" value="${r.w===''||r.w==null?'':esc(r.w)}">%</span></td>${mexpBtn('b'+j,r.t)}
-    <td class="xcell dsk"><button type="button" class="delbtn bdel" id="bx-${j}" data-brm="${j}" aria-label="Remove ${esc(r.t)}" title="Remove ${esc(r.t)}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M6 7l1 13h10l1-13"/></svg></button></td></tr>${mdetRow('b'+j,bDetail(r.t,ES[j])+`<div class="mi mact"><button type="button" class="btn sm mrm" data-brm="${j}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M6 7l1 13h10l1-13"/></svg>Remove ${esc(r.t)}</button></div>`)}`;
-  $('bTable').innerHTML=`<thead><tr><th style="text-align:left"><span class="hw">${bsBtn('t','ETF')}</span></th><th class="r retcol"><span class="hw">${bsBtn('ret',selLabel(B.sel,'short')+' return')}${infoBtn('bret','return')}</span></th>${TPER.map(([p,m],k)=>`<th class="dsk r${p===hp?' hl':''}"><span class="hw">${bsBtn(p,pLabel(p,m))}${k===TPER.length-1?infoBtn('returns','returns'):''}</span></th>`).join('')}${BM.map(([k,lab,info])=>`<th class="dsk r bm${k==='sharpe'?' bmfirst':''}"><span class="hw">${bsBtn(k,lab())}${infoBtn(info,lab())}</span></th>`).join('')}<th class="r wcell"><span class="hw">${bsBtn('w','<span class="dskl">% of portfolio</span><span class="mobl">%</span>')}</span></th><th class="mob"></th><th class="dsk"></th></tr></thead>
+    ${dsk(TPER.map(([p,m])=>{const v=periodRet(r.t,m);return `<td class="num ${cls(v)}${p===hp?' hl':''}${best[p]!=null&&v===best[p]?' best':''}">${sg(v)}</td>`}).join('')+BM.map(([k])=>bmCell(ES[j],k,bb)).join('')+`<td class="num ercol${ER[r.t]==null?' mut':''}">${fmtER(ER[r.t])}</td>`)}<td class="wcell"><span class="wbox"><label class="sr" for="bw-${j}">${esc(r.t)} percent</label><input class="field" id="bw-${j}" data-bw="${j}" inputmode="decimal" autocomplete="off" placeholder="0" value="${r.w===''||r.w==null?'':esc(r.w)}">%</span></td>${mexpBtn('b'+j,r.t)}
+    <td class="xcell dsk"><button type="button" class="delbtn bdel" id="bx-${j}" data-brm="${j}" aria-label="Remove ${esc(r.t)}" title="Remove ${esc(r.t)}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M6 7l1 13h10l1-13"/></svg></button></td></tr>${mdetRow('b'+j,bDetail(r.t,ES[j])+xMob(r.t)+`<div class="mi mact"><button type="button" class="btn sm mrm" data-brm="${j}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M6 7l1 13h10l1-13"/></svg>Remove ${esc(r.t)}</button></div>`)}`;
+  $('bTable').innerHTML=`<thead><tr><th style="text-align:left"><span class="hw">${bsBtn('t','ETF')}</span></th><th class="r retcol"><span class="hw">${bsBtn('ret',selLabel(B.sel,'short')+' return')}${infoBtn('bret','return')}</span></th>${TPER.map(([p,m],k)=>`<th class="dsk r${p===hp?' hl':''}"><span class="hw">${bsBtn(p,pLabel(p,m))}${k===TPER.length-1?infoBtn('returns','returns'):''}</span></th>`).join('')}${BM.map(([k,lab,info])=>`<th class="dsk r bm${k==='sharpe'?' bmfirst':''}"><span class="hw">${bsBtn(k,lab())}${infoBtn(info,lab())}</span></th>`).join('')}<th class="dsk r ercol"><span class="hw">${bsBtn('er','Fee')}${infoBtn('er','expense ratio')}</span></th><th class="r wcell"><span class="hw">${bsBtn('w','<span class="dskl">% of portfolio</span><span class="mobl">%</span>')}</span></th><th class="mob"></th><th class="dsk"></th></tr></thead>
     <tbody>${bOrder(WR,ES).map(j=>etfRow(B.rows[j],j)).join('')}${addRow}</tbody>${B.rows.length?`<tfoot><tr class="mixrow" id="bMixRow">${mixRowHTML()}</tr>${mdetRow('bmix',mixDetail())}</tfoot>`:''}`;
   document.querySelectorAll('#bTable button.info:empty').forEach(b=>{b.innerHTML=ICON_I});
 }
@@ -1215,10 +1320,10 @@ function holdRows(r,L,best){const st0=selStart(S.sel);const ed=!r.locked&&!r.ref
       const txt=v==null?'—':k==='sharpe'?v.toFixed(2):k==='worst'?un(v)+' <span class="mut">’'+ES.st.worstY.slice(2)+'</span>':['ret','m1','m3','m6','y1'].includes(k)?sg(v):un(v);
       if(k==='ret')return `<td class="num momcell"><span class="momwrap">${HAS(h.t)?sparkT(h.t,st0,r.color):''}<span class="v${neg}">${txt}</span></span></td>`;
       return `<td class="dsk num${v==null?' mut':neg}">${txt}</td>`}).join('');
-    const name=ed?`<span class="pn hsub"><label class="sr" for="pt-${pid}-${h.ix}">Ticker</label><input class="field tkin" id="pt-${pid}-${h.ix}" data-ptk="${h.ix}" data-pf="${pid}" list="tickers" autocomplete="off" spellcheck="false" value="${esc(h.t)}" title="${esc(NAMES[h.t]||'')}"><span class="wbox"><label class="sr" for="pw-${pid}-${h.ix}">${esc(h.t)} percent</label><input class="field" id="pw-${pid}-${h.ix}" data-pw="${h.ix}" data-pf="${pid}" inputmode="decimal" autocomplete="off" value="${esc(h.w)}">%</span></span>`
-      :`<span class="pn hsub"><span class="mono" style="font-weight:600" title="${esc(NAMES[h.t]||'')}">${esc(h.t)}</span><span class="mut mono" style="font-size:12px">${r1(h.w)}%</span>${r.id==='tw'?'<span class="sub" style="font-size:11px">holding this month</span>':''}</span>`;
+    const name=ed?`<span class="pn hsub"><label class="sr" for="pt-${pid}-${h.ix}">Ticker</label><input class="field tkin" id="pt-${pid}-${h.ix}" data-ptk="${h.ix}" data-pf="${pid}" list="tickers" autocomplete="off" spellcheck="false" value="${esc(h.t)}" title="${esc(NAMES[h.t]||'')}"><span class="wbox"><label class="sr" for="pw-${pid}-${h.ix}">${esc(h.t)} percent</label><input class="field" id="pw-${pid}-${h.ix}" data-pw="${h.ix}" data-pf="${pid}" inputmode="decimal" autocomplete="off" value="${esc(h.w)}">%</span>${HAS(h.t)?xBtn(h.t):''}</span>`
+      :`<span class="pn hsub"><span class="mono" style="font-weight:600" title="${esc(NAMES[h.t]||'')}">${esc(h.t)}</span><span class="mut mono" style="font-size:12px">${r1(h.w)}%</span>${r.id==='tw'?'<span class="sub" style="font-size:11px">holding this month</span>':''}${HAS(h.t)?xBtn(h.t):''}</span>`;
     const act=ed?`<button type="button" class="delbtn bdel" data-prm="${h.ix}" data-pf="${pid}" aria-label="Remove ${esc(h.t)}" title="Remove ${esc(h.t)}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M6 7l1 13h10l1-13"/></svg></button>`:'';
-    const mk='h'+pid+'-'+h.ix;return `<tr class="hrowx"><td>${name}</td>${cells}<td class="dsk hact">${act}</td>${mexpBtn(mk,h.t)}</tr>`+mdetRow(mk,(HAS(h.t)?bDetail(h.t,ES):'<span class="sub">No price data.</span>')+(ed?`<div class="mi mact"><button type="button" class="btn sm mrm" data-prm="${h.ix}" data-pf="${pid}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M6 7l1 13h10l1-13"/></svg>Remove ${esc(h.t)}</button></div>`:''))}).join('');
+    const mk='h'+pid+'-'+h.ix;return `<tr class="hrowx"><td>${name}</td>${cells}<td class="dsk hact">${act}</td>${mexpBtn(mk,h.t)}</tr>`+mdetRow(mk,(HAS(h.t)?bDetail(h.t,ES)+xMob(h.t):'<span class="sub">No price data.</span>')+(ed?`<div class="mi mact"><button type="button" class="btn sm mrm" data-prm="${h.ix}" data-pf="${pid}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M6 7l1 13h10l1-13"/></svg>Remove ${esc(h.t)}</button></div>`:''))}).join('');
   if(!ed)return rows;
   const p=r.p,tot=pTot(p),full=p.rows.length>=MAXETF;
   const add=`<tr class="hrowx hadd"><td colspan="20"><span class="haddw"><span class="addetf"><label class="sr" for="pa-${pid}">Ticker to add</label><input class="field tkin" id="pa-${pid}" data-padd-in="${pid}" list="tickers" placeholder="${full?'15 max':'Ticker'}" autocomplete="off" value="${esc(S.paDraft[pid]||'')}" ${full?'disabled':''}><button type="button" class="btn sm" data-padd="${pid}" ${full?'disabled':''}>Add</button></span>
@@ -1598,5 +1703,110 @@ async function ensureData(){const ts=needTickers();if(!ts.length)return;ts.forEa
     if(u.ok){const j=await u.json();(j.etfs||[]).forEach(([t,n])=>{UNI[t]=n;if(!NAMES[t])NAMES[t]=n})}
   }catch(e){$('banner').hidden=false;$('banner').textContent='Couldn’t load prices. Refresh the page to try again.';return}
   buildDataset();computeTW();render();
+  fetch('data/er.json').then(r=>r.ok?r.json():null).then(j=>{if(j){ER=j;render()}}).catch(()=>{});
 })();
+/* ---------- explore alternatives ---------- */
+const XM={t:null,d:null,err:null,added:[],from:null};
+const ICON_X='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg>';
+const xBtn=t=>`<button type="button" class="xbtn" data-xopen="${esc(t)}" aria-label="Explore alternatives to ${esc(t)}" title="Explore alternatives">${ICON_X}</button>`;
+const xMob=t=>`<div class="mi mact"><button type="button" class="btn sm mrm" data-xopen="${esc(t)}">${ICON_X}Explore alternatives</button></div>`;
+const xp=(v,d=1)=>v==null?'—':(v>0?'+':v<0?'−':'')+Math.abs(v*100).toFixed(d)+'%';
+const xu=(v,d=1)=>v==null?'—':(v<0?'−':'')+Math.abs(v*100).toFixed(d)+'%';
+const xcls=v=>v==null?'':v>0.0005?'p':v<-0.0005?'n':'';
+function xInBuild(t){return S.b.rows.some(r=>r.t===t)}
+function xCanPrice(t){return HAS(t)||(typeof UNI!=='undefined'&&!!UNI[t])}
+async function openExplore(t,from){XM.t=t;XM.d=null;XM.err=null;XM.added=[];XM.from=from||null;
+  $('xm').hidden=false;document.body.classList.add('xm-open');$('xmTitle').textContent='Explore alternatives to '+t;$('xmSub').textContent=NAMES[t]||'';renderXM();setTimeout(()=>$('xmClose').focus(),0);
+  try{const r=await fetch('data/peers/'+encodeURIComponent(t)+'.json');if(!r.ok)throw new Error('none');const d=await r.json();if(XM.t!==t)return;XM.d=d}
+  catch(e){if(XM.t!==t)return;XM.err=t==='TPS'?'TPS is the 12% Solution strategy, not a fund you can buy, so it has no alternatives to show.':`Alternatives aren't available for ${t} yet. It may have less than 3 years of prices, or it isn't in our ETF list.`}
+  renderXM()}
+function closeExplore(){if($('xm').hidden)return;$('xm').hidden=true;document.body.classList.remove('xm-open');const added=XM.added.slice();XM.t=null;
+  if(added.length){toast('Added '+(added.length===1?added[0]:added.slice(0,-1).join(', ')+' and '+added[added.length-1])+' to your build');
+    setTimeout(()=>added.forEach(t=>{const tr=document.querySelector(`#bTable tr[data-bt="${CSS.escape(t)}"]`);if(tr){tr.classList.remove('flash');void tr.offsetWidth;tr.classList.add('flash')}}),60)}
+  if(XM.from&&document.contains(XM.from))XM.from.focus()}
+function xToggleAdd(t){const B=S.b;const i=B.rows.findIndex(r=>r.t===t);
+  if(XM.added.includes(t)){if(i>=0)B.rows.splice(i,1);XM.added=XM.added.filter(x=>x!==t)}
+  else{if(i>=0||B.rows.length>=MAXETF||!xCanPrice(t))return;B.rows.push({t,w:'',c:bFreeColor()});XM.added.push(t);if(!S.b.open)S.b.open=true}
+  persist();render();renderXMButtons();renderXMFoot()}
+function xBtnState(t){if(XM.added.includes(t))return ['✓ Added','on',false];if(xInBuild(t))return ['In your build','',true];if(S.b.rows.length>=MAXETF)return ['Build is full (15)','',true];if(!xCanPrice(t))return ['No prices','',true];return ['+ Add to build','',false]}
+function renderXMButtons(){document.querySelectorAll('#xmBody .xadd').forEach(b=>{const [txt,c,dis]=xBtnState(b.dataset.xadd);b.textContent=txt;b.className='xadd'+(c?' '+c:'');b.disabled=dis;b.setAttribute('aria-pressed',c==='on')})}
+function renderXMFoot(){const a=XM.added;$('xmCount').textContent=a.length?`${a.length} added to your build: ${a.join(', ')}`:''}
+/* plain-language reason for each card */
+function xWhy(c,s,kind){const b=s.t,dr=c.r3-s.r3,ddw=c.dd<s.dd-0.05,cheaper=c.er!=null&&s.er!=null&&c.er<s.er-0.02;
+  let w;if(kind==='same'){w=ddw?`Higher return, but <strong class="neg">more risk</strong>: a deeper worst drop than ${b}.`:dr>0.1?`Much higher return and Sharpe than ${b}.`:`Higher return and Sharpe than ${b} with about the same worst drop.`}
+  else{w=dr>=0?`Beat ${b}'s return while moving on its own path${ddw?', but with <strong class="neg">bigger drops</strong>.':'.'}`:dr>=-0.05?`Moves differently from ${b}, yet came within ${Math.abs(dr*100).toFixed(1)} points of its return.`:`Lower return than ${b}, but a different engine${c.dd>s.dd+0.03?' and a smaller worst drop.':'.'}`}
+  return w+(cheaper?` And it costs less (${c.er.toFixed(2)}% vs ${s.er.toFixed(2)}%).`:'')}
+function xSpark(c,s,col,id){const all=c.sp.concat(s.sp);const lo=Math.min(0,...all),hi=Math.max(...all),rg=(hi-lo)||1;const X=i=>2+i*296/24,Y=v=>4+(hi-v)/rg*52;
+  const pl=a=>a.map((v,i)=>X(i).toFixed(1)+','+Y(v).toFixed(1)).join(' ');
+  return `<div class="xspark" data-xsp="${id}"><svg viewBox="0 0 300 60" preserveAspectRatio="none" role="img" aria-label="${esc(c.t)} versus ${esc(s.t)} over 3 years"><polyline points="${pl(s.sp)}" fill="none" stroke="var(--faint)" stroke-width="1.5" stroke-dasharray="4 3" vector-effect="non-scaling-stroke"/><polyline points="${pl(c.sp)}" fill="none" stroke="${col}" stroke-width="2.2" stroke-linejoin="round" vector-effect="non-scaling-stroke"/><g class="xcross" style="display:none"><line y1="0" y2="60" stroke="var(--ink2)" stroke-opacity=".5" vector-effect="non-scaling-stroke"/></g></svg><div class="xtip" hidden></div><div class="lg"><span style="color:${col}">━ ${esc(c.t)}</span><span>┅ ${esc(s.t)}</span><span>growth over 3 years</span></div></div>`}
+function xCard(c,s,kind){const col=kind==='same'?'var(--xs)':'var(--xd)';const dr=c.r3-s.r3;
+  const chips=[['1M',0],['3M',1],['6M',2],['1Y',3],['3Y / yr',4],['5Y / yr',5]].map(([l,k])=>`<div class="${xcls(c.r[k])}"><span>${l}</span><b>${xp(c.r[k])}</b></div>`).join('');
+  return `<article class="xcard" data-xc="${esc(c.t)}" style="--xc:${col}"><div class="xch"><div><b>${esc(c.t)}</b><span class="nm">${esc(c.n||NAMES[c.t]||'')}</span></div><span class="xchip ${kind==='same'?'s':'d'}">Tracks ${esc(s.t)} ${Math.round(c.c*100)}%</span></div>
+    <div class="xhero"><b class="${c.r3>=0?'pos':'neg'}">${xp(c.r3)}</b><span class="u">/ yr, 3Y</span><span class="xchip ${dr>=0?'up':'dn'}">${dr>=0?'+':'−'}${Math.abs(dr*100).toFixed(Math.abs(dr)<0.001?2:1)} pts vs ${esc(s.t)}</span></div>
+    ${xSpark(c,s,col,c.t)}<div class="xchips">${chips}</div>
+    <div class="xstats"><span>Sharpe <b>${c.sh.toFixed(2)}</b> vs ${s.sh.toFixed(2)}</span><span>Max DD <b class="neg">${xu(c.dd)}</b> vs ${xu(s.dd)}</span><span>Fee <b>${fmtER(c.er)}</b> vs ${fmtER(s.er)}</span></div>
+    <p class="xwhy">${xWhy(c,s,kind)}</p><button type="button" class="xadd" data-xadd="${esc(c.t)}"></button></article>`}
+/* return vs volatility dot chart */
+function xChart(d){const s=d.self,pts=[{...s,k:'self'}].concat(d.same.map(c=>({...c,k:'same'})),(d.closest||[]).map(c=>({...c,k:'same'})),d.div.map(c=>({...c,k:'div'})));
+  const ph=innerWidth<=700,W=ph?370:510,H=ph?300:320,L=48,R=W-10,T=16,Bm=276;const vs=pts.map(p=>p.vol),rs=pts.map(p=>p.r3);
+  const nice=(lo,hi,n)=>{const st=Math.pow(10,Math.floor(Math.log10((hi-lo)/n||0.01)));const step=[1,2,2.5,5,10].map(m=>m*st).find(x=>(hi-lo)/x<=n)||st*10;return [Math.floor(lo/step)*step,Math.ceil(hi/step)*step,step]};
+  const [x0,x1,xs]=nice(Math.max(0,Math.min(...vs)-0.03),Math.max(...vs)+0.03,4),[y0,y1,ys]=nice(Math.min(0,...rs)-0.02,Math.max(...rs)+0.04,4);
+  const X=v=>L+(v-x0)/(x1-x0)*(R-L),Y=v=>Bm-(v-y0)/(y1-y0)*(Bm-T);
+  let g='';for(let v=y0;v<=y1+1e-9;v+=ys)g+=`<line x1="${L}" x2="${R}" y1="${Y(v).toFixed(1)}" y2="${Y(v).toFixed(1)}" stroke="var(--grid)"/><text x="${L-6}" y="${(Y(v)+4).toFixed(1)}" text-anchor="end" font-size="11" fill="var(--faint)">${Math.round(v*100)}%</text>`;
+  for(let v=x0;v<=x1+1e-9;v+=xs)g+=`<text x="${X(v).toFixed(1)}" y="${Bm+16}" text-anchor="middle" font-size="11" fill="var(--faint)">${Math.round(v*100)}%</text>`;
+  const sx=X(s.vol),sy=Y(s.r3);
+  const zone=`<g class="xzone" style="display:none"><rect x="${L}" y="${T}" width="${Math.max(0,sx-L).toFixed(1)}" height="${Math.max(0,sy-T).toFixed(1)}" fill="var(--pos)" opacity=".08"/><line x1="${sx.toFixed(1)}" x2="${sx.toFixed(1)}" y1="${T}" y2="${Bm}" stroke="var(--ink)" stroke-opacity=".3" stroke-dasharray="4 4"/><line x1="${L}" x2="${R}" y1="${sy.toFixed(1)}" y2="${sy.toFixed(1)}" stroke="var(--ink)" stroke-opacity=".3" stroke-dasharray="4 4"/><text x="${L+8}" y="${T+16}" font-size="12" font-weight="600" fill="var(--pos)" font-family="IBM Plex Sans,sans-serif">Better than ${esc(s.t)}</text></g>`;
+  const placed=[];const lab=(p,x,y)=>{let lx=x+10,anchor='start';const w=p.t.length*7.5+4;if(lx+w>R+8){lx=x-10;anchor='end'}let ly=y+4;for(const q of placed){if(Math.abs(q.y-ly)<13&&Math.abs(q.x-lx)<w+10)ly=q.y+(ly>=q.y?13:-13)}placed.push({x:lx,y:ly});return `<text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="${anchor}" font-size="12" font-weight="600" fill="${p.k==='self'?'var(--ink)':p.k==='same'?'var(--xs)':'var(--xd)'}">${esc(p.t)}</text>`};
+  const pos=[];const spot=p=>{let x=X(p.vol),y=Y(p.r3);for(let k=0;k<12&&pos.some(q=>Math.hypot(q[0]-x,q[1]-y)<12);k++){const a=k*2.4;x=X(p.vol)+Math.cos(a)*(10+k*2);y=Y(p.r3)+Math.sin(a)*(10+k*2)}pos.push([x,y]);return [x,y]};
+  const dots=pts.slice().sort((a,b)=>a.k==='self'?-1:b.k==='self'?1:0).map(p=>{const [x,y]=spot(p);const mark=p.k==='self'?`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="8" fill="var(--ink)"/>`:p.k==='same'?`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="6" fill="var(--xs)"/>`:`<rect x="${(x-5.5).toFixed(1)}" y="${(y-5.5).toFixed(1)}" width="11" height="11" fill="var(--xd)"/>`;
+    return `<g class="xpt" data-xt="${esc(p.t)}" tabindex="0" role="button" aria-label="${esc(p.t)}: ${xp(p.r3)} a year, volatility ${xu(p.vol)}"><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="14" fill="transparent"/>${mark}${lab(p,x,y)}</g>`}).join('');
+  return `<figure class="xfig"><svg viewBox="0 0 ${W} ${H+20}" role="img" aria-label="Return versus volatility over 3 years">${g}${zone}<g font-family="IBM Plex Sans,sans-serif" font-size="12" font-weight="600" fill="var(--ink2)"><text x="${(L+R)/2}" y="${H+14}" text-anchor="middle">${ph?'Volatility, 3 years (lower is calmer)':'Volatility: how much it swings, 3 years (lower is calmer)'}</text><text transform="translate(12 ${(T+Bm)/2}) rotate(-90)" text-anchor="middle">3-year return per year</text></g><g class="xdots">${dots}</g></svg><div class="xtip" id="xChartTip" hidden></div><figcaption>Up and to the left is better: more return, calmer ride.</figcaption></figure>`}
+function xFind(t){const d=XM.d;if(!d)return null;if(d.self.t===t)return {...d.self,k:'self'};for(const [arr,k] of [[d.same,'same'],[d.closest||[],'same'],[d.div,'div']]){const c=arr.find(x=>x.t===t);if(c)return {...c,k}}return null}
+function xChartTip(t,on){const tip=$('xChartTip'),svg=document.querySelector('#xmBody .xfig svg');if(!tip||!svg)return;const zone=svg.querySelector('.xzone');
+  svg.querySelector('.xdots').classList.toggle('xfade',!!on);svg.querySelectorAll('.xpt').forEach(g=>g.classList.toggle('on',on&&g.dataset.xt===t));
+  document.querySelectorAll('#xmBody .xcard').forEach(c=>c.classList.toggle('hl',on&&c.dataset.xc===t));document.querySelectorAll('#xmBody .xcards').forEach(c=>c.classList.toggle('dim',!!on&&!!c.querySelector('.xcard.hl')));
+  if(!on){tip.hidden=true;zone.style.display='none';return}
+  const p=xFind(t),s=XM.d.self;if(!p)return;let h;
+  if(p.k==='self'){zone.style.display='';const n1=XM.d.same.length,n2=XM.d.div.length;h=`<b>${esc(s.t)} <span class="mut" style="font-weight:400">· the ETF you clicked</span></b><span class="mono pos" style="font-size:14px;font-weight:600">${xp(s.r3)} / yr <span class="mut" style="font-size:11px;font-weight:400">over 3Y</span></span><span>Volatility ${xu(s.vol)} · Sharpe ${s.sh.toFixed(2)}</span><span style="color:var(--xs)">● ${n1?n1+' similar ETF'+(n1>1?'s':'')+' beat it':'Nothing similar beat it'}</span><span style="color:var(--xd)">■ ${n2?n2+' diversifier'+(n2>1?'s':'')+' came close':'No diversifiers came close'}</span>`}
+  else{zone.style.display='none';const better=p.vol<s.vol?'Calmer than ':'Bumpier than ';h=`<b>${esc(p.t)} <span class="mut" style="font-weight:400">· ${esc((p.n||'').slice(0,34))}</span></b><div class="r"><span></span><span style="color:${p.k==='same'?'var(--xs)':'var(--xd)'};font-weight:600">${esc(p.t)}</span><span class="mut" style="font-weight:600">${esc(s.t)}</span></div><div class="r"><span class="mut">Return / yr</span><span>${xp(p.r3)}</span><span>${xp(s.r3)}</span></div><div class="r"><span class="mut">Volatility</span><span>${xu(p.vol)}</span><span>${xu(s.vol)}</span></div><div class="r"><span class="mut">Sharpe</span><span>${p.sh.toFixed(2)}</span><span>${s.sh.toFixed(2)}</span></div><span style="color:${p.k==='same'?'var(--xs)':'var(--xd)'}">${better+esc(s.t)}${p.r3>=s.r3?', more return':', less return'}</span>`}
+  tip.innerHTML=h;tip.hidden=false;const fig=tip.parentElement.getBoundingClientRect(),g=svg.querySelector(`.xpt[data-xt="${CSS.escape(t)}"]`).getBoundingClientRect();
+  let x=g.right-fig.left+8,y=g.top-fig.top;if(x+tip.offsetWidth>fig.width)x=g.left-fig.left-tip.offsetWidth-8;if(x<4)x=4;if(y+tip.offsetHeight>fig.height)y=fig.height-tip.offsetHeight-4;tip.style.left=x+'px';tip.style.top=Math.max(4,y)+'px'}
+function xSparkMove(box,e){const d=XM.d,c=xFind(box.dataset.xsp),s=d.self;if(!c)return;const svg=box.querySelector('svg'),r=svg.getBoundingClientRect();const i=Math.max(0,Math.min(24,Math.round((e.clientX-r.left)/r.width*24)));
+  const x=2+i*296/24;const cr=svg.querySelector('.xcross');cr.style.display='';cr.querySelector('line').setAttribute('x1',x);cr.querySelector('line').setAttribute('x2',x);
+  const t0=Date.parse(d.from),t1=Date.parse(d.to),dt=new Date(t0+(t1-t0)*i/24);const lab=MON[dt.getUTCMonth()]+' '+dt.getUTCDate()+', '+dt.getUTCFullYear();
+  const a=c.sp[i],b=s.sp[i],gap=a-b;const tip=box.querySelector('.xtip');
+  tip.innerHTML=`<span class="mut">${lab} · since ${MON[new Date(t0).getUTCMonth()]} ${new Date(t0).getUTCFullYear()}</span><div class="r"><span style="font-weight:600;color:var(--xc)">${esc(c.t)}</span><span></span><span class="${a>=0?'pos':'neg'}">${a>=0?'+':'−'}${Math.abs(a)}%</span></div><div class="r"><span style="font-weight:600">${esc(s.t)}</span><span></span><span class="${b>=0?'pos':'neg'}">${b>=0?'+':'−'}${Math.abs(b)}%</span></div><span style="color:var(--xc);border-top:1px solid var(--line);padding-top:3px">${gap===0?'Even':esc(gap>0?c.t:s.t)+' ahead by '+Math.abs(gap)+' pts'}</span>`;
+  tip.hidden=false;const bx=box.getBoundingClientRect();let tx=e.clientX-bx.left+12;if(tx+tip.offsetWidth>bx.width)tx=e.clientX-bx.left-tip.offsetWidth-12;tip.style.left=Math.max(0,tx)+'px';tip.style.top=(-tip.offsetHeight-6)+'px'}
+function xSparkOut(box){const cr=box.querySelector('.xcross');if(cr)cr.style.display='none';const tip=box.querySelector('.xtip');if(tip)tip.hidden=true}
+function renderXM(){const b=$('xmBody');renderXMFoot();
+  if(XM.err){b.innerHTML=`<div class="xnote"><b>Nothing to show</b><span>${esc(XM.err)}</span></div>`;return}
+  const d=XM.d;if(!d){b.innerHTML='<div class="xskel" style="height:70px"></div><div class="xskel" style="height:300px"></div><div class="xskel" style="height:260px"></div>';return}
+  const s=d.self,t=s.t;$('xmSub').textContent=(s.n||NAMES[t]||'')+' · alternatives are picked on the last 3 years ('+dayFmt(d.from)+' to '+dayFmt(d.to)+')';
+  const gl=[['1M',s.r[0]],['3M',s.r[1]],['6M',s.r[2]],['1Y',s.r[3]],['3Y / yr',s.r[4],1],['5Y / yr',s.r[5]]].map(([l,v,k])=>`<div class="xg ${xcls(v)}${k?' key':''}"><span>${l}</span><b>${xp(v)}</b></div>`).join('')+`<div class="xg"><span>Sharpe (3Y)</span><b>${s.sh.toFixed(2)}</b></div><div class="xg n"><span>Max DD (3Y)</span><b>${xu(s.dd)}</b></div><div class="xg"><span>Fee</span><b>${fmtER(s.er)}</b></div>`;
+  const floorTxt=s.sh>0?`a Sharpe within 20% of its ${s.sh.toFixed(2)}`:`a Sharpe at least ${s.sh.toFixed(2)}`;
+  const same=d.same.length?`<div class="xcards">${d.same.map(c=>xCard(c,s,'same')).join('')}</div>`
+    :`<div class="xahead"><div class="top"><span class="ck"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l4.8 4.8L19.5 7"/></svg></span><div><b style="font-size:16px">Nothing similar did better than ${esc(t)}</b><div class="mut" style="font-size:14px">None of the ETFs that move like ${esc(t)} beat it on both 3-year return and Sharpe.${(d.closest||[]).length?' Here are the closest ones for reference.':''}</div></div></div>${(d.closest||[]).length?`<div class="xtblw"><table class="xtbl"><thead><tr><th>ETF</th><th>1M</th><th>3M</th><th>6M</th><th>1Y</th><th>3Y / yr</th><th>5Y / yr</th><th>Sharpe</th><th>Max DD</th><th>Fee</th><th></th></tr></thead><tbody>${d.closest.map(c=>`<tr data-xc="${esc(c.t)}"><td><b>${esc(c.t)}</b> <span style="color:var(--xs);font-size:12px">tracks ${Math.round(c.c*100)}%</span></td>${c.r.map(v=>`<td class="${v==null?'mut':v>=0?'pos':'neg'}">${xp(v)}</td>`).join('')}<td>${c.sh.toFixed(2)}</td><td class="neg">${xu(c.dd)}</td><td>${fmtER(c.er)}</td><td><button type="button" class="xadd" style="height:32px;padding:0 10px;font-size:12px" data-xadd="${esc(c.t)}"></button></td></tr>`).join('')}</tbody></table></div>`:''}</div>`;
+  const dv=d.div.length?`<div class="xcards">${d.div.map(c=>xCard(c,s,'div')).join('')}${d.div.length<3?`<div class="xnote"><b>Only ${d.div.length} came close</b><span>Nothing else that moves differently from ${esc(t)} had ${floorTxt}.</span></div>`:''}</div>`
+    :`<div class="xnote"><b>Nothing that moves differently came close</b><span>No ETF with less than 60% overlap with ${esc(t)} had ${floorTxt} over the last 3 years.</span></div>`;
+  b.innerHTML=`<div style="display:flex;flex-direction:column;gap:8px"><div class="xcap">${esc(t)} at a glance</div><div class="xglance">${gl}</div></div>
+    <div class="xtop">${xChart(d)}<div class="xlegend"><div class="li"><svg width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="6" fill="var(--ink)"/></svg><span>${esc(t)}, the ETF you clicked</span></div><div class="li"><svg width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="6" fill="var(--xs)"/></svg><span>Same kind of exposure: moves 90%+ in step with ${esc(t)}</span></div><div class="li"><svg width="14" height="14" aria-hidden="true"><rect x="1" y="1" width="12" height="12" fill="var(--xd)"/></svg><span>Diversification: moves less than 60% in step with ${esc(t)}</span></div>
+    <div class="how">How these were picked: from ${d.pool.toLocaleString()} ETFs with 3+ years of history, at least $50M in assets, and no buffer, option-income or trading funds. Same kind of exposure: beat ${esc(t)} on both 3-year return and Sharpe. Diversification: moves differently but came close, with ${floorTxt}. Hover a dot or a card to compare.</div></div></div>
+    <section class="xsec"><h3>Same kind of exposure <small>Beat ${esc(t)} on 3-year return and Sharpe</small></h3>${same}</section>
+    <section class="xsec"><h3>Diversification <small>Moves differently from ${esc(t)}, but came close on return and Sharpe</small></h3>${dv}</section>`;
+  renderXMButtons()}
+function dayFmt(k){return MON[+k.slice(5,7)-1]+' '+(+k.slice(8))+', '+k.slice(0,4)}
+document.addEventListener('click',e=>{const o=e.target.closest('[data-xopen]');if(o){e.preventDefault();openExplore(o.dataset.xopen,o);return}
+  if($('xm').hidden)return;
+  if(e.target.closest('[data-xclose]')){closeExplore();return}
+  const a=e.target.closest('[data-xadd]');if(a&&!a.disabled){xToggleAdd(a.dataset.xadd);return}
+  const p=e.target.closest('#xmBody .xpt');if(p){const t=p.dataset.xt;xChartTip(t,true);const card=document.querySelector(`#xmBody [data-xc="${CSS.escape(t)}"]`);if(card&&matchMedia('(hover:none)').matches===false)card.scrollIntoView({behavior:'smooth',block:'nearest'});return}});
+document.addEventListener('keydown',e=>{if($('xm').hidden)return;if(e.key==='Escape'){e.stopPropagation();closeExplore()}
+  if(e.key==='Tab'){const f=[...$('xm').querySelectorAll('button:not(:disabled),[tabindex="0"]')].filter(x=>x.offsetParent);if(!f.length)return;const i=f.indexOf(document.activeElement);if(e.shiftKey&&i<=0){e.preventDefault();f[f.length-1].focus()}else if(!e.shiftKey&&i===f.length-1){e.preventDefault();f[0].focus()}}},true);
+document.addEventListener('mouseover',e=>{if($('xm').hidden)return;const p=e.target.closest('#xmBody .xpt');if(p){xChartTip(p.dataset.xt,true);return}
+  const c=e.target.closest('#xmBody [data-xc]');if(c){const svg=document.querySelector('#xmBody .xfig svg');if(svg){svg.querySelector('.xdots').classList.add('xfade');svg.querySelectorAll('.xpt').forEach(g=>g.classList.toggle('on',g.dataset.xt===c.dataset.xc))}}});
+document.addEventListener('mouseout',e=>{if($('xm').hidden)return;const p=e.target.closest('#xmBody .xpt');if(p&&!p.contains(e.relatedTarget)){xChartTip(p.dataset.xt,false);return}
+  const c=e.target.closest('#xmBody [data-xc]');if(c&&!c.contains(e.relatedTarget)){const svg=document.querySelector('#xmBody .xfig svg');if(svg){svg.querySelector('.xdots').classList.remove('xfade');svg.querySelectorAll('.xpt').forEach(g=>g.classList.remove('on'))}}});
+document.addEventListener('focusin',e=>{if($('xm').hidden)return;const p=e.target.closest&&e.target.closest('#xmBody .xpt');if(p)xChartTip(p.dataset.xt,true)});
+document.addEventListener('mousemove',e=>{if($('xm').hidden)return;const box=e.target.closest('#xmBody .xspark');document.querySelectorAll('#xmBody .xspark').forEach(b=>{if(b!==box)xSparkOut(b)});if(box)xSparkMove(box,e)});
+
 </script>
