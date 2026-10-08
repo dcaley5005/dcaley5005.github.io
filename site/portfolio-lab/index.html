@@ -761,6 +761,20 @@ tr.xecho>td{background:var(--accentBg);transition:background .2s}
 .xmhr .cnt{font-size:13px;color:var(--accent);font-weight:600;max-width:260px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .xdisc{margin:4px 0 0;font-size:12px;color:var(--faint)}
 @media (max-width:700px){.xmhr .cnt{display:none}}
+.xrl{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);font-weight:600;margin-bottom:-5px}
+.xrisk{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.xrisk.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.xrk{border-radius:8px;padding:6px 9px;display:flex;flex-direction:column;background:var(--panel);min-width:0}
+.xtip .xrk,.xtip .xpc{background:var(--panel2)}
+.xtip .xpc.p{background:var(--xposBg)}.xtip .xpc.n{background:var(--xnegBg)}
+.xrk span{font-size:11px;color:var(--muted);white-space:nowrap}
+.xrk b{font-family:"IBM Plex Mono",monospace;font-size:14px;white-space:nowrap}
+.xrk i{font-style:normal;font-family:"IBM Plex Mono",monospace;font-size:11px;white-space:nowrap}
+.xrk i.pos{color:var(--pos)}.xrk i.warn{color:var(--xd)}
+.xtip .xchips{gap:5px}.xtip .xpc{padding:5px 8px;cursor:default}
+.xtip:not(.dock):has(.xchips){width:340px}
+@media (max-width:520px){.xrisk{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.xtip.dock{gap:8px}.xtip.dock .xrl{margin-bottom:-3px}.xtip.dock .xpc,.xtip.dock .xrk{padding:4px 8px}.xtip.dock .xtw{font-size:12.5px;line-height:1.4}.xtip.dock .xttag{padding:2px 9px}
 </style>
 
 <div class="wrap">
@@ -1836,19 +1850,27 @@ function xSpark(c,s,col,id){const R=xRange(c,s),n=R.a.length;const all=R.a.conca
   return `<div class="xspark" data-xsp="${id}"><svg viewBox="0 0 300 60" preserveAspectRatio="none" role="img" aria-label="${esc(c.t)} versus ${esc(s.t)} ${XRWORD[XM.rng]}"><line x1="0" x2="300" y1="${Y(0).toFixed(1)}" y2="${Y(0).toFixed(1)}" stroke="var(--line)" vector-effect="non-scaling-stroke"/><polyline points="${pl(R.b)}" fill="none" stroke="var(--faint)" stroke-width="1.5" stroke-dasharray="4 3" vector-effect="non-scaling-stroke"/><polyline points="${pl(R.a)}" fill="none" stroke="${col}" stroke-width="2.2" stroke-linejoin="round" vector-effect="non-scaling-stroke"/><g class="xcross" style="display:none"><line y1="0" y2="60" stroke="var(--ink2)" stroke-opacity=".5" vector-effect="non-scaling-stroke"/></g></svg><div class="xtip" hidden></div><div class="lg"><span style="color:${col}">━ ${esc(c.t)}</span><span>┅ ${esc(s.t)}</span><span class="rw">growth ${XRWORD[XM.rng]}</span></div></div>`}
 const xpts=v=>v==null?'':(v>=0?'+':'−')+Math.abs(v*100).toFixed(Math.abs(v)<0.001&&v!==0?2:1);
 const XCOL={same:'var(--xs)',div:'var(--xd)',mom:'var(--xm)'};
+/* returns vs the clicked ETF as the colored period boxes; buttons on cards (they change the line charts), plain boxes in the hover panel */
+function xRetChips(c,s,live){return XR.map(([l,k,i])=>{const v=c.r[i],b=s.r[i],g=c===s||v==null||b==null?null:v-b;const inner=`<span>${l}</span><b>${xp(v)}</b>${c===s?'':`<i class="${g==null?'':g>=0?'pos':'neg'}">${g==null?'&nbsp;':xpts(g)+' vs '+esc(s.t)}</i>`}`;
+  return live?`<button type="button" class="xpc ${xcls(v)}${XM.rng===k?' sel':''}" data-xrng="${k}" aria-pressed="${XM.rng===k}" title="Show ${XRWORD[k]} on the line chart">${inner}</button>`:`<div class="xpc ${xcls(v)}">${inner}</div>`}).join('')}
+/* risk vs the clicked ETF: volatility, Sharpe, max drawdown, fee; green when better, amber when riskier */
+function xRiskTiles(c,s){const same=c===s;const t=(l,v,d,good)=>`<div class="xrk"><span>${l}</span><b>${v}</b>${same?'':`<i class="${d==null?'':good?'pos':'warn'}">${d==null?'&nbsp;':d}</i>`}</div>`;
+  const f2=v=>(v>=0?'+':'−')+Math.abs(v).toFixed(2);
+  return t('Volatility',xu(c.vol),xpts(c.vol-s.vol),c.vol<=s.vol)+t('Sharpe',c.sh.toFixed(2),f2(c.sh-s.sh),c.sh>=s.sh)+t('Max DD',xu(c.dd),xpts(c.dd-s.dd),c.dd>=s.dd)
+   +t('Fee',fmtER(c.er),c.er!=null&&s.er!=null?f2(c.er-s.er):null,c.er!=null&&s.er!=null&&c.er<=s.er)}
 function xCard(c,s,kind){const col=XCOL[kind];const dr=c.r3-s.r3;const pct=Math.round(c.c*100);
-  const chips=XR.map(([l,k,i])=>{const v=c.r[i],b=s.r[i],g=v!=null&&b!=null?v-b:null;return `<button type="button" class="xpc ${xcls(v)}${XM.rng===k?' sel':''}" data-xrng="${k}" aria-pressed="${XM.rng===k}" title="Show ${XRWORD[k]} on the line chart"><span>${l}</span><b>${xp(v)}</b><i class="${g==null?'':g>=0?'pos':'neg'}">${g==null?'&nbsp;':xpts(g)+' vs '+esc(s.t)}</i></button>`}).join('');
+  const chips=xRetChips(c,s,true);
   return `<article class="xcard" data-xc="${esc(c.t)}" style="--xc:${col}"><div class="xch"><div><b>${esc(c.t)}</b><span class="nm">${esc(c.n||NAMES[c.t]||'')}</span></div><span class="xchip ${kind==='same'?'s':kind==='mom'?'m':'d'}">Tracks ${esc(s.t)} ${pct}%</span></div>
     ${kind==='mom'&&c.m3!=null?`<div class="xhero"><b class="${c.m3>=0?'pos':'neg'}">${xp(c.m3)}</b><span class="u">last 3 months</span><span class="xchip up">${xpts(c.m3-s.m3)} pts vs ${esc(s.t)}</span></div>`:`<div class="xhero"><b class="${c.r3>=0?'pos':'neg'}">${xp(c.r3)}</b><span class="u">/ yr, 3Y</span><span class="xchip ${dr>=0?'up':'dn'}">${xpts(dr)} pts vs ${esc(s.t)}</span></div>`}
-    ${xSpark(c,s,col,c.t)}<div class="xchips">${chips}</div>
-    <div class="xstats"><span>Sharpe <b>${c.sh.toFixed(2)}</b> vs ${s.sh.toFixed(2)}</span><span>Max DD <b class="neg">${xu(c.dd)}</b> vs ${xu(s.dd)}</span><span>Fee <b>${fmtER(c.er)}</b> vs ${fmtER(s.er)}</span></div>
+    ${xSpark(c,s,col,c.t)}<div class="xrl">Returns vs ${esc(s.t)}</div><div class="xchips">${chips}</div>
+    <div class="xrl">Risk vs ${esc(s.t)}</div><div class="xrisk">${xRiskTiles(c,s)}</div>
     <p class="xwhy">${xWhy(c,s,kind)}</p><button type="button" class="xadd" data-xadd="${esc(c.t)}"></button></article>`}
 function xSetRange(k){XM.rng=k;const d=XM.d;if(!d)return;
   document.querySelectorAll('#xmBody .xspark').forEach(box=>{const c=xFind(box.dataset.xsp);if(!c)return;const col=box.closest('.xcard').style.getPropertyValue('--xc');box.outerHTML=xSpark(c,d.self,col,c.t)});
   document.querySelectorAll('#xmBody [data-xrng]').forEach(b=>{const on=b.dataset.xrng===k;b.classList.toggle('sel',on);b.setAttribute('aria-pressed',on)})}
 /* return vs volatility dot chart */
 function xChart(d){const s=d.self,seen=new Set();const pts=[{...s,k:'self'}].concat(d.same.map(c=>({...c,k:'same'})),(d.closest||[]).map(c=>({...c,k:'same'})),d.div.map(c=>({...c,k:'div'})),(d.mom||[]).map(c=>({...c,k:'mom'}))).filter(p=>!seen.has(p.t)&&seen.add(p.t));
-  const ph=innerWidth<=1000,W=ph?(innerWidth<=700?370:640):1000,H=ph?300:250,L=48,R=W-10,T=16,Bm=H-44;const vs=pts.map(p=>p.vol),rs=pts.map(p=>p.r3);
+  const ph=innerWidth<=1000,W=ph?(innerWidth<=700?370:640):1000,H=ph?300:270,L=48,R=W-10,T=16,Bm=H-44;const vs=pts.map(p=>p.vol),rs=pts.map(p=>p.r3);
   const nice=(lo,hi,n)=>{const st=Math.pow(10,Math.floor(Math.log10((hi-lo)/n||0.01)));const step=[1,2,2.5,5,10].map(m=>m*st).find(x=>(hi-lo)/x<=n)||st*10;return [Math.floor(lo/step)*step,Math.ceil(hi/step)*step,step]};
   const [x0,x1,xs]=nice(Math.max(0,Math.min(...vs)-0.03),Math.max(...vs)+0.03,4),[y0,y1,ys]=nice(Math.min(0,...rs)-0.02,Math.max(...rs)+0.04,4);
   const X=v=>L+(v-x0)/(x1-x0)*(R-L),Y=v=>Bm-(v-y0)/(y1-y0)*(Bm-T);
@@ -1871,20 +1893,19 @@ function xChartTip(t,on){const tip=$('xChartTip'),svg=document.querySelector('#x
   const mk=k=>k==='self'?'<circle cx="7" cy="7" r="6" fill="var(--ink)"/>':k==='mom'?'<path d="M7 1L13 12H1Z" fill="var(--xm)"/>':k==='div'?'<rect x="1" y="1" width="12" height="12" fill="var(--xd)"/>':'<circle cx="7" cy="7" r="6" fill="var(--xs)"/>';
   const head=(q,nm,k)=>`<div class="xth mk"><svg width="14" height="14" aria-hidden="true">${mk(k)}</svg><div><b style="color:${k==='self'?'var(--ink)':XCOL[k]}">${esc(q)}</b><span>${esc(nm||NAMES[q]||'')}</span></div></div>`;
   const pts=v=>(v>=0?'+':'−')+Math.abs(v*100).toFixed(1);
-  const tile=(l,v,dv,good,sg)=>`<div class="xtl"><span>${l}</span><b class="${sg==null?'':sg>=0?'pos':'neg'}">${v}</b>${dv==null?'':`<i class="${good==null?'':good?'pos':'warn'}">${dv} vs ${esc(s.t)}</i>`}</div>`;
   const m3=x=>x.m3!=null?x.m3:x.r[1];
   if(p.k==='self'){zone.style.display='';const n1=XM.d.same.length,n2=XM.d.div.length;
-    h=head(s.t,'The ETF you clicked','self')+`<div class="xtiles">${tile('Return / yr (3Y)',xp(s.r3),null,null,s.r3)}${tile('Last 3 months',xp(m3(s)),null,null,m3(s))}${tile('Volatility',xu(s.vol))}${tile('Sharpe',s.sh.toFixed(2))}</div><p class="xtw">Worst drop ${xu(s.dd)} over 3 years, fee ${fmtER(s.er)}.</p><div class="xtf"><span style="color:var(--xs)">● ${n1?n1+' with higher return':'No higher-return pick'}</span><span style="color:var(--xd)">■ ${n2?n2+' with less risk':'No less-risk pick'}</span>${XM.d.mom?`<span style="color:var(--xm)">▲ ${XM.d.mom.length?XM.d.mom.length+' with momentum':'No momentum pick'}</span>`:''}</div>`}
+    h=head(s.t,'The ETF you clicked','self')+`<div class="xrl">Returns</div><div class="xchips">${xRetChips(s,s,false)}</div><div class="xrl">Risk</div><div class="xrisk">${xRiskTiles(s,s)}</div><div class="xtf"><span style="color:var(--xs)">● ${n1?n1+' with higher return':'No higher-return pick'}</span><span style="color:var(--xd)">■ ${n2?n2+' with less risk':'No less-risk pick'}</span>${XM.d.mom?`<span style="color:var(--xm)">▲ ${XM.d.mom.length?XM.d.mom.length+' with momentum':'No momentum pick'}</span>`:''}</div>`}
   else{zone.style.display='none';const tagTxt={same:'Higher return pick',div:'Less risk pick',mom:'Momentum pick'}[p.k];
     const vr=p.vol/s.vol-1,risk=vr>0.05?'with more risk':vr<-0.05?'with less risk':'with about the same risk';
-    const lead={same:`Earned more than ${s.t}`,div:`About the same return as ${s.t}`,mom:`Ahead of ${s.t} lately`}[p.k];
-    const det=[];if(p.dd<s.dd-0.01)det.push(`a deeper worst drop (${xu(p.dd)} vs ${xu(s.dd)})`);else if(p.dd>s.dd+0.01)det.push(`a smaller worst drop (${xu(p.dd)} vs ${xu(s.dd)})`);
-    if(p.er!=null&&s.er!=null&&Math.abs(p.er-s.er)>=0.02)det.push(`a ${p.er>s.er?'higher':'lower'} fee (${fmtER(p.er)} vs ${fmtER(s.er)})`);
-    const sent=`${lead}, ${risk}${det.length?': '+det.join(' and '):''}.${p.k==='mom'?' Placed on the chart by its 3-year numbers.':''}`;
-    h=head(p.t,p.n,p.k)+`<span class="xttag ${p.k}">${tagTxt} · tracks ${esc(s.t)} ${Math.round(p.c*100)}%</span><div class="xtiles">${tile('Return / yr (3Y)',xp(p.r3),pts(p.r3-s.r3),p.r3>=s.r3,p.r3)}${tile('Last 3 months',xp(m3(p)),pts(m3(p)-m3(s)),m3(p)>=m3(s),m3(p))}${tile('Volatility',xu(p.vol),pts(p.vol-s.vol),p.vol<=s.vol)}${tile('Sharpe',p.sh.toFixed(2),(p.sh>=s.sh?'+':'−')+Math.abs(p.sh-s.sh).toFixed(2),p.sh>=s.sh)}</div><p class="xtw">${esc(sent)}</p>`}
+    const lead={same:`Earned ${xpts(p.r3-s.r3)} points a year more than ${s.t}`,div:`About the same return as ${s.t}`,mom:`Up ${xp(m3(p))} over the last 3 months vs ${xp(m3(s))} for ${s.t}`}[p.k];
+    const sent=`${lead}, ${risk}.${p.k==='mom'?' Placed on the chart by its 3-year numbers.':''}`;
+    h=head(p.t,p.n,p.k)+`<span class="xttag ${p.k}">${tagTxt} · tracks ${esc(s.t)} ${Math.round(p.c*100)}%</span><div class="xrl">Returns vs ${esc(s.t)}</div><div class="xchips">${xRetChips(p,s,false)}</div><div class="xrl">Risk vs ${esc(s.t)}</div><div class="xrisk">${xRiskTiles(p,s)}</div><p class="xtw">${esc(sent)}</p>`}
   tip.innerHTML=h;const leg=document.querySelector('#xmBody .xlegend'),side=leg&&leg.getBoundingClientRect().left>svg.getBoundingClientRect().right-4;
   if(side){/* wide screens: show the details in the column beside the chart so nothing on the chart is covered */
-    if(tip.parentElement!==leg)leg.appendChild(tip);tip.classList.add('dock');leg.classList.add('showtip');tip.style.left='';tip.style.top='';tip.hidden=false;return}
+    if(tip.parentElement!==leg)leg.appendChild(tip);tip.classList.add('dock');leg.classList.add('showtip');tip.style.left='';tip.style.top='';tip.hidden=false;
+    /* if the details run taller than the chart, grow the key column once so nothing spills over */
+    const need=tip.offsetTop+tip.offsetHeight;if(need>leg.clientHeight)leg.style.minHeight=need+'px';return}
   const figEl=svg.closest('.xfig');if(tip.parentElement!==figEl)figEl.appendChild(tip);tip.classList.remove('dock');tip.hidden=false;
   const fig=figEl.getBoundingClientRect(),g=svg.querySelector(`.xpt[data-xt="${CSS.escape(t)}"]`).getBoundingClientRect();
   /* narrow screens: above the dot when there is room, otherwise below, never over it */
