@@ -538,6 +538,25 @@ thead tr.grow th{padding-top:0}
 .mixrow td.num{font-size:15px}
 /* one section now: the builder is always open, so no collapse arrow; the title is hidden, so the controls sit in a normal row */
 #builder #bSave,#builder #bHint{display:none!important}
+/* narrower screens: smaller side margins and tighter columns so the whole table fits without sideways scrolling */
+@media (max-width:1600px){
+  .wrap{padding-inline:clamp(16px,2.6vw,40px)!important}
+  .btable th,.btable td{padding-left:4px!important;padding-right:4px!important}
+  .btable td{font-size:13px}
+  .btable thead th{font-size:11px;letter-spacing:.03em}
+  .btable .momwrap svg{width:62px}
+  .btable .wbox .field{width:44px}
+}
+@media (max-width:1300px){
+  .btable td{font-size:12px}
+  .btable thead th{font-size:10px;letter-spacing:.02em}
+  .btable .momwrap svg{width:48px}
+  .btable .tkin{width:62px!important}
+  .btable .pfname{width:96px!important}
+  .btable th,.btable td{padding-left:3px!important;padding-right:3px!important}
+  .btable .wbox .field{width:38px}
+  .btable .tkin{width:58px!important}
+}
 /* shorter laptop screens (14-inch): a slightly smaller, tighter table so 11 rows fit beside a decent chart */
 @media (max-height:900px) and (min-width:1000px){
   .wrap{padding-block:14px 28px!important;gap:12px!important}
@@ -1081,7 +1100,7 @@ function selLabel(sel,form){ // form: 'adj' (1-year), 'span' (year), 'short' (1Y
   if(form==='short')return sel.p;if(form==='adj')return y?y+'-year':m+'-month';return y?(y===1?'year':y+' years'):(m===1?'month':m+' months')}
 function validSel(x,dflt){if(x&&Number.isInteger(x.d)&&x.d>0)return {d:x.d};if(x&&PRESETS.some(p=>p[0]===x.p))return {p:x.p};return dflt}
 /* period return by months back, annualized past a year */
-function periodRetD(getRet,m){const s=selStart({p:({1:'1M',3:'3M',6:'6M',12:'1Y',36:'3Y',60:'5Y',120:'10Y'})[m]});const r=getRet(s);if(r==null)return null;if(m<=12)return r;const yrs=(D.ms[D.last]-D.ms[s])/(365.25*864e5);return Math.pow(1+r,1/yrs)-1}
+function periodRetD(getRet,m){const s=selStart({p:({1:'1M',3:'3M',6:'6M',ytd:'YTD',12:'1Y',36:'3Y',60:'5Y',120:'10Y'})[m]});const r=getRet(s);if(r==null)return null;if(m==='ytd'||m<=12)return r;const yrs=(D.ms[D.last]-D.ms[s])/(365.25*864e5);return Math.pow(1+r,1/yrs)-1}
 function ddDaily(V,s){if(!V||s==null||V[s]==null)return null;let pk=V[s],dd=0;for(let i=s;i<D.n;i++){if(V[i]==null)continue;pk=Math.max(pk,V[i]);dd=Math.min(dd,V[i]/pk-1)}return dd}
 /* 12% Solution: monthly rebalance by book rules, fixed 3-month lookback */
 const TW_EQ=['SPY','QQQ','MDY','IWM'],TW_BD=['TLT','JNK'];
@@ -1156,7 +1175,7 @@ const FINE=!!(window.matchMedia&&matchMedia('(hover:hover) and (pointer:fine)').
 function withFocus(fn){const fid=document.activeElement&&document.activeElement.id;fn();if(fid&&$(fid)&&document.activeElement!==$(fid))$(fid).focus()}
 function mixEq(){return !S.b.rows.some(r=>HAS(r.t)&&(Number(r.w)||0)>0)}
 function mixP(){if(mixEq())return {rows:S.b.rows.filter(r=>HAS(r.t)).map(r=>({t:r.t,w:1}))};return {rows:S.b.rows.filter(r=>HAS(r.t)&&(Number(r.w)||0)>0).map(r=>({t:r.t,w:Number(r.w)}))}}
-const TPER=[['1M',1]].concat(PERIODS.slice(0,5));
+const TPER=[['1M',1],['3M',3],['6M',6],['YTD','ytd'],['1Y',12],['3Y',36],['5Y',60]];
 function mixName(){const n=(S.b.name||'').trim();return n||'Portfolio total'}
 function mixRet(m){const p=mixP();if(!weights(p).length)return null;return periodRetD(s=>bhdRet(p,s),m)}
 function mixRowHTML(){const p=mixP();const ok=weights(p).length>0;const tot=bTotal();const scaled=ok&&!mixEq()&&Math.abs(tot-100)>=0.05;
@@ -1759,7 +1778,7 @@ document.addEventListener('mouseover',e=>{const el=e.target.closest&&e.target.cl
   const r=el.getBoundingClientRect();let x=r.left+r.width/2-t.offsetWidth/2;x=Math.max(8,Math.min(innerWidth-t.offsetWidth-8,x));let y=r.top-t.offsetHeight-6;if(y<6)y=r.bottom+6;t.style.left=x+'px';t.style.top=y+'px'});
 addEventListener('scroll',()=>{const t=$('qtip');if(t)t.hidden=true},true);
 /* re-render after typing pauses, keeping focus and the cursor where they were */
-let SOFT=0;function softRender(el,ms){clearTimeout(SOFT);const id=el.id;SOFT=setTimeout(()=>{const a=$(id),pos=a&&a.selectionStart;renderBuilder();const b=$(id);if(b&&document.activeElement!==b){b.focus({preventScroll:true});try{if(pos!=null)b.setSelectionRange(pos,pos)}catch(e){}}},ms)}
+let SOFT=0;function softRender(el,ms){clearTimeout(SOFT);const id=el.id;SOFT=setTimeout(()=>{const a=$(id),pos=a&&a.selectionStart;renderBuilder();const b=$(id);if(b){if(document.activeElement!==b)b.focus({preventScroll:true});try{if(pos!=null)b.setSelectionRange(pos,pos)}catch(e){}}},ms)}
 /* portfolio rows */
 document.addEventListener('click',e=>{const el=e.target.closest&&e.target.closest('[data-popen],[data-pdup2],[data-pung],[data-pdel2],[data-prm2],[data-padd2],[data-peven],[data-phide]');if(!el)return;const d=el.dataset;
   if(d.popen){S.pOpen[d.popen]=!S.pOpen[d.popen];renderBuilder();return}
