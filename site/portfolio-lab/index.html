@@ -38,7 +38,7 @@
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 body{background:var(--bg);color:var(--ink);font:15px/1.5 "IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;margin:0}
-.wrap{max-width:1760px;margin:0 auto;padding-inline:clamp(16px,3vw,48px);padding-block:32px 56px;display:flex;flex-direction:column;gap:24px}
+.wrap{max-width:1760px;margin:0 auto;padding-inline:clamp(16px,5vw,96px);padding-block:32px 56px;display:flex;flex-direction:column;gap:24px}
 h1,h2{font-family:Newsreader,Georgia,"Times New Roman",serif;font-weight:600;margin:0;text-wrap:balance}
 h1{font-size:clamp(34px,4vw,44px);letter-spacing:-.01em;line-height:1.05}
 h2{font-size:26px;line-height:1.15}
@@ -538,6 +538,19 @@ thead tr.grow th{padding-top:0}
 .mixrow td.num{font-size:15px}
 /* one section now: the builder is always open, so no collapse arrow; the title is hidden, so the controls sit in a normal row */
 #builder #bSave,#builder #bHint{display:none!important}
+/* shorter laptop screens (14-inch): a slightly smaller, tighter table so 11 rows fit beside a decent chart */
+@media (max-height:900px) and (min-width:1000px){
+  .wrap{padding-block:14px 28px!important;gap:12px!important}
+  .top h1{font-size:28px!important}
+  #builder .bheadwrap{min-height:50px!important;padding:6px 24px!important}
+  .btable td{padding-top:1px!important;padding-bottom:1px!important;font-size:13px}
+  .btable thead th{padding-top:3px!important;padding-bottom:3px!important;line-height:1.1;font-size:11px}
+  .btable .tkin,.btable .wbox .field,.btable .pfname{height:24px!important;font-size:13px}
+  .btable .delbtn,.btable .pfico{width:24px!important;height:24px!important}
+  .btable .momwrap svg{height:18px}
+  #bTable tr.pvstrip .btn,.pvsel{height:32px!important}
+  .pfadd .btn{height:26px!important;padding:0 10px!important;font-size:13px}
+}
 .top h1{font-size:clamp(26px,2.4vw,32px)!important}
 #builder .bheadwrap{display:flex;justify-content:flex-end;align-items:center;padding:12px 24px;min-height:64px;box-sizing:border-box}
 #builder #bToggle{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);padding:0!important;margin:0;border:0}
@@ -917,6 +930,7 @@ const INFO = {
   y1:{t:()=>'1-year return',w:()=>'The total gain or loss if you had bought 12 months ago.',h:()=>'Value today ÷ value one year ago, minus 1.',y:()=>'Shows whether the long-term record is holding up lately.'},
   y3:{t:()=>'3-year return (per year)',w:()=>'The average yearly return if you had bought 3 years ago.',h:()=>'Same compound-growth math as the 10-year number, over 3 years.',y:()=>'A middle view: long enough to smooth out a single bad quarter, short enough to reflect recent markets.'},
   y5:{t:()=>'5-year return (per year)',w:()=>'The average yearly return if you had bought 5 years ago.',h:()=>'Same compound-growth math as the 10-year number, over 5 years.',y:()=>'Covers at least one full up-and-down cycle in most periods, so it is harder for luck to carry the number.'},
+  vol:{t:()=>'Volatility',w:()=>'Lower is steadier. How much the price swings up and down, as a yearly percentage.',h:()=>'The standard deviation of daily returns over the period you pick above the chart, scaled to a year (times the square root of 252 trading days).',y:()=>'Around 15% is typical for the S&P 500. A fund at 25% swings much harder: a normal year could easily be 25% better or worse than its average.'},
   sharpe:{t:()=>'Sharpe ratio',w:()=>'Higher is better. How much return you got for the risk you took. Think of it as a "smoothness score" for your returns.',h:()=>'Take the average return minus what SHY (near-cash) earned, then divide by how much returns bounced around, scaled to a year. In Build a portfolio it uses daily prices over the period you pick above the chart. In Your portfolios it uses month-end prices over up to 10 years.',y:()=>'Two portfolios can both make 10% a year: one with gentle ups and downs, the other on a roller coaster. The higher Sharpe is the smoother ride for the same payoff. Rough guide: under 0.5 is weak, 0.5 to 1 is good, above 1 is very good.'},
   er:{t:()=>'Expense ratio (fee)',w:()=>'Lower is better. The yearly fee the fund charges, taken out of its returns automatically.',h:()=>'From Yahoo Finance, refreshed weekly. The total row is the fee of your mix, weighted by your percentages.',y:()=>'On $10,000, a 0.10% fee costs $10 a year and a 0.75% fee costs $75. Small differences add up over decades.'},
   dd:{t:()=>'Max drawdown',w:()=>'Closer to 0% is better. The worst drop from a high point to a low point before it recovered. In Build a portfolio it covers the period you pick above the chart; in Your portfolios, the last 10 years.',h:()=>'Track the highest daily close reached so far; the biggest percentage fall below that high is the max drawdown.',y:()=>'It answers "how much pain would I have had to sit through?" A −30% drawdown means $100,000 fell to $70,000 at some point. This is the number that makes people panic-sell at the bottom.'},
@@ -1147,7 +1161,7 @@ function mixName(){const n=(S.b.name||'').trim();return n||'Portfolio total'}
 function mixRet(m){const p=mixP();if(!weights(p).length)return null;return periodRetD(s=>bhdRet(p,s),m)}
 function mixRowHTML(){const p=mixP();const ok=weights(p).length>0;const tot=bTotal();const scaled=ok&&!mixEq()&&Math.abs(tot-100)>=0.05;
   const B=S.b;return `<td class="nmcell"><span class="pn"><span class="tkchk sp"></span><span class="chsp" aria-hidden="true" style="width:${CHSP_MIX}px"></span><span class="pn2"><label class="sr" for="bName">Portfolio name</label><input class="field nmin" id="bName" placeholder="Name it" autocomplete="off" value="${esc(B.name||'')}"></span></span></td><td class="num momcell" style="font-weight:700">${ok?(()=>{const st0=selStart(B.sel),v=wRetMix(st0);return `<span class="momwrap">${sparkMix(st0)}<span class="v ${cls(v)}">${sg(v)}</span></span>`})():''}</td>${dsk(`${TPER.map(([p2,m])=>{const v=ok?mixRet(m):null;return `<td class="num ${cls(v)}${p2===B.sel.p?' hl':''}" style="font-weight:700">${ok?sg(v):''}</td>`}).join('')}${(()=>{const o=ok?pStats(p,B.sel):null;return BM.map(([k])=>ok?bmCell(o,k,null,true):'<td></td>').join('')})()}<td class="num ercol" style="font-weight:700">${ok?fmtER(mixER()):''}</td>`)}<td class="num wcell" style="font-weight:700">${mixEq()?(ok?'<span class="sub" style="font-size:12px;font-weight:400" title="Each ETF counts equally until you set percentages">equal split</span>':''):`${Math.abs(tot-100)>=0.05&&tot>0?`<button type="button" class="linkbtn scl" id="bScale" title="Scale to ${scalePreview(B.rows)}">Scale</button> `:''}<span class="${Math.abs(tot-100)<0.05?'pos':'neg'}">${tot}%</span>`}</td>${mexpBtn('bmix','Portfolio total')}<td class="dsk"></td>`}
-const BM=[['sharpe',()=>'Sharpe','sharpe'],['dd',()=>'Max drawdown','dd'],['worst',()=>'Worst year','worst']];
+const BM=[['sharpe',()=>'Sharpe','sharpe'],['vol',()=>'Volatility','vol'],['dd',()=>'Max drawdown','dd'],['worst',()=>'Worst year','worst']];
 /* grouping: ticked ETFs (weighted by their % when any are set, else split evenly) and ticked portfolios */
 const bTicked=()=>S.b.rows.filter(r=>r.k&&HAS(r.t));
 const pTicked=()=>S.pfs.filter(p=>p.k);
@@ -1163,14 +1177,16 @@ const PICO={chev:'<path d="M9 6l6 6-6 6"/>',dup:'<rect x="8" y="8" width="12" he
 const pico=(k,s=16)=>`<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${PICO[k]}</svg>`;
 /* portfolios get their own colours, distinct from the ETF lines */
 const PFCOL=['#2f9bb0','#b5893f','#c45c8e','#7E9FD6','#8a9a3a','#a0522d'];const pfCol=p=>PFCOL[(Number(p.color)||0)%PFCOL.length];
+/* the colour of an ETF inside a portfolio: its colour in the table when it's there, otherwise the next ETF colour */
+function memCol(p,k){const r=S.b.rows.find(q=>q.t===p.rows[k].t);return r?ecol(r.c):ECOL[k%ECOL.length]}
 function pfER(p){const ws=weights(p);let a=0,tw=0;ws.forEach(x=>{if(ER[x.t]!=null){a+=ER[x.t]*x.w;tw+=x.w}});return tw>0.999?a/tw:null}
 /* saved portfolios as rows at the top of the builder table; open one to see and edit its ETFs */
 function pfRowsHTML(NC,stripAfter){const B=S.b,st0=selStart(B.sel),hp=B.sel.p;return S.pfs.map(p=>{const ok=weights(p).length>0,col=pfCol(p),open=!!S.pOpen[p.id],hid=!!S.hidden[p.id];
   const fc=ok?dFirstAny(p.rows.map(r=>r.t)):null,s0=Math.max(st0,fc??st0),V=ok?bhd(p,s0):null,v=V?bhdRet(p,s0):null,o=ok?pStats(p,B.sel):null,tot=pTot(p),good=Math.abs(tot-100)<0.05;
-  let h=`<tr class="pfrow${hid?' dim':''}${p.k?' ticked':''}" data-pid="${esc(p.id)}"><td><span class="tkcell"><label class="sr" for="pk-${esc(p.id)}">Tick ${esc(p.name)}</label><input type="checkbox" class="tkchk" id="pk-${esc(p.id)}" data-ptick="${esc(p.id)}" data-tip="Tick to group or add to another portfolio" ${p.k?'checked':''}><button type="button" class="pfchev" data-popen="${esc(p.id)}" aria-expanded="${open}" aria-label="${open?'Hide':'Show'} the ETFs in ${esc(p.name)}" data-tip="${open?'Hide':'Show'} the ETFs inside">${pico('chev',14)}</button><span style="display:flex;flex-direction:column"><span style="display:flex;gap:6px;align-items:center"><label class="sr" for="pn-${esc(p.id)}">Portfolio name</label><input class="field pfname" id="pn-${esc(p.id)}" data-pname="${esc(p.id)}" autocomplete="off" value="${esc(p.name)}"></span><span class="pfbar" aria-hidden="true">${weights(p).map(x=>{const r=B.rows.find(q=>q.t===x.t);return `<span style="width:${x.w*100}%;background:${r?ecol(r.c):'var(--faint)'}"></span>`}).join('')}</span></span></span></td>
+  let h=`<tr class="pfrow${hid?' dim':''}${p.k?' ticked':''}" data-pid="${esc(p.id)}"><td><span class="tkcell"><label class="sr" for="pk-${esc(p.id)}">Tick ${esc(p.name)}</label><input type="checkbox" class="tkchk" id="pk-${esc(p.id)}" data-ptick="${esc(p.id)}" data-tip="Tick to group or add to another portfolio" ${p.k?'checked':''}><button type="button" class="pfchev" data-popen="${esc(p.id)}" aria-expanded="${open}" aria-label="${open?'Hide':'Show'} the ETFs in ${esc(p.name)}" data-tip="${open?'Hide':'Show'} the ETFs inside">${pico('chev',14)}</button><span style="display:flex;flex-direction:column"><span style="display:flex;gap:6px;align-items:center"><label class="sr" for="pn-${esc(p.id)}">Portfolio name</label><input class="field pfname" id="pn-${esc(p.id)}" data-pname="${esc(p.id)}" autocomplete="off" value="${esc(p.name)}"></span><span class="pfbar" aria-hidden="true">${weights(p).map(x=>`<span style="width:${x.w*100}%;background:${memCol(p,p.rows.findIndex(q=>q.t===x.t))}"></span>`).join('')}</span></span></span></td>
     <td class="num momcell" style="font-weight:700"><span class="momwrap"><button type="button" class="spkbtn" data-phide="${esc(p.id)}" aria-pressed="${!hid}" aria-label="${hid?'Show':'Hide'} ${esc(p.name)} on the chart" data-tip="${hid?'Show':'Hide'} on chart">${V?sparkPath(i=>V[i],s0,col,p.name+' path over the period'):''}</button><span class="v ${cls(v)}">${sg(v)}</span></span></td>${dsk(TPER.map(([p2,m])=>{const r=ok?periodRetD(s=>bhdRet(p,s),m):null;return `<td class="num ${cls(r)}${p2===hp?' hl':''}" style="font-weight:700">${sg(r)}</td>`}).join('')+BM.map(([k])=>bmCell(o,k,null,true)).join('')+`<td class="num ercol" style="font-weight:700">${fmtER(pfER(p))}</td>`)}<td class="num wcell"><span style="display:inline-flex;align-items:center;gap:2px"><button type="button" class="pfico" data-pdup2="${esc(p.id)}" aria-label="Duplicate ${esc(p.name)}" data-tip="Duplicate to try other weights">${pico('dup')}</button><button type="button" class="pfico" data-pung="${esc(p.id)}" aria-label="Ungroup ${esc(p.name)}" data-tip="Ungroup back into single ETFs">${pico('ung')}</button><span class="${good?'':'neg'}" style="font-size:13px;margin-left:4px">${good?'100%':tot+'%'}</span></span></td><td class="mob"></td><td class="xcell dsk"><button type="button" class="delbtn bdel" data-pdel2="${esc(p.id)}" aria-label="Delete ${esc(p.name)}" data-tip="Delete ${esc(p.name)}">${pico('trash')}</button></td></tr>`;
   if(open){p.rows.forEach((r,k)=>{const ES=HAS(r.t)?pStats({rows:[{t:r.t,w:100}]},B.sel):null,wr=HAS(r.t)?wRetT(r.t,st0):null;
-      h+=`<tr class="pfkid"><td><span class="tkcell"><span class="pfkidt" title="${esc(NAMES[r.t]||'')}">${esc(r.t)}</span>${xBtn(r.t)}</span></td><td class="num momcell"><span class="momwrap">${HAS(r.t)?sparkT(r.t,st0,'var(--faint)'):''}<span class="v ${cls(wr)}">${sg(wr)}</span></span></td>${dsk(TPER.map(([p2,m])=>{const x=periodRet(r.t,m);return `<td class="num ${cls(x)}${p2===hp?' hl':''}">${sg(x)}</td>`}).join('')+BM.map(([kk])=>bmCell(ES,kk,null)).join('')+`<td class="num ercol">${fmtER(ER[r.t])}</td>`)}<td class="wcell"><span class="wbox"><label class="sr" for="pw-${esc(p.id)}-${k}">${esc(r.t)} percent of ${esc(p.name)}</label><input class="field" id="pw-${esc(p.id)}-${k}" data-pw2="${esc(p.id)}" data-k="${k}" inputmode="decimal" autocomplete="off" value="${esc(r.w)}">%</span></td><td class="mob"></td><td class="xcell dsk"><button type="button" class="delbtn bdel" data-prm2="${esc(p.id)}" data-k="${k}" aria-label="Take ${esc(r.t)} out of ${esc(p.name)}" data-tip="Take ${esc(r.t)} out of ${esc(p.name)}">${pico('trash')}</button></td></tr>`});
+      h+=`<tr class="pfkid"><td><span class="tkcell"><span class="pfkidt" title="${esc(NAMES[r.t]||'')}">${esc(r.t)}</span>${xBtn(r.t)}</span></td><td class="num momcell"><span class="momwrap">${HAS(r.t)?sparkT(r.t,st0,memCol(p,k)):''}<span class="v ${cls(wr)}">${sg(wr)}</span></span></td>${dsk(TPER.map(([p2,m])=>{const x=periodRet(r.t,m);return `<td class="num ${cls(x)}${p2===hp?' hl':''}">${sg(x)}</td>`}).join('')+BM.map(([kk])=>bmCell(ES,kk,null)).join('')+`<td class="num ercol">${fmtER(ER[r.t])}</td>`)}<td class="wcell"><span class="wbox"><label class="sr" for="pw-${esc(p.id)}-${k}">${esc(r.t)} percent of ${esc(p.name)}</label><input class="field" id="pw-${esc(p.id)}-${k}" data-pw2="${esc(p.id)}" data-k="${k}" inputmode="decimal" autocomplete="off" value="${esc(r.w)}">%</span></td><td class="mob"></td><td class="xcell dsk"><button type="button" class="delbtn bdel" data-prm2="${esc(p.id)}" data-k="${k}" aria-label="Take ${esc(r.t)} out of ${esc(p.name)}" data-tip="Take ${esc(r.t)} out of ${esc(p.name)}">${pico('trash')}</button></td></tr>`});
     h+=`<tr class="pfkid"><td colspan="${NC}"><span class="pfadd"><label class="sr" for="pa2-${esc(p.id)}">Add an ETF to ${esc(p.name)}</label><input class="field tkin" id="pa2-${esc(p.id)}" data-pa2="${esc(p.id)}" placeholder="Ticker" autocomplete="off" spellcheck="false" list="tickers" value="${esc(S.paDraft[p.id]||'')}"><button type="button" class="btn sm" data-padd2="${esc(p.id)}">Add to ${esc(p.name)}</button><button type="button" class="btn sm ghost" data-peven="${esc(p.id)}">Equal split</button>${good?'':`<span class="neg" style="font-size:13px">Percentages add to ${tot}%</span>`}</span></td></tr>`}
   if(stripAfter===p.id)h+=pvStripHTML(NC);
   return h}).join('')}
@@ -1202,13 +1218,14 @@ function pStats(p,sel){const ws=weights(p);if(!ws.length)return null;const ts=ws
   if(st){const fd=dFirstAny(ts);const sd=Math.max(fd,selStart({p:'10Y'}));st.dd=ddDaily(bhd(p,sd),sd)}
   /* Build a portfolio: Sharpe and max drawdown follow the period picked above the chart (worst year stays 10 years) */
   if(sel){const fd=dFirstAny(ts);const s0=Math.max(fd==null?0:fd,selStart(sel));const r=periodRisk(bhd(p,s0),s0);
-    if(r){st=st?{...st,sharpe:r.sharpe,dd:r.dd}:{sharpe:r.sharpe,dd:r.dd,worst:null,worstY:null}}else if(st)st={...st,sharpe:null,dd:null}}
+    if(r){st=st?{...st,sharpe:r.sharpe,dd:r.dd,vol:r.vol}:{sharpe:r.sharpe,dd:r.dd,vol:r.vol,worst:null,worstY:null}}else if(st)st={...st,sharpe:null,dd:null,vol:null}}
   return {st}}
 /* daily Sharpe (excess return over SHY, annualized) and max drawdown from day s to the latest price */
 function periodRisk(V,s){if(!V||s==null||V[s]==null)return null;const ex=[];let pk=V[s],dd=0;
   for(let i=s+1;i<=D.last;i++){if(V[i]==null||V[i-1]==null)continue;const r=V[i]/V[i-1]-1;const a=pxd('SHY',i),b=pxd('SHY',i-1);ex.push(r-(a!=null&&b!=null?a/b-1:0));pk=Math.max(pk,V[i]);dd=Math.min(dd,V[i]/pk-1)}
   if(ex.length<15)return null;const m=ex.reduce((x,y)=>x+y,0)/ex.length;const sd=Math.sqrt(ex.reduce((x,y)=>x+(y-m)**2,0)/(ex.length-1));
-  return {sharpe:sd>0?m/sd*Math.sqrt(252):null,dd}}
+  const rr=[];for(let i=s+1;i<=D.last;i++){if(V[i]!=null&&V[i-1]!=null)rr.push(V[i]/V[i-1]-1)}const rm=rr.reduce((x,y)=>x+y,0)/rr.length,vol=Math.sqrt(rr.reduce((x,y)=>x+(y-rm)**2,0)/(rr.length-1))*Math.sqrt(252);
+  return {sharpe:sd>0?m/sd*Math.sqrt(252):null,dd,vol}}
 function bmVal(o,k){if(!o)return null;return o.st?o.st[k]:null}
 function bmCell(o,k,best,bold){const v=bmVal(o,k);const neg=(k!=='sharpe')&&v!=null&&v<0?' neg':'';const b=best&&best[k]!=null&&v===best[k]?' best':'';
   const txt=v==null?'—':k==='sharpe'?v.toFixed(2):k==='worst'?un(v)+' <span class="mut">’'+o.st.worstY.slice(2)+'</span>':k==='mom'?sg(v):un(v);
@@ -1395,7 +1412,10 @@ function sizeCharts(){if(SZ||!D)return;alignHeads();SZ=true;try{const bb=$('bCha
   const duo=DUO(),bOn=S.b.open&&bb&&(duo||bb.clientWidth>=600),railB=bOn&&rb&&rb.offsetParent?rb.scrollHeight:0,railP=rp&&rp.offsetParent?rp.offsetHeight:0;
   const big=bb&&bb.clientWidth>=700;let hb=bOn?Math.max(big?460:340,railB):null,hp=null;if(duo){const h=Math.min(640,Math.max(360,railB,railP));hb=h;hp=h}
   else if(bOn){/* laptops: keep the ETF rows, the add-ticker row and the total on screen; the list scrolls only if it must */
-    const bd=$('builder'),nonChart=bd.offsetHeight-bb.offsetHeight,top=bd.getBoundingClientRect().top+scrollY,room=innerHeight-top-nonChart-10;
+    const bd=$('builder'),top=bd.getBoundingClientRect().top+scrollY;
+    const trs=[...document.querySelectorAll('#bTable tbody tr')].filter(r=>r.offsetParent&&!r.classList.contains('mdet')&&!r.classList.contains('pvstrip'));
+    const rowH=(document.querySelector('#bTable tbody tr[data-bt]')||{}).offsetHeight||34,strip=[...document.querySelectorAll('#bTable tr.pvstrip')].reduce((a,r)=>a+r.offsetHeight,0);
+    const rowsH=trs.reduce((a,r)=>a+r.offsetHeight,0),nonChart=bd.offsetHeight-bb.offsetHeight-rowsH-strip+11*rowH,room=innerHeight-top-nonChart-10;
     hb=Math.max(260,Math.min(hb,room))}
   if(rb){const sc=bOn&&!duo&&railB>hb;rb.style.maxHeight=sc?hb+'px':'';rb.style.overflow=sc?'auto':''}
   if(bOn&&hb!==CHH.b){CHH.b=hb;renderBChart()}else CHH.b=hb;
