@@ -538,6 +538,19 @@ thead tr.grow th{padding-top:0}
 .mixrow td.num{font-size:15px}
 /* one section now: the builder is always open, so no collapse arrow; the title is hidden, so the controls sit in a normal row */
 #builder #bSave,#builder #bHint{display:none!important}
+/* Explore: the "at a glance" strip stays pinned at the top while you scroll, and slims to one row once it sticks */
+.xgwrap{--p:0;position:sticky;top:-16px;z-index:6;background:var(--panel);margin:-16px -28px 0;padding:calc(16px + 6px*var(--p)) 28px calc(10px - 2px*var(--p));gap:calc(8px*(1 - var(--p)))!important;box-shadow:0 1px 0 color-mix(in srgb,var(--line) calc(var(--p)*100%),transparent),0 10px 18px -12px rgba(0,0,0,calc(.45*var(--p)))}
+.xgwrap .xcap{max-height:calc(48px*(1 - var(--p)));opacity:calc(1 - 1.8*var(--p));overflow:hidden;transform:translateY(calc(-6px*var(--p)))}
+.xgwrap .xglance{gap:calc(8px - 2px*var(--p))}
+.xgwrap .xg{will-change:height;padding:calc(10px - 4px*var(--p)) calc(12px - 2px*var(--p));border-radius:calc(10px - 2px*var(--p))}
+.xgwrap .xg span:first-child{font-size:calc(11px - 1px*var(--p))}
+.xgwrap .xg>*{flex-shrink:0}
+.xgwrap .xg b{align-self:flex-start;font-size:calc(17px - 3px*var(--p));will-change:transform}
+@media (max-width:640px){.xgwrap{--p:0!important;margin:-16px -16px 0;padding:16px 16px 10px;transition:padding .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s}.xgwrap .xg,.xgwrap .xg b,.xgwrap .xg span{height:auto!important;transform:none!important;max-width:none!important}
+.xgwrap.stuck{padding-top:22px;padding-bottom:8px;box-shadow:0 1px 0 var(--line),0 10px 18px -12px rgba(0,0,0,.45)}.xgwrap.stuck .xcap{display:none}.xgwrap.stuck .xglance{flex-wrap:nowrap;gap:6px;animation:xgIn .3s cubic-bezier(.2,.8,.2,1)}
+.xgwrap.stuck .xg{flex:1 1 0;flex-direction:row;align-items:baseline;justify-content:space-between;gap:6px;padding:6px 10px;border-radius:8px}.xgwrap.stuck .xg span:first-child{font-size:10px}.xgwrap.stuck .xg b{font-size:14px}
+.xgwrap.stuck .xg:not(.sel):not(#xgSh):not(#xgDd){display:none}}
+@keyframes xgIn{from{opacity:0;transform:translateY(-6px) scale(.98)}}
 /* narrower screens: smaller side margins and tighter columns so the whole table fits without sideways scrolling */
 @media (max-width:1600px){
   .wrap{padding-inline:clamp(16px,2.6vw,40px)!important}
@@ -1772,6 +1785,23 @@ document.addEventListener('input',e=>{const el=e.target;
   else if(el.id==='bName'){S.b.name=el.value;save('b',S.b);updateSave();renderMixLive()}
   else if(el.dataset&&el.dataset.bw!=null){const v=String(el.value).replace(/[^0-9.]/g,'');S.b.rows[+el.dataset.bw].w=v===''?'':Math.round(parseFloat(v)*100)/100;save('b',S.b);updateSave();renderMixLive()}
 });
+/* Explore: slim the pinned strip once you scroll past it (a little slack so it doesn't flicker at the edge) */
+const XG={cur:0,raf:0};
+function xgMeasure(w){w.style.setProperty('--p',0);w.style.marginBottom='0px';w.querySelectorAll('.xg').forEach(x=>{x.style.height='';const n=x.querySelector('b'),l=x.firstElementChild;n.style.transform='';l.style.transform='';l.style.maxWidth=''});w._h0=w.offsetHeight;const x=w.querySelector('.xg');w._bh=x?x.offsetHeight:0}
+function xgPaint(w,p){if(!w._h0)xgMeasure(w);w.style.setProperty('--p',p.toFixed(4));const pad=12-2*p,pv=10-4*p;
+  const sm=t=>{t=Math.min(1,Math.max(0,t));return t*t*(3-2*t)},px=sm(p/.6),py=sm((p-.25)/.75);
+  w.querySelectorAll('.xg').forEach(x=>{const n=x.querySelector('b'),l=x.firstElementChild;const nw=n.offsetWidth,nh=n.offsetHeight,lh=l.offsetHeight,inner=x.clientWidth-2*pad;
+    x.style.height=(w._bh-(w._bh-(nh+2*pv))*p)+'px';
+    n.style.transform=`translate(${((inner-nw)*px).toFixed(2)}px,${(-(lh+3)*py).toFixed(2)}px)`;
+    l.style.transform=`translateY(${(((nh-lh)/2)*py).toFixed(2)}px)`;l.style.maxWidth=(inner-(nw+8)*py)+'px'});
+  w.style.marginBottom=Math.max(0,w._h0-w.offsetHeight)+'px'}
+function xgTarget(b){const t=Math.min(1,Math.max(0,(b.scrollTop-16)/110));return t*t*(3-2*t)}
+function xgTick(){XG.raf=0;const b=$('xmBody'),w=b&&b.querySelector('.xgwrap');if(!w||innerWidth<=640)return;const tg=xgTarget(b);XG.cur+=(tg-XG.cur)*.2;if(Math.abs(tg-XG.cur)<.002)XG.cur=tg;xgPaint(w,XG.cur);if(XG.cur!==tg)XG.raf=requestAnimationFrame(xgTick)}
+function xgSync(reset){const b=$('xmBody'),w=b&&b.querySelector('.xgwrap');if(!w)return;
+  if(innerWidth<=640){if(w._h0){xgMeasure(w);w._h0=0}const st=w.classList.contains('stuck');if(!st&&b.scrollTop>70)w.classList.add('stuck');else if(st&&b.scrollTop<20)w.classList.remove('stuck');return}
+  w.classList.remove('stuck');if(reset){w._h0=0;XG.cur=xgTarget(b);xgPaint(w,XG.cur);return}if(!XG.raf)XG.raf=requestAnimationFrame(xgTick)}
+document.addEventListener('scroll',e=>{if(e.target&&e.target.id==='xmBody')xgSync()},true);
+addEventListener('resize',()=>xgSync(true));
 /* quick hover labels for the builder's icon buttons */
 document.addEventListener('mouseover',e=>{const el=e.target.closest&&e.target.closest('#builder [data-tip],#builder .xbtn');let t=$('qtip');if(!el){if(t)t.hidden=true;return}
   if(!t){document.body.insertAdjacentHTML('beforeend','<div id="qtip" role="tooltip" hidden></div>');t=$('qtip')}t.textContent=el.dataset.tip||el.getAttribute('aria-label')||'';t.hidden=false;
@@ -2052,7 +2082,7 @@ function xCard(c,s,kind){const col=XCOL[kind];const dr=c.r3-s.r3;const pct=Math.
     <p class="xwhy">${xWhy(c,s,kind)}</p><button type="button" class="xadd" data-xadd="${esc(c.t)}"></button></article>`}
 function xSetRange(k){XM.rng=k;const d=XM.d;if(!d)return;
   document.querySelectorAll('#xmBody .xspark').forEach(box=>{const c=xFind(box.dataset.xsp);if(!c)return;const col=box.closest('.xcard').style.getPropertyValue('--xc');box.outerHTML=xSpark(c,d.self,col,c.t)});
-  document.querySelectorAll('#xmBody [data-xrng]').forEach(b=>{const on=b.dataset.xrng===k;b.classList.toggle('sel',on);b.setAttribute('aria-pressed',on)});
+  document.querySelectorAll('#xmBody [data-xrng]').forEach(b=>{const on=b.dataset.xrng===k;b.classList.toggle('sel',on);b.setAttribute('aria-pressed',on)});{const w=document.querySelector('#xmBody .xgwrap');if(w&&w._h0&&innerWidth>640)xgPaint(w,XG.cur)}
   document.querySelectorAll('#xmBody .xcard').forEach(card=>{const c=xFind(card.dataset.xc);const rk=card.querySelector('.xrisk'),lb=card.querySelector('.xrlr');if(c&&rk)rk.innerHTML=xRiskTiles(c,d.self);if(lb)lb.textContent=`Risk vs ${d.self.t} · ${xRngLbl()}`});
   const rs=xRisk(d.self),gs=$('xgSh'),gd=$('xgDd');if(gs)gs.innerHTML=`<span>Sharpe (${k})</span><b>${rs.sh.toFixed(2)}</b>`;if(gd)gd.innerHTML=`<span>Max DD (${k})</span><b>${xu(rs.dd)}</b>`}
 /* return vs volatility dot chart */
@@ -2119,13 +2149,13 @@ function renderXM(){const b=$('xmBody');renderXMFoot();
   const dv=d.div.length?`<div class="xcards">${d.div.map(c=>xCard(c,s,'div')).join('')}${d.div.length<3?`<div class="xnote"><b>Only ${d.div.length} found</b><span>Nothing else had 15%+ less volatility than ${esc(t)} while staying within 2 points a year of its return.</span></div>`:''}</div>`
     :`<div class="xnote"><b>No less risky fund kept up with ${esc(t)}</b><span>No ETF had 15%+ less volatility while staying within 2 points a year of its 3-year return.</span></div>`;
   const mo=!d.mom?'':`<section class="xsec"><h3>Momentum <small>Moves like ${esc(t)} and is ahead of it over the last 3 months, without much more risk</small></h3>${d.mom.length?`<div class="xcards">${d.mom.map(c=>xCard(c,s,'mom')).join('')}${d.mom.length<3?`<div class="xnote"><b>Only ${d.mom.length} ahead lately</b><span>${esc(t)} is ${xp(s.m3)} over the last 3 months, so few similar funds have kept ahead of it.</span></div>`:''}</div>`:`<div class="xnote"><b>Nothing similar is ahead of ${esc(t)} lately</b><span>No fund that moves like ${esc(t)} beat it by 2+ points over the last 3 months without much more risk. ${esc(t)} itself is ${xp(s.m3)}.</span></div>`}</section>`;
-  b.innerHTML=`<div style="display:flex;flex-direction:column;gap:8px"><div class="xcap">${esc(t)} at a glance <span class="xcap2">· click a period to change the line charts</span></div><div class="xglance">${gl}</div></div>
+  b.innerHTML=`<div class="xgwrap" style="display:flex;flex-direction:column;gap:8px"><div class="xcap">${esc(t)} at a glance <span class="xcap2">· click a period to change the line charts</span></div><div class="xglance">${gl}</div></div>
     <div class="xtop">${xChart(d)}<div class="xlegend"><div class="li"><svg width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="6" fill="var(--ink)"/></svg><span>${esc(t)}, the ETF you clicked</span></div><div class="li" data-xk="same"><svg width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="6" fill="var(--xs)"/></svg><span>Higher return: moves 85%+ in step with ${esc(t)}, earned more</span></div><div class="li" data-xk="div"><svg width="14" height="14" aria-hidden="true"><rect x="1" y="1" width="12" height="12" fill="var(--xd)"/></svg><span>Less risk: 15%+ less volatility, about the same return</span></div>${d.mom?`<div class="li" data-xk="mom"><svg width="14" height="14" aria-hidden="true"><path d="M7 1L13 12H1Z" fill="var(--xm)"/></svg><span>Momentum: ahead of ${esc(t)} over the last 3 months, plotted on its 3-year numbers</span></div>`:''}
     <div class="how">Picked from ${d.pool.toLocaleString()} ETFs. Hover a dot or a card to compare.</div></div></div>
     <section class="xsec"><h3>Higher return, similar risk <small>Moves like ${esc(t)} and earned more, without much more risk</small></h3>${same}</section>
     <section class="xsec"><h3>Less risk, similar return <small>Less risk than ${esc(t)} with about the same return</small></h3>${dv}</section>${mo}
     <p class="xdisc">Past performance doesn't guarantee future results. These are ideas to research, not advice.</p>`;
-  renderXMButtons()}
+  renderXMButtons();xgSync(true)}
 function xHowHTML(){const t=XM.t||'this ETF',d=XM.d;const st=(k,p)=>`<div class="xstep"><span class="k">${k}</span><p>${p}</p></div>`;
   return st('The pool',`${d?d.pool.toLocaleString():'About 1,800'} ETFs with at least 3 years of prices and $50M in assets. Left out: buffer, option-income and covered-call funds, trading funds, hedged, tactical and long/short strategies, ETNs, and anything charging more than 1% a year.`)
    +st('Higher return, similar risk',`Moves at least 85% in step with ${t}, earned at least 1 point a year more over 3 years, and has no more than 25% more volatility. Best Sharpe first.`)
