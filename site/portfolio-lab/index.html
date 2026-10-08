@@ -650,7 +650,7 @@ button.xg{cursor:pointer}button.xg:hover{box-shadow:inset 0 0 0 1px var(--inputL
 .xg b{font-family:"IBM Plex Mono",monospace;font-size:17px;font-weight:600}
 .xg.p{background:var(--xposBg)}.xg.p b{color:var(--pos)}.xg.n{background:var(--xnegBg)}.xg.n b{color:var(--neg)}
 .xg.key{outline:1px solid var(--accent)}
-.xtop{display:flex;gap:24px;align-items:center}
+.xtop{display:flex;gap:24px;align-items:stretch}
 .xfig{position:relative;margin:0;flex:1 1 auto;min-width:0;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:10px 10px 6px}
 .xfig svg{display:block;width:100%;height:auto;font-family:"IBM Plex Mono",monospace;overflow:visible}
 .xfig figcaption{font-size:12px;color:var(--faint);padding:2px 6px 4px}
@@ -660,9 +660,24 @@ button.xg{cursor:pointer}button.xg:hover{box-shadow:inset 0 0 0 1px var(--inputL
 .xlegend{position:relative}
 .xlegend .li{display:flex;gap:10px;align-items:center}
 .xlegend .li svg{flex:none}
-.xtip.dock{position:absolute;left:0;right:0;top:0;min-width:0;max-width:none;box-shadow:0 8px 24px rgba(0,0,0,.18)}
+.xlegend{padding-top:6px}
+.xlegend.showtip>:not(.xtip){visibility:hidden}
+.xtip.dock{position:absolute;left:0;right:0;top:6px;min-width:0;max-width:none;background:transparent;border:0;box-shadow:none;padding:0;gap:12px;font-size:13.5px}
+.xth.mk{flex-direction:row;align-items:flex-start;gap:10px}.xfig .xth.mk svg,.xth.mk svg{flex:none;margin-top:5px;width:14px;height:14px;display:inline}.xth.mk>div{display:flex;flex-direction:column;min-width:0}
+.xtip:not(.dock):has(.xtiles){width:290px}
+.xtip.dock .xth{border-bottom:0;padding-bottom:0}
+.xttag{align-self:flex-start;font-size:12px;font-weight:600;border-radius:99px;padding:3px 10px;white-space:nowrap}
+.xttag.same{color:var(--xs);background:var(--xsBg)}.xttag.div{color:var(--xd);background:var(--xdBg)}.xttag.mom{color:var(--xm);background:var(--xmBg)}
+.xtiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.xtl{background:var(--panel2);border-radius:9px;padding:8px 10px;display:flex;flex-direction:column;gap:1px;min-width:0}
+.xtip:not(.dock) .xtl{background:var(--panel2)}
+.xtl span{font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);white-space:nowrap}
+.xtl b{font-family:"IBM Plex Mono",monospace;font-size:16px;font-weight:600}
+.xtl i{font-style:normal;font-family:"IBM Plex Mono",monospace;font-size:11.5px;white-space:nowrap}
+.xtl i.warn{color:var(--xd)}
+.xtw{margin:0;font-size:13px;line-height:1.5;color:var(--ink2)}
 .xlegend .how{font-size:12.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:12px}
-.xtip{position:absolute;pointer-events:none;z-index:3;min-width:230px;max-width:300px;background:var(--panel);border:1px solid var(--inputLine);border-radius:10px;padding:10px 12px;font-size:12.5px;box-shadow:0 8px 20px rgba(0,0,0,.25);display:flex;flex-direction:column;gap:8px}
+.xtip{position:absolute;pointer-events:none;z-index:3;min-width:230px;max-width:320px;background:var(--panel);border:1px solid var(--inputLine);border-radius:10px;padding:10px 12px;font-size:12.5px;box-shadow:0 8px 20px rgba(0,0,0,.25);display:flex;flex-direction:column;gap:8px}
 .xth{display:flex;flex-direction:column;gap:1px;padding-bottom:7px;border-bottom:1px solid var(--line)}
 .xth b{font-family:"IBM Plex Mono",monospace;font-size:14px}
 .xth span{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -1841,17 +1856,26 @@ function xFind(t){const d=XM.d;if(!d)return null;if(d.self.t===t)return {...d.se
 function xChartTip(t,on){const tip=$('xChartTip'),svg=document.querySelector('#xmBody .xfig svg');if(!tip||!svg)return;const zone=svg.querySelector('.xzone');
   svg.querySelector('.xdots').classList.toggle('xfade',!!on);svg.querySelectorAll('.xpt').forEach(g=>g.classList.toggle('on',on&&g.dataset.xt===t));
   document.querySelectorAll('#xmBody .xcard').forEach(c=>c.classList.toggle('hl',on&&c.dataset.xc===t));document.querySelectorAll('#xmBody .xcards').forEach(c=>c.classList.toggle('dim',!!on&&!!c.querySelector('.xcard.hl')));
-  if(!on){tip.hidden=true;zone.style.display='none';return}
+  if(!on){tip.hidden=true;zone.style.display='none';const lg=document.querySelector('#xmBody .xlegend');if(lg)lg.classList.remove('showtip');return}
   const p=xFind(t),s=XM.d.self;if(!p)return;let h;
-  const row=(l,a,b,cl)=>`<span class="l">${l}</span><span class="v ${cl||''}">${a}</span>${b==null?'':`<span class="v">${b}</span>`}`;
-  const head=(q,nm)=>`<div class="xth"><b>${esc(q)}</b><span>${esc(nm||NAMES[q]||'')}</span></div>`;
+  /* option B: header with the fund's marker, a list tag, four headline tiles, one plain sentence */
+  const mk=k=>k==='self'?'<circle cx="7" cy="7" r="6" fill="var(--ink)"/>':k==='mom'?'<path d="M7 1L13 12H1Z" fill="var(--xm)"/>':k==='div'?'<rect x="1" y="1" width="12" height="12" fill="var(--xd)"/>':'<circle cx="7" cy="7" r="6" fill="var(--xs)"/>';
+  const head=(q,nm,k)=>`<div class="xth mk"><svg width="14" height="14" aria-hidden="true">${mk(k)}</svg><div><b style="color:${k==='self'?'var(--ink)':XCOL[k]}">${esc(q)}</b><span>${esc(nm||NAMES[q]||'')}</span></div></div>`;
+  const pts=v=>(v>=0?'+':'−')+Math.abs(v*100).toFixed(1);
+  const tile=(l,v,dv,good,sg)=>`<div class="xtl"><span>${l}</span><b class="${sg==null?'':sg>=0?'pos':'neg'}">${v}</b>${dv==null?'':`<i class="${good==null?'':good?'pos':'warn'}">${dv} vs ${esc(s.t)}</i>`}</div>`;
+  const m3=x=>x.m3!=null?x.m3:x.r[1];
   if(p.k==='self'){zone.style.display='';const n1=XM.d.same.length,n2=XM.d.div.length;
-    h=head(s.t,'The ETF you clicked')+`<div class="xtt c2">${row('Return / yr (3Y)',xp(s.r3),null,s.r3>=0?'pos':'neg')}${row('Volatility',xu(s.vol))}${row('Sharpe',s.sh.toFixed(2))}${row('Max DD',xu(s.dd),null,'neg')}${row('Fee',fmtER(s.er))}</div><div class="xtf"><span style="color:var(--xs)">● ${n1?n1+' with higher return':'No higher-return pick'}</span><span style="color:var(--xd)">■ ${n2?n2+' with less risk':'No less-risk pick'}</span>${XM.d.mom?`<span style="color:var(--xm)">▲ ${XM.d.mom.length?XM.d.mom.length+' with momentum':'No momentum pick'}</span>`:''}</div>`}
-  else{zone.style.display='none';const kc=XCOL[p.k];
-    h=head(p.t,p.n)+`<div class="xtt c3"><span></span><span class="v hd" style="color:${kc}">${esc(p.t)}</span><span class="v hd">${esc(s.t)}</span>${row('Return / yr (3Y)',xp(p.r3),xp(s.r3))}${row('Volatility',xu(p.vol),xu(s.vol))}${row('Sharpe',p.sh.toFixed(2),s.sh.toFixed(2))}${row('Max DD',xu(p.dd),xu(s.dd))}${p.k==='mom'&&p.m3!=null?row('Last 3 months',xp(p.m3),xp(s.m3)):''}${row('Fee',fmtER(p.er),fmtER(s.er))}${row('Tracks '+esc(s.t),Math.round(p.c*100)+'%','')}</div><div class="xtf"><span style="color:${kc}">${p.k==='mom'?'Ahead of '+esc(s.t)+' lately; plotted on its 3-year numbers':(p.vol<s.vol?'Less risk than ':'More risk than ')+esc(s.t)+(p.r3>=s.r3?', more return':', less return')}</span></div>`}
+    h=head(s.t,'The ETF you clicked','self')+`<div class="xtiles">${tile('Return / yr (3Y)',xp(s.r3),null,null,s.r3)}${tile('Last 3 months',xp(m3(s)),null,null,m3(s))}${tile('Volatility',xu(s.vol))}${tile('Sharpe',s.sh.toFixed(2))}</div><p class="xtw">Worst drop ${xu(s.dd)} over 3 years, fee ${fmtER(s.er)}.</p><div class="xtf"><span style="color:var(--xs)">● ${n1?n1+' with higher return':'No higher-return pick'}</span><span style="color:var(--xd)">■ ${n2?n2+' with less risk':'No less-risk pick'}</span>${XM.d.mom?`<span style="color:var(--xm)">▲ ${XM.d.mom.length?XM.d.mom.length+' with momentum':'No momentum pick'}</span>`:''}</div>`}
+  else{zone.style.display='none';const tagTxt={same:'Higher return pick',div:'Less risk pick',mom:'Momentum pick'}[p.k];
+    const vr=p.vol/s.vol-1,risk=vr>0.05?'with more risk':vr<-0.05?'with less risk':'with about the same risk';
+    const lead={same:`Earned more than ${s.t}`,div:`About the same return as ${s.t}`,mom:`Ahead of ${s.t} lately`}[p.k];
+    const det=[];if(p.dd<s.dd-0.01)det.push(`a deeper worst drop (${xu(p.dd)} vs ${xu(s.dd)})`);else if(p.dd>s.dd+0.01)det.push(`a smaller worst drop (${xu(p.dd)} vs ${xu(s.dd)})`);
+    if(p.er!=null&&s.er!=null&&Math.abs(p.er-s.er)>=0.02)det.push(`a ${p.er>s.er?'higher':'lower'} fee (${fmtER(p.er)} vs ${fmtER(s.er)})`);
+    const sent=`${lead}, ${risk}${det.length?': '+det.join(' and '):''}.${p.k==='mom'?' Placed on the chart by its 3-year numbers.':''}`;
+    h=head(p.t,p.n,p.k)+`<span class="xttag ${p.k}">${tagTxt} · tracks ${esc(s.t)} ${Math.round(p.c*100)}%</span><div class="xtiles">${tile('Return / yr (3Y)',xp(p.r3),pts(p.r3-s.r3),p.r3>=s.r3,p.r3)}${tile('Last 3 months',xp(m3(p)),pts(m3(p)-m3(s)),m3(p)>=m3(s),m3(p))}${tile('Volatility',xu(p.vol),pts(p.vol-s.vol),p.vol<=s.vol)}${tile('Sharpe',p.sh.toFixed(2),(p.sh>=s.sh?'+':'−')+Math.abs(p.sh-s.sh).toFixed(2),p.sh>=s.sh)}</div><p class="xtw">${esc(sent)}</p>`}
   tip.innerHTML=h;const leg=document.querySelector('#xmBody .xlegend'),side=leg&&leg.getBoundingClientRect().left>svg.getBoundingClientRect().right-4;
   if(side){/* wide screens: show the details in the column beside the chart so nothing on the chart is covered */
-    if(tip.parentElement!==leg)leg.appendChild(tip);tip.classList.add('dock');tip.style.left='';tip.style.top='';tip.hidden=false;return}
+    if(tip.parentElement!==leg)leg.appendChild(tip);tip.classList.add('dock');leg.classList.add('showtip');tip.style.left='';tip.style.top='';tip.hidden=false;return}
   const figEl=svg.closest('.xfig');if(tip.parentElement!==figEl)figEl.appendChild(tip);tip.classList.remove('dock');tip.hidden=false;
   const fig=figEl.getBoundingClientRect(),g=svg.querySelector(`.xpt[data-xt="${CSS.escape(t)}"]`).getBoundingClientRect();
   /* narrow screens: above the dot when there is room, otherwise below, never over it */
