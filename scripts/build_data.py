@@ -319,6 +319,8 @@ def build_explore(series, names, fund):
     meta = {"asof": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
             "from": start.strftime("%Y-%m-%d"), "to": end.strftime("%Y-%m-%d"),
             "dd": day_dates, "wd": wk_dates}
+    if "SHY" in lines:   # near-cash prices, so the site can work out Sharpe for any range picked
+        meta["rf"] = {"d": lines["SHY"][0], "w": lines["SHY"][1]}
     written = 0
     for i, t in enumerate(tick):
         if t not in names:
