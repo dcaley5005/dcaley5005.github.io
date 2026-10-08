@@ -38,7 +38,7 @@
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 body{background:var(--bg);color:var(--ink);font:15px/1.5 "IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;margin:0}
-.wrap{max-width:1440px;margin:0 auto;padding-inline:clamp(16px,3vw,48px);padding-block:32px 56px;display:flex;flex-direction:column;gap:24px}
+.wrap{max-width:1760px;margin:0 auto;padding-inline:clamp(16px,3vw,48px);padding-block:32px 56px;display:flex;flex-direction:column;gap:24px}
 h1,h2{font-family:Newsreader,Georgia,"Times New Roman",serif;font-weight:600;margin:0;text-wrap:balance}
 h1{font-size:clamp(34px,4vw,44px);letter-spacing:-.01em;line-height:1.05}
 h2{font-size:26px;line-height:1.15}
@@ -536,7 +536,11 @@ thead tr.grow th{padding-top:0}
 
 .btable tfoot td{border-top:2px solid var(--line);border-bottom:0;padding-top:10px}
 .mixrow td.num{font-size:15px}
-/* one section now: the builder is always open, so no collapse arrow */
+/* one section now: the builder is always open, so no collapse arrow; the title is hidden, so the controls sit in a normal row */
+#builder .bheadwrap{display:flex;justify-content:flex-end;align-items:center;padding:12px 24px;min-height:64px;box-sizing:border-box}
+#builder #bToggle{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);padding:0!important;margin:0;border:0}
+#builder .bacts{position:static!important;transform:none!important;display:flex;flex-wrap:wrap;justify-content:flex-end;padding:0!important}
+@media (max-width:640px){#builder .bheadwrap{padding:10px 16px}}
 #builder #bTitle{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 #builder .bchev{display:none}#builder .bhead{cursor:default}
 /* one table: saved portfolios live in the builder table */
@@ -562,7 +566,7 @@ thead tr.grow th{padding-top:0}
 .tkchk{flex:none;width:18px;height:18px;accent-color:var(--accent);cursor:pointer;margin:0 4px 0 2px;vertical-align:middle}
 .tkchk.sp{display:inline-block;cursor:default}
 .chsp{display:inline-block;width:24px;flex:none;margin-left:-1px}
-.btable th .hw .tkchk{margin-right:10px}
+
 .spkbtn{border:0;background:transparent;padding:0;margin:0;cursor:pointer;display:inline-flex;border-radius:4px}
 .spkbtn:hover{background:var(--panel2)}
 tr.dim .spkbtn{opacity:.5}
@@ -1152,7 +1156,7 @@ function tickRows100(skip){const ps=pTicked().filter(p=>p.id!==skip&&weights(p).
   if(!ps.length)rows=tickP().rows.map(r=>({t:r.t,w:r.w}));
   else{const items=ps.length+bTicked().length,acc={};ps.forEach(p=>weights(p).forEach(x=>{acc[x.t]=(acc[x.t]||0)+x.w/items}));bTicked().forEach(r=>{acc[r.t]=(acc[r.t]||0)+1/items});rows=Object.entries(acc).map(([t,w])=>({t,w}))}
   scaleRows(rows);return rows}
-const CHSP_MIX=16,CHSP_ADD=16;/* nudges so 'Name it' and the add box line up with the names above */
+const CHSP_MIX=16,CHSP_ADD=16,CHSP_HEAD=39;/* nudges so 'Name it' and the add box line up with the names above */
 const PICO={chev:'<path d="M9 6l6 6-6 6"/>',dup:'<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/>',ung:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><path d="M14 6.5h4a2 2 0 0 1 2 2v2M10 17.5H6a2 2 0 0 1-2-2v-2"/>',trash:'<path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M6 7l1 13h10l1-13"/>'};
 const pico=(k,s=16)=>`<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${PICO[k]}</svg>`;
 /* portfolios get their own colours, distinct from the ETF lines */
@@ -1256,7 +1260,7 @@ function renderBTable(){const B=S.b;if(!B.open)return;const hp=B.sel.p;
     <td class="num momcell${wBest!=null&&WR[j]===wBest?' best':''}"><span class="momwrap"><button type="button" class="spkbtn" data-bhide="${j}" aria-pressed="${!r.hidden}" aria-label="${r.hidden?'Show':'Hide'} ${esc(r.t)} on the chart" data-tip="${r.hidden?'Show':'Hide'} on chart">${HAS(r.t)?sparkT(r.t,st0,ecol(r.c)):''}</button><span class="v ${cls(WR[j])}">${sg(WR[j])}</span></span></td>
     ${dsk(TPER.map(([p,m])=>{const v=periodRet(r.t,m);return `<td class="num ${cls(v)}${p===hp?' hl':''}${best[p]!=null&&v===best[p]?' best':''}">${sg(v)}</td>`}).join('')+BM.map(([k])=>bmCell(ES[j],k,bb)).join('')+`<td class="num ercol${ER[r.t]==null?' mut':''}">${fmtER(ER[r.t])}</td>`)}<td class="wcell"><span class="wbox"><label class="sr" for="bw-${j}">${esc(r.t)} percent</label><input class="field" id="bw-${j}" data-bw="${j}" inputmode="decimal" autocomplete="off" placeholder="0" value="${r.w===''||r.w==null?'':esc(r.w)}">%</span></td>${mexpBtn('b'+j,r.t)}
     <td class="xcell dsk"><button type="button" class="delbtn bdel" id="bx-${j}" data-brm="${j}" aria-label="Remove ${esc(r.t)}" data-tip="Remove ${esc(r.t)}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M6 7l1 13h10l1-13"/></svg></button></td></tr>${mdetRow('b'+j,bDetail(r.t,ES[j])+xMob(r.t)+`<div class="mi mact"><button type="button" class="btn sm mrm" data-brm="${j}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M6 7l1 13h10l1-13"/></svg>Remove ${esc(r.t)}</button></div>`)}`;
-  $('bTable').innerHTML=`<thead><tr><th style="text-align:left"><span class="hw">${B.rows.length+S.pfs.length>=2?`<label class="sr" for="bTickAll">Tick everything</label><input type="checkbox" class="tkchk" id="bTickAll" data-tip="Tick all" ${B.rows.every(r=>r.k)&&S.pfs.every(p=>p.k)?'checked':''}>`:''}${bsBtn('t','ETF')}</span></th><th class="r retcol"><span class="hw">${bsBtn('ret',selLabel(B.sel,'short')+' return')}${infoBtn('bret','return')}</span></th>${TPER.map(([p,m],k)=>`<th class="dsk r${p===hp?' hl':''}"><span class="hw">${bsBtn(p,pLabel(p,m))}${k===TPER.length-1?infoBtn('returns','returns'):''}</span></th>`).join('')}${BM.map(([k,lab,info])=>`<th class="dsk r bm${k==='sharpe'?' bmfirst':''}"><span class="hw">${bsBtn(k,lab())}${infoBtn(info,lab())}</span></th>`).join('')}<th class="dsk r ercol"><span class="hw">${bsBtn('er','Fee')}${infoBtn('er','expense ratio')}</span></th><th class="r wcell"><span class="hw">${bsBtn('w','<span class="dskl">% of portfolio</span><span class="mobl">%</span>')}</span></th><th class="mob"></th><th class="dsk"></th></tr></thead>
+  $('bTable').innerHTML=`<thead><tr><th style="text-align:left"><span class="hw">${B.rows.length+S.pfs.length>=2?`<label class="sr" for="bTickAll">Tick everything</label><input type="checkbox" class="tkchk" id="bTickAll" data-tip="Tick all" ${B.rows.every(r=>r.k)&&S.pfs.every(p=>p.k)?'checked':''}><span class="chsp" aria-hidden="true" style="width:${CHSP_HEAD}px"></span>`:''}${bsBtn('t','ETF')}</span></th><th class="r retcol"><span class="hw">${bsBtn('ret',selLabel(B.sel,'short')+' return')}${infoBtn('bret','return')}</span></th>${TPER.map(([p,m],k)=>`<th class="dsk r${p===hp?' hl':''}"><span class="hw">${bsBtn(p,pLabel(p,m))}${k===TPER.length-1?infoBtn('returns','returns'):''}</span></th>`).join('')}${BM.map(([k,lab,info])=>`<th class="dsk r bm${k==='sharpe'?' bmfirst':''}"><span class="hw">${bsBtn(k,lab())}${infoBtn(info,lab())}</span></th>`).join('')}<th class="dsk r ercol"><span class="hw">${bsBtn('er','Fee')}${infoBtn('er','expense ratio')}</span></th><th class="r wcell"><span class="hw">${bsBtn('w','<span class="dskl">% of portfolio</span><span class="mobl">%</span>')}</span></th><th class="mob"></th><th class="dsk"></th></tr></thead>
     <tbody>${(()=>{const ord=bOrder(WR,ES);const lastK=ord.filter(j=>B.rows[j].k&&HAS(B.rows[j].t)).pop();const lastP=lastK==null?(pTicked().pop()||{}).id:null;if(lastK==null&&lastP==null)PVON=false;return pfRowsHTML(NC,lastP)+ord.map(j=>etfRow(B.rows[j],j)+(j===lastK?pvStripHTML(NC):'')).join('')})()}${addRow}</tbody>`;
   document.querySelectorAll('#bTable button.info:empty').forEach(b=>{b.innerHTML=ICON_I});
 
@@ -1387,10 +1391,10 @@ function alignHeads(){const bw=document.querySelector('#builder .bheadwrap'),pt=
   else if(d<-0.5){if(getComputedStyle(ba).position==='absolute'&&bh)bh.style.minHeight=(bh.offsetHeight-d)+'px';else ba.style.paddingBottom=(parseFloat(getComputedStyle(ba).paddingBottom)-d)+'px'}}
 function sizeCharts(){if(SZ||!D)return;alignHeads();SZ=true;try{const bb=$('bChartbox'),rb=document.querySelector('.bcgrid .prail'),rp=document.querySelector('#portfolios .pgrid>.prail');
   const duo=DUO(),bOn=S.b.open&&bb&&(duo||bb.clientWidth>=600),railB=bOn&&rb&&rb.offsetParent?rb.offsetHeight:0,railP=rp&&rp.offsetParent?rp.offsetHeight:0;
-  let hb=bOn?Math.max(320,railB):null,hp=null;if(duo){const h=Math.min(640,Math.max(360,railB,railP));hb=h;hp=h}
+  const big=bb&&bb.clientWidth>=700;let hb=bOn?Math.max(big?460:340,railB):null,hp=null;if(duo){const h=Math.min(640,Math.max(360,railB,railP));hb=h;hp=h}
   else if(bOn){/* laptops: keep the ETF rows, the add-ticker row and the total on screen; the list scrolls only if it must */
     const bd=$('builder'),nonChart=bd.offsetHeight-bb.offsetHeight,top=bd.getBoundingClientRect().top+scrollY,room=innerHeight-top-nonChart-10;
-    hb=Math.max(300,Math.min(hb,Math.max(320,room)))}
+    hb=Math.max(big?420:300,Math.min(hb,Math.max(320,room)))}
   if(rb){const sc=bOn&&!duo&&railB>hb;rb.style.maxHeight=sc?hb+'px':'';rb.style.overflow=sc?'auto':''}
   if(bOn&&hb!==CHH.b){CHH.b=hb;renderBChart()}else CHH.b=hb;
   if(hp!==CHH.p){CHH.p=hp;renderChart()}}finally{SZ=false}}
