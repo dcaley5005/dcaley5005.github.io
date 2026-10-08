@@ -538,6 +538,7 @@ thead tr.grow th{padding-top:0}
 .mixrow td.num{font-size:15px}
 /* one section now: the builder is always open, so no collapse arrow; the title is hidden, so the controls sit in a normal row */
 #builder #bSave,#builder #bHint{display:none!important}
+.top h1{font-size:clamp(26px,2.4vw,32px)!important}
 #builder .bheadwrap{display:flex;justify-content:flex-end;align-items:center;padding:12px 24px;min-height:64px;box-sizing:border-box}
 #builder #bToggle{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);padding:0!important;margin:0;border:0}
 #builder .bacts{position:static!important;transform:none!important;display:flex;flex-wrap:wrap;justify-content:flex-end;padding:0!important}
@@ -1395,7 +1396,7 @@ function sizeCharts(){if(SZ||!D)return;alignHeads();SZ=true;try{const bb=$('bCha
   const big=bb&&bb.clientWidth>=700;let hb=bOn?Math.max(big?460:340,railB):null,hp=null;if(duo){const h=Math.min(640,Math.max(360,railB,railP));hb=h;hp=h}
   else if(bOn){/* laptops: keep the ETF rows, the add-ticker row and the total on screen; the list scrolls only if it must */
     const bd=$('builder'),nonChart=bd.offsetHeight-bb.offsetHeight,top=bd.getBoundingClientRect().top+scrollY,room=innerHeight-top-nonChart-10;
-    hb=Math.max(big?420:300,Math.min(hb,Math.max(320,room)))}
+    hb=Math.max(260,Math.min(hb,room))}
   if(rb){const sc=bOn&&!duo&&railB>hb;rb.style.maxHeight=sc?hb+'px':'';rb.style.overflow=sc?'auto':''}
   if(bOn&&hb!==CHH.b){CHH.b=hb;renderBChart()}else CHH.b=hb;
   if(hp!==CHH.p){CHH.p=hp;renderChart()}}finally{SZ=false}}
