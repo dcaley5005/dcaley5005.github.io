@@ -644,8 +644,8 @@ body.xm-open{overflow:hidden}
 .xcap2{text-transform:none;letter-spacing:0;color:var(--faint)}
 .xglance{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
 .xg{flex:0 0 calc((100% - 64px)/9);min-width:0;border:0;border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:3px;background:var(--panel2);color:var(--ink);text-align:left;font:inherit}
-button.xg{cursor:pointer}button.xg:hover{box-shadow:inset 0 0 0 1px var(--inputLine)}
-.xg.sel{box-shadow:inset 0 0 0 2px var(--accent)}
+button.xg{cursor:pointer}button.xg:hover{box-shadow:inset 0 0 0 1px var(--inputLine);filter:brightness(1.08)}
+.xg.sel,button.xg.sel:hover{box-shadow:inset 0 0 0 2px var(--accent)}
 .xg span:first-child{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11px;letter-spacing:.07em;color:var(--muted);text-transform:uppercase}
 .xg b{font-family:"IBM Plex Mono",monospace;font-size:17px;font-weight:600}
 .xg.p{background:var(--xposBg)}.xg.p b{color:var(--pos)}.xg.n{background:var(--xnegBg)}.xg.n b{color:var(--neg)}
@@ -653,9 +653,8 @@ button.xg{cursor:pointer}button.xg:hover{box-shadow:inset 0 0 0 1px var(--inputL
 .xtop{display:flex;gap:24px;align-items:stretch}
 .xfig{position:relative;margin:0;flex:1 1 auto;min-width:0;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:10px 10px 6px}
 .xfig svg{display:block;width:100%;height:auto;font-family:"IBM Plex Mono",monospace;overflow:visible}
-.xfig figcaption{font-size:12px;color:var(--faint);padding:2px 6px 4px}
 .xpt{cursor:pointer;transition:opacity .12s}
-.xfade .xpt{opacity:.25}.xfade .xpt.on{opacity:1}
+.xfade .xpt{opacity:.5}.xfade .xpt text{opacity:.8}.xfade .xpt.on{opacity:1}.xfade .xpt.on text{opacity:1}
 .xlegend{flex:0 0 330px;display:flex;flex-direction:column;gap:10px;font-size:13.5px;line-height:1.5;color:var(--ink2)}
 .xlegend{position:relative}
 .xlegend .li{display:flex;gap:10px;align-items:center}
@@ -710,8 +709,8 @@ button.xg{cursor:pointer}button.xg:hover{box-shadow:inset 0 0 0 1px var(--inputL
 .xspark .lg{display:flex;gap:12px;font-size:11px;color:var(--faint);margin-top:2px}
 .xchips{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
 .xpc{border:0;border-radius:8px;padding:6px 9px;display:flex;flex-direction:column;align-items:flex-start;background:var(--panel);color:var(--ink);font:inherit;text-align:left;cursor:pointer;min-width:0}
-.xpc:hover{box-shadow:inset 0 0 0 1px var(--inputLine)}
-.xpc.sel{box-shadow:inset 0 0 0 2px var(--xc)}
+button.xpc:hover{box-shadow:inset 0 0 0 1px var(--inputLine);filter:brightness(1.08)}
+.xpc.sel,button.xpc.sel:hover{box-shadow:inset 0 0 0 2px var(--xc)}
 .xpc i{font-style:normal;font-family:"IBM Plex Mono",monospace;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 .xchips span{font-size:11px;color:var(--muted)}
 .xchips b{font-family:"IBM Plex Mono",monospace;font-size:14px}
@@ -741,7 +740,7 @@ button.xg{cursor:pointer}button.xg:hover{box-shadow:inset 0 0 0 1px var(--inputL
   .xcards{grid-template-columns:minmax(0,1fr)}.xg{flex-basis:calc((100% - 16px)/3)}
 }
 .xchip.m{color:var(--xm);background:var(--xmBg)}
-.xpc.why{box-shadow:inset 0 0 0 1px var(--xm)}.xpc.why.sel{box-shadow:inset 0 0 0 2px var(--xc)}
+.xpc.why{box-shadow:inset 0 0 0 1px var(--xm)}.xpc.why.sel,button.xpc.why.sel:hover{box-shadow:inset 0 0 0 2px var(--xc)}
 .xfigt{font-family:"Source Serif 4",Georgia,serif;font-size:16px;font-weight:600;color:var(--ink);padding:4px 6px 2px}
 tr.xecho>td{background:var(--accentBg);transition:background .2s}
 .xmhr{display:flex;gap:8px;align-items:center;flex:none}
@@ -775,6 +774,11 @@ tr.xecho>td{background:var(--accentBg);transition:background .2s}
 .xtip:not(.dock):has(.xchips){width:340px}
 @media (max-width:520px){.xrisk{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .xtip.dock{gap:8px}.xtip.dock .xrl{margin-bottom:-3px}.xtip.dock .xpc,.xtip.dock .xrk{padding:4px 8px}.xtip.dock .xtw{font-size:12.5px;line-height:1.4}.xtip.dock .xttag{padding:2px 9px}
+
+/* key lines on the right light up their group on the chart */
+.xlegend .li[data-xk]{cursor:default;border-radius:6px;margin:-3px -6px;padding:3px 6px;transition:background .12s}
+.xlegend .li[data-xk]:hover{background:var(--panel2)}
+.xtf .none{font-weight:500;color:var(--muted)}
 </style>
 
 <div class="wrap">
@@ -1891,14 +1895,20 @@ function xChart(d){const s=d.self,seen=new Set();const pts=[{...s,k:'self'}].con
   for(let v=x0;v<=x1+1e-9;v+=xs)g+=`<text x="${X(v).toFixed(1)}" y="${Bm+16}" text-anchor="middle" font-size="11" fill="var(--faint)">${Math.round(v*100)}%</text>`;
   const sx=X(s.vol),sy=Y(s.r3);
   const zone=`<g class="xzone" style="display:none"><rect x="${L}" y="${T}" width="${Math.max(0,sx-L).toFixed(1)}" height="${Math.max(0,sy-T).toFixed(1)}" fill="var(--pos)" opacity=".08"/><line x1="${sx.toFixed(1)}" x2="${sx.toFixed(1)}" y1="${T}" y2="${Bm}" stroke="var(--ink)" stroke-opacity=".3" stroke-dasharray="4 4"/><line x1="${L}" x2="${R}" y1="${sy.toFixed(1)}" y2="${sy.toFixed(1)}" stroke="var(--ink)" stroke-opacity=".3" stroke-dasharray="4 4"/><text x="${L+8}" y="${T+16}" font-size="12" font-weight="600" fill="var(--pos)" font-family="IBM Plex Sans,sans-serif">Better than ${esc(s.t)}: more return, less risk</text><rect x="${sx.toFixed(1)}" y="${T}" width="${Math.max(0,R-sx).toFixed(1)}" height="${Math.max(0,sy-T).toFixed(1)}" fill="var(--xd)" opacity=".07"/><text x="${R-8}" y="${T+16}" text-anchor="end" font-size="12" font-weight="600" fill="var(--xd)" font-family="IBM Plex Sans,sans-serif">More return, but riskier</text></g>`;
-  const placed=[];const lab=(p,x,y)=>{let lx=x+10,anchor='start';const w=p.t.length*7.5+4;if(lx+w>R+8){lx=x-10;anchor='end'}let ly=y+4;for(const q of placed){if(Math.abs(q.y-ly)<13&&Math.abs(q.x-lx)<w+10)ly=q.y+(ly>=q.y?13:-13)}placed.push({x:lx,y:ly});return `<text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="${anchor}" font-size="12" font-weight="600" fill="${p.k==='self'?'var(--ink)':p.k==='same'?'var(--xs)':p.k==='mom'?'var(--xm)':'var(--xd)'}">${esc(p.t)}</text>`};
+  /* labels: try right, left, above, below, then nudged spots; keep the one that hits no other label or dot */
+  const placed=[];const lab=(p,x,y)=>{const w=p.t.length*7.5+2;const box=(lx,ly,a)=>{const x0=a==='start'?lx:a==='end'?lx-w:lx-w/2;return [x0,ly-10,x0+w,ly+2]};
+    const hit=(b,q)=>Math.max(0,Math.min(b[2],q[2])-Math.max(b[0],q[0]))*Math.max(0,Math.min(b[3],q[3])-Math.max(b[1],q[1]));
+    const dotsB=pos.filter(q=>q[0]!==x||q[1]!==y).map(q=>[q[0]-8,q[1]-8,q[0]+8,q[1]+8]);
+    const cands=[[x+10,y+4,'start'],[x-10,y+4,'end'],[x,y-11,'middle'],[x,y+20,'middle'],[x+10,y-9,'start'],[x+10,y+17,'start'],[x-10,y-9,'end'],[x-10,y+17,'end']];
+    let best=null,bs=1e9;for(const [lx,ly,a] of cands){const b=box(lx,ly,a);let sc=0;if(b[0]<L-4||b[2]>R+8||b[1]<T-4||b[3]>Bm+2)sc+=500;for(const q of placed)sc+=hit(b,q)*2;for(const q of dotsB)sc+=hit(b,q);if(sc<bs){bs=sc;best=[lx,ly,a,b]}if(sc===0)break}
+    placed.push(best[3]);return `<text x="${best[0].toFixed(1)}" y="${best[1].toFixed(1)}" text-anchor="${best[2]}" font-size="12" font-weight="600" fill="${p.k==='self'?'var(--ink)':p.k==='same'?'var(--xs)':p.k==='mom'?'var(--xm)':'var(--xd)'}">${esc(p.t)}</text>`};
   const pos=[];const spot=p=>{let x=X(p.vol),y=Y(p.r3);for(let k=0;k<12&&pos.some(q=>Math.hypot(q[0]-x,q[1]-y)<12);k++){const a=k*2.4;x=X(p.vol)+Math.cos(a)*(10+k*2);y=Y(p.r3)+Math.sin(a)*(10+k*2)}pos.push([x,y]);return [x,y]};
-  const dots=pts.slice().sort((a,b)=>a.k==='self'?-1:b.k==='self'?1:0).map(p=>{const [x,y]=spot(p);const mark=p.k==='self'?`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="8" fill="var(--ink)"/>`:p.k==='same'?`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="6" fill="var(--xs)"/>`:p.k==='mom'?`<path d="M${x.toFixed(1)} ${(y-7).toFixed(1)}L${(x+7).toFixed(1)} ${(y+5).toFixed(1)}H${(x-7).toFixed(1)}Z" fill="var(--xm)"/>`:`<rect x="${(x-5.5).toFixed(1)}" y="${(y-5.5).toFixed(1)}" width="11" height="11" fill="var(--xd)"/>`;
-    return `<g class="xpt" data-xt="${esc(p.t)}" tabindex="0" role="button" aria-label="${esc(p.t)}: ${xp(p.r3)} a year, volatility ${xu(p.vol)}"><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="14" fill="transparent"/>${mark}${lab(p,x,y)}</g>`}).join('');
-  return `<figure class="xfig"><div class="xfigt">Return vs. risk over the last 3 years</div><svg viewBox="0 0 ${W} ${H+20}" role="img" aria-label="Return versus risk over the last 3 years">${g}${zone}<g font-family="IBM Plex Sans,sans-serif" font-size="12" font-weight="600" fill="var(--ink2)"><text x="${(L+R)/2}" y="${H+14}" text-anchor="middle">${innerWidth<=700?'Risk: volatility (lower is less risky)':'Risk: volatility, how much the price moves around (lower is less risky)'}</text><text transform="translate(12 ${(T+Bm)/2}) rotate(-90)" text-anchor="middle">Return per year</text></g><g class="xdots">${dots}</g></svg><div class="xtip" id="xChartTip" hidden></div><figcaption>Up and to the left is better: more return, less risk.</figcaption></figure>`}
+  const ord=pts.slice().sort((a,b)=>a.k==='self'?-1:b.k==='self'?1:0),xy=ord.map(spot);const dots=ord.map((p,ix)=>{const [x,y]=xy[ix];const mark=p.k==='self'?`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="8" fill="var(--ink)"/>`:p.k==='same'?`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="6" fill="var(--xs)"/>`:p.k==='mom'?`<path d="M${x.toFixed(1)} ${(y-7).toFixed(1)}L${(x+7).toFixed(1)} ${(y+5).toFixed(1)}H${(x-7).toFixed(1)}Z" fill="var(--xm)"/>`:`<rect x="${(x-5.5).toFixed(1)}" y="${(y-5.5).toFixed(1)}" width="11" height="11" fill="var(--xd)"/>`;
+    return `<g class="xpt" data-xt="${esc(p.t)}" data-xk="${p.k}" tabindex="0" role="button" aria-label="${esc(p.t)}: ${xp(p.r3)} a year, volatility ${xu(p.vol)}"><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="14" fill="transparent"/>${mark}${lab(p,x,y)}</g>`}).join('');
+  return `<figure class="xfig"><div class="xfigt">Return vs. risk over the last 3 years</div><svg viewBox="0 0 ${W} ${H+20}" role="img" aria-label="Return versus risk over the last 3 years">${g}${zone}<g font-family="IBM Plex Sans,sans-serif" font-size="12" font-weight="600" fill="var(--ink2)"><text x="${(L+R)/2}" y="${H+14}" text-anchor="middle">${innerWidth<=700?'Risk: volatility (lower is less risky)':'Risk: volatility, how much the price moves around (lower is less risky)'}</text><text transform="translate(12 ${(T+Bm)/2}) rotate(-90)" text-anchor="middle">Return per year</text></g><g class="xdots">${dots}</g></svg><div class="xtip" id="xChartTip" hidden></div></figure>`}
 function xFind(t){const d=XM.d;if(!d)return null;if(d.self.t===t)return {...d.self,k:'self'};for(const [arr,k] of [[d.same,'same'],[d.closest||[],'same'],[d.div,'div'],[d.mom||[],'mom']]){const c=arr.find(x=>x.t===t);if(c)return {...c,k}}return null}
 function xChartTip(t,on){const tip=$('xChartTip'),svg=document.querySelector('#xmBody .xfig svg');if(!tip||!svg)return;const zone=svg.querySelector('.xzone');
-  svg.querySelector('.xdots').classList.toggle('xfade',!!on);svg.querySelectorAll('.xpt').forEach(g=>g.classList.toggle('on',on&&g.dataset.xt===t));
+  svg.querySelector('.xdots').classList.toggle('xfade',!!on&&t!==XM.d.self.t);svg.querySelectorAll('.xpt').forEach(g=>g.classList.toggle('on',on&&g.dataset.xt===t));
   document.querySelectorAll('#xmBody .xcard').forEach(c=>c.classList.toggle('hl',on&&c.dataset.xc===t));document.querySelectorAll('#xmBody .xcards').forEach(c=>c.classList.toggle('dim',!!on&&!!c.querySelector('.xcard.hl')));
   if(!on){tip.hidden=true;zone.style.display='none';const lg=document.querySelector('#xmBody .xlegend');if(lg)lg.classList.remove('showtip');return}
   const p=xFind(t),s=XM.d.self;if(!p)return;let h;
@@ -1908,7 +1918,7 @@ function xChartTip(t,on){const tip=$('xChartTip'),svg=document.querySelector('#x
   const pts=v=>(v>=0?'+':'−')+Math.abs(v*100).toFixed(1);
   const m3=x=>x.m3!=null?x.m3:x.r[1];
   if(p.k==='self'){zone.style.display='';const n1=XM.d.same.length,n2=XM.d.div.length;
-    h=head(s.t,'The ETF you clicked','self')+`<div class="xrl">Returns</div><div class="xchips">${xRetChips(s,s,false)}</div><div class="xrl xrlr">Risk · ${xRngLbl()}</div><div class="xrisk">${xRiskTiles(s,s)}</div><div class="xtf"><span style="color:var(--xs)">● ${n1?n1+' with higher return':'No higher-return pick'}</span><span style="color:var(--xd)">■ ${n2?n2+' with less risk':'No less-risk pick'}</span>${XM.d.mom?`<span style="color:var(--xm)">▲ ${XM.d.mom.length?XM.d.mom.length+' with momentum':'No momentum pick'}</span>`:''}</div>`}
+    h=head(s.t,'The ETF you clicked','self')+`<div class="xrl">Returns</div><div class="xchips">${xRetChips(s,s,false)}</div><div class="xrl xrlr">Risk · ${xRngLbl()}</div><div class="xrisk">${xRiskTiles(s,s)}</div><div class="xtf"><span style="color:var(--xs)">● Higher return${n1?'':' <i class="none">· none found</i>'}</span><span style="color:var(--xd)">■ Less risk${n2?'':' <i class="none">· none found</i>'}</span>${XM.d.mom?`<span style="color:var(--xm)">▲ Momentum${XM.d.mom.length?'':' <i class="none">· none found</i>'}</span>`:''}</div>`}
   else{zone.style.display='none';const tagTxt={same:'Higher return pick',div:'Less risk pick',mom:'Momentum pick'}[p.k];
     const vr=p.vol/s.vol-1,risk=vr>0.05?'with more risk':vr<-0.05?'with less risk':'with about the same risk';
     const lead={same:`Earned ${xpts(p.r3-s.r3)} points a year more than ${s.t}`,div:`About the same return as ${s.t}`,mom:`Up ${xp(m3(p))} over the last 3 months vs ${xp(m3(s))} for ${s.t}`}[p.k];
@@ -1940,7 +1950,7 @@ function renderXM(){const b=$('xmBody');renderXMFoot();
     :`<div class="xnote"><b>No less risky fund kept up with ${esc(t)}</b><span>No ETF had 15%+ less volatility while staying within 2 points a year of its 3-year return.</span></div>`;
   const mo=!d.mom?'':`<section class="xsec"><h3>Momentum <small>Moves like ${esc(t)} and is ahead of it over the last 3 months, without much more risk</small></h3>${d.mom.length?`<div class="xcards">${d.mom.map(c=>xCard(c,s,'mom')).join('')}${d.mom.length<3?`<div class="xnote"><b>Only ${d.mom.length} ahead lately</b><span>${esc(t)} is ${xp(s.m3)} over the last 3 months, so few similar funds have kept ahead of it.</span></div>`:''}</div>`:`<div class="xnote"><b>Nothing similar is ahead of ${esc(t)} lately</b><span>No fund that moves like ${esc(t)} beat it by 2+ points over the last 3 months without much more risk. ${esc(t)} itself is ${xp(s.m3)}.</span></div>`}</section>`;
   b.innerHTML=`<div style="display:flex;flex-direction:column;gap:8px"><div class="xcap">${esc(t)} at a glance <span class="xcap2">· click a period to change the line charts</span></div><div class="xglance">${gl}</div></div>
-    <div class="xtop">${xChart(d)}<div class="xlegend"><div class="li"><svg width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="6" fill="var(--ink)"/></svg><span>${esc(t)}, the ETF you clicked</span></div><div class="li"><svg width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="6" fill="var(--xs)"/></svg><span>Higher return: moves 85%+ in step with ${esc(t)}, earned more</span></div><div class="li"><svg width="14" height="14" aria-hidden="true"><rect x="1" y="1" width="12" height="12" fill="var(--xd)"/></svg><span>Less risk: 15%+ less volatility, about the same return</span></div>${d.mom?`<div class="li"><svg width="14" height="14" aria-hidden="true"><path d="M7 1L13 12H1Z" fill="var(--xm)"/></svg><span>Momentum: ahead of ${esc(t)} over the last 3 months, plotted on its 3-year numbers</span></div>`:''}
+    <div class="xtop">${xChart(d)}<div class="xlegend"><div class="li"><svg width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="6" fill="var(--ink)"/></svg><span>${esc(t)}, the ETF you clicked</span></div><div class="li" data-xk="same"><svg width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="6" fill="var(--xs)"/></svg><span>Higher return: moves 85%+ in step with ${esc(t)}, earned more</span></div><div class="li" data-xk="div"><svg width="14" height="14" aria-hidden="true"><rect x="1" y="1" width="12" height="12" fill="var(--xd)"/></svg><span>Less risk: 15%+ less volatility, about the same return</span></div>${d.mom?`<div class="li" data-xk="mom"><svg width="14" height="14" aria-hidden="true"><path d="M7 1L13 12H1Z" fill="var(--xm)"/></svg><span>Momentum: ahead of ${esc(t)} over the last 3 months, plotted on its 3-year numbers</span></div>`:''}
     <div class="how">Picked from ${d.pool.toLocaleString()} ETFs. Hover a dot or a card to compare.</div></div></div>
     <section class="xsec"><h3>Higher return, similar risk <small>Moves like ${esc(t)} and earned more, without much more risk</small></h3>${same}</section>
     <section class="xsec"><h3>Less risk, similar return <small>Less risk than ${esc(t)} with about the same return</small></h3>${dv}</section>${mo}
@@ -1966,8 +1976,10 @@ document.addEventListener('pointerover',e=>{if(!e.target.closest)return;const tr
 document.addEventListener('keydown',e=>{if($('xm').hidden)return;if(e.key==='Escape'){e.stopPropagation();if($('xmDrawer').classList.contains('open')){xDrawer(false);$('xmHow').focus()}else closeExplore()}
   if(e.key==='Tab'){const f=[...$('xm').querySelectorAll('button:not(:disabled),[tabindex="0"]')].filter(x=>x.offsetParent);if(!f.length)return;const i=f.indexOf(document.activeElement);if(e.shiftKey&&i<=0){e.preventDefault();f[f.length-1].focus()}else if(!e.shiftKey&&i===f.length-1){e.preventDefault();f[0].focus()}}},true);
 document.addEventListener('mouseover',e=>{if($('xm').hidden)return;const p=e.target.closest('#xmBody .xpt');if(p){xChartTip(p.dataset.xt,true);return}
+  const lk=e.target.closest('#xmBody .xlegend .li[data-xk]');if(lk){const svg=document.querySelector('#xmBody .xfig svg');if(svg){svg.querySelector('.xdots').classList.add('xfade');svg.querySelectorAll('.xpt').forEach(g=>g.classList.toggle('on',g.dataset.xk===lk.dataset.xk))}return}
   const c=e.target.closest('#xmBody [data-xc]');if(c){const svg=document.querySelector('#xmBody .xfig svg');if(svg){svg.querySelector('.xdots').classList.add('xfade');svg.querySelectorAll('.xpt').forEach(g=>g.classList.toggle('on',g.dataset.xt===c.dataset.xc))}}});
 document.addEventListener('mouseout',e=>{if($('xm').hidden)return;const p=e.target.closest('#xmBody .xpt');if(p&&!p.contains(e.relatedTarget)){xChartTip(p.dataset.xt,false);return}
+  const lk=e.target.closest('#xmBody .xlegend .li[data-xk]');if(lk&&!lk.contains(e.relatedTarget)){const svg=document.querySelector('#xmBody .xfig svg');if(svg){svg.querySelector('.xdots').classList.remove('xfade');svg.querySelectorAll('.xpt').forEach(g=>g.classList.remove('on'))}return}
   const c=e.target.closest('#xmBody [data-xc]');if(c&&!c.contains(e.relatedTarget)){const svg=document.querySelector('#xmBody .xfig svg');if(svg){svg.querySelector('.xdots').classList.remove('xfade');svg.querySelectorAll('.xpt').forEach(g=>g.classList.remove('on'))}}});
 document.addEventListener('focusin',e=>{if($('xm').hidden)return;const p=e.target.closest&&e.target.closest('#xmBody .xpt');if(p)xChartTip(p.dataset.xt,true)});
 document.addEventListener('mousemove',e=>{if($('xm').hidden)return;const box=e.target.closest('#xmBody .xspark');document.querySelectorAll('#xmBody .xspark').forEach(b=>{if(b!==box)xSparkOut(b)});if(box)xSparkMove(box,e)});
