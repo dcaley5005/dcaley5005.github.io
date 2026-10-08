@@ -779,6 +779,9 @@ tr.xecho>td{background:var(--accentBg);transition:background .2s}
 .xlegend .li[data-xk]{cursor:default;border-radius:6px;margin:-3px -6px;padding:3px 6px;transition:background .12s}
 .xlegend .li[data-xk]:hover{background:var(--panel2)}
 .xtf .none{font-weight:500;color:var(--muted)}
+/* no browser focus box around a clicked dot; keyboard users get a thin ring on the marker instead */
+.xpt:focus,.xpt:focus-visible{outline:none}
+.xpt:focus-visible>:not(text):not([fill="transparent"]){stroke:var(--ink);stroke-width:2}
 </style>
 
 <div class="wrap">
