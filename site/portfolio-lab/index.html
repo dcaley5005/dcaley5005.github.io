@@ -546,13 +546,13 @@ thead tr.grow th{padding-top:0}
 .xgwrap .xg span:first-child{font-size:calc(11px - 1px*var(--p))}
 .xgwrap .xg>*{flex-shrink:0}
 .xgwrap .xg b{align-self:flex-start;font-size:calc(17px - 3px*var(--p));will-change:transform}
-.xgmini{display:none}
-@media (max-width:640px){.xgwrap{--p:0!important;position:static;margin:0;padding:0;box-shadow:none}.xgwrap .xg,.xgwrap .xg b,.xgwrap .xg span{height:auto!important;transform:none!important;max-width:none!important}
-.xgmini{display:block;position:sticky;top:-16px;height:0;margin:-16px 0 -4px;z-index:7}
-.xgmi{position:absolute;left:-16px;right:-16px;top:0;display:flex;gap:6px;padding:10px 16px;background:var(--panel);box-shadow:0 1px 0 var(--line),0 10px 18px -12px rgba(0,0,0,.5);transform:translateY(-105%);opacity:0;pointer-events:none;transition:transform .38s cubic-bezier(.2,.9,.25,1),opacity .22s ease;will-change:transform}
-.xgmini.on .xgmi{transform:none;opacity:1;pointer-events:auto}
-.xgmi .xg{flex:1 1 0;padding:7px 10px;border-radius:8px;gap:1px;cursor:pointer}
-.xgmi .xg span:first-child{font-size:9.5px}.xgmi .xg b{font-size:14px}}
+#xgMini{display:none}
+@media (max-width:640px),(pointer:coarse){.xgwrap{--p:0!important;position:static;margin:0;padding:0;box-shadow:none}.xgwrap .xg,.xgwrap .xg b,.xgwrap .xg span{height:auto!important;transform:none!important;max-width:none!important}
+#xgMini{display:flex;position:absolute;left:0;right:0;z-index:8;gap:6px;padding:10px 16px;background:var(--panel);box-shadow:0 1px 0 var(--line),0 10px 18px -12px rgba(0,0,0,.5);transform:translateY(-105%);opacity:0;pointer-events:none;transition:transform .38s cubic-bezier(.2,.9,.25,1),opacity .22s ease;will-change:transform}
+#xgMini.on{transform:none;opacity:1;pointer-events:auto}
+#xgMini .xg{flex:1 1 0;padding:7px 10px;border-radius:8px;gap:1px;cursor:pointer}
+#xgMini .xg span:first-child{font-size:9.5px}#xgMini .xg b{font-size:14px}}
+@media (pointer:coarse) and (min-width:641px){#xgMini{padding:10px 28px}#xgMini .xg{flex:1 1 auto;flex-direction:row;align-items:baseline;justify-content:space-between;gap:6px;padding:6px 10px;min-width:0}#xgMini .xg span:first-child{font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}}
 /* narrower screens: smaller side margins and tighter columns so the whole table fits without sideways scrolling */
 @media (max-width:1600px){
   .wrap{padding-inline:clamp(16px,2.6vw,40px)!important}
@@ -731,7 +731,7 @@ body.xm-open{overflow:hidden}
 .xmback{position:absolute;inset:0;background:rgba(10,10,8,.55)}
 .xmd{position:relative;width:min(1480px,94vw);max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);display:flex;flex-direction:column;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:16px;box-shadow:0 24px 60px rgba(0,0,0,.35);overflow:hidden}
 @media (min-width:1880px){.xmd{width:min(1640px,88vw)}}
-.xmh{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding:18px 28px 14px;border-bottom:1px solid var(--line)}
+.xmh{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding:18px 28px 14px;border-bottom:1px solid var(--line);position:relative;z-index:9;background:var(--panel)}
 .xmh h2{margin:0;font-family:"Source Serif 4",Georgia,serif;font-size:26px;font-weight:600}
 .xmh .sub{font-size:13px;color:var(--muted);margin-top:4px}
 .xmh .sub .sshort{display:none}@media (max-width:700px){.xmh .sub .sfull{display:none}.xmh .sub .sshort{display:inline}}
@@ -1792,7 +1792,7 @@ document.addEventListener('input',e=>{const el=e.target;
   else if(el.dataset&&el.dataset.bw!=null){const v=String(el.value).replace(/[^0-9.]/g,'');S.b.rows[+el.dataset.bw].w=v===''?'':Math.round(parseFloat(v)*100)/100;save('b',S.b);updateSave();renderMixLive()}
 });
 /* Explore: slim the pinned strip once you scroll past it (a little slack so it doesn't flicker at the edge) */
-const XG={cur:0,raf:0};
+const XG={cur:0,raf:0};const XGMINI=()=>innerWidth<=640||matchMedia('(pointer:coarse)').matches;
 function xgMeasure(w){w.style.setProperty('--p',0);w.style.marginBottom='0px';w.querySelectorAll('.xg').forEach(x=>{x.style.height='';const n=x.querySelector('b'),l=x.firstElementChild;n.style.transform='';l.style.transform='';l.style.maxWidth=''});w._h0=w.offsetHeight;const x=w.querySelector('.xg');w._bh=x?x.offsetHeight:0}
 function xgPaint(w,p){if(!w._h0)xgMeasure(w);w.style.setProperty('--p',p.toFixed(4));const pad=12-2*p,pv=10-4*p;
   const sm=t=>{t=Math.min(1,Math.max(0,t));return t*t*(3-2*t)},px=sm(p/.6),py=sm((p-.25)/.75);
@@ -1802,17 +1802,17 @@ function xgPaint(w,p){if(!w._h0)xgMeasure(w);w.style.setProperty('--p',p.toFixed
     l.style.transform=`translateY(${(((nh-lh)/2)*py).toFixed(2)}px)`;l.style.maxWidth=(inner-(nw+8)*py)+'px'});
   w.style.marginBottom=Math.max(0,w._h0-w.offsetHeight)+'px'}
 function xgTarget(b){const t=Math.min(1,Math.max(0,(b.scrollTop-16)/110));return t*t*(3-2*t)}
-function xgTick(){XG.raf=0;const b=$('xmBody'),w=b&&b.querySelector('.xgwrap');if(!w||innerWidth<=640)return;const tg=xgTarget(b);XG.cur+=(tg-XG.cur)*.2;if(Math.abs(tg-XG.cur)<.002)XG.cur=tg;xgPaint(w,XG.cur);if(XG.cur!==tg)XG.raf=requestAnimationFrame(xgTick)}
+function xgTick(){XG.raf=0;const b=$('xmBody'),w=b&&b.querySelector('.xgwrap');if(!w||XGMINI())return;const tg=xgTarget(b);XG.cur+=(tg-XG.cur)*.2;if(Math.abs(tg-XG.cur)<.002)XG.cur=tg;xgPaint(w,XG.cur);if(XG.cur!==tg)XG.raf=requestAnimationFrame(xgTick)}
 function xgSync(reset){const b=$('xmBody'),w=b&&b.querySelector('.xgwrap');if(!w)return;
-  if(innerWidth<=640){if(w._h0){xgMeasure(w);w._h0=0}xgMini(b,w,reset);return}
+  if(XGMINI()){if(w._h0){xgMeasure(w);w._h0=0}xgMini(b,w,reset);return}
   w.classList.remove('stuck');if(reset){w._h0=0;XG.cur=xgTarget(b);xgPaint(w,XG.cur);return}if(!XG.raf)XG.raf=requestAnimationFrame(xgTick)}
 document.addEventListener('scroll',e=>{if(e.target&&e.target.id==='xmBody')xgSync()},true);
-function xgMiniFill(m,w){const src=[w.querySelector('.xg.sel'),$('xgSh'),$('xgDd')].filter(Boolean);m.querySelector('.xgmi').innerHTML=src.map(x=>`<div class="${x.className.replace(/\bsel\b/,'')}"><span>${x.firstElementChild.innerHTML}</span><b>${x.querySelector('b').innerHTML}</b></div>`).join('')}
-function xgMini(b,w,refill){const m=b.querySelector('.xgmini');if(!m)return;const on=w.getBoundingClientRect().bottom<b.getBoundingClientRect().top+40;if(refill||(on&&!m.classList.contains('on')))xgMiniFill(m,w);m.classList.toggle('on',on)}
-document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('#xmBody .xgmi')){$('xmBody').scrollTo({top:0,behavior:XREDUCE.matches?'auto':'smooth'})}});
+function xgMiniFill(m,w){const all=innerWidth>640;const src=all?[...w.querySelectorAll('.xg')]:[w.querySelector('.xg.sel'),$('xgSh'),$('xgDd')].filter(Boolean);m.innerHTML=src.map(x=>`<div class="${all?x.className:x.className.replace(/\bsel\b/,'')}"${all&&x.dataset.xrng?` data-xrng="${x.dataset.xrng}" role="button"`:''}><span>${x.firstElementChild.innerHTML}</span><b>${x.querySelector('b').innerHTML}</b></div>`).join('')}
+function xgMini(b,w,refill){let m=$('xgMini');if(!m){document.querySelector('#xm .xmh').insertAdjacentHTML('afterend','<div id="xgMini" aria-hidden="true"></div>');m=$('xgMini')}m.style.top=(document.querySelector('#xm .xmh').getBoundingClientRect().height-1.5)+'px';const on=b.scrollTop>w.offsetTop-b.offsetTop+w.offsetHeight-40;if(refill||(on&&!m.classList.contains('on')))xgMiniFill(m,w);m.classList.toggle('on',on)}
+document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('#xgMini')&&!e.target.closest('[data-xrng]')){$('xmBody').scrollTo({top:0,behavior:XREDUCE.matches?'auto':'smooth'})}});
 addEventListener('resize',()=>xgSync(true));
 /* quick hover labels for the builder's icon buttons */
-document.addEventListener('mouseover',e=>{const el=e.target.closest&&e.target.closest('#builder [data-tip],#builder .xbtn');let t=$('qtip');if(!el){if(t)t.hidden=true;return}
+document.addEventListener('mouseover',e=>{let t=$('qtip');if(matchMedia('(hover:none)').matches){if(t)t.hidden=true;return}const el=e.target.closest&&e.target.closest('#builder [data-tip],#builder .xbtn');if(!el){if(t)t.hidden=true;return}
   if(!t){document.body.insertAdjacentHTML('beforeend','<div id="qtip" role="tooltip" hidden></div>');t=$('qtip')}t.textContent=el.dataset.tip||el.getAttribute('aria-label')||'';t.hidden=false;
   const r=el.getBoundingClientRect();let x=r.left+r.width/2-t.offsetWidth/2;x=Math.max(8,Math.min(innerWidth-t.offsetWidth-8,x));let y=r.top-t.offsetHeight-6;if(y<6)y=r.bottom+6;t.style.left=x+'px';t.style.top=y+'px'});
 addEventListener('scroll',()=>{const t=$('qtip');if(t)t.hidden=true},true);
@@ -2010,7 +2010,7 @@ function xCanPrice(t){return HAS(t)||(typeof UNI!=='undefined'&&!!UNI[t])}
 const XDATA={},XLOAD={};
 function xLoad(t){if(!XLOAD[t])XLOAD[t]=fetch('data/peers/'+encodeURIComponent(t)+'.json').then(r=>{if(!r.ok)throw new Error('none');return r.json()}).then(d=>XDATA[t]=d).catch(e=>{delete XLOAD[t];throw e});return XLOAD[t]}
 async function openExplore(t,from){XM.t=t;XM.d=XDATA[t]||null;XM.rng='3Y';XM.err=null;XM.added=[];XM.from=from||null;
-  $('xm').hidden=false;document.body.classList.add('xm-open');$('xmTitle').textContent='Explore alternatives to '+t;$('xmSub').textContent=NAMES[t]||'';xDrawer(false);renderXM();xOpenFx();setTimeout(()=>$('xmClose').focus({preventScroll:true}),0);
+  {const q=$('qtip');if(q)q.hidden=true}$('xm').hidden=false;document.body.classList.add('xm-open');$('xmTitle').textContent='Explore alternatives to '+t;$('xmSub').textContent=NAMES[t]||'';xDrawer(false);renderXM();xOpenFx();setTimeout(()=>$('xmClose').focus({preventScroll:true}),0);
   if(XM.d){xCascade(true);return}
   try{const d=await xLoad(t);if(XM.t!==t)return;XM.d=d}
   catch(e){if(XM.t!==t)return;XM.err=t==='TPS'?'TPS is the 12% Solution strategy, not a fund you can buy, so it has no alternatives to show.':`Alternatives aren't available for ${t} yet. It may have less than 3 years of prices, or it isn't in our ETF list.`}
@@ -2094,7 +2094,7 @@ function xCard(c,s,kind){const col=XCOL[kind];const dr=c.r3-s.r3;const pct=Math.
     <p class="xwhy">${xWhy(c,s,kind)}</p><button type="button" class="xadd" data-xadd="${esc(c.t)}"></button></article>`}
 function xSetRange(k){XM.rng=k;const d=XM.d;if(!d)return;
   document.querySelectorAll('#xmBody .xspark').forEach(box=>{const c=xFind(box.dataset.xsp);if(!c)return;const col=box.closest('.xcard').style.getPropertyValue('--xc');box.outerHTML=xSpark(c,d.self,col,c.t)});
-  document.querySelectorAll('#xmBody [data-xrng]').forEach(b=>{const on=b.dataset.xrng===k;b.classList.toggle('sel',on);b.setAttribute('aria-pressed',on)});{const w=document.querySelector('#xmBody .xgwrap');if(w&&w._h0&&innerWidth>640)xgPaint(w,XG.cur);if(w&&innerWidth<=640)setTimeout(()=>xgSync(true),0)}
+  document.querySelectorAll('#xmBody [data-xrng]').forEach(b=>{const on=b.dataset.xrng===k;b.classList.toggle('sel',on);b.setAttribute('aria-pressed',on)});{const w=document.querySelector('#xmBody .xgwrap');if(w&&w._h0&&!XGMINI())xgPaint(w,XG.cur);if(w&&XGMINI())setTimeout(()=>xgSync(true),0)}
   document.querySelectorAll('#xmBody .xcard').forEach(card=>{const c=xFind(card.dataset.xc);const rk=card.querySelector('.xrisk'),lb=card.querySelector('.xrlr');if(c&&rk)rk.innerHTML=xRiskTiles(c,d.self);if(lb)lb.textContent=`Risk vs ${d.self.t} · ${xRngLbl()}`});
   const rs=xRisk(d.self),gs=$('xgSh'),gd=$('xgDd');if(gs)gs.innerHTML=`<span>Sharpe (${k})</span><b>${rs.sh.toFixed(2)}</b>`;if(gd)gd.innerHTML=`<span>Max DD (${k})</span><b>${xu(rs.dd)}</b>`}
 /* return vs volatility dot chart */
@@ -2162,7 +2162,7 @@ function renderXM(){const b=$('xmBody');renderXMFoot();
   const dv=d.div.length?`<div class="xcards">${d.div.map(c=>xCard(c,s,'div')).join('')}${d.div.length<3?`<div class="xnote"><b>Only ${d.div.length} found</b><span>Nothing else had 15%+ less volatility than ${esc(t)} while staying within 2 points a year of its return.</span></div>`:''}</div>`
     :`<div class="xnote"><b>No less risky fund kept up with ${esc(t)}</b><span>No ETF had 15%+ less volatility while staying within 2 points a year of its 3-year return.</span></div>`;
   const mo=!d.mom?'':`<section class="xsec"><h3>Momentum <small>Moves like ${esc(t)} and is ahead of it over the last 3 months, without much more risk</small></h3>${d.mom.length?`<div class="xcards">${d.mom.map(c=>xCard(c,s,'mom')).join('')}${d.mom.length<3?`<div class="xnote"><b>Only ${d.mom.length} ahead lately</b><span>${esc(t)} is ${xp(s.m3)} over the last 3 months, so few similar funds have kept ahead of it.</span></div>`:''}</div>`:`<div class="xnote"><b>Nothing similar is ahead of ${esc(t)} lately</b><span>No fund that moves like ${esc(t)} beat it by 2+ points over the last 3 months without much more risk. ${esc(t)} itself is ${xp(s.m3)}.</span></div>`}</section>`;
-  b.innerHTML=`<div class="xgmini" aria-hidden="true"><div class="xgmi"></div></div><div class="xgwrap" style="display:flex;flex-direction:column;gap:8px"><div class="xcap">${esc(t)} at a glance <span class="xcap2">· click a period to change the line charts</span></div><div class="xglance">${gl}</div></div>
+  b.innerHTML=`<div class="xgwrap" style="display:flex;flex-direction:column;gap:8px"><div class="xcap">${esc(t)} at a glance <span class="xcap2">· click a period to change the line charts</span></div><div class="xglance">${gl}</div></div>
     <div class="xtop">${xChart(d)}<div class="xlegend"><div class="li"><svg width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="6" fill="var(--ink)"/></svg><span>${esc(t)}, the ETF you clicked</span></div><div class="li" data-xk="same"><svg width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="6" fill="var(--xs)"/></svg><span>Higher return: moves 85%+ in step with ${esc(t)}, earned more</span></div><div class="li" data-xk="div"><svg width="14" height="14" aria-hidden="true"><rect x="1" y="1" width="12" height="12" fill="var(--xd)"/></svg><span>Less risk: 15%+ less volatility, about the same return</span></div>${d.mom?`<div class="li" data-xk="mom"><svg width="14" height="14" aria-hidden="true"><path d="M7 1L13 12H1Z" fill="var(--xm)"/></svg><span>Momentum: ahead of ${esc(t)} over the last 3 months, plotted on its 3-year numbers</span></div>`:''}
     <div class="how">Picked from ${d.pool.toLocaleString()} ETFs. Hover a dot or a card to compare.</div></div></div>
     <section class="xsec"><h3>Higher return, similar risk <small>Moves like ${esc(t)} and earned more, without much more risk</small></h3>${same}</section>
@@ -2183,7 +2183,7 @@ document.addEventListener('click',e=>{const o=e.target.closest('[data-xopen]');i
   if(e.target.closest('#xmHow')){xDrawer(!$('xmDrawer').classList.contains('open'));return}
   if(e.target.closest('[data-xdclose]')){xDrawer(false);$('xmHow').focus();return}
   const a=e.target.closest('[data-xadd]');if(a&&!a.disabled){xToggleAdd(a.dataset.xadd);return}
-  const g=e.target.closest('#xmBody [data-xrng]');if(g){xSetRange(g.dataset.xrng);return}
+  const g=e.target.closest('#xmBody [data-xrng],#xgMini [data-xrng]');if(g){xSetRange(g.dataset.xrng);return}
   const p=e.target.closest('#xmBody .xpt');if(p){const t=p.dataset.xt;xChartTip(t,true);const card=document.querySelector(`#xmBody [data-xc="${CSS.escape(t)}"]`);if(card&&matchMedia('(hover:none)').matches===false)card.scrollIntoView({behavior:'smooth',block:'nearest'});return}});
 document.addEventListener('pointerover',e=>{if(!e.target.closest)return;const tr=e.target.closest('tr');const o=e.target.closest('[data-xopen]')||(tr&&tr.querySelector('[data-xopen]'));if(o&&o.dataset.xopen!=='TPS'&&!XDATA[o.dataset.xopen])xLoad(o.dataset.xopen).catch(()=>{})});
 document.addEventListener('keydown',e=>{if($('xm').hidden)return;if(e.key==='Escape'){e.stopPropagation();if($('xmDrawer').classList.contains('open')){xDrawer(false);$('xmHow').focus()}else closeExplore()}
