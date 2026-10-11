@@ -1789,7 +1789,8 @@ document.addEventListener('click',e=>{
   else if(d.ioclose){closeIO();return}
   else if(b.id==='importBtn'){closeIO();$('fileInput').click()}
   else if(b.id==='bImport'||b.id==='pImport'){closeIO();pfTarget=b.id==='bImport'?'b':'p';$('pfFile').click()}
-  else if(b.id==='bExport'){closeIO();const rows=S.b.rows.filter(r=>r.t);if(!rows.length){toast('Add some ETFs first');return}const nm=(S.b.name||'').trim()||'portfolio';offer(nm.replace(/[^A-Za-z0-9 _-]+/g,'').trim().replace(/\s+/g,'-').toLowerCase()+'.csv',builderCSV())}
+  else if(b.id==='bDaily'){closeIO();if(!S.b.rows.length&&!S.pfs.length){toast('Add some ETFs first');return}offer(`portfolio-lab-daily-${D.days[selStart(S.b.sel)]}-to-${D.days[D.last]}.csv`,dailyCSV())}
+  else if(b.id==='bExport'){closeIO();if(!S.b.rows.length&&!S.pfs.length){toast('Add some ETFs first');return}const nm=(S.b.name||'').trim()||'portfolio';offer(nm.replace(/[^A-Za-z0-9 _-]+/g,'').trim().replace(/\s+/g,'-').toLowerCase()+'.csv',builderCSV())}
   else if(b.id==='pExport'){closeIO();if(!S.pfs.length){toast('No portfolios to export yet');return}offer(`my-portfolios-${D.days[D.last]}.csv`,portfoliosCSV())}
   else if(b.id==='exportBtn'){closeIO();offer(`portfolio-lab-daily-${D.days[D.last]}.csv`,monthlyCSV())}
   else if(b.id==='exportTable')offer(`portfolio-lab-comparison-${D.days[D.last]}.csv`,tableCSV());
@@ -1983,11 +1984,19 @@ function expCols(sel){const tp=[['1M',1],['3M',3],['6M',6],['1Y',12],['3Y',36],[
 function statTail(st){return [st&&st.sharpe!=null?st.sharpe.toFixed(2):'',st&&st.dd!=null?pc(st.dd):'',st&&st.worst!=null?pc(st.worst):'',st&&st.worstY?st.worstY:'']}
 const TAILH=['Sharpe','Max drawdown','Worst year','Worst year (year)'];
 function builderCSV(){const B=S.b,C=expCols(B.sel),st0=selStart(B.sel);
-  const head=['ETF'].concat(C.extra?[C.label]:[],C.tp.map(([p,m])=>m>12?p+' return (per yr)':p+' return'),TAILH,['% of portfolio']);
+  const head=['ETF or portfolio'].concat(C.extra?[C.label]:[],C.tp.map(([p,m])=>m>12?p+' return (per yr)':p+' return'),TAILH,['% of portfolio','Holdings']);
   const out=[head.map(cell).join(',')];
-  B.rows.forEach(r=>{const has=HAS(r.t);const st=has?(pStats({rows:[{t:r.t,w:100}]},B.sel)||{}).st:null;
-    out.push([r.t].concat(C.extra?[pc(has?wRetT(r.t,st0):null)]:[],C.tp.map(([p,m])=>pc(has?periodRet(r.t,m):null)),statTail(st),[r.w===''||r.w==null?0:r.w]).map(cell).join(','))});
-  const p=mixP();if(weights(p).length){const st=(pStats(p,B.sel)||{}).st;out.push(['Portfolio total'+((B.name||'').trim()?' ('+B.name.trim()+')':'')].concat(C.extra?[pc(wRetMix(st0))]:[],C.tp.map(([pp,m])=>pc(mixRet(m))),statTail(st),[bTotal()]).map(cell).join(','))}
+  topOrder().forEach(it=>{if(it.t==='e'){const r=B.rows[it.j],has=HAS(r.t);const st=has?(pStats({rows:[{t:r.t,w:100}]},B.sel)||{}).st:null;
+      out.push([r.t].concat(C.extra?[pc(has?wRetT(r.t,st0):null)]:[],C.tp.map(([p,m])=>pc(has?periodRet(r.t,m):null)),statTail(st),[r.w===''||r.w==null?0:r.w,'']).map(cell).join(','))}
+    else{const p=it.p,ok=weights(p).length>0;const st=ok?(pStats(p,B.sel)||{}).st:null;const fc=ok?dFirstAny(p.rows.map(r=>r.t)):null,s0=Math.max(st0,fc??st0);
+      out.push([p.name].concat(C.extra?[pc(ok?bhdRet(p,s0):null)]:[],C.tp.map(([pp,m])=>pc(ok?periodRetD(s=>bhdRet(p,s),m):null)),statTail(st),[pTot(p),p.rows.map(r=>r.t+' '+r.w+'%').join('; ')]).map(cell).join(','))}});
+  return out.join('\n')+'\n'}
+/* daily data: each ETF and portfolio's return since the start of the picked period, one row per trading day */
+function dailyCSV(){const B=S.b,st0=selStart(B.sel),last=D.last,cols=[];
+  topOrder().forEach(it=>{if(it.t==='e'){const t=B.rows[it.j].t;if(!HAS(t))return;let s0=st0;while(s0<last&&pxd(t,s0)==null)s0++;const b=pxd(t,s0);if(b==null)return;cols.push({name:t,v:i=>{if(i<s0)return null;const a=pxd(t,i);return a==null?null:(a/b-1)*100}})}
+    else{const p=it.p;if(!weights(p).length)return;const fc=dFirstAny(p.rows.map(r=>r.t)),s0=Math.max(st0,fc??st0),V=bhd(p,s0);if(!V||V[s0]==null)return;cols.push({name:p.name,v:i=>i<s0||V[i]==null?null:(V[i]/V[s0]-1)*100})}});
+  const out=[['Date'].concat(cols.map(c=>c.name+' (% since '+D.days[st0]+')')).map(cell).join(',')];
+  for(let i=st0;i<=last;i++)out.push([D.days[i]].concat(cols.map(c=>{const v=c.v(i);return v==null?'':v.toFixed(2)})).map(cell).join(','));
   return out.join('\n')+'\n'}
 function portfoliosCSV(){const C=expCols(S.sel);const key={'1M':'m1','3M':'m3','6M':'m6','1Y':'y1','3Y':'y3','5Y':'y5'};
   const head=['Portfolio'].concat(C.extra?[C.label]:[],C.tp.map(([p,m])=>m>12?p+' return (per yr)':p+' return'),TAILH,['Holdings']);
@@ -2021,7 +2030,38 @@ function parsePortfoliosCSV(text,filename){const rows=parseCSV(text).filter(r=>r
     body.forEach(r=>{const n=String(r[ni]||'').trim();const t=cleanTicker(r[ti]||'');if(!n||!t)return;if(!map.has(n))map.set(n,[]);const list=map.get(n);if(!list.some(x=>x.t===t))list.push({t,w:wi>=0?numOrNull(r[wi]):null})})}
   const out=[...map].map(([name,list])=>{list=list.slice(0,MAXETF);if(list.some(r=>r.w!=null))fixPct(list);else{list.forEach(r=>r.w=1);scaleRows(list)}return {name,rows:list}}).filter(p=>p.rows.length);
   if(!out.length)throw new Error("Couldn't read any portfolios. Put the portfolio name in the first column, the ETF in the second, and its % in the third.");return out}
-async function pfImport(file){try{const txt=await file.text();const list=pfTarget==='b'?parseBuilderCSV(txt,file.name):parsePortfoliosCSV(txt,file.name);const missing=new Set();list.forEach(p=>p.rows.forEach(r=>{if(!HAS(r.t)&&!UNI[r.t])missing.add(r.t)}));
+/* one CSV for the whole table: an ETF column plus an optional portfolio column, in either order (and an optional % column).
+   Rows with a portfolio name are grouped into that portfolio; rows without one come in as single ETFs. Other columns are ignored. */
+function parseMixedCSV(text){const rows=parseCSV(text).map(r=>r.map(c=>String(c??'').trim())).filter(r=>r.some(Boolean));if(!rows.length)throw new Error('The file is empty.');
+  const h=rows[0].map(c=>c.toLowerCase());const hasH=h.some(c=>HDR.test(c));const body=hasH?rows.slice(1):rows;
+  let ti=-1,pi=-1,wi=-1,hi=-1;
+  if(hasH){hi=h.findIndex(c=>/^holding/.test(c));ti=h.findIndex(c=>/^(etfs?|tickers?|symbols?|funds?)\b/.test(c));pi=h.findIndex(c=>/^(portfolio|group|basket)/.test(c));wi=h.findIndex(c=>/% of portfolio|^%$|^(percent|weight|alloc)/.test(c))}
+  if(ti<0){/* no ETF header: the column that looks most like tickers */const n=Math.max(...body.map(r=>r.length));let best=-1,bs=-1;
+    for(let c=0;c<n;c++){const sc=body.filter(r=>/^[A-Za-z][A-Za-z0-9.]{0,7}$/.test(r[c]||'')).length;if(sc>bs&&c!==pi){bs=sc;best=c}}ti=best}
+  if(pi<0&&!hasH){/* no header: a text column next to the tickers that repeats or has spaces reads as the portfolio */const n=Math.max(...body.map(r=>r.length));
+    for(let c=0;c<n&&pi<0;c++){if(c===ti)continue;const v=body.map(r=>r[c]||'').filter(Boolean);if(v.length&&v.some(x=>!/^-?[0-9.,]+%?$/.test(x)))pi=c}}
+  const loose=[],groups=new Map(),order=[];
+  body.forEach(r=>{if(hi>=0&&r[hi]){/* a summary export: a portfolio row lists its ETFs as 'IWM 34%; MDY 33%' */const pn=r[ti]||'';if(!pn)return;if(!groups.has(pn)){groups.set(pn,[]);order.push({p:pn})}const g=groups.get(pn);
+      r[hi].split(/[;|]/).forEach(x=>{const m=x.trim().match(/^([A-Za-z][A-Za-z0-9.]{0,7})\s*([0-9.]+)?\s*%?/);if(m){const t=cleanTicker(m[1]);if(t&&!g.some(y=>y.t===t))g.push({t,w:m[2]!=null?parseFloat(m[2]):null})}});return}
+    const raw=(r[ti]||'').replace(/^\$/,'');if(!/^[A-Za-z][A-Za-z0-9.]{0,7}$/.test(raw))return;const t=cleanTicker(raw);if(!t)return;const pn=pi>=0?(r[pi]||''):'';const w=wi>=0?numOrNull(r[wi]):null;
+    if(pn){if(!groups.has(pn)){groups.set(pn,[]);order.push({p:pn})}const g=groups.get(pn);if(!g.some(x=>x.t===t))g.push({t,w})}
+    else if(!loose.some(x=>x.t===t)){loose.push({t,w});order.push({t})}});
+  if(!loose.length&&!groups.size)throw new Error("Couldn't find any tickers. Put the ETFs in a column called ETF, and portfolio names in a column called portfolio.");
+  const pfs=[...groups].map(([name,list])=>{list=list.slice(0,MAXETF);if(list.some(r=>r.w!=null))fixPct(list);else{list.forEach(r=>r.w=1);scaleRows(list)}return {name,rows:list}});
+  if(loose.some(r=>r.w!=null))fixPct(loose);else loose.forEach(r=>r.w='');
+  return {loose:loose.slice(0,MAXETF),pfs,order}}
+async function pfImport(file){try{const txt=await file.text();
+  if(pfTarget==='b'){const m=parseMixedCSV(txt);const missing=new Set([...m.loose,...m.pfs.flatMap(p=>p.rows)].filter(r=>!HAS(r.t)).map(r=>r.t));
+    const B=S.b;B.rows=m.loose.map((r,j)=>({t:r.t,w:r.w,c:j}));B.editing=null;B.open=true;BSORT.k=null;BSORT.dir=0;
+    let added=0,updated=0,skipped=0;const byName=new Map();
+    m.pfs.forEach(p=>{const ex=S.pfs.find(x=>x.name.trim().toLowerCase()===p.name.trim().toLowerCase());const rows=p.rows.map(r=>({t:r.t,w:r.w}));
+      if(ex){ex.rows=rows;updated++;byName.set(p.name,ex)}else if(S.pfs.length<MAXP){const np={id:'p'+(++uid),name:p.name,color:freeColor(),rows};S.pfs.push(np);added++;byName.set(p.name,np)}else skipped++});
+    /* keep the file's order: each portfolio sits where its first ETF appears */
+    m.order.forEach((x,i)=>{if(x.p){const pf=byName.get(x.p);if(pf)pf.o=i}else{const r=B.rows.find(q=>q.t===x.t);if(r)r.o=i}});
+    persist();render();
+    const np=m.pfs.length,nl=m.loose.length;
+    toast(`Loaded ${nl} ETF${nl===1?'':'s'}${np?` and ${np} portfolio${np===1?'':'s'} (${m.pfs.map(p=>p.name).join(', ')})`:''}${skipped?`. Skipped ${skipped}, ${MAXP} portfolios max`:''}.`+(missing.size?` No prices yet for ${[...missing].slice(0,4).join(', ')}${missing.size>4?` and ${missing.size-4} more`:''}.`:''));return}
+  const list=pfTarget==='b'?parseBuilderCSV(txt,file.name):parsePortfoliosCSV(txt,file.name);const missing=new Set();list.forEach(p=>p.rows.forEach(r=>{if(!HAS(r.t)&&!UNI[r.t])missing.add(r.t)}));
   const miss=missing.size?` No prices for ${[...missing].slice(0,4).join(', ')}${missing.size>4?'…':''}; import their prices to see them.`:'';
   if(pfTarget==='b'){const p=list[0];S.b.rows=p.rows.map((r,j)=>({t:r.t,w:r.w,c:j}));S.b.name=p.name;S.b.editing=null;S.b.open=true;BSORT.k=null;BSORT.dir=0;persist();render();
     toast(`Loaded ${p.rows.length} ETFs into the builder${p.rows.every(r=>r.w==='')?'. No percentages in the file, so it shows an equal split until you set them.':'.'}`+miss)}
@@ -2033,11 +2073,13 @@ async function pfImport(file){try{const txt=await file.text();const list=pfTarge
 let ioLast=null;
 function ioOpt(id,icon,title,desc){return `<button type="button" class="ioopt" id="${id}">${icon}<span><strong>${title}</strong><span class="sub">${desc}</span></span></button>`}
 function openIO(sc,from){ioLast=from||null;const up='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3"/><path d="m7 8 5-5 5 5"/><path d="M5 21h14"/></svg>',dn='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>';
-  const pf=sc==='b'?[ioOpt('bImport',up,'Import a portfolio','A CSV with the ETF in column 1 and its % in column 2. Header row and % are optional.'),ioOpt('bExport',dn,'Export this portfolio','A CSV of the table: each ETF with its returns, Sharpe, drawdown, worst year and %.')]
+  const per=selLabel(S.b.sel,'short');
+  const pf=sc==='b'?[ioOpt('bImport',up,'Import ETFs and portfolios','Upload a CSV with a column of ETFs. To group some of them into a portfolio, add a portfolio column and give those rows the same name. Rows with no name stay as single ETFs. Add a % column if you want to set the weights.')]
     :[ioOpt('pImport',up,'Import portfolios','A CSV with the portfolio name, ETF and % in columns 1 to 3. Header optional; no % means equal weights.'),ioOpt('pExport',dn,'Export my portfolios','A CSV of the table: each portfolio with its returns and stats, plus its ETFs and weights.')];
+  const bx=sc==='b'?[ioOpt('bExport',dn,'Export the summary','One row for each ETF and portfolio in the table, with its returns, Sharpe, max drawdown and worst year. Portfolios also list their ETFs and weights.'),ioOpt('bDaily',dn,'Export daily data',`Every trading day in the period you picked (${per}), with each ETF and portfolio's return since the start of that period.`)]:[];
   const data=sc==='p'?[ioOpt('exportBtn',dn,'Export chart data','Daily values for each line on the chart over the picked period.')]:[];
-  $('ioTitle').textContent=sc==='b'?'Build a portfolio: import / export':'Your portfolios: import / export';
-  $('ioBody').innerHTML=`<span class="cap">Portfolios</span><div class="iolist">${pf.join('')}</div><span class="sub iofmt">Exports open in Excel and can be imported back in. Portfolios with a name already in your list are updated; five max.</span>${data.length?`<span class="cap" style="margin-top:6px">Chart data</span><div class="iolist">${data.join('')}</div>`:''}`;
+  $('ioTitle').textContent=sc==='b'?'Import / export':'Your portfolios: import / export';
+  $('ioBody').innerHTML=sc==='b'?`<span class="cap">Import</span><div class="iolist">${pf.join('')}</div><span class="cap" style="margin-top:6px">Export</span><div class="iolist">${bx.join('')}</div><span class="sub iofmt">Both open in Excel. The summary file can be imported back in.</span>`:`<span class="cap">Portfolios</span><div class="iolist">${pf.join('')}</div><span class="sub iofmt">Exports open in Excel and can be imported back in. Portfolios with a name already in your list are updated.</span>${data.length?`<span class="cap" style="margin-top:6px">Chart data</span><div class="iolist">${data.join('')}</div>`:''}`;
   $('ioModal').hidden=false;$('ioModal').querySelector('.ioopt').focus()}
 function closeIO(){if($('ioModal').hidden)return;$('ioModal').hidden=true;ioLast&&ioLast.focus&&ioLast.focus()}
 let DL=null;
