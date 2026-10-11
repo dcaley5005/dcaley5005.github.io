@@ -609,6 +609,19 @@ thead tr.grow th{padding-top:0}
 .pfkidt{font:500 14px var(--mono,"IBM Plex Mono",monospace);padding-left:62px}
 .pfadd{display:flex;gap:8px;align-items:center;padding-left:60px}
 /* group: tick boxes where the colour line used to be; the action strip opens under the last ticked row */
+/* drag to reorder ETF rows */
+#bTable tr>:first-child{padding-left:26px!important;position:relative}
+#bTable .grip{all:unset;box-sizing:border-box;position:absolute;left:3px;top:50%;margin-top:-14px;width:20px;height:28px;border-radius:6px;display:grid;place-items:center;color:var(--muted);cursor:grab;touch-action:none;opacity:0;transition:opacity .15s,background .15s,color .15s,width .18s cubic-bezier(.2,.8,.2,1)}
+#bTable tr:hover .grip,#bTable .grip:focus-visible,#bTable tr.bdrag .grip{opacity:1}
+#bTable .grip:hover,#bTable tr.bdrag .grip{color:var(--ink);background:var(--line2)}
+#bTable .grip:focus-visible{outline:2px solid var(--focus);outline-offset:1px}
+@media (hover:none){#bTable .grip{opacity:1}}
+@media (max-width:1300px){#bTable tr>:first-child{padding-left:19px!important}#bTable .grip{left:0;width:18px}}
+html.grabbing,html.grabbing *{cursor:grabbing!important;user-select:none}
+#bTable tr[data-bt]{transition:transform .2s cubic-bezier(.2,.8,.2,1)}
+#bTable tr.bdrag{position:relative;z-index:5;transition:none;background:var(--panel);box-shadow:var(--shadow),0 0 0 1px var(--line)}
+#bTable tr.bdrag>td{background:var(--panel2)!important;border-color:transparent}
+@media (prefers-reduced-motion:reduce){#bTable tr[data-bt]{transition:none}}
 #qtip{position:fixed;z-index:200;pointer-events:none;background:var(--ink);color:var(--panel);font:500 12px var(--sans,"IBM Plex Sans",sans-serif);padding:5px 9px;border-radius:6px;white-space:nowrap;box-shadow:0 6px 18px rgba(0,0,0,.25)}
 .btable .tkwrap{position:relative;display:inline-flex;align-items:center}
 .btable .tkwrap .xbtn{position:static;transform:none;margin-left:4px;flex:none}
@@ -1313,7 +1326,7 @@ function renderBTable(){const B=S.b;if(!B.open)return;const hp=B.sel.p;
   const ES=B.rows.map(r=>HAS(r.t)?pStats({rows:[{t:r.t,w:100}]},B.sel):null);const bb={};BM.forEach(([k])=>{const vs=ES.map(o=>bmVal(o,k)).filter(v=>v!=null);if(vs.length>1)bb[k]=Math.max(...vs)});
   const NC=TPER.length+BM.length+5;const full=B.rows.length>=MAXETF;
   const addRow=`<tr class="addrow"><td><span class="tkcell"><span class="rsw" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span><span class="chsp" aria-hidden="true" style="width:${CHSP_ADD}px"></span><label class="sr" for="bAdd">Ticker to add</label><input class="field tkin" id="bAdd" role="combobox" aria-autocomplete="list" aria-controls="bSug" aria-expanded="false" placeholder="${full?'15 max':'Ticker'}" autocomplete="off" spellcheck="false" value="${esc(S.bDraft||'')}" ${full?'disabled':''}></span></td><td><button type="button" class="btn sm" id="bAddBtn" ${full?'disabled':''}>Add</button></td><td colspan="${NC-2}" class="sub addnote"><span class="addnw"><span>${B.rows.length?'':'Type a ticker and press Enter to add it, then set its % of the portfolio.'}</span></span></td></tr>`;const st0=selStart(B.sel);const WR=B.rows.map(r=>HAS(r.t)?wRetT(r.t,st0):null);const wBest=WR.filter(v=>v!=null).length>1?Math.max(...WR.filter(v=>v!=null)):null;
-  const etfRow=(r,j)=>`<tr class="${r.hidden?'dim':''}${r.k?' ticked':''}" data-bt="${esc(r.t)}"><td><span class="tkcell">${B.rows.length+S.pfs.length>=2?`<label class="sr" for="bk-${j}">Tick ${esc(r.t)} to group it</label><input type="checkbox" class="tkchk" id="bk-${j}"  data-btick="${j}" data-tip="Tick to group" ${r.k?'checked':''}>`:'<span class="tkchk sp"></span>'}<span class="chsp" aria-hidden="true"></span><span class="tkwrap"><label class="sr" for="bt-${j}">Ticker ${j+1}</label><input class="field tkin" id="bt-${j}" data-btk="${j}" list="tickers" autocomplete="off" spellcheck="false" value="${esc(r.t)}" title="${esc(NAMES[r.t]||'Imported prices')}">${xBtn(r.t)}</span></span></td>
+  const etfRow=(r,j)=>`<tr class="${r.hidden?'dim':''}${r.k?' ticked':''}" data-bt="${esc(r.t)}"><td>${B.rows.length>=2?`<button type="button" class="grip" aria-label="Reorder ${esc(r.t)}. Drag, or press the up or down arrow." data-tip="Drag to reorder"><svg width="12" height="18" viewBox="0 0 12 18" aria-hidden="true"><g fill="currentColor"><circle cx="3.5" cy="3.5" r="1.6"/><circle cx="8.5" cy="3.5" r="1.6"/><circle cx="3.5" cy="9" r="1.6"/><circle cx="8.5" cy="9" r="1.6"/><circle cx="3.5" cy="14.5" r="1.6"/><circle cx="8.5" cy="14.5" r="1.6"/></g></svg></button>`:''}<span class="tkcell">${B.rows.length+S.pfs.length>=2?`<label class="sr" for="bk-${j}">Tick ${esc(r.t)} to group it</label><input type="checkbox" class="tkchk" id="bk-${j}"  data-btick="${j}" data-tip="Tick to group" ${r.k?'checked':''}>`:'<span class="tkchk sp"></span>'}<span class="chsp" aria-hidden="true"></span><span class="tkwrap"><label class="sr" for="bt-${j}">Ticker ${j+1}</label><input class="field tkin" id="bt-${j}" data-btk="${j}" list="tickers" autocomplete="off" spellcheck="false" value="${esc(r.t)}" title="${esc(NAMES[r.t]||'Imported prices')}">${xBtn(r.t)}</span></span></td>
     <td class="num momcell${wBest!=null&&WR[j]===wBest?' best':''}"><span class="momwrap"><button type="button" class="spkbtn" data-bhide="${j}" aria-pressed="${!r.hidden}" aria-label="${r.hidden?'Show':'Hide'} ${esc(r.t)} on the chart" data-tip="${r.hidden?'Show':'Hide'} on chart">${HAS(r.t)?sparkT(r.t,st0,ecol(r.c)):''}</button><span class="v ${cls(WR[j])}">${sg(WR[j])}</span></span></td>
     ${dsk(TPER.map(([p,m])=>{const v=periodRet(r.t,m);return `<td class="num ${cls(v)}${p===hp?' hl':''}${best[p]!=null&&v===best[p]?' best':''}">${sg(v)}</td>`}).join('')+BM.map(([k])=>bmCell(ES[j],k,bb)).join('')+`<td class="num ercol${ER[r.t]==null?' mut':''}">${fmtER(ER[r.t])}</td>`)}<td class="wcell"><span class="wbox"><label class="sr" for="bw-${j}">${esc(r.t)} percent</label><input class="field" id="bw-${j}" data-bw="${j}" inputmode="decimal" autocomplete="off" placeholder="0" value="${r.w===''||r.w==null?'':esc(r.w)}">%</span></td>${mexpBtn('b'+j,r.t)}
     <td class="xcell dsk"><button type="button" class="delbtn bdel" id="bx-${j}" data-brm="${j}" aria-label="Remove ${esc(r.t)}" data-tip="Remove ${esc(r.t)}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M6 7l1 13h10l1-13"/></svg></button></td></tr>${mdetRow('b'+j,bDetail(r.t,ES[j])+xMob(r.t)+`<div class="mi mact"><button type="button" class="btn sm mrm" data-brm="${j}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M6 7l1 13h10l1-13"/></svg>Remove ${esc(r.t)}</button></div>`)}`;
@@ -1812,7 +1825,36 @@ function xgMini(b,w,refill){let m=$('xgMini');if(!m){document.querySelector('#xm
 document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('#xgMini')&&!e.target.closest('[data-xrng]')){$('xmBody').scrollTo({top:0,behavior:XREDUCE.matches?'auto':'smooth'})}});
 addEventListener('resize',()=>xgSync(true));
 /* quick hover labels for the builder's icon buttons */
-document.addEventListener('mouseover',e=>{let t=$('qtip');if(matchMedia('(hover:none)').matches){if(t)t.hidden=true;return}const el=e.target.closest&&e.target.closest('#builder [data-tip],#builder .xbtn');if(!el){if(t)t.hidden=true;return}
+/* drag to reorder ETF rows */
+let BD=null;
+function bRowsDisp(){return [...document.querySelectorAll('#bTable tr[data-bt]')]}
+function bRowIx(tr){const i=tr.querySelector('[data-btk]');return i?+i.dataset.btk:-1}
+function bCommitOrder(ixs,movedT,oldTop){const B=S.b;const nr=ixs.map(j=>B.rows[j]).filter(Boolean);if(nr.length!==B.rows.length)return;
+  B.rows=nr;BSORT.k=null;BSORT.dir=0;persist();renderBuilder();
+  const tr=bRowsDisp().find(r=>r.dataset.bt===movedT);if(tr&&oldTop!=null){const d=oldTop-tr.getBoundingClientRect().top;if(Math.abs(d)>1){tr.style.transition='none';tr.style.transform=`translateY(${d}px)`;void tr.offsetWidth;tr.style.transition='';tr.style.transform=''}}
+  return tr}
+document.addEventListener('pointerdown',e=>{const g=e.target.closest&&e.target.closest('#bTable .grip');if(!g||e.button!==0)return;e.preventDefault();
+  const tr=g.closest('tr'),rows=bRowsDisp(),idx=rows.indexOf(tr);if(idx<0)return;{const q=$('qtip');if(q)q.hidden=true}
+  BD={g,tr,rows,idx,to:idx,H:tr.offsetHeight,y0:e.clientY,dy:0,mids:rows.map(r=>r.offsetTop+r.offsetHeight/2)};
+  try{g.setPointerCapture(e.pointerId)}catch(_){}document.documentElement.classList.add('grabbing');tr.classList.add('bdrag')});
+document.addEventListener('pointermove',e=>{if(!BD)return;const {mids,idx,rows,H}=BD;const n=rows.length;
+  let c=mids[idx]+(e.clientY-BD.y0);c=Math.max(mids[0],Math.min(mids[n-1],c));const dy=c-mids[idx];BD.dy=dy;
+  let to=0;mids.forEach((m,i)=>{if(i!==idx&&m<c)to++});BD.to=to;
+  BD.tr.style.transform=`translateY(${dy}px)`;
+  rows.forEach((r,i)=>{if(i===idx)return;let off=0;if(to>idx&&i>idx&&i<=to)off=-H;if(to<idx&&i<idx&&i>=to)off=H;r.style.transform=off?`translateY(${off}px)`:''})});
+function bDragEnd(cancel){if(!BD)return;const {tr,rows,idx}=BD,to=cancel?idx:BD.to;const t=tr.dataset.bt,oldTop=tr.getBoundingClientRect().top;
+  document.documentElement.classList.remove('grabbing');BD=null;
+  if(to===idx){rows.forEach(r=>{r.style.transform=''});setTimeout(()=>tr.classList.remove('bdrag'),200);return}
+  const ixs=rows.map(bRowIx);const [m]=ixs.splice(idx,1);ixs.splice(to,0,m);
+  rows.forEach(r=>{r.style.transition='none';r.style.transform=''});
+  bCommitOrder(ixs,t,oldTop)}
+document.addEventListener('pointerup',()=>bDragEnd(false));
+document.addEventListener('pointercancel',()=>bDragEnd(true));
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&BD){bDragEnd(true);return}
+  const g=e.target.closest&&e.target.closest('#bTable .grip');if(!g||BD||(e.key!=='ArrowUp'&&e.key!=='ArrowDown'))return;e.preventDefault();
+  const tr=g.closest('tr'),rows=bRowsDisp(),i=rows.indexOf(tr),to=e.key==='ArrowUp'?i-1:i+1;if(to<0||to>=rows.length)return;
+  const ixs=rows.map(bRowIx);const [m]=ixs.splice(i,1);ixs.splice(to,0,m);const nt=bCommitOrder(ixs,tr.dataset.bt,tr.getBoundingClientRect().top);if(nt){const ng=nt.querySelector('.grip');if(ng)ng.focus()}});
+document.addEventListener('mouseover',e=>{let t=$('qtip');if(BD||matchMedia('(hover:none)').matches){if(t)t.hidden=true;return}const el=e.target.closest&&e.target.closest('#builder [data-tip],#builder .xbtn');if(!el){if(t)t.hidden=true;return}
   if(!t){document.body.insertAdjacentHTML('beforeend','<div id="qtip" role="tooltip" hidden></div>');t=$('qtip')}t.textContent=el.dataset.tip||el.getAttribute('aria-label')||'';t.hidden=false;
   const r=el.getBoundingClientRect();let x=r.left+r.width/2-t.offsetWidth/2;x=Math.max(8,Math.min(innerWidth-t.offsetWidth-8,x));let y=r.top-t.offsetHeight-6;if(y<6)y=r.bottom+6;t.style.left=x+'px';t.style.top=y+'px'});
 addEventListener('scroll',()=>{const t=$('qtip');if(t)t.hidden=true},true);
