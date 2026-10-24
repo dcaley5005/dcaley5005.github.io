@@ -14,6 +14,8 @@ Run directly for a trial on a few ETFs (prints what came back, writes nothing to
 """
 import json
 import math
+import re
+import warnings
 import os
 import sys
 import time
@@ -23,6 +25,8 @@ from pathlib import Path
 
 import pandas as pd
 import yfinance as yf
+
+warnings.filterwarnings("ignore")
 
 ROOT = Path(__file__).resolve().parent.parent
 HOLD_FILE = ROOT / "data" / "holdings.json"
@@ -61,6 +65,8 @@ def fetch_holdings(t):
             if w is None:
                 continue
             sym = (str(sym).strip() if sym is not None else "")
+            if re.fullmatch(r"0\d{4}", sym):      # Hong Kong listings come back as 00939; Yahoo wants 0939.HK
+                sym = sym[1:] + ".HK"
             rows.append([sym if sym and sym.lower() != "nan" else "", str(r.get("Name") or "").strip(), round(w, 5)])
     sec = {k: round(v, 5) for k, v in (fd.sector_weightings or {}).items() if _num(v)}
     ac = {k.replace("Position", ""): round(v, 4) for k, v in (fd.asset_classes or {}).items() if _num(v) is not None}
@@ -293,17 +299,11 @@ def trial(tickers):
         tw = sum(r[2] for r in h["top"])
         log(f"  {t}: {len(h['top'])} holdings = {tw:.1%}, sectors {len(h['sec'])}, asset split {h['ac']}, "
             f"desc {len(h['desc'])} chars")
-        for r in h["top"]:
-            log(f"      {r[0]:<10} {r[2]:>7.2%}  {r[1]}")
-        top_sec = sorted(h["sec"].items(), key=lambda x: -x[1])[:4]
-        log(f"      sectors: {top_sec}")
-        log(f"      desc: {h['desc'][:220]}")
+        log("      " + ", ".join(r[0] or r[1] for r in h["top"]))
     syms = holding_symbols(hold)
     stocks = update_stocks(syms, tmp / "stocks.json", minutes=5)
     log(f"[{time.time() - t0:.0f}s] holding details for {len(stocks)}/{len(syms)}")
-    for s in syms[:40]:
-        st = stocks.get(s) or {}
-        log(f"  {s:<10} {st.get('qt')}  {st.get('sec')} / {st.get('ind')}  {st.get('n')}")
+    log("  no details for: " + ", ".join(s for s in syms if not (stocks.get(s) or {}).get("ind")))
     start = (pd.Timestamp.today() - pd.DateOffset(years=3, months=2)).strftime("%Y-%m-%d")
     got, miss = download(syms, start)
     log(f"[{time.time() - t0:.0f}s] holding prices for {len(got)}/{len(syms)}; missing {miss}")
