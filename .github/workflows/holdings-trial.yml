@@ -5,7 +5,10 @@ on:
     inputs:
       tickers:
         description: "ETFs to try"
-        default: "XLK SPY QQQ SCHD IEUR AGG GLD VWO"
+        default: "XLK SPY QQQ SCHD IEUR AGG GLD VWO IWM ACWX MDY IEMG"
+
+permissions:
+  contents: write
 
 jobs:
   trial:
@@ -21,3 +24,10 @@ jobs:
       - run: pip install -r scripts/requirements.txt
       - name: Try the holdings pull
         run: python scripts/holdings.py ${{ inputs.tickers }}
+      - name: Save the output to the holdings-trial branch (for previewing, not used by the site)
+        run: |
+          cd /tmp/inside_trial
+          git init -q -b holdings-trial
+          git add -A
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -qm "Holdings trial output"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" holdings-trial
