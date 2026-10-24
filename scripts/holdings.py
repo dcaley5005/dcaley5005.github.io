@@ -204,7 +204,7 @@ def period_returns(s, last):
     return out
 
 
-def build_inside(out_dir, etf_series, hold, stocks, stock_series, names):
+def build_inside(out_dir, etf_series, hold, stocks, stock_series, names, fund=None):
     """Write inside/<T>.json per ETF: description, sectors, asset split, top 10 with a card each
     (same shape as the Explore cards), and the return of everything outside the top 10."""
     import numpy as np
@@ -228,16 +228,18 @@ def build_inside(out_dir, etf_series, hold, stocks, stock_series, names):
 
     cards = {}
 
-    def card(sym):
-        if sym in cards:
-            return cards[sym]
-        s = stock_series.get(sym)
-        st = stocks.get(sym) or {}
-        c = {"t": sym, "n": st.get("n") or "", "ind": st.get("ind"), "sec": st.get("sec")}
+    def card(sym, s=None, c=None):
+        stock = c is None
+        if stock:
+            if sym in cards:
+                return cards[sym]
+            s = stock_series.get(sym)
+            st = stocks.get(sym) or {}
+            c = {"t": sym, "n": st.get("n") or "", "ind": st.get("ind"), "sec": st.get("sec")}
         if s is not None and len(s) > 30 and s.index[-1] >= end - pd.Timedelta(days=7):
             c["r"] = period_returns(s, end)
-            px = s.reindex(idx).ffill(limit=5)
-            full = px.notna().all() and s.index[0] <= start
+            px = s.reindex(s.index.union(idx)).ffill().reindex(idx)   # markets abroad close on other days
+            full = bool(px.notna().all())
             px = px.dropna()
             if len(px) > 30:
                 r = px.pct_change().iloc[1:]
@@ -249,10 +251,11 @@ def build_inside(out_dir, etf_series, hold, stocks, stock_series, names):
                     c["r3"] = round(float((px.iloc[-1] / px.iloc[0]) ** (1 / yrs) - 1), 4)
                     if rf is not None and vol > 0:
                         c["sh"] = round(float(r.sub(rf.reindex(r.index).fillna(0)).mean() * 252 / vol), 3)
-                relp = (s.reindex(idx).ffill(limit=5) / px.iloc[-1] * 10000).round()
+                relp = (s.reindex(s.index.union(idx)).ffill().reindex(idx) / px.iloc[-1] * 10000).round()
                 c["d"] = [None if v != v else int(v) for v in relp.iloc[-nd:]]
                 c["w"] = [None if v != v else int(v) for v in relp.iloc[wk]]
-        cards[sym] = c
+        if stock:
+            cards[sym] = c
         return c
 
     out = Path(out_dir)
@@ -272,17 +275,25 @@ def build_inside(out_dir, etf_series, hold, stocks, stock_series, names):
         if top and tw < 0.999:
             rest = {"wt": round(1 - tw, 5), "r": []}
             for k in range(5):        # 1M 3M 6M YTD 1Y; 3Y per year doesn't add up this way
-                # a holding without a return for this period counts as part of the rest
+                # Today's weights are after the period's moves, so roll each back to where it started:
+                # start weight = weight now x (1 + fund return) / (1 + its return). A holding without a
+                # return for this period counts as part of the rest.
                 known = [c for c in top if c.get("r") and c["r"][k] is not None]
-                left = 1 - sum(c["wt"] for c in known)
-                if er[k] is None or left < 0.02:
+                if er[k] is None:
                     rest["r"].append(None)
                     continue
-                added = sum(c["wt"] * c["r"][k] for c in known)
+                w0 = [c["wt"] * (1 + er[k]) / (1 + c["r"][k]) for c in known]
+                left = 1 - sum(w0)
+                if left < 0.02:
+                    rest["r"].append(None)
+                    continue
+                added = sum(w * c["r"][k] for w, c in zip(w0, known))
                 rest["r"].append(round((er[k] - added) / left, 4))
             rest["r"].append(None)
-        doc = dict(meta, t=t, n=names.get(t, ""), desc=h.get("desc", ""), hasof=h.get("asof"),
-                   sec=h.get("sec", {}), ac=h.get("ac", {}), er=er, top=top, rest=rest)
+        me = card(t, s, {"t": t, "n": names.get(t, ""), "er": (fund or {}).get(t, {}).get("er")}) if s is not None else {"t": t}
+        doc = dict(meta, self=me, t=t, n=names.get(t, ""), desc=h.get("desc", ""), hasof=h.get("asof"),
+                   sec=h.get("sec", {}), ac=h.get("ac", {}), er=er, top=top, rest=rest,
+                   f={k: (fund or {}).get(t, {}).get(k) for k in ("aum", "cat", "fam", "inc")})
         (out / f"{t}.json").write_text(json.dumps(doc, separators=(",", ":")))
         written += 1
     log(f"What's inside: wrote {written} ETFs, {len(cards)} holding cards")
@@ -309,8 +320,14 @@ def trial(tickers):
     log(f"[{time.time() - t0:.0f}s] holding prices for {len(got)}/{len(syms)}; missing {miss}")
     etf, miss2 = download(sorted(set(tickers) | {"SPY", "SHY"}), start)
     log(f"ETF prices for {len(etf)}; missing {miss2}")
-    names = {t: t for t in tickers}
-    build_inside(tmp / "inside", etf, hold, stocks, got, names)
+    names, fund = {t: t for t in tickers}, {}
+    try:
+        names.update({t: n for t, n in json.loads((ROOT / "data" / "universe.json").read_text())["etfs"]})
+        j = json.loads((ROOT / "data" / "fund_info.json").read_text())
+        fund = {t: dict(zip(j["fields"], row)) for t, row in j["f"].items()}
+    except Exception as e:
+        log(f"no names or fund details: {e}")
+    build_inside(tmp / "inside", etf, hold, stocks, got, names, fund)
     for t in tickers:
         p = tmp / "inside" / f"{t}.json"
         if not p.exists():
