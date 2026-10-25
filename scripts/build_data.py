@@ -9,6 +9,9 @@ Output, under _site/portfolio-lab/data/:
                   matches the newsletter, which reports price change only
   universe.json   the ETF list the app offers (ticker, name)
   peers/<T>.json  "Explore alternatives" picks for each ETF, from the last 3 years of prices
+  pool.json       every candidate's 3-year numbers and weekly returns, so the site can pick
+                  alternatives to a custom portfolio in the browser
+  inside/<T>.json "What's inside": description, sectors and the top 10 holdings with a card each
   er.json         expense ratio per ETF (percent)
   fund_info.json  per-ETF details from Yahoo: fund size, expense ratio, average volume, price,
                   category, fund family, inception date (refreshed weekly, a slice per run)
@@ -17,6 +20,7 @@ The universe is every US-listed ETF that is not leveraged or inverse, ranked by
 3-month average dollar volume (set UNIVERSE_SIZE to keep only the top N), plus the core tickers. It is
 re-ranked weekly (Saturday runs) and saved to data/universe.json in the repo.
 """
+import base64
 import json
 import os
 import re
@@ -350,6 +354,36 @@ def build_explore(series, names, fund):
         written += 1
     log(f"Explore: {written} ETFs with 3 years of prices, {len(cand)} candidates to suggest")
 
+    # For custom portfolios the site runs the same rules in the browser, against this one file: every
+    # candidate's 3-year numbers plus its weekly returns (every 5th trading day back from the last),
+    # standardized and stored as int8 (z x 32) so a portfolio is matched against all of them in one pass.
+    wk5 = sorted(set(range(len(px) - 1, -1, -5)))
+    ct = [tick[i] for i in cand]
+    wr = px.iloc[wk5][ct].pct_change().iloc[1:]
+    wz = ((wr - wr.mean()) / wr.std(ddof=0).replace(0, np.nan)).fillna(0.0).to_numpy()
+    q = np.clip(np.round(wz * 32), -127, 127).astype(np.int8)
+    pool = dict(meta, zd=[px.index[i].strftime("%Y-%m-%d") for i in wk5], t=ct,
+                r3=[round(float(r3[u]), 4) for u in ct], vol=[round(float(vol[u]), 4) for u in ct],
+                sh=[round(float(sharpe[u]), 3) for u in ct], m3=[round(float(m3s[u]), 4) for u in ct],
+                z=base64.b64encode(np.ascontiguousarray(q.T).tobytes()).decode("ascii"))
+    (OUT / "pool.json").write_text(json.dumps(pool, separators=(",", ":")))
+    log(f"Portfolio pool: {len(ct)} candidates x {q.shape[0]} weeks, {(OUT / 'pool.json').stat().st_size / 1e6:.2f} MB")
+
+
+def build_whats_inside(series, names, fund):
+    """Top holdings per ETF and a card for each holding (see holdings.py). Holdings and holding details
+    are refreshed a slice per run and kept in data/; holding prices are downloaded fresh each run."""
+    import holdings as H
+    hold = H.update_holdings(list(names))
+    syms = H.holding_symbols(hold)
+    stocks = H.update_stocks(syms)
+    last = series["SPY"].index[-1]
+    start = (last - pd.DateOffset(years=3, months=2)).strftime("%Y-%m-%d")
+    log(f"Downloading prices for {len(syms)} holdings…")
+    prices, missing = H.download(syms, start)
+    log(f"Holding prices: {len(prices)} of {len(syms)}")
+    H.build_inside(OUT / "inside", series, hold, stocks, prices, names, fund)
+
 
 def load_universe():
     force = os.environ.get("REBUILD_UNIVERSE", "").lower() in ("1", "true", "yes")
@@ -500,6 +534,10 @@ def main():
         build_explore({**core, **got}, names, fund)
     except Exception as e:  # never let this block the price refresh
         log(f"Explore step failed: {e}")
+    try:
+        build_whats_inside({**core, **got}, names, load_fund_info())
+    except Exception as e:  # never let this block the price refresh
+        log(f"What's inside step failed: {e}")
     log("Done.")
 
 
