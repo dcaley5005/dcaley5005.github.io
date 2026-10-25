@@ -373,7 +373,7 @@ def build_explore(series, names, fund):
 
 def build_whats_inside(series, names, fund):
     """Top holdings per ETF and a card for each holding (see holdings.py). Holdings and holding details
-    are refreshed a slice per run and kept in data/; holding prices are downloaded fresh each run."""
+    are refreshed a slice per run and kept in data/; holding prices are cached between runs (holdings.py)."""
     import holdings as H
     hold = H.update_holdings(list(names))
     last = series["SPY"].index[-1]
@@ -382,11 +382,15 @@ def build_whats_inside(series, names, fund):
     ysyms = H.holding_symbols({t: h for t, h in hold.items() if t not in nport})
     syms = sorted(set(ysyms) | H.nport_symbols(nport, last))
     log(f"SEC holdings for {len(nport)} ETFs; {len(syms)} holding symbols in all")
-    stocks = H.update_stocks(syms)
+    # prices first, so they get Yahoo's patience before the slower name and sector lookups
     # 3 years and 5 months: the 3Y view starts from the SEC report on or before 3 years ago
     start = (last - pd.DateOffset(years=3, months=5)).strftime("%Y-%m-%d")
-    prices, missing = H.download_cached(syms, start, set(ysyms) | H.nport_priority(nport))
+    pri = set(ysyms) | H.nport_priority(nport)
+    prices, missing = H.download_cached(syms, start, pri)
     log(f"Holding prices: {len(prices)} of {len(syms)}")
+    # names and sectors only for symbols Yahoo has prices for, biggest holdings first
+    order = sorted((x for x in syms if x in prices), key=lambda x: x not in pri)
+    stocks = H.update_stocks(syms, refresh=order)
     H.build_inside(OUT / "inside", series, hold, stocks, prices, names, fund, nport)
 
 

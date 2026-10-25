@@ -147,9 +147,10 @@ def update_holdings(tickers, path=HOLD_FILE, minutes=HOLD_MINUTES):
     return keep
 
 
-def update_stocks(syms, path=STOCK_FILE, minutes=STOCK_MINUTES):
+def update_stocks(syms, path=STOCK_FILE, minutes=STOCK_MINUTES, refresh=None):
+    """Names and sectors for `syms`; only the symbols in `refresh` (in that order) are looked up."""
     old = _load(path)
-    old = _refresh(old, syms, fetch_stock, STOCK_MAX_AGE_DAYS, minutes, "Holding details")
+    old = _refresh(old, list(syms if refresh is None else refresh), fetch_stock, STOCK_MAX_AGE_DAYS, minutes, "Holding details")
     keep = {s: old[s] for s in sorted(syms) if s in old}
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(keep, separators=(",", ":")))
