@@ -3,27 +3,37 @@
 Every registered fund (ETFs included) reports its complete portfolio to the SEC; the SEC posts the
 quarter-end reports as one bulk ZIP per quarter at
   https://www.sec.gov/data-research/sec-markets-data/form-n-port-data-sets
-(about 400-700 MB, tab-separated tables inside). This script downloads a quarter, keeps only the
-ETFs in data/universe.json, and writes each one's top holdings with their share of the fund.
+(about 450 MB, tab-separated tables inside). ETF ticker -> SEC series comes from company_tickers_mf.json.
 
-ETF ticker -> SEC series comes from https://www.sec.gov/files/company_tickers_mf.json.
+Three steps (the backfill workflow runs them):
+  python scripts/nport.py quarters --since 2019q4      # list the quarters on the SEC page (JSON)
+  python scripts/nport.py quarter 2026q3 --out DIR     # one quarter -> DIR/2026q3.json.gz
+  python scripts/nport.py combine --inp DIR --out OUT  # all quarters -> one history file per ETF
 
-Trial mode (no repo changes, writes a report and a few sample files to OUT_DIR):
-  python scripts/nport.py --quarter 2026q3 --trial SPY QQQ XLK IWM SCHD
+What the per-quarter step keeps for each ETF report: the top holdings (NPORT_TOP_N, default 50) by
+share of net assets, after dropping cash pools (asset category STIV, short-term investment vehicles,
+which is where securities-lending cash collateral sits, and RA, repurchase agreements). Their total
+is kept as "cash". Holdings are keyed by CUSIP (so share classes like GOOG and GOOGL stay apart),
+falling back to ISIN, then name.
 
-The SEC asks automated tools to identify themselves; set SEC_USER_AGENT (for example
-"Portfolio Lab yourname@example.com") in the workflow.
+Tickers: most filers leave the ticker blank, so each holding's ticker is a vote across every fund in
+the SEC file that holds the same CUSIP or ISIN, then turned into a Yahoo symbol (BRK.B -> BRK-B,
+Taiwan 2330 -> 2330.TW). US stocks with no votes fall back to a name match against SEC's company list.
+
+The SEC asks automated tools to identify themselves; set SEC_USER_AGENT ("Name email@example.com").
 """
 import argparse
+import gzip
 import io
 import json
 import os
 import re
 import sys
+import tarfile
 import time
 import urllib.request
 import zipfile
-from collections import defaultdict
+from collections import Counter, defaultdict
 from pathlib import Path
 
 import pandas as pd
@@ -31,10 +41,14 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parent.parent
 UNIVERSE_FILE = ROOT / "data" / "universe.json"
 YAHOO_HOLD = ROOT / "data" / "holdings.json"
+STOCKS_FILE = ROOT / "data" / "stocks.json"
 INDEX_URL = "https://www.sec.gov/data-research/sec-markets-data/form-n-port-data-sets"
 TICKERS_URL = "https://www.sec.gov/files/company_tickers_mf.json"
-UA = os.environ.get("SEC_USER_AGENT", "Portfolio Lab research script (danielcaley.com)")
+COMPANY_URL = "https://www.sec.gov/files/company_tickers.json"
+UA = os.environ.get("SEC_USER_AGENT", "Portfolio Lab daniel.caley1@gmail.com")
 TOP_N = int(os.environ.get("NPORT_TOP_N", "50"))
+CASH_CATS = {"STIV", "RA"}
+SAMPLES = ["SPY", "QQQ", "XLK", "IWM", "SCHD", "IEUR", "VWO", "ARKK", "EWJ", "EWY", "INDA", "MCHI"]
 
 
 def log(*a):
@@ -61,21 +75,24 @@ def get(url, dest=None, tries=4):
     raise RuntimeError(f"couldn't download {url}")
 
 
+def blank(v):
+    return v is None or (isinstance(v, float) and v != v) or str(v).strip().upper() in ("", "NAN", "N/A", "NONE", "0", "000000000")
+
+
+def clean(v):
+    return "" if blank(v) else str(v).strip()
+
+
 # ---------- the SEC files ----------
-def quarter_url(q):
-    """Find the ZIP link for a quarter such as 2026q3 (or "latest") on the data sets page."""
+def zip_links():
     html = get(INDEX_URL).decode("utf-8", "replace")
     links = sorted(set(re.findall(r'href="([^"]+\.zip)"', html, re.I)))
-    if q.lower() == "latest":
-        qs = sorted({m.lower() for u in links for m in re.findall(r"\d{4}q[1-4]", u, re.I)})
-        log(f"Quarters on the page: {qs[-6:]} (newest last)")
-        q = qs[-1] if qs else q
-    hit = [u for u in links if q.lower() in u.lower()]
-    log(f"Data sets page lists {len(links)} ZIPs; {len(hit)} match {q}: {hit[:3]}")
-    if not hit:
-        raise RuntimeError(f"no ZIP for {q} on {INDEX_URL}; first links: {links[:5]}")
-    u = hit[0]
-    return u if u.startswith("http") else "https://www.sec.gov" + u
+    out = {}
+    for u in links:
+        m = re.search(r"(\d{4}q[1-4])", u, re.I)
+        if m:
+            out[m.group(1).lower()] = u if u.startswith("http") else "https://www.sec.gov" + u
+    return dict(sorted(out.items()))
 
 
 def series_map():
@@ -89,6 +106,12 @@ def series_map():
             m[str(row[ti]).upper()] = row[si]
     log(f"SEC ticker list: {len(m)} fund tickers with a series id")
     return m
+
+
+def universe():
+    uni = json.loads(UNIVERSE_FILE.read_text())
+    uni = uni.get("etfs", uni) if isinstance(uni, dict) else uni
+    return sorted({(r[0] if isinstance(r, list) else r.get("t")) for r in uni})
 
 
 def member(zf, name):
@@ -124,10 +147,22 @@ def headers(zf, name):
         return io.TextIOWrapper(f, encoding="utf-8", errors="replace").readline().rstrip("\n").split("\t")
 
 
+def iso(s):
+    # the SEC writes dates like 30-JUN-2026
+    return pd.to_datetime(s, format="mixed", errors="coerce", dayfirst=True).dt.strftime("%Y-%m-%d")
+
+
+def holding_key(cusip, isin, name, title):
+    if cusip and len(cusip) == 9:
+        return "C:" + cusip.upper()
+    if isin and len(isin) == 12:
+        return "I:" + isin.upper()
+    return "N:" + (name + "|" + title).upper()[:120]
+
+
 def load_quarter(zpath, want_series):
-    """{series_id: {"asof", "name", "net", "n", "top": [[name, ticker, cusip, isin, pct, cat, country], ...]}}"""
+    """-> {"reports": {sid: [report, ...]}, "sec": {key: {...}}}"""
     zf = zipfile.ZipFile(zpath)
-    log("ZIP members:", [n.split('/')[-1] for n in zf.namelist()])
     for t in ("SUBMISSION.tsv", "FUND_REPORTED_INFO.tsv", "FUND_REPORTED_HOLDING.tsv", "IDENTIFIERS.tsv"):
         if member(zf, t):
             log(f"  {t} columns: {headers(zf, t)}")
@@ -137,23 +172,22 @@ def load_quarter(zpath, want_series):
     rdate = pick(sub.columns, "REPORT_DATE", "REPORT_ENDING_PERIOD", "PERIOD_OF_REPORT")
     fdate = pick(sub.columns, "FILING_DATE")
     sub = sub[[c for c in (acc, rdate, fdate) if c]].rename(columns={acc: "acc", rdate: "asof", fdate: "filed"})
-    log("  sample SUBMISSION dates:", sub.head(3).to_dict("records"))
-    # the SEC writes dates like 30-JUN-2026; store them as 2026-06-30 so they sort
     for c in ("asof", "filed"):
         if c in sub:
-            sub[c] = pd.to_datetime(sub[c], format="mixed", errors="coerce", dayfirst=True).dt.strftime("%Y-%m-%d")
+            sub[c] = iso(sub[c])
 
     fri = read(zf, "FUND_REPORTED_INFO.tsv")
-    sid = pick(fri.columns, "SERIES_ID")
-    sname = pick(fri.columns, "SERIES_NAME")
-    net = pick(fri.columns, "NET_ASSETS")
-    fri = fri[[c for c in (pick(fri.columns, "ACCESSION_NUMBER"), sid, sname, net) if c]]
-    fri.columns = ["acc", "sid", "name", "net"][:len(fri.columns)]
+    fri = fri[[pick(fri.columns, "ACCESSION_NUMBER"), pick(fri.columns, "SERIES_ID"),
+               pick(fri.columns, "SERIES_NAME"), pick(fri.columns, "NET_ASSETS")]]
+    fri.columns = ["acc", "sid", "name", "net"]
     fri = fri[fri["sid"].isin(want_series)].merge(sub, on="acc", how="left")
-    # one report per series: the latest period, latest filing (amendments win)
-    fri = fri.sort_values(["sid", "asof", "filed"]).groupby("sid").tail(1)
+    fri = fri[fri["asof"].notna()]
+    fri["filed"] = fri["filed"].fillna("") if "filed" in fri else ""
+    # one report per series and period: the latest filing (amendments win)
+    fri = fri.sort_values(["sid", "asof", "filed"]).groupby(["sid", "asof"]).tail(1)
     accs = set(fri["acc"])
-    log(f"Reports for {fri['sid'].nunique()} of {len(want_series)} wanted series in this quarter")
+    log(f"Reports: {len(fri)} for {fri['sid'].nunique()} of {len(want_series)} wanted series; "
+        f"periods {fri['asof'].value_counts().sort_index().to_dict()}")
 
     hcols = headers(zf, "FUND_REPORTED_HOLDING.tsv")
     H = dict(acc=pick(hcols, "ACCESSION_NUMBER"), hid=pick(hcols, "HOLDING_ID"),
@@ -168,108 +202,304 @@ def load_quarter(zpath, want_series):
             rows.append(ch)
     hold = pd.concat(rows) if rows else pd.DataFrame(columns=use)
     hold = hold.rename(columns={v: k for k, v in H.items() if v})
-    hold["pct"] = pd.to_numeric(hold["pct"], errors="coerce")
-    log(f"Holdings rows for those reports: {len(hold):,}")
+    hold["pct"] = pd.to_numeric(hold["pct"], errors="coerce").fillna(0)
+    for c in ("name", "title", "cusip", "cat", "country"):
+        hold[c] = hold[c].map(clean) if c in hold else ""
+    log(f"Holdings rows for those reports: {len(hold):,}; asset categories: "
+        f"{hold.groupby('cat')['pct'].sum().sort_values(ascending=False).head(12).round(0).to_dict()}")
 
-    # tickers and ISINs live in IDENTIFIERS (one row per identifier)
+    icols = headers(zf, "IDENTIFIERS.tsv")
+    I = dict(hid=pick(icols, "HOLDING_ID"), isin=pick(icols, "IDENTIFIER_ISIN", "ISIN"),
+             ticker=pick(icols, "IDENTIFIER_TICKER", "TICKER"))
     ident = {}
-    if member(zf, "IDENTIFIERS.tsv") and "hid" in hold:
-        icols = headers(zf, "IDENTIFIERS.tsv")
-        I = dict(hid=pick(icols, "HOLDING_ID"), isin=pick(icols, "IDENTIFIER_ISIN", "ISIN"),
-                 ticker=pick(icols, "IDENTIFIER_TICKER", "TICKER"))
-        hids = set(hold["hid"])
-        for ch in read(zf, "IDENTIFIERS.tsv", usecols=[v for v in I.values() if v], chunks=True):
-            ch = ch[ch[I["hid"]].isin(hids)]
-            for r in ch.itertuples(index=False):
-                d = r._asdict() if hasattr(r, "_asdict") else dict(zip(ch.columns, r))
-                rec = ident.setdefault(d[I["hid"]], {})
-                if I["isin"] and isinstance(d.get(I["isin"]), str):
-                    rec["isin"] = d[I["isin"]]
-                if I["ticker"] and isinstance(d.get(I["ticker"]), str):
-                    rec["ticker"] = d[I["ticker"]]
+    hids = set(hold["hid"])
+    for ch in read(zf, "IDENTIFIERS.tsv", usecols=[v for v in I.values() if v], chunks=True):
+        ch = ch[ch[I["hid"]].isin(hids)]
+        for h, i, t in zip(ch[I["hid"]], ch[I["isin"]], ch[I["ticker"]]):
+            rec = ident.setdefault(h, ["", ""])
+            rec[0] = rec[0] or clean(i)
+            rec[1] = rec[1] or clean(t)
+    hold["isin"] = hold["hid"].map(lambda h: ident.get(h, ["", ""])[0])
+    hold["ticker"] = hold["hid"].map(lambda h: ident.get(h, ["", ""])[1])
+    hold["key"] = [holding_key(c, i, n, t) for c, i, n, t in zip(hold["cusip"], hold["isin"], hold["name"], hold["title"])]
 
-    out = {}
+    # the reports
+    sec = {}
+    reports = defaultdict(list)
     info = fri.set_index("acc")
     for a, g in hold.groupby("acc"):
-        g = g.sort_values("pct", ascending=False)
-        top = []
-        for r in g.head(TOP_N).itertuples(index=False):
-            d = r._asdict()
-            idn = ident.get(d.get("hid"), {})
-            top.append([str(d.get("name") or ""), idn.get("ticker", ""), str(d.get("cusip") or ""),
-                        idn.get("isin", ""), round(float(d["pct"]) / 100, 6) if d["pct"] == d["pct"] else None,
-                        str(d.get("cat") or ""), str(d.get("country") or "")])
         i = info.loc[a]
-        out[i["sid"]] = {"asof": str(i.get("asof", ""))[:10], "name": i.get("name", ""),
-                         "net": i.get("net"), "n": int(len(g)), "top": top}
-    return out
+        cash = g[g["cat"].isin(CASH_CATS)]["pct"].sum()
+        g = g[~g["cat"].isin(CASH_CATS)]
+        w = g.groupby("key")["pct"].sum().sort_values(ascending=False)
+        top = [[k, round(float(p) / 100, 6)] for k, p in w.head(TOP_N).items()]
+        for k, _ in top:
+            sec.setdefault(k, None)
+        reports[i["sid"]].append({"asof": i["asof"], "filed": clean(i.get("filed")), "name": clean(i["name"]),
+                                  "net": clean(i["net"]), "n": int(len(w)), "cash": round(float(cash) / 100, 6),
+                                  "top": top})
+    first = hold.drop_duplicates("key").set_index("key")
+    for k in sec:
+        r = first.loc[k]
+        sec[k] = {"name": r["name"], "title": r["title"], "cusip": r["cusip"], "isin": r["isin"],
+                  "cat": r["cat"], "country": r["country"], "votes": Counter()}
+
+    # ticker votes from every fund in the file that holds the same CUSIP or ISIN
+    by_cusip = {s["cusip"].upper(): k for k, s in sec.items() if len(s["cusip"]) == 9}
+    by_isin = {s["isin"].upper(): k for k, s in sec.items() if len(s["isin"]) == 12}
+    hid2key = {}
+    for ch in read(zf, "FUND_REPORTED_HOLDING.tsv", usecols=[H["hid"], H["cusip"]], chunks=True):
+        c = ch[H["cusip"]].str.upper()
+        m = c.isin(by_cusip.keys())
+        hid2key.update(zip(ch.loc[m, H["hid"]], c[m].map(by_cusip)))
+    for ch in read(zf, "IDENTIFIERS.tsv", usecols=[v for v in I.values() if v], chunks=True):
+        ch = ch[ch[I["ticker"]].notna()]
+        for h, i, t in zip(ch[I["hid"]], ch[I["isin"]], ch[I["ticker"]]):
+            k = hid2key.get(h) or (by_isin.get(i.upper()) if isinstance(i, str) else None)
+            if k and not blank(t):
+                sec[k]["votes"][str(t).strip().upper()] += 1
+    voted = sum(1 for s in sec.values() if s["votes"])
+    log(f"Distinct top holdings: {len(sec):,}; with at least one ticker vote: {voted:,}")
+    for s in sec.values():
+        s["votes"] = dict(s["votes"].most_common(5))
+    return {"reports": reports, "sec": sec}
 
 
-# ---------- trial ----------
-def trial(q, tickers, out_dir):
-    out_dir = Path(out_dir)
-    out_dir.mkdir(parents=True, exist_ok=True)
+# ---------- tickers -> Yahoo symbols ----------
+EXCH_WORDS = {"US", "UN", "UW", "UQ", "UA", "UP", "UR", "EQUITY", "LN", "TT", "HK", "JP", "JT", "KS", "KP", "CH", "C1", "C2",
+              "IN", "IS", "IB", "GR", "GY", "FP", "NA", "SW", "SE", "CN", "CT", "AU", "AT", "SM", "IM", "SS", "DC", "FH", "NO", "BB"}
+SUFFIX = {"GB": ".L", "DE": ".DE", "FR": ".PA", "CH": ".SW", "NL": ".AS", "ES": ".MC", "IT": ".MI", "SE": ".ST",
+          "DK": ".CO", "FI": ".HE", "NO": ".OL", "BE": ".BR", "IE": ".IR", "AT": ".VI", "PT": ".LS", "CA": ".TO",
+          "AU": ".AX", "JP": ".T", "HK": ".HK", "TW": ".TW", "KR": ".KS", "IN": ".NS", "SG": ".SI", "BR": ".SA",
+          "MX": ".MX", "ZA": ".JO", "IL": ".TA", "NZ": ".NZ", "ID": ".JK", "MY": ".KL", "TH": ".BK", "SA": ".SR",
+          "PL": ".WA", "TR": ".IS"}
+
+
+def norm_ticker(t):
+    t = t.upper().replace(" EQUITY", "").strip()
+    m = re.match(r"^([A-Z]{1,5})[ ./\-]([A-Z])$", t)  # BRK B, BRK/B, BRK.B
+    if m:
+        return f"{m.group(1)}-{m.group(2)}"
+    tok = t.split()
+    if not tok:
+        return ""
+    t = tok[0]
+    if t in EXCH_WORDS:
+        return ""
+    t = re.sub(r"[./]([A-Z])$", r"-\1", t) if re.match(r"^[A-Z]{1,5}[./][A-Z]$", t) else t
+    return t if re.match(r"^[A-Z0-9\-]{1,12}$", t) else ""
+
+
+def yahoo_symbol(raw, s, known=()):
+    """Best guess at the Yahoo symbol for a holding ("" when there's nothing to go on).
+    known: symbols the site already has (data/stocks.json); a candidate found there wins."""
+    raw = (raw or "").upper().strip()
+    c, isin = s.get("country", ""), s.get("isin", "").upper()
+    if re.match(r"^[A-Z0-9\-]+\.[A-Z]{1,3}$", raw) and raw.split(".")[1] in {v[1:] for v in SUFFIX.values()} | {"TWO", "KQ", "SS", "SZ"}:
+        return raw  # already Yahoo style, such as 2330.TW
+    # local codes spelled out inside the ISIN
+    if re.match(r"^TW000\d{4}", isin):
+        return isin[5:9] + ".TW"
+    if re.match(r"^KR7\d{6}", isin):
+        return isin[3:9] + ".KS"
+    t = norm_ticker(raw)
+    if not t:
+        return ""
+    cands = [t]
+    if t.isdigit() and (c in ("HK", "CN") or isin.startswith(("HK", "KYG", "BMG", "CNE"))) and len(t) <= 5:
+        cands.insert(0, t.zfill(4) + ".HK")
+    if t.isdigit() and len(t) == 6 and c == "CN":
+        cands.insert(0, t + (".SS" if t.startswith("6") else ".SZ"))
+    if c in SUFFIX and len(cands) == 1:
+        # a foreign ISIN usually means the local listing (ASML.AS), a US one the US listing
+        if isin and not isin.startswith("US"):
+            cands.insert(0, t + SUFFIX[c])
+        else:
+            cands.append(t + SUFFIX[c])
+    for x in cands:
+        if x in known:
+            return x
+    return t if isin.startswith("US") or c in ("US", "") else cands[0]
+
+
+def name_key(n):
+    n = re.sub(r"[^A-Z0-9 ]", " ", n.upper())
+    n = re.sub(r"\b(THE|INC|INCORPORATED|CORP|CORPORATION|CO|COMPANY|LTD|LIMITED|PLC|HOLDINGS?|GROUP|SA|NV|AG|LLC|LP|CLASS [A-Z]|CL [A-Z]|COM|NEW|DEL)\b", " ", n)
+    return " ".join(n.split())
+
+
+def company_names():
+    """SEC company list: normalized name -> ticker, only where the name gives one ticker."""
+    try:
+        j = json.loads(get(COMPANY_URL))
+    except Exception as e:
+        log(f"  company list unavailable: {e}")
+        return {}
+    by = defaultdict(set)
+    for r in j.values():
+        by[name_key(r["title"])].add(r["ticker"].upper().replace(".", "-"))
+    return {k: next(iter(v)) for k, v in by.items() if len(v) == 1 and k}
+
+
+# ---------- steps ----------
+def cmd_quarters(a):
+    qs = [q for q in zip_links() if q >= a.since.lower()]
+    print(json.dumps(qs))
+
+
+def cmd_quarter(a):
+    out = Path(a.out)
+    out.mkdir(parents=True, exist_ok=True)
+    links = zip_links()
+    q = max(links) if a.q == "latest" else a.q.lower()
+    if q not in links:
+        raise RuntimeError(f"no ZIP for {q}; the page has {list(links)}")
     smap = series_map()
-    uni = json.loads(UNIVERSE_FILE.read_text())
-    uni = uni.get("etfs", uni) if isinstance(uni, dict) else uni
-    etfs = sorted({(r[0] if isinstance(r, list) else r.get("t")) for r in uni})
-    mapped = {t: smap[t] for t in etfs if t in smap}
-    log(f"Universe: {len(etfs)} ETFs, {len(mapped)} map to an SEC series ({len(etfs) - len(mapped)} don't)")
-    zpath = out_dir.parent / f"{q}.zip"
+    want = {smap[t] for t in universe() if t in smap}
+    zpath = Path(a.work) / f"{q}.zip"
+    zpath.parent.mkdir(parents=True, exist_ok=True)
     if not zpath.exists():
-        url = quarter_url(q)
-        log(f"Downloading {url}")
         t0 = time.time()
-        get(url, zpath)
-        log(f"  {zpath.stat().st_size / 1e6:.0f} MB in {time.time() - t0:.0f}s")
+        get(links[q], zpath)
+        log(f"Downloaded {links[q]}: {zpath.stat().st_size / 1e6:.0f} MB in {time.time() - t0:.0f}s")
     t0 = time.time()
-    got = load_quarter(zpath, set(mapped.values()))
-    log(f"Parsed in {time.time() - t0:.0f}s")
+    d = load_quarter(zpath, want)
+    d["q"] = q
+    log(f"Parsed {q} in {time.time() - t0:.0f}s")
+    with gzip.open(out / f"{q}.json.gz", "wt") as f:
+        json.dump(d, f, separators=(",", ":"))
+    log(f"Wrote {out / f'{q}.json.gz'} ({(out / f'{q}.json.gz').stat().st_size / 1e6:.1f} MB)")
 
-    by_t = {t: got.get(s) for t, s in mapped.items()}
-    have = {t: v for t, v in by_t.items() if v}
-    tick_share = [sum(1 for h in v["top"] if h[1]) / max(1, len(v["top"])) for v in have.values()]
-    stock_share = [sum(1 for h in v["top"] if h[5] in ("EC", "EP")) / max(1, len(v["top"])) for v in have.values()]
-    dates = defaultdict(int)
-    for v in have.values():
-        dates[v["asof"][:7]] += 1
-    rep = {
-        "quarter": q, "universe": len(etfs), "mapped_to_series": len(mapped), "with_holdings": len(have),
-        "missing_examples": [t for t in etfs if t not in mapped][:40],
-        "mapped_but_no_report_examples": [t for t, v in by_t.items() if not v][:40],
-        "report_months": dict(sorted(dates.items())),
-        "avg_share_of_top_holdings_with_ticker": round(sum(tick_share) / max(1, len(tick_share)), 3),
-        "avg_share_of_top_holdings_that_are_stock": round(sum(stock_share) / max(1, len(stock_share)), 3),
-        "unique_holding_tickers_top50": len({h[1] for v in have.values() for h in v["top"] if h[1]}),
-        "unique_holding_ids_top50": len({h[3] or h[2] or h[0] for v in have.values() for h in v["top"]}),
-    }
-    # side by side with the Yahoo top 10 we already have
+
+def cmd_combine(a):
+    inp, out = Path(a.inp), Path(a.out)
+    (out / "etf").mkdir(parents=True, exist_ok=True)
+    files = sorted(inp.rglob("*.json.gz"))
+    log(f"Combining {len(files)} quarter files: {[f.name for f in files]}")
+    reports, sec = defaultdict(dict), {}
+    for fp in files:
+        with gzip.open(fp, "rt") as f:
+            d = json.load(f)
+        for sid, rs in d["reports"].items():
+            for r in rs:
+                old = reports[sid].get(r["asof"])
+                if not old or (r.get("filed") or "") >= (old.get("filed") or ""):
+                    reports[sid][r["asof"]] = r
+        for k, s in d["sec"].items():
+            cur = sec.get(k)
+            if not cur:
+                sec[k] = dict(s, votes=Counter(s["votes"]))
+            else:
+                cur["votes"].update(s["votes"])
+                for f2 in ("name", "title", "isin", "cat", "country"):
+                    cur[f2] = s[f2] or cur[f2]  # later quarters win
+
+    names = company_names()
+    stocks = set(json.loads(STOCKS_FILE.read_text())) if STOCKS_FILE.exists() else set()
+    how = Counter()
+    for k, s in sec.items():
+        sym, src = "", ""
+        for t, _ in s["votes"].most_common():
+            sym = yahoo_symbol(t, s, stocks)
+            if sym:
+                src = "vote"
+                break
+        if not sym:
+            sym = yahoo_symbol("", s, stocks)
+            src = "isin" if sym else ""
+        if not sym and s["cat"] in ("EC", "EP") and (s["isin"].startswith("US") or s["country"] == "US"):
+            sym = names.get(name_key(s["name"]), "")
+            src = "name" if sym else ""
+        s["sym"], s["src"] = sym, src
+        how[src or "none"] += 1
+    log(f"Symbols for {len(sec):,} distinct holdings: {dict(how)}")
+
+    smap = series_map()
+    etfs = universe()
     yh = json.loads(YAHOO_HOLD.read_text()) if YAHOO_HOLD.exists() else {}
+    stats = {"etfs": len(etfs), "mapped": 0, "with_history": 0, "quarters_per_etf": Counter(), "first_period": Counter()}
+    w_all = w_sym = w_known = 0.0
+    unresolved = Counter()
+    for t in etfs:
+        sid = smap.get(t)
+        if not sid:
+            continue
+        stats["mapped"] += 1
+        rs = [reports[sid][d] for d in sorted(reports.get(sid, {}))]
+        if not rs:
+            continue
+        stats["with_history"] += 1
+        stats["quarters_per_etf"][len(rs)] += 1
+        stats["first_period"][rs[0]["asof"][:4]] += 1
+        idx, table, hist = {}, [], []
+        for r in rs:
+            top = []
+            for k, p in r["top"]:
+                if k not in idx:
+                    s = sec[k]
+                    idx[k] = len(table)
+                    table.append([s["sym"], s["name"], s["cusip"], s["isin"], s["cat"], s["country"]])
+                top.append([idx[k], p])
+            hist.append([r["asof"], r["net"], r["n"], r["cash"], top])
+        last = rs[-1]
+        for k, p in last["top"]:
+            s = sec[k]
+            w_all += p
+            if s["sym"]:
+                w_sym += p
+                w_known += p if s["sym"] in stocks else 0
+            else:
+                unresolved[s["name"]] += p
+        doc = {"t": t, "sid": sid, "name": last["name"],
+               "cols": {"sec": ["sym", "name", "cusip", "isin", "cat", "country"], "hist": ["asof", "net", "n", "cash", "top"]},
+               "sec": table, "hist": hist}
+        (out / "etf" / f"{t}.json").write_text(json.dumps(doc, separators=(",", ":")))
+
+    rep = {
+        "quarter_files": [f.name for f in files],
+        "universe": stats["etfs"], "mapped_to_series": stats["mapped"], "with_history": stats["with_history"],
+        "reports_per_etf": dict(sorted(stats["quarters_per_etf"].items())),
+        "first_report_year": dict(sorted(stats["first_period"].items())),
+        "symbol_sources": dict(how),
+        "latest_top50_weight_with_symbol": round(w_sym / max(w_all, 1e-9), 3),
+        "latest_top50_weight_with_symbol_in_stocks_json": round(w_known / max(w_all, 1e-9), 3),
+        "top_unresolved_by_weight": [[n, round(w, 3)] for n, w in unresolved.most_common(40)],
+    }
     cmp = {}
-    for t in tickers:
-        v = have.get(t)
-        if not v:
+    for t in SAMPLES:
+        fp = out / "etf" / f"{t}.json"
+        if not fp.exists():
             cmp[t] = "no SEC report found"
             continue
-        (out_dir / f"{t}.json").write_text(json.dumps(v, indent=1))
-        y = (yh.get(t) or {}).get("top", [])
-        cmp[t] = {"sec_asof": v["asof"], "sec_holdings": v["n"],
-                  "sec_top10": [[h[1] or h[0], h[4]] for h in v["top"][:10]],
-                  "yahoo_top10": [[r[0] or r[1], r[2]] for r in y[:10]]}
+        d = json.loads(fp.read_text())
+        a0 = d["hist"][-1]
+        cmp[t] = {"reports": len(d["hist"]), "first": d["hist"][0][0], "latest": a0[0], "holdings": a0[2], "cash": a0[3],
+                  "sec_top10": [[d["sec"][i][0] or d["sec"][i][1], p] for i, p in a0[4][:10]],
+                  "yahoo_top10": [[r[0] or r[1], r[2]] for r in (yh.get(t) or {}).get("top", [])[:10]]}
     rep["compare"] = cmp
-    (out_dir / "report.json").write_text(json.dumps(rep, indent=1))
+    (out / "report.json").write_text(json.dumps(rep, indent=1))
     log(json.dumps({k: v for k, v in rep.items() if k != "compare"}, indent=1))
     for t, c in cmp.items():
-        log(t, json.dumps(c)[:600])
+        log(t, json.dumps(c)[:700])
+    with tarfile.open(out / "nport-etfs.tar.gz", "w:gz") as tf:
+        tf.add(out / "etf", arcname="etf")
+    log(f"Wrote {stats['with_history']} ETF files; archive {(out / 'nport-etfs.tar.gz').stat().st_size / 1e6:.1f} MB")
 
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--quarter", required=True, help="such as 2026q3")
-    ap.add_argument("--trial", nargs="*", default=["SPY", "QQQ", "XLK", "IWM", "SCHD", "IEUR", "VWO", "ARKK"])
-    ap.add_argument("--out", default="/tmp/nport_trial/out")
+    sp = ap.add_subparsers(dest="cmd", required=True)
+    p = sp.add_parser("quarters")
+    p.add_argument("--since", default="2019q4")
+    p = sp.add_parser("quarter")
+    p.add_argument("q", help="such as 2026q3, or latest")
+    p.add_argument("--out", default="/tmp/nport/quarters")
+    p.add_argument("--work", default="/tmp/nport/zips")
+    p = sp.add_parser("combine")
+    p.add_argument("--inp", default="/tmp/nport/quarters")
+    p.add_argument("--out", default="/tmp/nport/out")
     a = ap.parse_args()
-    trial(a.quarter, [t.upper() for t in a.trial], a.out)
+    {"quarters": cmd_quarters, "quarter": cmd_quarter, "combine": cmd_combine}[a.cmd](a)
 
 
 if __name__ == "__main__":
