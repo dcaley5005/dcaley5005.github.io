@@ -543,7 +543,7 @@ def cmd_combine(a):
 
 
 def site_doc(d):
-    """The trimmed copy kept in the repo for the nightly build: symbol, name and country per holding,
+    """The trimmed copy kept in the repo for the nightly build: symbol (stocks only), name and country per holding,
     and for each report its date, cash share and top holdings as [holding index, share of the fund]."""
     keep, idx, sec = {}, {}, []
     for h in d["hist"]:
@@ -552,7 +552,8 @@ def site_doc(d):
     for i in keep:
         s = d["sec"][i]
         idx[i] = len(sec)
-        sec.append([s[0], s[1], s[5]])
+        # only stocks keep a symbol: the "tickers" some funds give bonds aren't real listings
+        sec.append([s[0] if s[4] in ("EC", "EP") else "", s[1], s[5]])
     return {"t": d["t"], "asof": d["hist"][-1][0], "sec": sec,
             "hist": [[h[0], h[3], [[idx[i], p] for i, p in h[4]]] for h in d["hist"]]}
 

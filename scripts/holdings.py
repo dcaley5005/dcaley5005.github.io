@@ -192,6 +192,44 @@ def download(syms, start):
     return got, todo
 
 
+# ---------- holding prices, cached between runs ----------
+PRICE_CACHE = ROOT / ".cache" / "holding_prices.pkl"   # kept by actions/cache, not in git
+PRICE_SLICES = 3          # holdings outside the priority set refresh one slice per run
+NEW_PER_RUN = int(os.environ.get("NEW_HOLDING_PRICES", "1500"))   # first downloads per run, to stay under Yahoo's limit
+
+
+def download_cached(syms, start, priority):
+    """Daily closes for the holdings, using the cache from earlier runs. Every run downloads the priority
+    symbols (the biggest holdings, which get line charts) and one slice of the rest, so the others are at
+    most PRICE_SLICES days old; symbols never seen before are added up to NEW_PER_RUN a run."""
+    import pickle
+    import zlib
+    cache = {}
+    if PRICE_CACHE.exists():
+        try:
+            cache = pickle.loads(PRICE_CACHE.read_bytes())
+        except Exception as e:
+            log(f"  price cache unreadable ({e}); starting over")
+    day = datetime.now(timezone.utc).toordinal()
+    failed = cache.pop("__failed__", {})   # symbol -> day it last failed; skipped for 30 days
+    failed = {x: d for x, d in failed.items() if day - d < 30}
+    syms = sorted(set(syms))
+    pri = set(priority) & set(syms)
+    new = [x for x in syms if x not in cache and x not in pri and x not in failed][:NEW_PER_RUN]
+    due = [x for x in syms if x in cache and x not in pri and (zlib.crc32(x.encode()) + day) % PRICE_SLICES == 0]
+    todo = sorted(pri | set(new) | set(due))
+    log(f"Holding prices: {len(syms)} symbols, {len(cache)} cached; downloading {len(todo)} "
+        f"({len(pri)} priority, {len(due)} due, {len(new)} new)")
+    got, missing = download(todo, start)
+    cut = pd.Timestamp(start)
+    for x, ser in got.items():
+        cache[x] = ser[ser.index >= cut]
+    failed.update({x: day for x in missing if x not in cache})
+    PRICE_CACHE.parent.mkdir(parents=True, exist_ok=True)
+    PRICE_CACHE.write_bytes(pickle.dumps({**cache, "__failed__": failed}))
+    return {x: cache[x] for x in syms if x in cache}, missing
+
+
 # ---------- SEC holdings history ----------
 def load_nport(tickers):
     """data/nport/<T>.json for the ETFs that have one and still file: {T: doc}."""
@@ -222,6 +260,16 @@ def nport_bases(doc, starts, end):
     for d in list(starts) + [end]:
         i = max((j for j, x in enumerate(dates) if x <= d), default=0)
         out.append(i)
+    return out
+
+
+def nport_priority(nport):
+    """The symbols that get a full card: the biggest holdings in each fund's latest report."""
+    out = set()
+    for d in nport.values():
+        for j, _ in d["hist"][-1][2][:NPORT_CARDS]:
+            if d["sec"][j][0]:
+                out.add(d["sec"][j][0])
     return out
 
 

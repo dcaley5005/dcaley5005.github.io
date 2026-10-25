@@ -383,8 +383,7 @@ def build_whats_inside(series, names, fund):
     stocks = H.update_stocks(syms)
     # 3 years and 5 months: the 3Y view starts from the SEC report on or before 3 years ago
     start = (last - pd.DateOffset(years=3, months=5)).strftime("%Y-%m-%d")
-    log(f"Downloading prices for {len(syms)} holdings…")
-    prices, missing = H.download(syms, start)
+    prices, missing = H.download_cached(syms, start, set(H.holding_symbols(hold)) | H.nport_priority(nport))
     log(f"Holding prices: {len(prices)} of {len(syms)}")
     H.build_inside(OUT / "inside", series, hold, stocks, prices, names, fund, nport)
 

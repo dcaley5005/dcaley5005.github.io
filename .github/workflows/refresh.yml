@@ -39,6 +39,13 @@ jobs:
 
       - run: pip install -r scripts/requirements.txt
 
+      # holding prices from earlier runs, so each run only downloads part of them
+      - uses: actions/cache@v4
+        with:
+          path: .cache
+          key: holding-prices-${{ github.run_id }}
+          restore-keys: holding-prices-
+
       - name: Build data and site
         run: python scripts/build_data.py
         env:

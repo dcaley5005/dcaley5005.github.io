@@ -12,6 +12,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: site-preview
+  cancel-in-progress: true
+
 jobs:
   preview:
     runs-on: ubuntu-latest
@@ -24,6 +28,13 @@ jobs:
           cache: pip
           cache-dependency-path: scripts/requirements.txt
       - run: pip install -r scripts/requirements.txt
+
+      # holding prices from earlier runs, so each run only downloads part of them
+      - uses: actions/cache@v4
+        with:
+          path: .cache
+          key: holding-prices-${{ github.run_id }}
+          restore-keys: holding-prices-
       - name: Build data and site
         run: |
           set -o pipefail
