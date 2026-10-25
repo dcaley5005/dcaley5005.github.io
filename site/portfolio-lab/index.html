@@ -728,10 +728,74 @@ tr.flash>td{animation:pflash 1.6s ease-out}
 #bTable th.bm .hw,#bTable th.wcell .hw{align-items:center}
 #bTable th.wcell .sort{max-width:72px}
 
+
+/* ---------- what's inside ---------- */
+.xpfms{display:flex;flex-direction:column;gap:6px}
+.xpfm{display:grid;grid-template-columns:10px auto minmax(0,1fr) auto;gap:8px;align-items:center;font-size:13.5px}
+.xpfm i{width:10px;height:10px;border-radius:2px}.xpfm b{font-family:"IBM Plex Mono",monospace;font-weight:500}
+.xpfm span{color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.xpfm em{font-style:normal;font-family:"IBM Plex Mono",monospace}
+.xslg.xcmp>div em{font-style:normal;font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--faint);white-space:nowrap}
+.xslg.xcmp{grid-template-columns:repeat(auto-fill,minmax(270px,1fr))}
+.xslg.xcmp>div em.up{color:var(--pos)}.xslg.xcmp>div em.dn{color:var(--neg)}
+.pfname+.xtools{margin-left:0}
+.xtools{display:inline-flex;gap:0;flex:none;margin-left:3px;vertical-align:middle}
+.xtools .xbtn{position:static;transform:none;margin:0;opacity:1;background:transparent;color:var(--faint);width:22px}
+@media (min-width:1001px){.btable .tkin{width:66px}}
+.xtools .xbtn:hover,.xtools .xbtn:focus-visible{color:var(--accent);background:var(--accentBg)}
+.btable .tkwrap .xtools{margin-left:4px}
+.xtabs{display:flex;gap:4px;margin-top:10px;flex-wrap:wrap}
+.xtab{border:1px solid var(--line);background:transparent;min-height:36px;padding:0 12px;border-radius:9px;font:500 14px "IBM Plex Sans",sans-serif;color:var(--ink2);cursor:pointer;display:inline-flex;align-items:center;gap:7px}
+.xtab:hover{background:var(--panel2);color:var(--ink)}
+.xtab[aria-selected="true"]{background:var(--btn);border-color:var(--btn);color:var(--btnInk)}
+.xtab svg{flex:none}
+.xin .xtmfig{flex:1 1 auto;min-width:0;margin:0;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:10px}
+.xtmh{display:flex;flex-direction:column;gap:2px;padding:2px 4px 0}
+.xtmh b{font-size:16px;font-weight:600}
+.xtmh span{font-size:12.5px;color:var(--muted)}
+.xtm{position:relative;flex:1 1 auto;min-height:320px}
+.xtile{position:absolute;box-sizing:border-box;border:0;margin:0;border-radius:6px;padding:7px 8px;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:1px;overflow:hidden;text-align:left;cursor:pointer;font-family:"IBM Plex Mono",monospace;transition:opacity .12s,box-shadow .12s}
+.xtile.l{padding:10px 12px}
+.xtile:hover{box-shadow:inset 0 0 0 2px currentColor}
+.xtile:focus-visible{outline:2px solid var(--focus);outline-offset:1px}
+.xtile.on{box-shadow:inset 0 0 0 2.5px currentColor}
+.xtm.fade .xtile:not(.on){opacity:.5}
+.xtile .xtk{font-weight:600;font-size:13px;line-height:1.2;white-space:nowrap}
+.xtile.l .xtk{font-size:19px}
+.xtile .xtn{font-family:"IBM Plex Sans",sans-serif;font-size:12px;line-height:1.3;opacity:.85;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.xtile .xtv{font-size:12px;line-height:1.3;white-space:nowrap}
+.xtile.rest{cursor:default}.xtile.rest:hover{box-shadow:none}
+.b-p1{background:var(--tp1);color:var(--tp1f)}.b-p2{background:var(--tp2);color:var(--tp2f)}.b-p3{background:var(--tp3);color:var(--tp3f)}.b-p4{background:var(--tp4);color:var(--tp4f)}
+.b-n1{background:var(--tn1);color:var(--tn1f)}.b-n2{background:var(--tn2);color:var(--tn2f)}.b-n3{background:var(--tn3);color:var(--tn3f)}.b-o{background:var(--to);color:var(--tof)}
+.xidock{flex:0 0 clamp(330px,32%,460px);min-width:0;display:flex;flex-direction:column}
+.xidock>.xcard{flex:1 1 auto;min-height:0;box-sizing:border-box}
+.xidock .xcard.hl{border-color:var(--xc);box-shadow:0 0 0 3px color-mix(in srgb,var(--xc) 22%,transparent)}
+.xadesc{margin:0;font-size:13.5px;line-height:1.55;color:var(--ink2);display:-webkit-box;-webkit-line-clamp:6;-webkit-box-orient:vertical;overflow:hidden}
+.xafacts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 14px}
+.xafacts div{display:flex;flex-direction:column;gap:2px;min-width:0}
+.xafacts span{font-size:12px;color:var(--muted)}
+.xafacts b{font-size:14px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.xconc{margin:0;font-size:13.5px;line-height:1.5;color:var(--ink2)}
+.xrisk.x3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.xnoline{font-size:12.5px;color:var(--faint);padding:18px 0;text-align:center;border:1px dashed var(--line);border-radius:8px}
+.xsecp{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:16px 18px;gap:12px}
+.xsech{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.xsech h3{margin:0}
+.xsnote{margin:0;font-size:13.5px;color:var(--ink2)}
+.xsbar{display:flex;height:22px;border-radius:6px;overflow:hidden;gap:2px}
+.xsbar span{min-width:2px}
+.xslg{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px 22px}
+.xslg div{display:flex;align-items:center;gap:9px;font-size:13.5px;color:var(--ink2);min-width:0}
+.xslg i{width:10px;height:10px;border-radius:2px;flex:none}
+.xslg span{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.xslg b{font:500 13px "IBM Plex Mono",monospace;color:var(--ink)}
+.xassets{display:flex;flex-direction:column;gap:12px;padding:6px 4px}
+.xassets p{margin:0;font-size:13.5px;color:var(--ink2);line-height:1.5}
+@media (max-width:1000px){.xin.xtop{flex-direction:column;align-items:stretch}.xidock{flex:none}.xtm{flex:none;height:340px;min-height:0}}
+@media (max-width:700px){.xtm{height:300px}.xtile .xtn{display:none}}
 /* ---------- explore alternatives ---------- */
-:root{--xm:#7b55c9;--xmBg:#ece6f8;--xs:#2f6fdb;--xsBg:#E4ECFA;--xd:#c2417a;--xdBg:#F7E3EC;--xz:#a8650a;--xzBg:#F6EAD6;--xposBg:#E6F0E9;--xnegBg:#F7E5DD}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--xm:#b39af2;--xmBg:#2b2440;--xs:#6aa6f5;--xsBg:#1f2a3a;--xd:#ee7fae;--xdBg:#3a2230;--xz:#e8a33d;--xzBg:#3a2e1b;--xposBg:#1d2c24;--xnegBg:#34241d}}
-:root[data-theme="dark"]{--xm:#b39af2;--xmBg:#2b2440;--xs:#6aa6f5;--xsBg:#1f2a3a;--xd:#ee7fae;--xdBg:#3a2230;--xz:#e8a33d;--xzBg:#3a2e1b;--xposBg:#1d2c24;--xnegBg:#34241d}
+:root{--tp1:#DDEDE3;--tp1f:#1C1B18;--tp2:#A9D3BB;--tp2f:#1C1B18;--tp3:#357D5B;--tp3f:#fff;--tp4:#1D6B4C;--tp4f:#fff;--tn1:#F5DDD0;--tn1f:#1C1B18;--tn2:#E6A585;--tn2f:#1C1B18;--tn3:#A8401C;--tn3f:#fff;--to:#DCD5C6;--tof:#3D3A34;--xm:#7b55c9;--xmBg:#ece6f8;--xs:#2f6fdb;--xsBg:#E4ECFA;--xd:#c2417a;--xdBg:#F7E3EC;--xz:#a8650a;--xzBg:#F6EAD6;--xposBg:#E6F0E9;--xnegBg:#F7E5DD}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--tp1:#22352B;--tp1f:#EDE8DC;--tp2:#285A43;--tp2f:#EDE8DC;--tp3:#277A57;--tp3f:#F4F1E8;--tp4:#4FB884;--tp4f:#0F1A14;--tn1:#3B2820;--tn1f:#EDE8DC;--tn2:#7E3D25;--tn2f:#F4F1E8;--tn3:#C9623B;--tn3f:#140C08;--to:#35332E;--tof:#CFC9BB;--xm:#b39af2;--xmBg:#2b2440;--xs:#6aa6f5;--xsBg:#1f2a3a;--xd:#ee7fae;--xdBg:#3a2230;--xz:#e8a33d;--xzBg:#3a2e1b;--xposBg:#1d2c24;--xnegBg:#34241d}}
+:root[data-theme="dark"]{--tp1:#22352B;--tp1f:#EDE8DC;--tp2:#285A43;--tp2f:#EDE8DC;--tp3:#277A57;--tp3f:#F4F1E8;--tp4:#4FB884;--tp4f:#0F1A14;--tn1:#3B2820;--tn1f:#EDE8DC;--tn2:#7E3D25;--tn2f:#F4F1E8;--tn3:#C9623B;--tn3f:#140C08;--to:#35332E;--tof:#CFC9BB;--xm:#b39af2;--xmBg:#2b2440;--xs:#6aa6f5;--xsBg:#1f2a3a;--xd:#ee7fae;--xdBg:#3a2230;--xz:#e8a33d;--xzBg:#3a2e1b;--xposBg:#1d2c24;--xnegBg:#34241d}
 .tkcell{position:relative}
 .xbtn{position:absolute;right:4px;top:50%;transform:translateY(-50%);width:24px;height:24px;border:0;border-radius:6px;padding:0;background:var(--panel2);color:var(--ink2);display:flex;align-items:center;justify-content:center;opacity:0;cursor:pointer;transition:opacity .12s}
 .hsub .xbtn{position:static;transform:none;margin-left:2px}
@@ -995,7 +1059,7 @@ tr.xecho>td{background:var(--accentBg);transition:background .2s}
 </div>
 <div class="pop" id="pop" role="tooltip" hidden></div>
 <div class="modal" id="ioModal" hidden><div class="mback" data-ioclose="1"></div><div class="mpanel" role="dialog" aria-modal="true" aria-labelledby="ioTitle"><div class="mhead"><h3 id="ioTitle">Import / Export</h3><button type="button" class="mclose" data-ioclose="1" aria-label="Close"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div><div id="ioBody"></div></div></div>
-<div class="xm" id="xm" hidden><div class="xmback" data-xclose></div><div class="xmd" role="dialog" aria-modal="true" aria-labelledby="xmTitle"><div class="xmh"><div><h2 id="xmTitle">Explore alternatives</h2><div class="sub" id="xmSub"></div></div><div class="xmhr"><span class="cnt" id="xmCount" aria-live="polite"></span><button type="button" class="xhowb" id="xmHow" aria-expanded="false" aria-controls="xmDrawer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 7.6v.01"/></svg><span class="t">How these are chosen</span></button><button type="button" class="xclose" id="xmClose" data-xclose aria-label="Close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div></div><div class="xmb" id="xmBody"></div><aside class="xdrawer" id="xmDrawer" aria-hidden="true" aria-label="How these are chosen"><div class="xdh"><h3>How these are chosen</h3><button type="button" class="xclose" data-xdclose aria-label="Close this panel" style="width:36px;height:36px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div><div class="xdb"></div></aside></div></div>
+<div class="xm" id="xm" hidden><div class="xmback" data-xclose></div><div class="xmd" role="dialog" aria-modal="true" aria-labelledby="xmTitle"><div class="xmh"><div><h2 id="xmTitle">Explore alternatives</h2><div class="sub" id="xmSub"></div><div class="xtabs" role="tablist" aria-label="Explore views"><button type="button" class="xtab" role="tab" data-xtab="alt" aria-selected="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg>Alternatives</button><button type="button" class="xtab" role="tab" data-xtab="in" aria-selected="false"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/></svg>Under the hood</button></div></div><div class="xmhr"><span class="cnt" id="xmCount" aria-live="polite"></span><button type="button" class="xhowb" id="xmHow" aria-expanded="false" aria-controls="xmDrawer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 7.6v.01"/></svg><span class="t">How these are chosen</span></button><button type="button" class="xclose" id="xmClose" data-xclose aria-label="Close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div></div><div class="xmb" id="xmBody"></div><aside class="xdrawer" id="xmDrawer" aria-hidden="true" aria-label="How these are chosen"><div class="xdh"><h3>How these are chosen</h3><button type="button" class="xclose" data-xdclose aria-label="Close this panel" style="width:36px;height:36px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div><div class="xdb"></div></aside></div></div>
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 <div class="drophint" id="drophint" hidden>Drop CSV files to import prices</div>
 
@@ -1285,7 +1349,7 @@ function memOrder(p){const ix=p.rows.map((r,k)=>k);if(!BSORT.k||!BSORT.dir)retur
   return ix.sort((a,b)=>{const va=v[a],vb=v[b];if(va==null&&vb==null)return a-b;if(va==null)return 1;if(vb==null)return -1;const c=typeof va==='string'?va.localeCompare(vb):va-vb;return (c*BSORT.dir)||a-b})}
 function pfRowsHTML(NC,stripAfter,list){const B=S.b,st0=selStart(B.sel),hp=B.sel.p;return (list||S.pfs).map(p=>{const ok=weights(p).length>0,col=pfCol(p),open=!!S.pOpen[p.id],hid=!!S.hidden[p.id];
   const fc=ok?dFirstAny(p.rows.map(r=>r.t)):null,s0=Math.max(st0,fc??st0),V=ok?bhd(p,s0):null,v=V?bhdRet(p,s0):null,o=ok?pStats(p,B.sel):null,tot=pTot(p),good=Math.abs(tot-100)<0.05;
-  let h=`<tr class="pfrow${hid?' dim':''}${p.k?' ticked':''}" data-pid="${esc(p.id)}"><td>${S.pfs.length+B.rows.length>=2?gripBtn(p.name,'data-gk="top"'):''}<span class="tkcell"><label class="sr" for="pk-${esc(p.id)}">Tick ${esc(p.name)}</label><input type="checkbox" class="tkchk" id="pk-${esc(p.id)}" data-ptick="${esc(p.id)}" data-tip="Tick to group or add to another portfolio" ${p.k?'checked':''}><button type="button" class="pfchev" data-popen="${esc(p.id)}" aria-expanded="${open}" aria-label="${open?'Hide':'Show'} the ETFs in ${esc(p.name)}" data-tip="${open?'Hide':'Show'} the ETFs inside">${pico('chev',14)}</button><span style="display:flex;flex-direction:column"><span style="display:flex;gap:6px;align-items:center"><label class="sr" for="pn-${esc(p.id)}">Portfolio name</label><input class="field pfname" id="pn-${esc(p.id)}" data-pname="${esc(p.id)}" autocomplete="off" value="${esc(p.name)}"></span><span class="pfbar" aria-hidden="true">${weights(p).map(x=>`<span style="width:${x.w*100}%;background:${memCol(p,p.rows.findIndex(q=>q.t===x.t))}"></span>`).join('')}</span></span></span></td>
+  let h=`<tr class="pfrow${hid?' dim':''}${p.k?' ticked':''}" data-pid="${esc(p.id)}"><td>${S.pfs.length+B.rows.length>=2?gripBtn(p.name,'data-gk="top"'):''}<span class="tkcell"><label class="sr" for="pk-${esc(p.id)}">Tick ${esc(p.name)}</label><input type="checkbox" class="tkchk" id="pk-${esc(p.id)}" data-ptick="${esc(p.id)}" data-tip="Tick to group or add to another portfolio" ${p.k?'checked':''}><button type="button" class="pfchev" data-popen="${esc(p.id)}" aria-expanded="${open}" aria-label="${open?'Hide':'Show'} the ETFs in ${esc(p.name)}" data-tip="${open?'Hide':'Show'} the ETFs inside">${pico('chev',14)}</button><span style="display:flex;flex-direction:column"><span style="display:flex;gap:6px;align-items:center"><label class="sr" for="pn-${esc(p.id)}">Portfolio name</label><input class="field pfname" id="pn-${esc(p.id)}" data-pname="${esc(p.id)}" autocomplete="off" value="${esc(p.name)}">${ok?`<span class="xtools"><button type="button" class="xbtn" data-xpf="${esc(p.id)}" data-xtab="alt" aria-label="Explore alternatives to ${esc(p.name)}" title="Explore alternatives to this mix">${ICON_X}</button><button type="button" class="xbtn" data-xpf="${esc(p.id)}" data-xtab="in" aria-label="Under the hood of ${esc(p.name)}" title="Under the hood: every holding across these ETFs">${ICON_L}</button></span>`:''}</span><span class="pfbar" aria-hidden="true">${weights(p).map(x=>`<span style="width:${x.w*100}%;background:${memCol(p,p.rows.findIndex(q=>q.t===x.t))}"></span>`).join('')}</span></span></span></td>
     <td class="num momcell" style="font-weight:700"><span class="momwrap"><button type="button" class="spkbtn" data-phide="${esc(p.id)}" aria-pressed="${!hid}" aria-label="${hid?'Show':'Hide'} ${esc(p.name)} on the chart" data-tip="${hid?'Show':'Hide'} on chart">${V?sparkPath(i=>V[i],s0,col,p.name+' path over the period'):''}</button><span class="v ${cls(v)}">${sg(v)}</span></span></td>${dsk(TPER.map(([p2,m])=>{const r=ok?periodRetD(s=>bhdRet(p,s),m):null;return `<td class="num ${cls(r)}${p2===hp?' hl':''}" style="font-weight:700">${sg(r)}</td>`}).join('')+BM.map(([k])=>bmCell(o,k,null,true)).join('')+`<td class="num ercol" style="font-weight:700">${fmtER(pfER(p))}</td>`)}<td class="num wcell"><span style="display:inline-flex;align-items:center;gap:2px"><button type="button" class="pfico" data-pdup2="${esc(p.id)}" aria-label="Duplicate ${esc(p.name)}" data-tip="Duplicate to try other weights">${pico('dup')}</button><button type="button" class="pfico" data-pung="${esc(p.id)}" aria-label="Ungroup ${esc(p.name)}" data-tip="Ungroup back into single ETFs">${pico('ung')}</button><span class="${good?'':'neg'}" style="font-size:13px;margin-left:4px">${good?'100%':tot+'%'}</span></span></td><td class="mob"></td><td class="xcell dsk"><button type="button" class="delbtn bdel" data-pdel2="${esc(p.id)}" aria-label="Delete ${esc(p.name)}" data-tip="Delete ${esc(p.name)}">${pico('trash')}</button></td></tr>`;
   if(open){memOrder(p).forEach(k=>{const r=p.rows[k];const ES=HAS(r.t)?pStats({rows:[{t:r.t,w:100}]},B.sel):null,wr=HAS(r.t)?wRetT(r.t,st0):null;
       h+=`<tr class="pfkid" data-pk="${esc(p.id)}" data-k="${k}"><td>${p.rows.length>=2?gripBtn(r.t,'data-gk="kid"'):''}<span class="tkcell"><span class="pfkidt" title="${esc(NAMES[r.t]||'')}">${esc(r.t)}</span>${xBtn(r.t)}</span></td><td class="num momcell"><span class="momwrap">${HAS(r.t)?sparkT(r.t,st0,memCol(p,k)):''}<span class="v ${cls(wr)}">${sg(wr)}</span></span></td>${dsk(TPER.map(([p2,m])=>{const x=periodRet(r.t,m);return `<td class="num ${cls(x)}${p2===hp?' hl':''}">${sg(x)}</td>`}).join('')+BM.map(([kk])=>bmCell(ES,kk,null)).join('')+`<td class="num ercol">${fmtER(ER[r.t])}</td>`)}<td class="wcell"><span class="wbox"><label class="sr" for="pw-${esc(p.id)}-${k}">${esc(r.t)} percent of ${esc(p.name)}</label><input class="field" id="pw-${esc(p.id)}-${k}" data-pw2="${esc(p.id)}" data-k="${k}" inputmode="decimal" autocomplete="off" value="${esc(r.w)}">%</span></td><td class="mob"></td><td class="xcell dsk"><button type="button" class="delbtn bdel" data-prm2="${esc(p.id)}" data-k="${k}" aria-label="Take ${esc(r.t)} out of ${esc(p.name)}" data-tip="Take ${esc(r.t)} out of ${esc(p.name)}">${pico('trash')}</button></td></tr>`});
@@ -2149,8 +2213,9 @@ const XM={t:null,d:null,err:null,added:[],from:null,rng:'3Y'};
 const XR=[['1M','1M',0],['3M','3M',1],['6M','6M',2],['YTD','YTD',3],['1Y','1Y',4],['3Y','3Y',5]];
 const XRWORD={'1M':'over 1 month','3M':'over 3 months','6M':'over 6 months','YTD':'since Jan 1','1Y':'over 1 year','3Y':'over 3 years'};
 const ICON_X='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg>';
-const xBtn=t=>`<button type="button" class="xbtn" data-xopen="${esc(t)}" aria-label="Explore alternatives to ${esc(t)}" title="Explore alternatives">${ICON_X}</button>`;
-const xMob=t=>`<div class="mi mact"><button type="button" class="btn sm mrm" data-xopen="${esc(t)}">${ICON_X}Explore alternatives</button></div>`;
+const ICON_L='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/></svg>';
+const xBtn=t=>`<span class="xtools"><button type="button" class="xbtn" data-xopen="${esc(t)}" aria-label="Explore alternatives to ${esc(t)}" title="Explore alternatives">${ICON_X}</button><button type="button" class="xbtn" data-xopen="${esc(t)}" data-xtab="in" aria-label="Under the hood of ${esc(t)}" title="Under the hood: what's in it">${ICON_L}</button></span>`;
+const xMob=t=>`<div class="mi mact"><button type="button" class="btn sm mrm" data-xopen="${esc(t)}">${ICON_X}Explore alternatives</button><button type="button" class="btn sm mrm" data-xopen="${esc(t)}" data-xtab="in">${ICON_L}Under the hood</button></div>`;
 const xp=(v,d=1)=>v==null?'—':(v>0?'+':v<0?'−':'')+Math.abs(v*100).toFixed(d)+'%';
 const xu=(v,d=1)=>v==null?'—':(v<0?'−':'')+Math.abs(v*100).toFixed(d)+'%';
 const xcls=v=>v==null?'':v>0.0005?'p':v<-0.0005?'n':'';
@@ -2159,12 +2224,18 @@ function xCanPrice(t){return HAS(t)||(typeof UNI!=='undefined'&&!!UNI[t])}
 /* peers files are fetched on hover so the window opens with its content already in place */
 const XDATA={},XLOAD={};
 function xLoad(t){if(!XLOAD[t])XLOAD[t]=fetch('data/peers/'+encodeURIComponent(t)+'.json').then(r=>{if(!r.ok)throw new Error('none');return r.json()}).then(d=>XDATA[t]=d).catch(e=>{delete XLOAD[t];throw e});return XLOAD[t]}
-async function openExplore(t,from){XM.t=t;XM.d=XDATA[t]||null;XM.rng='3Y';XM.err=null;XM.added=[];XM.from=from||null;
-  {const q=$('qtip');if(q)q.hidden=true}XM.sel=null;$('xm').hidden=false;document.body.classList.add('xm-open');$('xmTitle').textContent='Explore alternatives to '+t;$('xmSub').textContent=NAMES[t]||'';xDrawer(false);renderXM();xOpenFx();setTimeout(()=>$('xmClose').focus({preventScroll:true}),0);
-  if(XM.d){xCascade(true);return}
-  try{const d=await xLoad(t);if(XM.t!==t)return;XM.d=d}
-  catch(e){if(XM.t!==t)return;XM.err=t==='TPS'?'TPS is the 12% Solution strategy, not a fund you can buy, so it has no alternatives to show.':`Alternatives aren't available for ${t} yet. It may have less than 3 years of prices, or it isn't in our ETF list.`}
-  renderXM();xCascade()}
+async function openExplore(t,from,tab){XM.pf=null;XM.t=t;XM.tab=tab==='in'?'in':'alt';XM.alt=XDATA[t]||null;XM.ins=XIN[t]||null;XM.errA=XM.errI=null;XM.secMode=null;XM.rngSet=0;XM.rng=XM.tab==='in'?'1Y':'3Y';XM.added=[];XM.from=from||null;
+  {const q=$('qtip');if(q)q.hidden=true}XM.sel=null;
+  if(t==='TPS'){XM.errA='TPS is the 12% Solution strategy, not a fund you can buy, so it has no alternatives to show.';XM.errI='TPS is the 12% Solution strategy, not a fund, so it has no holdings to show.'}
+  xUse();$('xm').hidden=false;document.body.classList.add('xm-open');xHead();$('xmSub').textContent=NAMES[t]||'';xDrawer(false);xRender();xOpenFx();setTimeout(()=>$('xmClose').focus({preventScroll:true}),0);
+  const done=k=>{if(XM.t!==t||$('xm').hidden)return;if(XM.tab===k){xUse();xRender();xCascade()}};
+  if(XM.d)xCascade(true);
+  if(!XM.alt&&!XM.errA)xLoad(t).then(d=>{XM.alt=d;done('alt')},()=>{XM.errA=`Alternatives aren't available for ${t} yet. It may have less than 3 years of prices, or it isn't in our ETF list.`;done('alt')});
+  if(!XM.ins&&!XM.errI)xinLoad(t).then(d=>{XM.ins=d;done('in')},()=>{XM.errI=`Holdings aren't available for ${t} yet. They're added a slice at a time each night, so check back soon.`;done('in')})}
+function xUse(){XM.d=XM.tab==='in'?XM.ins:XM.alt;XM.err=XM.tab==='in'?XM.errI:XM.errA}
+function xRender(){XM.tab==='in'?renderXI():renderXM()}
+function xHead(){$('xmTitle').textContent=(XM.tab==='in'?'Under the hood of ':'Explore alternatives to ')+XM.t;document.querySelectorAll('#xm .xtab').forEach(b=>b.setAttribute('aria-selected',b.dataset.xtab===XM.tab));$('xmHow').hidden=XM.tab==='in';if(XM.tab==='in')xDrawer(false)}
+function xTab(k){if(XM.tab===k)return;XM.tab=k;XM.sel=null;if(k==='in'&&XM.rng==='3Y'&&!XM.rngSet)XM.rng='1Y';xUse();xHead();$('xmSub').textContent=NAMES[XM.t]||'';xRender();$('xmBody').scrollTop=0;xCascade()}
 /* motion: the window grows out of the compass, its contents settle in, and the row stays lit */
 const XREDUCE=matchMedia('(prefers-reduced-motion: reduce)');
 function xSrc(){const t=XM.t;let el=XM.from&&document.contains(XM.from)&&XM.from.offsetParent?XM.from:null;
@@ -2214,7 +2285,7 @@ function xWin(){const d=XM.d,to=new Date(d.to+'T00:00:00Z');let st;
   const daily=Date.parse(d.dd[0])<=st,ds=daily?d.dd:d.wd;let i0=0;for(let i=0;i<ds.length;i++){if(Date.parse(ds[i])<=st)i0=i;else break}
   return {ka:daily?'d':'w',i0,ppy:daily?252:52}}
 /* volatility, Sharpe and max drawdown over the range picked; 3Y uses the nightly numbers from daily prices */
-function xRisk(c){if(XM.rng==='3Y'||!c.d)return {vol:c.vol,sh:c.sh,dd:c.dd};const {ka,i0,ppy}=xWin(),p=c[ka].slice(i0),rf=XM.d.rf?XM.d.rf[ka].slice(i0):null;
+function xRisk(c){if(XM.rng==='3Y'||!c.d||!c.w||c.d.includes(null)||c.w.includes(null))return {vol:c.vol,sh:c.sh,dd:c.dd};const {ka,i0,ppy}=xWin(),p=c[ka].slice(i0),rf=XM.d.rf?XM.d.rf[ka].slice(i0):null;
   const r=[],ex=[];let pk=p[0],dd=0;for(let i=1;i<p.length;i++){const x=p[i]/p[i-1]-1;r.push(x);ex.push(x-(rf?rf[i]/rf[i-1]-1:0));pk=Math.max(pk,p[i]);dd=Math.min(dd,p[i]/pk-1)}
   if(r.length<4)return {vol:c.vol,sh:c.sh,dd:c.dd};const mean=a=>a.reduce((x,y)=>x+y,0)/a.length,sd=a=>{const m=mean(a);return Math.sqrt(a.reduce((x,y)=>x+(y-m)**2,0)/(a.length-1))};
   const v=sd(r);return {vol:v*Math.sqrt(ppy),sh:v>0?mean(ex)*ppy/(v*Math.sqrt(ppy)):0,dd}}
@@ -2229,13 +2300,14 @@ function xSpark(c,s,col,id){const R=xRange(c,s),n=R.a.length;const all=R.a.conca
 const xpts=v=>v==null?'':(v>=0?'+':'−')+Math.abs(v*100).toFixed(Math.abs(v)<0.001&&v!==0?2:1);
 const XCOL={same:'var(--xs)',div:'var(--xd)',mom:'var(--xm)'};
 /* returns vs the clicked ETF as the colored period boxes; buttons on cards (they change the line charts), plain boxes in the hover panel */
-function xRetChips(c,s,live){return XR.map(([l,k,i])=>{const v=c.r[i],b=s.r[i],g=c===s||v==null||b==null?null:v-b;const inner=`<span>${l}</span><b>${xp(v)}</b>${c===s?'':`<i class="${g==null?'':g>=0?'pos':'neg'}">${g==null?'&nbsp;':xpts(g)+' vs '+esc(s.t)}</i>`}`;
+function xRetChips(c,s,live){return XR.map(([l,k,i])=>{const v=c.r[i],b=s.r[i],g=c===s||v==null||b==null?null:v-b;const inner=`<span>${l}</span><b>${xp(v)}</b>${c===s?'':`<i class="${g==null?'':g>=0?'pos':'neg'}">${g==null?'&nbsp;':xpts(g)+' vs '+esc(s.ts||s.t)}</i>`}`;
   return live?`<button type="button" class="xpc ${xcls(v)}${XM.rng===k?' sel':''}" data-xrng="${k}" aria-pressed="${XM.rng===k}" title="Show ${XRWORD[k]} on the line chart">${inner}</button>`:`<div class="xpc ${xcls(v)}">${inner}</div>`}).join('')}
 /* risk vs the clicked ETF: volatility, Sharpe, max drawdown, fee; green when better, amber when riskier */
 function xRiskTiles(c0,s0){const same=c0===s0;const c={...c0,...xRisk(c0)},s={...s0,...xRisk(s0)};const t=(l,v,d,good)=>`<div class="xrk"><span>${l}</span><b>${v}</b>${same?'':`<i class="${d==null?'':good?'pos':'warn'}">${d==null?'&nbsp;':d}</i>`}</div>`;
   const f2=v=>(v>=0?'+':'−')+Math.abs(v).toFixed(2);
-  return t('Volatility',xu(c.vol),xpts(c.vol-s.vol),c.vol<=s.vol)+t('Sharpe',c.sh.toFixed(2),f2(c.sh-s.sh),c.sh>=s.sh)+t('Max DD',xu(c.dd),xpts(c.dd-s.dd),c.dd>=s.dd)
-   +t('Fee',fmtER(c.er),c.er!=null&&s.er!=null?f2(c.er-s.er):null,c.er!=null&&s.er!=null&&c.er<=s.er)}
+  const ok=(a,b)=>a!=null&&b!=null;
+  return t('Volatility',xu(c.vol),ok(c.vol,s.vol)?xpts(c.vol-s.vol):null,c.vol<=s.vol)+t('Sharpe',c.sh==null?'—':c.sh.toFixed(2),ok(c.sh,s.sh)?f2(c.sh-s.sh):null,c.sh>=s.sh)+t('Max DD',xu(c.dd),ok(c.dd,s.dd)?xpts(c.dd-s.dd):null,c.dd>=s.dd)
+   +('er' in c0?t('Fee',fmtER(c.er),c.er!=null&&s.er!=null?f2(c.er-s.er):null,c.er!=null&&s.er!=null&&c.er<=s.er):'')}
 function xCard(c,s,kind){const col=XCOL[kind];const dr=c.r3-s.r3;const pct=Math.round(c.c*100);
   const chips=xRetChips(c,s,true);
   return `<article class="xcard" data-xc="${esc(c.t)}" style="--xc:${col}"><div class="xch"><div><b>${esc(c.t)}</b><span class="nm">${esc(c.n||NAMES[c.t]||'')}</span></div><span class="xchip ${kind==='same'?'s':kind==='mom'?'m':'d'}">Tracks ${esc(s.t)} ${pct}%</span></div>
@@ -2243,12 +2315,12 @@ function xCard(c,s,kind){const col=XCOL[kind];const dr=c.r3-s.r3;const pct=Math.
     ${xSpark(c,s,col,c.t)}<div class="xrl">Returns vs ${esc(s.t)}</div><div class="xchips">${chips}</div>
     <div class="xrl xrlr">Risk vs ${esc(s.t)} · ${xRngLbl()}</div><div class="xrisk">${xRiskTiles(c,s)}</div>
     <p class="xwhy">${xWhy(c,s,kind)}</p><button type="button" class="xadd" data-xadd="${esc(c.t)}"></button></article>`}
-function xSetRange(k){XM.rng=k;const d=XM.d;if(!d)return;
+function xSetRange(k){XM.rng=k;XM.rngSet=1;const d=XM.d;if(!d)return;
   document.querySelectorAll('#xmBody .xspark').forEach(box=>{const c=xFind(box.dataset.xsp);if(!c)return;const col=box.closest('.xcard').style.getPropertyValue('--xc');box.outerHTML=xSpark(c,d.self,col,c.t)});
   document.querySelectorAll('#xmBody [data-xrng]').forEach(b=>{const on=b.dataset.xrng===k;b.classList.toggle('sel',on);b.setAttribute('aria-pressed',on)});{const w=document.querySelector('#xmBody .xgwrap');if(w&&w._h0&&!XGMINI())xgPaint(w,XG.cur);if(w&&XGMINI())setTimeout(()=>xgSync(true),0)}
   document.querySelectorAll('#xmBody .xcard').forEach(card=>{const c=xFind(card.dataset.xc);const rk=card.querySelector('.xrisk'),lb=card.querySelector('.xrlr');if(c&&rk)rk.innerHTML=xRiskTiles(c,d.self);if(lb)lb.textContent=`Risk vs ${d.self.t} · ${xRngLbl()}`});
   {const T=$('xCmp');if(T){T.innerHTML=xCmpTable();renderXMButtons()}}
-  const rs=xRisk(d.self),gs=$('xgSh'),gd=$('xgDd');if(gs)gs.innerHTML=`<span>Sharpe (${k})</span><b>${rs.sh.toFixed(2)}</b>`;if(gd)gd.innerHTML=`<span>Max DD (${k})</span><b>${xu(rs.dd)}</b>`}
+  const rs=xRisk(d.self),gs=$('xgSh'),gd=$('xgDd');if(gs)gs.innerHTML=`<span>Sharpe (${k})</span><b>${rs.sh==null?'—':rs.sh.toFixed(2)}</b>`;if(gd)gd.innerHTML=`<span>Max DD (${k})</span><b>${xu(rs.dd)}</b>`;if(XM.tab==='in'){xinPaint();const dk=$('xInDock');if(dk){dk.dataset.t='~';xinTip(null,false)}const n=$('xtmNote');if(n)n.textContent=xinNote()}}
 /* return vs volatility dot chart */
 function ph0(){return innerWidth<=1000}
 function xChart(d){const s=d.self,seen=new Set();const pts=[{...s,k:'self'}].concat(d.same.map(c=>({...c,k:'same'})),(d.closest||[]).map(c=>({...c,k:'same'})),d.div.map(c=>({...c,k:'div'})),(d.mom||[]).map(c=>({...c,k:'mom'}))).filter(p=>!seen.has(p.t)&&seen.add(p.t));
@@ -2276,7 +2348,7 @@ function xChart(d){const s=d.self,seen=new Set();const pts=[{...s,k:'self'}].con
     const ok=`<g class="xok" aria-hidden="true"><circle cx="${(x+8).toFixed(1)}" cy="${(y-8).toFixed(1)}" r="5.5" fill="var(--accent)" stroke="var(--panel)" stroke-width="1.5"/><path d="M${(x+5.6).toFixed(1)} ${(y-8).toFixed(1)}l1.7 1.7 3-3.3" fill="none" stroke="var(--panel)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></g>`;
     return `<g class="xpt" data-xt="${esc(p.t)}" data-xk="${p.k}" tabindex="0" role="button" aria-label="${esc(p.t)}: ${xp(p.r3)} a year, volatility ${xu(p.vol)}"><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="16" fill="transparent"/>${mark}${ok}${lab(p,x,y)}</g>`}).join('');
   return `<figure class="xfig"><div class="xfigt">Return vs. risk over the last 3 years</div><svg viewBox="0 0 ${W} ${H+20}" role="img" aria-label="Return versus risk over the last 3 years">${g}${zone}<g font-family="IBM Plex Sans,sans-serif" font-size="12" font-weight="600" fill="var(--ink2)"><text x="${L}" y="${H+14}" fill="var(--faint)">← less risk</text><text x="${R}" y="${H+14}" text-anchor="end" fill="var(--faint)">more risk →</text><text x="${(L+R)/2}" y="${H+14}" text-anchor="middle">${innerWidth<=700?'Risk: volatility':'Risk: volatility, how much the price moves around'}</text><text transform="translate(12 ${(T+Bm)/2}) rotate(-90)" text-anchor="middle">Return per year →</text></g><g class="xdots">${dots}</g></svg><div class="xtip" id="xChartTip" hidden></div></figure>`}
-function xFind(t){const d=XM.d;if(!d)return null;if(d.self.t===t)return {...d.self,k:'self'};for(const [arr,k] of [[d.same,'same'],[d.closest||[],'same'],[d.div,'div'],[d.mom||[],'mom']]){const c=arr.find(x=>x.t===t);if(c)return {...c,k}}return null}
+function xFind(t){const d=XM.d;if(!d||!d.self)return null;if(d.self.t===t)return {...d.self,k:'self'};if(XM.tab==='in'){const c=(d.top||[]).find(x=>x.t&&x.t===t);return c?{...c,k:'hold'}:null}for(const [arr,k] of [[d.same,'same'],[d.closest||[],'same'],[d.div,'div'],[d.mom||[],'mom']]){const c=arr.find(x=>x.t===t);if(c)return {...c,k}}return null}
 function xChartTip(t,on){if(!on&&XM.sel){t=XM.sel;on=true}
   const leg=document.querySelector('#xmBody .xlegend'),dock=$('xCardDock'),svg=document.querySelector('#xmBody .xfig svg');const p=on?xFind(t):null;
   if(svg)svg.querySelectorAll('.xpt').forEach(g=>g.classList.toggle('pinned',!!XM.sel&&g.dataset.xt===XM.sel));
@@ -2317,7 +2389,8 @@ function xSparkMove(box,e){const d=XM.d,c=xFind(box.dataset.xsp),s=d.self;if(!c)
   tip.innerHTML=`<div class="xth"><b>${dayFmt(R.dates[i])}</b><span>growth since ${dayFmt(R.dates[0])}</span></div><div class="xtt c2"><span class="l" style="color:var(--xc);font-weight:600">${esc(c.t)}</span><span class="v">${f(a)}</span><span class="l" style="color:var(--ink);font-weight:600">${esc(s.t)}</span><span class="v">${f(b)}</span></div><div class="xtf"><span style="color:var(--xc)">${gap===0?'Even':esc(gap>0?c.t:s.t)+' ahead by '+Math.abs(gap).toFixed(1)+' pts'}</span></div>`;
   tip.hidden=false;const bx=box.getBoundingClientRect();let tx=e.clientX-bx.left+12;if(tx+tip.offsetWidth>bx.width)tx=e.clientX-bx.left-tip.offsetWidth-12;tip.style.left=Math.max(0,tx)+'px';tip.style.top=(-tip.offsetHeight-6)+'px'}
 function xSparkOut(box){const cr=box.querySelector('.xcross');if(cr)cr.style.display='none';const tip=box.querySelector('.xtip');if(tip)tip.hidden=true}
-function xSelfCard(s){const n=XM.d.same.length,m=XM.d.div.length,mo=XM.d.mom?XM.d.mom.length:null;
+function xSelfCard(s){if(XM.d&&XM.d.pf)return xSelfCard0(s).replace('>The ETF you clicked<','>Your portfolio<').replace(/<button type="button" class="xadd"[^>]*><\/button>/,'');return xSelfCard0(s)}
+function xSelfCard0(s){const n=XM.d.same.length,m=XM.d.div.length,mo=XM.d.mom?XM.d.mom.length:null;
   const sp=xSpark(s,s,'var(--ink)',s.t).replace(/<polyline[^>]*stroke-dasharray="4 3"[^>]*\/>/,'').replace(/<span>┅[^<]*<\/span>/,'');
   return `<article class="xcard" data-xc="${esc(s.t)}" style="--xc:var(--ink)"><div class="xch"><div><b>${esc(s.t)}</b><span class="nm">${esc(s.n&&s.n!==s.t?s.n:NAMES[s.t]||'')}</span></div><span class="xchip xbasechip">The ETF you clicked</span></div><div class="xhero"><b class="${s.r3>=0?'pos':'neg'}">${xp(s.r3)}</b><span class="u">/ yr, 3Y</span><span class="xchip xbasechip">The base</span></div>${sp}<div class="xrl">Returns · the base</div><div class="xchips">${xRetChips(s,s,true).replace(/<\/b>/g,'</b><i class="xbase">base</i>')}</div><div class="xrl xrlr">Risk · ${xRngLbl()}</div><div class="xrisk">${xRiskTiles(s,s).replace(/<\/b><\/div>/g,'</b><i class="xbase">base</i></div>')}</div><p class="xwhy xsfnd">Found ${n} higher return, ${m} less risk${mo==null?'':`, ${mo} momentum`} pick${n+m+(mo||0)===1?'':'s'}.</p><button type="button" class="xadd" data-xadd="${esc(s.t)}"></button></article>`}
 function xMini(c,s,col){const R=xRange(c,s),n=R.a.length;if(n<2)return '';const self=c===s;const all=self?R.a:R.a.concat(R.b);const lo=Math.min(0,...all),hi=Math.max(0,...all),rg=(hi-lo)||1;const X=i=>1+i*94/(n-1),Y=v=>2+(hi-v)/rg*24;
@@ -2346,10 +2419,196 @@ function renderXM(){const b=$('xmBody');renderXMFoot();XM.chH=null;
     :`<div class="xnote"><b>No less risky fund kept up with ${esc(t)}</b><span>No ETF had 15%+ less volatility while staying within 2 points a year of its 3-year return.</span></div>`;
   const mo=!d.mom?'':`<section class="xsec"><h3>Momentum <small>Moves like ${esc(t)} and is ahead of it over the last 3 months, without much more risk</small></h3>${d.mom.length?`<div class="xcards">${d.mom.map(c=>xCard(c,s,'mom')).join('')}${d.mom.length<3?`<div class="xnote"><b>Only ${d.mom.length} ahead lately</b><span>${esc(t)} is ${xp(s.m3)} over the last 3 months, so few similar funds have kept ahead of it.</span></div>`:''}</div>`:`<div class="xnote"><b>Nothing similar is ahead of ${esc(t)} lately</b><span>No fund that moves like ${esc(t)} beat it by 2+ points over the last 3 months without much more risk. ${esc(t)} itself is ${xp(s.m3)}.</span></div>`}</section>`;
   b.innerHTML=`<div class="xgwrap" style="display:flex;flex-direction:column;gap:8px"><div class="xcap">${esc(t)} at a glance <span class="xcap2">· click a period to change the line charts</span></div><div class="xglance">${gl}</div></div>
-    <div class="xtop">${xChart(d)}<div class="xlegend"><div class="li"><svg width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="6" fill="var(--ink)"/></svg><span>${esc(t)}, the ETF you clicked</span></div><div class="li" data-xk="same"><svg width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="6" fill="var(--xs)"/></svg><span>Higher return: moves 85%+ in step with ${esc(t)}, earned more</span></div><div class="li" data-xk="div"><svg width="14" height="14" aria-hidden="true"><rect x="1" y="1" width="12" height="12" fill="var(--xd)"/></svg><span>Less risk: 15%+ less volatility, about the same return</span></div>${d.mom?`<div class="li" data-xk="mom"><svg width="14" height="14" aria-hidden="true"><path d="M7 1L13 12H1Z" fill="var(--xm)"/></svg><span>Momentum: ahead of ${esc(t)} over the last 3 months, plotted on its 3-year numbers</span></div>`:''}
+    <div class="xtop">${xChart(d)}<div class="xlegend"><div class="li"><svg width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="6" fill="var(--ink)"/></svg><span>${esc(t)}, ${d.pf?'your portfolio':'the ETF you clicked'}</span></div><div class="li" data-xk="same"><svg width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="6" fill="var(--xs)"/></svg><span>Higher return: moves 85%+ in step with ${esc(t)}, earned more</span></div><div class="li" data-xk="div"><svg width="14" height="14" aria-hidden="true"><rect x="1" y="1" width="12" height="12" fill="var(--xd)"/></svg><span>Less risk: 15%+ less volatility, about the same return</span></div>${d.mom?`<div class="li" data-xk="mom"><svg width="14" height="14" aria-hidden="true"><path d="M7 1L13 12H1Z" fill="var(--xm)"/></svg><span>Momentum: ahead of ${esc(t)} over the last 3 months, plotted on its 3-year numbers</span></div>`:''}
     <div class="xcdock" id="xCardDock" hidden></div><div class="how">Picked from ${d.pool.toLocaleString()} ETFs. Hover a shape to see its card. Click it to keep the card here.</div></div></div>
     <p class="xdisc">Past performance doesn't guarantee future results. These are ideas to research, not advice.</p>`;
   renderXMButtons();xgSync(true);xFitChart();if(document.fonts&&document.fonts.status!=='loaded')document.fonts.ready.then(()=>{if(XM.d&&!$('xm').hidden){xFitChart();if(XM.sel)xChartTip(XM.sel,true)}});if(XM.sel&&xFind(XM.sel))xChartTip(XM.sel,true)}
+
+/* ---------- what's inside: top holdings as a map sized by weight and colored by return ---------- */
+const XIN={},XINL={};
+function xinLoad(t){if(!XINL[t])XINL[t]=fetch('data/inside/'+encodeURIComponent(t)+'.json').then(r=>{if(!r.ok)throw new Error('none');return r.json()}).then(d=>{d.same=[];d.div=[];d.mom=null;d.closest=[];d.pool=0;d.top=d.top||[];XIN[t]=d;return d}).catch(e=>{delete XINL[t];throw e});return XINL[t]}
+const XSEC={technology:'Technology',financial_services:'Financials',healthcare:'Health care',consumer_cyclical:'Consumer discretionary',consumer_defensive:'Consumer staples',industrials:'Industrials',communication_services:'Communication',energy:'Energy',utilities:'Utilities',realestate:'Real estate',basic_materials:'Materials'};
+const XSCOL=['var(--p1)','var(--p2)','var(--p3)','var(--p4)','var(--p5)','var(--p6)','var(--tyBd)','var(--tyCa)','var(--tyOt)','var(--tyEq)','var(--xd)','var(--xm)'];
+const XTHR={'1M':.08,'3M':.15,'6M':.25,'YTD':.4,'1Y':.4,'3Y':.25};
+const xw=v=>v==null?'—':(v*100).toFixed(v<0.1?2:1)+'%';
+const xRk=()=>XR.find(x=>x[1]===XM.rng)[2];
+function xBucket(r){if(r==null)return'o';const k=XTHR[XM.rng];return r<-k?'n3':r<-k/2?'n2':r<0?'n1':r<k/4?'p1':r<k/2?'p2':r<k?'p3':'p4'}
+function xMoney(v){return v>=1e12?'$'+(v/1e12).toFixed(2)+'T':v>=1e9?'$'+(v/1e9).toFixed(1)+'B':v>=1e6?'$'+Math.round(v/1e6)+'M':'$'+Math.round(v).toLocaleString()}
+/* what a holding added to the fund over the range: its weight rolled back to the start of the range, times its return */
+function xinAdded(c,k){if(k===5)k=4;const d=XM.d,R=d.self&&d.self.r?d.self.r[k]:d.er?d.er[k]:null,r=c.r?c.r[k]:null;if(R==null||r==null)return null;return c.wt*(1+R)/(1+r)*r}
+function xinEq(d){return d.top.some(c=>c.r)&&(!!d.pf||!(d.ac&&d.ac.stock!=null&&d.ac.stock<.5))}
+function xinNote(){return `Tile size is each holding's share of the ${XM.d&&XM.d.pf?'portfolio':'fund'}. Color is its return ${XRWORD[XM.rng]}; click a period above to change it.`}
+function renderXI(){const b=$('xmBody');renderXMFoot();
+  if(XM.err){b.innerHTML=`<div class="xnote"><b>Nothing to show</b><span>${esc(XM.err)}</span></div>`;return}
+  const d=XM.d;if(!d){b.innerHTML='<div class="xskel" style="height:70px"></div><div class="xskel" style="height:440px"></div>';return}
+  const s=d.self||{t:d.t},t=d.t;
+  $('xmSub').innerHTML=`<span class="sfull">${esc((d.n||NAMES[t]||'')+(d.hasof?' · holdings as of '+dayFmt(d.hasof):''))}</span><span class="sshort">Top holdings and what they returned</span>`;
+  const rs=s.r?xRisk(s):null;
+  const gl=s.r?XR.map(([l,k,i])=>`<button type="button" class="xg ${xcls(s.r[i])}${XM.rng===k?' sel':''}" data-xrng="${k}" aria-pressed="${XM.rng===k}" title="Show ${XRWORD[k]}"><span>${l}</span><b>${xp(s.r[i])}</b></button>`).join('')+`<div class="xg" id="xgSh"><span>Sharpe (${XM.rng})</span><b>${rs.sh==null?'—':rs.sh.toFixed(2)}</b></div><div class="xg n" id="xgDd"><span>Max DD (${XM.rng})</span><b>${xu(rs.dd)}</b></div><div class="xg"><span>Fee</span><b>${fmtER(s.er)}</b></div>`:'';
+  const tw=d.top.reduce((a,c)=>a+c.wt,0);
+  const fig=xinEq(d)?`<figure class="xtmfig"><div class="xtmh"><b>${d.pf?`The ${d.top.length} biggest holdings across your ETFs are ${xw(tw)} of the portfolio`:`Top ${d.top.length} holdings are ${xw(tw)} of ${esc(t)}`}</b><span id="xtmNote">${xinNote()}</span></div><div class="xtm" id="xTm"></div></figure>`:xinAssetsHTML(d);
+  b.innerHTML=`${gl?`<div style="display:flex;flex-direction:column;gap:8px"><div class="xcap">${esc(t)} at a glance <span class="xcap2">· click a period to recolor the map and cards</span></div><div class="xglance">${gl}</div></div>`:''}
+    <div class="xtop xin">${fig}<div class="xcdock xidock" id="xInDock">${xAboutCard(d)}</div></div>${xinSecHTML(d)}
+    <p class="xdisc">${d.pf?"Each ETF's top 10 holdings, weighted by your percentages. A stock in one ETF's top 10 but further down in another only counts the top-10 part, so overlaps are a floor. Sectors cover every holding. ":''}Holdings from Yahoo Finance. "Everything else" is worked out from the fund's own return, so treat it as an estimate. Past performance doesn't guarantee future results.</p>`;
+  $('xInDock').dataset.t='';xinFit();xinPaint();if(XM.sel&&xFind(XM.sel))xinTip(XM.sel,true);
+  if(document.fonts&&document.fonts.status!=='loaded')document.fonts.ready.then(()=>{if(XM.tab==='in'&&!$('xm').hidden){xinFit();xinPaint()}})}
+
+/* ---------- under the hood of a portfolio: every member's holdings and sectors, weighted by the portfolio's percentages ---------- */
+function openExplorePf(id,from,tab){const p=pf(id);if(!p)return;const ws=weights(p);
+  XM.pf=id;XM.t=p.name;XM.tab=tab==='alt'?'alt':'in';XM.alt=null;XM.ins=null;XM.errA=XM.errI=ws.length?null:'Give the ETFs in this portfolio some percentages first.';XM.secMode=null;XM.rngSet=0;XM.rng=XM.tab==='in'?'1Y':'3Y';XM.added=[];XM.from=from||null;
+  {const q=$('qtip');if(q)q.hidden=true}XM.sel=null;
+  xUse();$('xm').hidden=false;document.body.classList.add('xm-open');xHead();$('xmSub').textContent=ws.map(x=>x.t+' '+xw(x.w)).join(' · ');xDrawer(false);xRender();xOpenFx();setTimeout(()=>$('xmClose').focus({preventScroll:true}),0);
+  if(!ws.length)return;const key=JSON.stringify(ws);XM.pfKey=key;
+  xPfAlt(p).then(d=>{if(XM.pf!==id||XM.pfKey!==key||$('xm').hidden)return;XM.alt=d;if(XM.tab==='alt'){xUse();xRender();xCascade()}},e=>{if(XM.pf!==id||XM.pfKey!==key)return;XM.errA=e&&e.user?e.message:"Alternatives for portfolios aren't available yet. They need a file that the nightly update makes, so check back tomorrow.";if(XM.tab==='alt'){xUse();xRender()}});
+  Promise.allSettled(ws.map(x=>x.t==='TPS'?Promise.reject(new Error('strategy')):xinLoad(x.t))).then(()=>{if(XM.pf!==id||XM.pfKey!==key||$('xm').hidden)return;
+    try{XM.ins=xinMix(p,ws)}catch(e){console.error(e);XM.ins=null}
+    if(!XM.ins)XM.errI="Holdings aren't available for these ETFs yet. They're added a slice at a time each night, so check back soon.";xUse();xRender();xCascade()})}
+function xinMix(p,ws){const ok=x=>{const d=XIN[x.t];return d&&d.self&&d.self.r&&x.t!=='TPS'};const have=ws.filter(ok);if(!have.length)return null;
+  const tw=have.reduce((a,x)=>a+x.w,0),W=have.map(x=>({t:x.t,w:x.w/tw,d:XIN[x.t]})),miss=ws.filter(x=>!ok(x)),d0=W[0].d;
+  const r=[0,1,2,3,4,5].map(i=>W.every(x=>x.d.self.r[i]!=null)?W.reduce((a,x)=>a+x.w*x.d.self.r[i],0):null);
+  /* buy-and-hold growth line from the start of each series */
+  const same=k=>W.every(x=>x.d[k+'d']&&d0[k+'d']&&x.d[k+'d'].length===d0[k+'d'].length&&x.d[k+'d'][x.d[k+'d'].length-1]===d0[k+'d'][d0[k+'d'].length-1]);
+  const mixS=k=>{if(!same(k)||!W.every(x=>x.d.self[k]&&x.d.self[k].length===d0.self[k].length&&!x.d.self[k].includes(null)&&x.d.self[k][0]>0))return null;
+    return d0.self[k].map((_,i)=>Math.round(10000*W.reduce((a,x)=>a+x.w*x.d.self[k][i]/x.d.self[k][0],0)))};
+  const sd=mixS('d'),sw=mixS('w');let vol=null,sh=null,dd=null,r3=r[5];
+  if(sw&&d0.wd&&d0.wd.length>4){const rf=d0.rf&&d0.rf.w&&d0.rf.w.length===sw.length?d0.rf.w:null,ret=[],ex=[];let pk=sw[0],m=0;
+    for(let i=1;i<sw.length;i++){const x=sw[i]/sw[i-1]-1;ret.push(x);ex.push(x-(rf?rf[i]/rf[i-1]-1:0));pk=Math.max(pk,sw[i]);m=Math.min(m,sw[i]/pk-1)}
+    const yrs=(Date.parse(d0.wd[d0.wd.length-1])-Date.parse(d0.wd[0]))/(365.25*864e5),ppy=ret.length/yrs,mean=a=>a.reduce((x,y)=>x+y,0)/a.length;
+    const mu=mean(ret),v=Math.sqrt(ret.reduce((a,y)=>a+(y-mu)**2,0)/(ret.length-1));vol=v*Math.sqrt(ppy);sh=v>0?mean(ex)*ppy/vol:0;dd=m;r3=Math.pow(sw[sw.length-1]/sw[0],1/yrs)-1;r[5]=r3}
+  const self={t:p.name,ts:'mix',n:'Your portfolio',er:pfER(p),r,vol,sh,dd,r3,d:sd,w:sw};
+  /* the same stock in two funds becomes one tile */
+  const M=new Map();W.forEach(x=>(x.d.top||[]).forEach(c=>{const k=c.t||c.hn||c.n;if(!k||!(c.wt>0))return;let m=M.get(k);if(!m){m={...c,wt:0,src:[]};M.set(k,m)}m.wt+=x.w*c.wt;m.src.push([x.t,x.w*c.wt])}));
+  let all=[...M.values()];if(all.some(c=>c.r))all=all.filter(c=>c.r);const top=all.sort((a,b)=>b.wt-a.wt).slice(0,20),stw=top.reduce((a,c)=>a+c.wt,0);
+  const rest={wt:Math.max(0,1-stw),r:[0,1,2,3,4].map(k=>{const R=r[k];if(R==null)return null;let add=0,w0=0;for(const c of top){const q=c.r?c.r[k]:null;if(q==null)return null;const s0=c.wt*(1+R)/(1+q);add+=s0*q;w0+=s0}return 1-w0>0.003?(R-add)/(1-w0):null}).concat([null])};
+  const mix=f=>{const o={};W.forEach(x=>Object.entries(f(x.d)||{}).forEach(([k,v])=>{if(typeof v==='number')o[k]=(o[k]||0)+x.w*v}));return o};
+  const asof=W.map(x=>x.d.hasof).filter(Boolean).sort()[0]||null;
+  return {t:p.name,n:'Your portfolio · '+W.map(x=>x.t+' '+xw(x.w)).join(', '),pf:{id:p.id,ws:W.map(x=>[x.t,x.w]),miss:miss.map(x=>x.t),missW:1-tw},self,top,rest,sec:mix(d=>d.sec),ac:mix(d=>d.ac),hasof:asof,
+    dd:d0.dd,wd:d0.wd,rf:d0.rf,from:d0.from,to:d0.to,desc:'',f:{},same:[],div:[],mom:null,closest:[],pool:0}}
+
+/* ---------- alternatives to a portfolio: the nightly pool file (every candidate's 3-year numbers and
+   standardized weekly returns), matched against the portfolio's own buy-and-hold line in the browser ---------- */
+let XPOOL=null,XPOOLL=null;
+function xPoolLoad(){if(!XPOOLL)XPOOLL=fetch('data/pool.json').then(r=>{if(!r.ok)throw new Error('none');return r.json()}).then(j=>{
+    const raw=atob(j.z),N=j.t.length,L=j.zd.length-1,q=new Int8Array(raw.length);for(let i=0;i<raw.length;i++){const b=raw.charCodeAt(i);q[i]=b>127?b-256:b}
+    const nr=new Float64Array(N);for(let k=0;k<N;k++){let a=0;for(let i=0;i<L;i++){const v=q[k*L+i];a+=v*v}nr[k]=Math.sqrt(a)}
+    j.q=q;j.nr=nr;j.N=N;j.L=L;j.ix={};j.t.forEach((t,k)=>j.ix[t]=k);XPOOL=j;return j}).catch(e=>{XPOOLL=null;throw e});return XPOOLL}
+function xUserErr(m){const e=new Error(m);e.user=1;return e}
+async function xPfAlt(p){const ws=weights(p);
+  const P=await xPoolLoad(),day=dt=>dayOnOrBefore(Date.parse(dt+'T00:00:00Z'));
+  if(ws.some(x=>x.t==='TPS'))throw xUserErr('This portfolio includes TPS, the 12% Solution strategy, which isn\'t a fund, so alternatives can\'t be worked out for it.');
+  const s0=day(P.from),iL=day(P.to);if(s0<0||iL<=s0)throw xUserErr('Not enough shared price history to compare this portfolio over 3 years.');
+  if(ws.some(x=>pxd(x.t,s0)==null))throw xUserErr(`Alternatives are picked on the last 3 years, and ${xList(ws.filter(x=>pxd(x.t,s0)==null).map(x=>x.t))} ${ws.filter(x=>pxd(x.t,s0)==null).length===1?"doesn't":"don't"} have 3 years of prices yet.`);
+  const V=bhd(p,s0);if(!V||V[iL]==null)throw xUserErr('Not enough price history to compare this portfolio over 3 years.');
+  /* weekly returns on the pool's dates, then correlation with every candidate in one pass */
+  const wv=P.zd.map(dt=>V[day(dt)]);if(wv.some(v=>v==null))throw xUserErr('Not enough price history to compare this portfolio over 3 years.');
+  const L=P.L,pr=new Float64Array(L);let mu=0;for(let i=0;i<L;i++){pr[i]=wv[i+1]/wv[i]-1;mu+=pr[i]}mu/=L;let pn=0;for(let i=0;i<L;i++){pr[i]-=mu;pn+=pr[i]*pr[i]}pn=Math.sqrt(pn);
+  const corr=new Float64Array(P.N);for(let k=0;k<P.N;k++){let a=0;const o=k*L;for(let i=0;i<L;i++)a+=pr[i]*P.q[o+i];corr[k]=pn>0&&P.nr[k]>0?a/(pn*P.nr[k]):0}
+  /* the portfolio's own numbers, the same way the nightly update works them out for an ETF */
+  const dr=[],ex=[];let pk=V[s0],dd=0;const hasRf=HAS('SHY');
+  for(let i=s0+1;i<=iL;i++){if(V[i]==null||V[i-1]==null)continue;const x=V[i]/V[i-1]-1;dr.push(x);const a=hasRf?pxd('SHY',i):null,b=hasRf?pxd('SHY',i-1):null;ex.push(x-(a!=null&&b!=null?a/b-1:0));pk=Math.max(pk,V[i]);dd=Math.min(dd,V[i]/pk-1)}
+  const mean=a=>a.reduce((x,y)=>x+y,0)/a.length,m0=mean(dr),sdv=Math.sqrt(dr.reduce((a,y)=>a+(y-m0)**2,0)/(dr.length-1)),vol=sdv*Math.sqrt(252),sh=vol>0?mean(ex)*252/vol:0;
+  const yrs=(D.ms[iL]-D.ms[s0])/(365.25*864e5),r3=Math.pow(V[iL]/V[s0],1/yrs)-1;let m3=0;for(let k=0;k<10;k++)m3+=V[iL-k]/V[iL-k-63]-1;m3/=10;
+  const r=[1,3,6,'ytd',12].map(m=>periodRetD(s=>bhdRet(p,s),m)).concat([r3]);
+  const rel=dt=>{const v=V[day(dt)];return v==null?null:Math.round(v/V[iL]*10000)};
+  const self={t:p.name,ts:'mix',n:'Your portfolio · '+ws.map(x=>x.t+' '+xw(x.w)).join(', '),er:pfER(p),r,r3,vol,sh,dd,m3,d:P.dd.map(rel),w:P.wd.map(rel)};
+  /* the same three rules as for a single ETF */
+  const mem=new Set(ws.map(x=>x.t)),rows=[];for(let k=0;k<P.N;k++)if(!mem.has(P.t[k]))rows.push(k);
+  const rb=r3,bv=vol,mb=m3,R3=P.r3,VO=P.vol,SH=P.sh,M3=P.m3;
+  const same=rows.filter(k=>corr[k]>=0.85&&R3[k]>=rb+0.01&&VO[k]<=bv*1.25).sort((a,b)=>SH[b]-SH[a]).slice(0,3);
+  const closest=same.length?[]:rows.filter(k=>corr[k]>=0.85).sort((a,b)=>corr[b]-corr[a]).slice(0,3);
+  const div=rows.filter(k=>VO[k]<=bv*0.85&&R3[k]>=rb-0.02).sort((a,b)=>SH[b]-SH[a]).slice(0,3);
+  const mom=rows.filter(k=>corr[k]>=0.85&&VO[k]<=bv*1.25&&R3[k]>=rb-0.03&&M3[k]>=mb+0.02).sort((a,b)=>M3[b]-M3[a]).slice(0,3);
+  /* each pick's card comes from its own nightly file, which also has its line chart */
+  const picks=[...new Set([...same,...closest,...div,...mom])];await Promise.allSettled(picks.map(k=>xLoad(P.t[k])));
+  const card=k=>{const x=XDATA[P.t[k]];return x&&x.self?{...x.self,c:Math.round(corr[k]*1000)/1000}:null},cards=a=>a.map(card).filter(Boolean);
+  return {pf:p.id,asof:P.asof,from:P.from,to:P.to,dd:P.dd,wd:P.wd,rf:P.rf,self,same:cards(same),closest:cards(closest),div:cards(div),mom:cards(mom),pool:P.N}}
+const xList=a=>a.length<2?a.join(''):a.slice(0,-1).join(', ')+' and '+a[a.length-1];
+function xPfCard(d){const P=d.pf,p=pf(P.id),top=d.top,tw=top.reduce((a,c)=>a+c.wt,0),t3=top.slice(0,3).reduce((a,c)=>a+c.wt,0);
+  const ov=top.filter(c=>c.src&&c.src.length>1),ovw=ov.reduce((a,c)=>a+c.wt,0);
+  const col=t=>{const i=p?p.rows.findIndex(q=>q.t===t):-1;return i>=0?memCol(p,i):'var(--faint)'};
+  const fund=P.ws.map(([t,w])=>`<div class="xpfm"><i style="background:${col(t)}"></i><b>${esc(t)}</b><span title="${esc(NAMES[t]||'')}">${esc(NAMES[t]||'')}</span><em>${xw(w)}</em></div>`).join('');
+  const s=d.self,fact=(k,v)=>v==null||v===''?'':`<div><span>${k}</span><b>${esc(String(v))}</b></div>`;
+  return `<article class="xcard xabout" style="--xc:var(--ink)"><div class="xch"><div><b>${esc(d.t)}</b><span class="nm">${P.ws.length} ETF${P.ws.length===1?'':'s'} at your percentages</span></div><span class="xchip xbasechip">Your portfolio</span></div>
+    <div class="xpfms">${fund}</div>
+    ${P.miss.length?`<p class="xconc">${esc(xList(P.miss))} ${P.miss.length===1?"isn't":"aren't"} included yet (no holdings data), so the rest is rescaled to 100%.</p>`:''}
+    <div class="xafacts">${fact('Blended fee',s.er!=null?fmtER(s.er):null)}${fact('Holdings as of',d.hasof?dayFmt(d.hasof):null)}</div>
+    ${P.ws.length>1?`<div class="xrl">Overlap</div><p class="xconc">${ov.length?`${esc(ov.length>4?ov.slice(0,4).map(c=>c.t||c.hn).join(', ')+` and ${ov.length-4} more`:xList(ov.map(c=>c.t||c.hn)))} ${ov.length===1?'shows':'show'} up in more than one of your ETFs. Together ${ov.length===1?"that's":"they're"} <b>${xw(ovw)}</b> of the portfolio.`:"None of your ETFs' top holdings overlap."}</p>`:''}
+    ${tw>.02?`<div class="xrl">How concentrated</div><p class="xconc">The ${top.length} biggest holdings are <b>${xw(tw)}</b> of the portfolio${top.length>=3?`, and the top 3 alone are <b>${xw(t3)}</b>`:''}.</p>`:''}
+    <p class="xwhy">Hover a tile to see that holding's card. Click it to keep the card here.</p></article>`}
+function xAboutCard(d){if(d.pf)return xPfCard(d);const s=d.self||{},f=d.f||{},top=d.top,tw=top.reduce((a,c)=>a+c.wt,0),t3=top.slice(0,3).reduce((a,c)=>a+c.wt,0);
+  const fact=(k,v)=>v==null||v===''?'':`<div><span>${k}</span><b title="${esc(String(v))}">${esc(String(v))}</b></div>`;
+  const eq=xinEq(d);
+  return `<article class="xcard xabout" style="--xc:var(--ink)"><div class="xch"><div><b>${esc(d.t)}</b><span class="nm">${esc(d.n||NAMES[d.t]||'')}</span></div><span class="xchip xbasechip">About this ETF</span></div>
+    ${d.desc?`<p class="xadesc" title="${esc(d.desc)}">${esc(d.desc)}</p>`:''}
+    <div class="xafacts">${fact('Fund size',f.aum?xMoney(f.aum):null)}${fact('Fee',s.er!=null?fmtER(s.er):null)}${fact('Category',f.cat)}${fact('Issuer',f.fam)}${fact('Since',f.inc?dayFmt(f.inc):null)}${fact('Holdings as of',d.hasof?dayFmt(d.hasof):null)}</div>
+    ${eq&&tw>.02?`<div class="xrl">How concentrated</div><p class="xconc">The top ${top.length} holdings are <b>${xw(tw)}</b> of the fund${top.length>=3?`, and the top 3 alone are <b>${xw(t3)}</b>`:''}.</p>`:''}
+    ${eq?`<p class="xwhy">Hover a tile to see that holding's card. Click it to keep the card here.</p>`:''}</article>`}
+function xHoldCard(c,s){const k=xRk(),nm=c.n||c.hn||'';
+  const line=c.w&&c.d&&!c.w.includes(null)&&!c.d.includes(null)&&s.w;
+  const r3=c.r3!=null,hv=r3?c.r3:c.r?c.r[4]:null,hb=r3?s.r3:s.r?s.r[4]:null,dr=hv!=null&&hb!=null?hv-hb:null;
+  const add=xinAdded(c,k),wd=k===5?XRWORD['1Y']:XRWORD[XM.rng];
+  const via=XM.d&&XM.d.pf&&c.src?`Held through ${xList(c.src.map(([t,w])=>`${esc(t)} (${xw(w)})`))}.`:'';
+  const why=[c.ind?esc(c.ind)+'.':'',via,add==null?'':`Added <b class="${add>=0?'pos':'neg'}">${xpts(add)} pts</b> to ${esc(s.t)}'s return ${wd}.`].filter(Boolean).join(' ');
+  return `<article class="xcard" data-xc="${esc(c.t)}" style="--xc:var(--xs)"><div class="xch"><div><b>${esc(c.t)}</b><span class="nm">${esc(nm)}</span></div><span class="xchip s">${xw(c.wt)} of ${esc(s.t)}</span></div>
+    ${hv==null?'':`<div class="xhero"><b class="${hv>=0?'pos':'neg'}">${xp(hv)}</b><span class="u">${r3?'/ yr, 3Y':'1Y'}</span>${dr==null?'':`<span class="xchip ${dr>=0?'up':'dn'}">${xpts(dr)} pts vs ${esc(s.t)}</span>`}</div>`}
+    ${line?xSpark(c,s,'var(--xs)',c.t):'<div class="xnoline">Not enough price history for a line chart</div>'}
+    ${c.r&&s.r?`<div class="xrl">Returns vs ${esc(s.t)}</div><div class="xchips">${xRetChips(c,s,true)}</div>`:''}
+    ${c.vol!=null?`<div class="xrl xrlr">Risk vs ${esc(s.t)} · ${xRngLbl()}</div><div class="xrisk x3">${xRiskTiles(c,s)}</div>`:''}
+    ${why?`<p class="xwhy">${why}</p>`:''}</article>`}
+/* swap the card on the right: the hovered or locked holding, else the fund's About card */
+function xinTip(t,on){const dock=$('xInDock'),d=XM.d;if(!dock||!d)return;const show=on?t:XM.sel;
+  const tm=$('xTm');if(tm){tm.classList.toggle('fade',!!show);tm.querySelectorAll('.xtile[data-ht]').forEach(x=>x.classList.toggle('on',x.dataset.ht===show))}
+  const c=show?xFind(show):null,key=c?show+(XM.sel===show?'*':''):'';if(dock.dataset.t===key)return;
+  dock.innerHTML=c?xHoldCard(c,d.self):xAboutCard(d);dock.dataset.t=key;if(c&&XM.sel===show)dock.firstElementChild.classList.add('hl')}
+/* make the map as tall as the tallest card, so cards never get cut and the two columns end together */
+function xinFit(){const dock=$('xInDock'),d=XM.d;if(!dock||!d)return;dock.style.minHeight='';if(ph0()||!$('xTm'))return;
+  const html=dock.innerHTML,key=dock.dataset.t;let mx=0;
+  const meas=h=>{dock.innerHTML=h;const el=dock.firstElementChild;el.style.flex='none';mx=Math.max(mx,el.offsetHeight)};
+  meas(xAboutCard(d));d.top.forEach(c=>{if(c.t)meas(xHoldCard({...c,k:'hold'},d.self))});
+  dock.innerHTML=html;dock.dataset.t=key;dock.style.minHeight=mx+'px'}
+function xSquarify(items,x,y,w,h){const out=[];let R={x,y,w,h},row=[],rest=items.slice();
+  const worst=(row,len)=>{const s=row.reduce((a,b)=>a+b.a,0);let mx=0,mn=Infinity;row.forEach(r=>{mx=Math.max(mx,r.a);mn=Math.min(mn,r.a)});return Math.max(len*len*mx/(s*s),s*s/(len*len*mn))};
+  const lay=row=>{const s=row.reduce((a,b)=>a+b.a,0);if(R.w>=R.h){const cw=s/R.h;let yy=R.y;row.forEach(r=>{const hh=r.a/cw;out.push({...r,x:R.x,y:yy,w:cw,h:hh});yy+=hh});R={x:R.x+cw,y:R.y,w:R.w-cw,h:R.h}}
+    else{const rh=s/R.w;let xx=R.x;row.forEach(r=>{const ww=r.a/rh;out.push({...r,x:xx,y:R.y,w:ww,h:rh});xx+=ww});R={x:R.x,y:R.y+rh,w:R.w,h:R.h-rh}}};
+  while(rest.length){const len=Math.min(R.w,R.h),it=rest[0];if(!row.length||worst(row.concat([it]),len)<=worst(row,len)){row.push(it);rest.shift()}else{lay(row);row=[]}}
+  if(row.length)lay(row);return out}
+function xinPaint(){const el=$('xTm'),d=XM.d;if(!el||!d)return;const W=el.clientWidth,H=el.clientHeight;if(!W||!H)return;
+  const k=xRk(),top=d.top.filter(c=>c.wt>0),tw=top.reduce((a,c)=>a+c.wt,0),rest=d.rest&&d.rest.wt>0.003?d.rest:null;
+  const rw=rest?Math.max(64,Math.round(W*rest.wt)):0,aw=W-rw,g=1.5;
+  const tiles=xSquarify(top.map(c=>({c,a:c.wt/tw*aw*H})),0,0,aw,H);
+  const box=(x,y,w,h)=>`left:${(x+g).toFixed(1)}px;top:${(y+g).toFixed(1)}px;width:${Math.max(0,w-2*g).toFixed(1)}px;height:${Math.max(0,h-2*g).toFixed(1)}px`;
+  let h='';tiles.forEach(({c,x,y,w,h:hh})=>{const r=c.r?c.r[k]:null,L=w>=150&&hh>=110,M=w>=74&&hh>=58,nm=c.n||c.hn||'';
+    /* fit the ticker: drop the exchange suffix (2330.TW -> 2330) when the tile is narrow, or leave it off */
+    let tk=c.t||nm;const fits=x=>x.length*(L?11.6:7.9)+(L?24:16)<=w&&hh>=24;if(!fits(tk))tk=tk.split('.')[0];const S=fits(tk);
+    const inner=`${S?`<span class="xtk">${esc(tk)}</span>`:''}${L&&nm?`<span class="xtn">${esc(nm)}</span>`:''}${M?`<span class="xtv">${xw(c.wt)}</span><span class="xtv">${xp(r)}</span>`:''}`;
+    const lab=`${c.t||''} ${nm}: ${xw(c.wt)} of ${d.t}, ${xp(r)} ${XRWORD[XM.rng]}`;
+    h+=c.t?`<button type="button" class="xtile b-${xBucket(r)}${L?' l':''}${XM.sel===c.t?' on':''}" data-ht="${esc(c.t)}" style="${box(x,y,w,hh)}" aria-label="${esc(lab)}">${inner}</button>`
+      :`<div class="xtile rest b-o" style="${box(x,y,w,hh)}" title="${esc(lab)}">${inner}</div>`});
+  if(rest){const r=rest.r?rest.r[k]:null,wide=rw>=130,big=rw>=200;
+    h+=`<div class="xtile rest b-${xBucket(r)}${big&&H>=110?' l':''}" style="${box(aw,0,rw,H)}" title="Everything outside the top ${top.length}: ${xw(rest.wt)} of ${esc(d.t)}. Its return is worked out from the fund's return minus what the top ${top.length} added.${k===5?' The 3-year per-year return can\'t be split this way.':''}"><span class="xtk">${wide?'Everything else':'Rest'}</span>${wide?`<span class="xtn">the other holdings</span>`:''}<span class="xtv">${xw(rest.wt)}</span><span class="xtv">${r==null?'—':'≈ '+xp(r)}</span></div>`}
+  el.innerHTML=h;el.classList.toggle('fade',!!XM.sel)}
+function xinSecHTML(d){const sec=Object.entries(d.sec||{}).filter(([,v])=>v>0.0005).sort((a,b)=>b[1]-a[1]);
+  const im={};d.top.forEach(c=>{if(c.ind)im[c.ind]=(im[c.ind]||0)+c.wt});const ind=Object.entries(im).sort((a,b)=>b[1]-a[1]);
+  if(!sec.length&&!ind.length)return '';
+  const one=sec.length&&sec[0][1]>=0.6,auto=one&&ind.length&&!d.pf?'ind':'sec',mode=!ind.length?'sec':!sec.length?'ind':XM.secMode||auto;
+  let items=mode==='sec'?sec.map(([k,v])=>[XSEC[k]||k,v]):ind.slice();
+  const tot=items.reduce((a,x)=>a+x[1],0);
+  if(mode==='sec'&&d.pf&&tot<0.98){let left=1-tot;const bd=Math.min(left,(d.ac&&d.ac.bond)||0);if(bd>0.005){items.push(['Bonds',bd,2]);left-=bd}if(left>0.005)items.push(['Other and cash',left,1])}
+  else if(tot<(mode==='sec'?0.98:0.999))items.push([mode==='sec'?'Other and cash':`Outside the top ${d.top.length}`,1-tot,1]);
+  
+  const col=(x,i)=>x[2]===2?'var(--faint)':x[2]?'var(--to)':XSCOL[i%XSCOL.length];
+
+  const sw=sec.length&&ind.length?`<div class="seg" role="group" aria-label="Break down by"><button type="button" data-xsm="sec" aria-pressed="${mode==='sec'}">Sectors</button><button type="button" data-xsm="ind" aria-pressed="${mode==='ind'}">Industries</button></div>`:'';
+  const note=d.pf?(mode==='ind'?`Industries of the ${d.top.length} biggest holdings across your ETFs.`:'Your portfolio by sector, across every holding in every ETF.'):mode==='ind'?(one?`${esc(d.t)} is ${xw(sec[0][1])} ${esc(XSEC[sec[0][0]]||sec[0][0])}, so this opens on industries, one level down. Industries are known for the top ${d.top.length} holdings.`:`Industries of the top ${d.top.length} holdings.`):`${esc(d.t)} by sector, across the whole fund.`;
+  return `<section class="xsec xsecp" id="xinSec"><div class="xsech"><h3>${mode==='ind'?'Industries':'Sectors'}</h3>${sw}</div><p class="xsnote">${note}</p>
+    <div class="xsbar" role="img" aria-label="${esc(items.map(x=>x[0]+' '+xw(x[1])).join(', '))}">${items.map((x,i)=>`<span style="flex:${x[1]};background:${col(x,i)}" title="${esc(x[0])} ${xw(x[1])}"></span>`).join('')}</div>
+    <div class="xslg">${items.map((x,i)=>`<div><i style="background:${col(x,i)}"></i><span>${esc(x[0])}</span><b>${xw(x[1])}</b></div>`).join('')}</div></section>`}
+function xinAssetsHTML(d){const L={stock:'Stocks',bond:'Bonds',cash:'Cash',preferred:'Preferred stock',convertible:'Convertibles',other:'Other (such as gold or futures)'};
+  const a=Object.entries(d.ac||{}).filter(([,v])=>v>0.001).sort((x,y)=>y[1]-x[1]);const cols=['var(--p1)','var(--p3)','var(--p4)','var(--p5)','var(--p6)','var(--to)'];
+  const named=d.top.filter(c=>c.wt>0);
+  return `<figure class="xtmfig"><div class="xtmh"><b>What ${esc(d.t)} holds</b><span>${d.pf?"Your ETFs don't list stock-by-stock holdings (bond and commodity funds usually don't), so here's how the portfolio splits by asset type.":"Yahoo doesn't list stock-by-stock holdings for this fund, so here's how it splits by asset type."}</span></div><div class="xassets">
+    ${a.length?`<div class="xsbar">${a.map(([k,v],i)=>`<span style="flex:${v};background:${cols[i%cols.length]}" title="${L[k]||k} ${xw(v)}"></span>`).join('')}</div><div class="xslg">${a.map(([k,v],i)=>`<div><i style="background:${cols[i%cols.length]}"></i><span>${L[k]||esc(k)}</span><b>${xw(v)}</b></div>`).join('')}</div>`:'<p>No breakdown is available.</p>'}
+    ${named.length?`<p>Largest listed: ${named.slice(0,5).map(c=>`${esc(c.hn||c.n||c.t)} (${xw(c.wt)})`).join(', ')}.</p>`:''}</div></figure>`}
 /* make the chart as tall as the tallest card, so a card never has to be cut down to fit beside it */
 function xFitChart(){if(ph0()||!XM.d)return;const dock=$('xCardDock'),fig=document.querySelector('#xmBody .xfig'),leg=document.querySelector('#xmBody .xlegend');if(!dock||!fig||!leg)return;const d=XM.d;
   const was=dock.hidden,html=dock.innerHTML,show=leg.classList.contains('showcard');dock.style.visibility='hidden';dock.hidden=false;leg.classList.add('showcard');let mx=0;
@@ -2361,11 +2620,16 @@ function xHowHTML(){const t=XM.t||'this ETF',d=XM.d;const st=(k,p)=>`<div class=
    +st('Higher return, similar risk',`Moves at least 85% in step with ${t}, earned at least 1 point a year more over 3 years, and has no more than 25% more volatility. Best Sharpe first.`)
    +st('Less risk, similar return',`At least 15% less volatility than ${t} over 3 years, with a yearly return no more than 2 points below it. Best Sharpe first.`)
    +st('Momentum',`Moves at least 85% in step with ${t} and is ahead of it by 2+ points over the last 3 months, using the average of the last 10 days so one week can't flip it. No more than 25% more volatility, and a 3-year return within 3 points of ${t}. Strongest 3 months first.`)
+   +(XM.pf?`<p class="xstepn">For a portfolio, "moves in step" is measured on weekly returns over the last 3 years, and the portfolio is bought at your percentages 3 years ago and held. Its own ETFs are left out of the picks.</p>`:'')
    +`<p class="xstepn">Return and volatility are measured over the last 3 years, and everything refreshes every morning. Sharpe is return per unit of volatility. These are ideas to research, not advice.</p>`}
 function xDrawer(on){const dr=$('xmDrawer'),b=$('xmHow');if(on){dr.querySelector('.xdb').innerHTML=xHowHTML();dr.style.top=document.querySelector('#xm .xmh').offsetHeight+'px'}dr.classList.toggle('open',!!on);dr.setAttribute('aria-hidden',!on);b.setAttribute('aria-expanded',!!on)}
 function dayFmt(k){return MON[+k.slice(5,7)-1]+' '+(+k.slice(8))+', '+k.slice(0,4)}
-document.addEventListener('click',e=>{const o=e.target.closest('[data-xopen]');if(o){e.preventDefault();openExplore(o.dataset.xopen,o);return}
+document.addEventListener('click',e=>{{const q=e.target.closest('[data-xpf]');if(q){e.preventDefault();e.stopPropagation();openExplorePf(q.dataset.xpf,q,q.dataset.xtab);return}}const o=e.target.closest('[data-xopen]');if(o){e.preventDefault();openExplore(o.dataset.xopen,o,o.dataset.xtab);return}
   if($('xm').hidden)return;
+  {const b=e.target.closest('#xm .xtab');if(b){xTab(b.dataset.xtab);return}}
+  {const m=e.target.closest('#xmBody [data-xsm]');if(m){XM.secMode=m.dataset.xsm;const el=$('xinSec');if(el)el.outerHTML=xinSecHTML(XM.d);return}}
+  {const tt=e.target.closest('#xmBody .xtile[data-ht]');if(tt){const t=tt.dataset.ht;XM.sel=XM.sel===t?null:t;$('xInDock').dataset.t='~';xinTip(t,!!XM.sel);
+    if(XM.sel&&ph0()){const dk=$('xInDock'),B=$('xmBody');if(dk&&B){const r=dk.getBoundingClientRect(),b=B.getBoundingClientRect();if(r.top>b.bottom-120)B.scrollTo({top:B.scrollTop+(r.top-b.top)-80,behavior:XREDUCE.matches?'auto':'smooth'})}}return}}
   if(e.target.closest('[data-xclose]')){closeExplore();return}
   if(e.target.closest('#xmHow')){xDrawer(!$('xmDrawer').classList.contains('open'));return}
   if(e.target.closest('[data-xdclose]')){xDrawer(false);$('xmHow').focus();return}
@@ -2374,8 +2638,11 @@ document.addEventListener('click',e=>{const o=e.target.closest('[data-xopen]');i
   const p=e.target.closest('#xmBody .xpt');if(p){XM.sel=p.dataset.xt;xChartTip(p.dataset.xt,true);
     /* when the card sits under the chart (narrow screens), bring it into view */const lg=document.querySelector('#xmBody .xlegend'),B=$('xmBody'),svg=p.closest('svg');if(XM.sel&&lg&&B&&svg&&lg.getBoundingClientRect().top>svg.getBoundingClientRect().bottom-4){const r=lg.getBoundingClientRect(),b=B.getBoundingClientRect(),m=$('xgMini'),off=(XGMINI()&&m?m.offsetHeight:70)+10;if(r.top>b.bottom-120||r.top<b.top+off)B.scrollTo({top:B.scrollTop+(r.top-b.top)-off,behavior:XREDUCE.matches?'auto':'smooth'})}return}
   const rw=e.target.closest('#xCmp tr[data-xrow]');if(rw){const t=rw.dataset.xrow;XM.sel=t;xChartTip(t,true);const tp=document.querySelector('#xmBody .xtop'),B=$('xmBody');if(tp&&B){const r=tp.getBoundingClientRect(),bb=B.getBoundingClientRect();if(r.top<bb.top+60)B.scrollTo({top:B.scrollTop+(r.top-bb.top)-80,behavior:XREDUCE.matches?'auto':'smooth'})}return}
-  if(XM.sel&&!e.target.closest('#xCardDock,[data-xrng],#xgMini,.xmh,#xmDrawer,#xmFoot,.xmf')){const t=XM.sel;XM.sel=null;xChartTip(t,false)}});
-document.addEventListener('pointerover',e=>{if(!e.target.closest)return;const tr=e.target.closest('tr');const o=e.target.closest('[data-xopen]')||(tr&&tr.querySelector('[data-xopen]'));if(o&&o.dataset.xopen!=='TPS'&&!XDATA[o.dataset.xopen])xLoad(o.dataset.xopen).catch(()=>{})});
+  if(XM.sel&&!e.target.closest('#xCardDock,#xInDock,[data-xrng],#xgMini,.xmh,#xmDrawer,#xmFoot,.xmf')){const t=XM.sel;XM.sel=null;XM.tab==='in'?xinTip(t,false):xChartTip(t,false)}});
+document.addEventListener('mouseover',e=>{if($('xm').hidden||XM.tab!=='in')return;const tt=e.target.closest&&e.target.closest('#xmBody .xtile[data-ht]');if(tt)xinTip(tt.dataset.ht,true)});
+document.addEventListener('mouseout',e=>{if($('xm').hidden||XM.tab!=='in')return;const tt=e.target.closest&&e.target.closest('#xmBody .xtile[data-ht]');if(tt&&!(e.relatedTarget&&e.relatedTarget.closest&&e.relatedTarget.closest('#xmBody .xtile[data-ht]')))xinTip(tt.dataset.ht,false)});
+addEventListener('resize',()=>{if($('xm').hidden||XM.tab!=='in')return;cancelAnimationFrame(XM.rz);XM.rz=requestAnimationFrame(()=>{xinFit();xinPaint()})});
+document.addEventListener('pointerover',e=>{if(!e.target.closest)return;const tr=e.target.closest('tr');const o=e.target.closest('[data-xopen]')||(tr&&tr.querySelector('[data-xopen]'));if(o&&o.dataset.xopen!=='TPS'&&!XDATA[o.dataset.xopen])xLoad(o.dataset.xopen).catch(()=>{});if(e.target.closest('[data-xpf][data-xtab="alt"]')&&!XPOOL)xPoolLoad().catch(()=>{});const L=e.target.closest('[data-xopen][data-xtab="in"]');if(L&&L.dataset.xopen!=='TPS'&&!XIN[L.dataset.xopen])xinLoad(L.dataset.xopen).catch(()=>{})});
 document.addEventListener('keydown',e=>{if($('xm').hidden)return;if(e.key==='Escape'){e.stopPropagation();if($('xmDrawer').classList.contains('open')){xDrawer(false);$('xmHow').focus()}else closeExplore()}
   if(e.key==='Tab'){const f=[...$('xm').querySelectorAll('button:not(:disabled),[tabindex="0"]')].filter(x=>x.offsetParent);if(!f.length)return;const i=f.indexOf(document.activeElement);if(e.shiftKey&&i<=0){e.preventDefault();f[f.length-1].focus()}else if(!e.shiftKey&&i===f.length-1){e.preventDefault();f[0].focus()}}},true);
 document.addEventListener('mouseover',e=>{if($('xm').hidden)return;const p=e.target.closest('#xmBody .xpt');if(p){xChartTip(p.dataset.xt,true);return}
