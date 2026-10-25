@@ -43,6 +43,11 @@ jobs:
         run: python scripts/build_data.py
         env:
           REBUILD_UNIVERSE: ${{ inputs.rebuild_universe }}
+          # A push that only changes the site reuses the saved fund details and holdings instead of
+          # refreshing them from Yahoo, so it deploys in minutes; scheduled and manual runs refresh as usual.
+          FUND_INFO_MINUTES: ${{ github.event_name == 'push' && '0' || '30' }}
+          HOLDINGS_MINUTES: ${{ github.event_name == 'push' && '0' || '15' }}
+          STOCK_INFO_MINUTES: ${{ github.event_name == 'push' && '0' || '10' }}
 
       - name: Save the ETF list, fund details and holdings if they changed
         run: |
