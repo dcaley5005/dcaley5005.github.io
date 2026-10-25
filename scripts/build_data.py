@@ -11,7 +11,8 @@ Output, under _site/portfolio-lab/data/:
   peers/<T>.json  "Explore alternatives" picks for each ETF, from the last 3 years of prices
   pool.json       every candidate's 3-year numbers and weekly returns, so the site can pick
                   alternatives to a custom portfolio in the browser
-  inside/<T>.json "What's inside": description, sectors and the top 10 holdings with a card each
+  inside/<T>.json "What's inside": description, sectors and the top holdings with a card each (the top 50
+                  from the fund's SEC reports where it files them, else Yahoo's top 10)
   er.json         expense ratio per ETF (percent)
   fund_info.json  per-ETF details from Yahoo: fund size, expense ratio, average volume, price,
                   category, fund family, inception date (refreshed weekly, a slice per run)
@@ -375,14 +376,17 @@ def build_whats_inside(series, names, fund):
     are refreshed a slice per run and kept in data/; holding prices are downloaded fresh each run."""
     import holdings as H
     hold = H.update_holdings(list(names))
-    syms = H.holding_symbols(hold)
-    stocks = H.update_stocks(syms)
     last = series["SPY"].index[-1]
-    start = (last - pd.DateOffset(years=3, months=2)).strftime("%Y-%m-%d")
+    nport = H.load_nport(list(names))
+    syms = sorted(set(H.holding_symbols(hold)) | H.nport_symbols(nport, last))
+    log(f"SEC holdings for {len(nport)} ETFs; {len(syms)} holding symbols in all")
+    stocks = H.update_stocks(syms)
+    # 3 years and 5 months: the 3Y view starts from the SEC report on or before 3 years ago
+    start = (last - pd.DateOffset(years=3, months=5)).strftime("%Y-%m-%d")
     log(f"Downloading prices for {len(syms)} holdings…")
     prices, missing = H.download(syms, start)
     log(f"Holding prices: {len(prices)} of {len(syms)}")
-    H.build_inside(OUT / "inside", series, hold, stocks, prices, names, fund)
+    H.build_inside(OUT / "inside", series, hold, stocks, prices, names, fund, nport)
 
 
 def load_universe():

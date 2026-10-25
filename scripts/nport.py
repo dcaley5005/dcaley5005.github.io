@@ -9,6 +9,7 @@ Three steps (the backfill workflow runs them):
   python scripts/nport.py quarters --since 2019q4      # list the quarters on the SEC page (JSON)
   python scripts/nport.py quarter 2026q3 --out DIR     # one quarter -> DIR/2026q3.json.gz
   python scripts/nport.py combine --inp DIR --out OUT  # all quarters -> one history file per ETF
+  python scripts/nport.py site --inp OUT/etf           # trimmed copies for the site build -> data/nport/
 
 What the per-quarter step keeps for each ETF report: the top holdings (NPORT_TOP_N, default 50) by
 share of net assets, after dropping cash pools (asset category STIV, short-term investment vehicles,
@@ -541,6 +542,34 @@ def cmd_combine(a):
     log(f"Wrote {stats['with_history']} ETF files; archive {(out / 'nport-etfs.tar.gz').stat().st_size / 1e6:.1f} MB")
 
 
+def site_doc(d):
+    """The trimmed copy kept in the repo for the nightly build: symbol, name and country per holding,
+    and for each report its date, cash share and top holdings as [holding index, share of the fund]."""
+    keep, idx, sec = {}, {}, []
+    for h in d["hist"]:
+        for i, _ in h[4]:
+            keep.setdefault(i, None)
+    for i in keep:
+        s = d["sec"][i]
+        idx[i] = len(sec)
+        sec.append([s[0], s[1], s[5]])
+    return {"t": d["t"], "asof": d["hist"][-1][0], "sec": sec,
+            "hist": [[h[0], h[3], [[idx[i], p] for i, p in h[4]]] for h in d["hist"]]}
+
+
+def cmd_site(a):
+    """etf/<T>.json from combine -> data/nport/<T>.json (replacing what's there)."""
+    inp, out = Path(a.inp), Path(a.out)
+    out.mkdir(parents=True, exist_ok=True)
+    for old in out.glob("*.json"):
+        old.unlink()
+    n = 0
+    for fp in sorted(inp.glob("*.json")):
+        (out / fp.name).write_text(json.dumps(site_doc(json.loads(fp.read_text())), separators=(",", ":")))
+        n += 1
+    log(f"Wrote {n} files to {out}")
+
+
 def main():
     ap = argparse.ArgumentParser()
     sp = ap.add_subparsers(dest="cmd", required=True)
@@ -553,8 +582,11 @@ def main():
     p = sp.add_parser("combine")
     p.add_argument("--inp", default="/tmp/nport/quarters")
     p.add_argument("--out", default="/tmp/nport/out")
+    p = sp.add_parser("site")
+    p.add_argument("--inp", default="/tmp/nport/out/etf")
+    p.add_argument("--out", default=str(ROOT / "data" / "nport"))
     a = ap.parse_args()
-    {"quarters": cmd_quarters, "quarter": cmd_quarter, "combine": cmd_combine}[a.cmd](a)
+    {"quarters": cmd_quarters, "quarter": cmd_quarter, "combine": cmd_combine, "site": cmd_site}[a.cmd](a)
 
 
 if __name__ == "__main__":

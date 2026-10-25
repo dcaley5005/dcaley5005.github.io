@@ -1,9 +1,12 @@
 name: SEC holdings backfill
 
 # Builds real ETF holdings history from the SEC Form N-PORT data sets: one job per quarter, then one
-# history file per ETF. Output goes to the "nport-data" release (kept out of git) and a short review
-# report goes to the nport-trial branch. Not used by the site yet.
+# history file per ETF. The full output goes to the "nport-data" release, a trimmed copy to data/nport/
+# (on main), which the nightly build reads, and a short review report to the nport-trial branch.
 on:
+  # monthly: the SEC posts each quarter's file a month or two after it ends; quarters already done are reused
+  schedule:
+    - cron: "23 14 9 * *"
   # also runs on pushes to the working branch, since a manual-only workflow can't be started until it's on main
   push:
     branches: [claude/new-session-1u2wve]
@@ -108,6 +111,14 @@ jobs:
           gh release view nport-data >/dev/null 2>&1 || gh release create nport-data --prerelease --title "SEC holdings data" \
             --notes "ETF holdings history from SEC Form N-PORT, built by the SEC holdings backfill workflow. Not used by the site yet."
           gh release upload nport-data /tmp/nport/out/nport-etfs.tar.gz /tmp/nport/out/report.json /tmp/nport/quarters/*.json.gz --clobber
+      - name: Update the holdings history the site uses (main only)
+        if: github.ref == 'refs/heads/main'
+        run: |
+          python scripts/nport.py site --inp /tmp/nport/out/etf
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A data/nport
+          git diff --cached --quiet || (git commit -qm "Update SEC holdings history" && git push)
       - name: Save the review report to the nport-trial branch
         if: always()
         run: |

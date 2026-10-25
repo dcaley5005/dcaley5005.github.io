@@ -1,0 +1,53 @@
+name: Site preview
+
+# Builds the site from this working branch the same way the nightly job does, then saves the page and
+# the data for a few ETFs to the site-preview branch so changes can be checked before they go to main.
+# Nothing is deployed.
+on:
+  push:
+    branches: [claude/new-session-1u2wve]
+    paths: [site/**, scripts/build_data.py, scripts/holdings.py, data/nport/**, .github/workflows/site-preview.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: scripts/requirements.txt
+      - run: pip install -r scripts/requirements.txt
+      - name: Build data and site
+        run: |
+          set -o pipefail
+          python scripts/build_data.py 2>&1 | tee /tmp/build_log.txt
+        env:
+          FUND_INFO_MINUTES: "0"
+          HOLDINGS_MINUTES: "0"
+          STOCK_INFO_MINUTES: "8"
+      - name: Save a slice of the site to the site-preview branch
+        if: always()
+        run: |
+          D=_site/portfolio-lab/data
+          du -sh $D/inside $D 2>/dev/null | tee -a /tmp/build_log.txt || true
+          mkdir -p /tmp/pv/portfolio-lab/data/inside /tmp/pv/portfolio-lab/data/t /tmp/pv/portfolio-lab/data/peers
+          cp _site/portfolio-lab/index.html /tmp/pv/portfolio-lab/
+          for f in core.csv tw.csv universe.json er.json fund_info.json pool.json; do cp $D/$f /tmp/pv/portfolio-lab/data/ 2>/dev/null || true; done
+          for t in QQQ XLK SPY IWM SCHD IEUR VWO ARKK EWJ MCHI SMH VTI; do
+            cp $D/inside/$t.json /tmp/pv/portfolio-lab/data/inside/ 2>/dev/null || true
+            cp $D/t/$t.csv /tmp/pv/portfolio-lab/data/t/ 2>/dev/null || true
+            cp $D/peers/$t.json /tmp/pv/portfolio-lab/data/peers/ 2>/dev/null || true
+          done
+          cp /tmp/build_log.txt /tmp/pv/
+          cd /tmp/pv
+          git init -q -b site-preview
+          git add -A
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -qm "Site preview"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" site-preview
