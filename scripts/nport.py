@@ -295,31 +295,42 @@ def yahoo_symbol(raw, s, known=()):
     known: symbols the site already has (data/stocks.json); a candidate found there wins."""
     raw = (raw or "").upper().strip()
     c, isin = s.get("country", ""), s.get("isin", "").upper()
+    foreign = bool(isin) and not isin.startswith("US")
+
+    def first(cands, default):
+        return next((x for x in cands if x in known), default)
+
     if re.match(r"^[A-Z0-9\-]+\.[A-Z]{1,3}$", raw) and raw.split(".")[1] in {v[1:] for v in SUFFIX.values()} | {"TWO", "KQ", "SS", "SZ"}:
         return raw  # already Yahoo style, such as 2330.TW
     # local codes spelled out inside the ISIN
     if re.match(r"^TW000\d{4}", isin):
-        return isin[5:9] + ".TW"
+        return first([isin[5:9] + ".TW", isin[5:9] + ".TWO"], isin[5:9] + ".TW")
     if re.match(r"^KR7\d{6}", isin):
-        return isin[3:9] + ".KS"
+        return first([isin[3:9] + ".KS", isin[3:9] + ".KQ"], isin[3:9] + ".KS")
     t = norm_ticker(raw)
     if not t:
         return ""
-    cands = [t]
-    if t.isdigit() and (c in ("HK", "CN") or isin.startswith(("HK", "KYG", "BMG", "CNE"))) and len(t) <= 5:
-        cands.insert(0, t.zfill(4) + ".HK")
-    if t.isdigit() and len(t) == 6 and c == "CN":
-        cands.insert(0, t + (".SS" if t.startswith("6") else ".SZ"))
-    if c in SUFFIX and len(cands) == 1:
-        # a foreign ISIN usually means the local listing (ASML.AS), a US one the US listing
-        if isin and not isin.startswith("US"):
-            cands.insert(0, t + SUFFIX[c])
+    if foreign and re.match(r"^[A-Z]{4}[FY]$", t):
+        return ""  # a US over-the-counter line for a foreign stock (TCTZF, BABAF), not its home listing
+    if t.isdigit():
+        if len(t) == 6 and (c == "CN" or isin.startswith("CNE")):
+            cands = [t + (".SS" if t.startswith("6") else ".SZ")]
+        elif c == "JP" or isin.startswith("JP"):
+            cands = [t + ".T"]
+        elif len(t) <= 5 and (c in ("HK", "CN") or isin.startswith(("HK", "KYG", "BMG", "CNE"))):
+            cands = [t.zfill(4) + ".HK"]
+        elif c in SUFFIX:
+            cands = [t + SUFFIX[c]]
         else:
-            cands.append(t + SUFFIX[c])
-    for x in cands:
-        if x in known:
-            return x
-    return t if isin.startswith("US") or c in ("US", "") else cands[0]
+            return ""
+        return first(cands, cands[0])
+    if foreign and (c in ("HK", "CN", "JP", "TW", "KR") or isin.startswith(("HK", "JP", "CNE", "TW", "KR"))):
+        return ""  # those markets use number codes, so a letter ticker is a US line
+    cands = [t]
+    if c in SUFFIX:
+        # a foreign ISIN usually means the local listing (ASML.AS), a US one the US listing
+        cands.insert(0, t + SUFFIX[c]) if foreign else cands.append(t + SUFFIX[c])
+    return first(cands, cands[0] if foreign and c not in ("US", "") else t)
 
 
 def name_key(n):
@@ -394,8 +405,38 @@ def cmd_combine(a):
                 for f2 in ("name", "title", "isin", "cat", "country"):
                     cur[f2] = s[f2] or cur[f2]  # later quarters win
 
+    # one key per security: funds report some stocks by CUSIP and others by ISIN only
+    isin_of = {v["cusip"].upper(): v["isin"].upper() for v in sec.values() if len(v["cusip"]) == 9 and len(v["isin"]) == 12}
+    canon = {}
+    for k, v in sec.items():
+        isin = v["isin"].upper() if len(v["isin"]) == 12 else isin_of.get(v["cusip"].upper(), "")
+        canon[k] = "I:" + isin if isin else k
+    merged = {}
+    for k, v in sec.items():
+        c = canon[k]
+        if c not in merged:
+            merged[c] = dict(v, votes=Counter(v["votes"]))
+        else:
+            m = merged[c]
+            m["votes"].update(v["votes"])
+            for f2 in ("name", "title", "cusip", "isin", "cat", "country"):
+                m[f2] = m[f2] or v[f2]
+    log(f"Distinct holdings: {len(sec):,} keys -> {len(merged):,} securities after joining CUSIP and ISIN")
+    sec = merged
+    for by_date in reports.values():
+        for r in by_date.values():
+            w = Counter()
+            for k, p in r["top"]:
+                w[canon[k]] += p
+            r["top"] = [[k, round(p, 6)] for k, p in w.most_common()]
+
     names = company_names()
-    stocks = set(json.loads(STOCKS_FILE.read_text())) if STOCKS_FILE.exists() else set()
+    stock_info = json.loads(STOCKS_FILE.read_text()) if STOCKS_FILE.exists() else {}
+    stocks = set(stock_info)
+    yname = defaultdict(list)  # Yahoo name -> symbols the site already has
+    for sym_, v in stock_info.items():
+        if v.get("qt") == "EQUITY" and v.get("n"):
+            yname[name_key(v["n"])].append(sym_)
     how = Counter()
     for k, s in sec.items():
         sym, src = "", ""
@@ -407,6 +448,12 @@ def cmd_combine(a):
         if not sym:
             sym = yahoo_symbol("", s, stocks)
             src = "isin" if sym else ""
+        if not sym and s["cat"] in ("EC", "EP"):
+            hits = yname.get(name_key(s["name"]), [])
+            suf = SUFFIX.get(s["country"], "")
+            local = [h for h in hits if suf and h.endswith(suf)] or [h for h in hits if "." not in h and s["isin"].startswith("US")]
+            sym = (local or (hits if len(hits) == 1 else [""]))[0]
+            src = "yahoo-name" if sym else ""
         if not sym and s["cat"] in ("EC", "EP") and (s["isin"].startswith("US") or s["country"] == "US"):
             sym = names.get(name_key(s["name"]), "")
             src = "name" if sym else ""
@@ -419,6 +466,7 @@ def cmd_combine(a):
     yh = json.loads(YAHOO_HOLD.read_text()) if YAHOO_HOLD.exists() else {}
     stats = {"etfs": len(etfs), "mapped": 0, "with_history": 0, "quarters_per_etf": Counter(), "first_period": Counter()}
     w_all = w_sym = w_known = 0.0
+    e_all = e_sym = e_known = 0.0
     unresolved = Counter()
     for t in etfs:
         sid = smap.get(t)
@@ -448,8 +496,13 @@ def cmd_combine(a):
             if s["sym"]:
                 w_sym += p
                 w_known += p if s["sym"] in stocks else 0
-            else:
-                unresolved[s["name"]] += p
+            if s["cat"] in ("EC", "EP"):
+                e_all += p
+                if s["sym"]:
+                    e_sym += p
+                    e_known += p if s["sym"] in stocks else 0
+                else:
+                    unresolved[f'{s["name"]} ({s["country"]})'] += p
         doc = {"t": t, "sid": sid, "name": last["name"],
                "cols": {"sec": ["sym", "name", "cusip", "isin", "cat", "country"], "hist": ["asof", "net", "n", "cash", "top"]},
                "sec": table, "hist": hist}
@@ -463,7 +516,9 @@ def cmd_combine(a):
         "symbol_sources": dict(how),
         "latest_top50_weight_with_symbol": round(w_sym / max(w_all, 1e-9), 3),
         "latest_top50_weight_with_symbol_in_stocks_json": round(w_known / max(w_all, 1e-9), 3),
-        "top_unresolved_by_weight": [[n, round(w, 3)] for n, w in unresolved.most_common(40)],
+        "latest_top50_stock_weight_with_symbol": round(e_sym / max(e_all, 1e-9), 3),
+        "latest_top50_stock_weight_with_symbol_in_stocks_json": round(e_known / max(e_all, 1e-9), 3),
+        "top_unresolved_stocks_by_weight": [[n, round(w, 3)] for n, w in unresolved.most_common(40)],
     }
     cmp = {}
     for t in SAMPLES:

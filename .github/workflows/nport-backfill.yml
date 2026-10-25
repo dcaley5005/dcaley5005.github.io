@@ -13,6 +13,10 @@ on:
       since:
         description: "First quarter to include"
         default: "2019q4"
+      reparse:
+        description: "Parse every quarter again (otherwise reuse the quarter files already in the release)"
+        type: boolean
+        default: false
       contact:
         description: "Contact the SEC can see in the download requests (name and email)"
         default: "Portfolio Lab daniel.caley1@gmail.com"
@@ -59,7 +63,16 @@ jobs:
           cache: pip
           cache-dependency-path: scripts/requirements.txt
       - run: pip install -r scripts/requirements.txt
-      - run: python scripts/nport.py quarter ${{ matrix.q }} --out /tmp/nport/quarters
+      - name: Reuse the quarter file from the release if it's there
+        id: reuse
+        if: ${{ !inputs.reparse }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p /tmp/nport/quarters
+          if gh release download nport-data -p "${{ matrix.q }}.json.gz" -D /tmp/nport/quarters 2>/dev/null; then echo "hit=true" >> "$GITHUB_OUTPUT"; fi
+      - if: steps.reuse.outputs.hit != 'true'
+        run: python scripts/nport.py quarter ${{ matrix.q }} --out /tmp/nport/quarters
       - uses: actions/upload-artifact@v4
         with:
           name: q-${{ matrix.q }}
