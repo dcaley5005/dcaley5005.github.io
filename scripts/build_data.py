@@ -378,12 +378,14 @@ def build_whats_inside(series, names, fund):
     hold = H.update_holdings(list(names))
     last = series["SPY"].index[-1]
     nport = H.load_nport(list(names))
-    syms = sorted(set(H.holding_symbols(hold)) | H.nport_symbols(nport, last))
+    # Yahoo's top 10 only matters for funds without SEC reports
+    ysyms = H.holding_symbols({t: h for t, h in hold.items() if t not in nport})
+    syms = sorted(set(ysyms) | H.nport_symbols(nport, last))
     log(f"SEC holdings for {len(nport)} ETFs; {len(syms)} holding symbols in all")
     stocks = H.update_stocks(syms)
     # 3 years and 5 months: the 3Y view starts from the SEC report on or before 3 years ago
     start = (last - pd.DateOffset(years=3, months=5)).strftime("%Y-%m-%d")
-    prices, missing = H.download_cached(syms, start, set(H.holding_symbols(hold)) | H.nport_priority(nport))
+    prices, missing = H.download_cached(syms, start, set(ysyms) | H.nport_priority(nport))
     log(f"Holding prices: {len(prices)} of {len(syms)}")
     H.build_inside(OUT / "inside", series, hold, stocks, prices, names, fund, nport)
 
