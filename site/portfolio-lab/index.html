@@ -730,6 +730,14 @@ tr.flash>td{animation:pflash 1.6s ease-out}
 
 
 /* ---------- what's inside ---------- */
+/* the page title and price date live in the builder's toolbar, so the chart starts at the top of the screen */
+header.top{display:none!important}
+#builder .bheadwrap{gap:16px;flex-wrap:wrap}
+.bbrand{margin-right:auto;display:flex;flex-direction:column;gap:2px;min-width:0;padding:2px 0}
+.bbrand h1{margin:0;font-size:26px!important;line-height:1.1;letter-spacing:-.01em}
+.bbrand .asof{flex-direction:row;align-items:baseline;gap:6px;font-size:12.5px}
+.bbrand .asof strong{font-size:12.5px}
+@media (max-width:640px){.bbrand{flex:1 0 100%;flex-direction:row;align-items:baseline;justify-content:space-between;gap:10px}.bbrand h1{font-size:22px!important}}
 .xsteps{border-top:1px solid var(--line);padding-top:14px;display:flex;flex-direction:column;gap:10px}
 .xsth{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
 .xsteps ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;counter-reset:xs}
@@ -1029,10 +1037,9 @@ tr.xecho>td{background:var(--accentBg);transition:background .2s}
   <header class="top">
     <div style="display:flex;flex-direction:column;gap:6px">
       <div class="eyebrow">ETF baskets vs. the 12% Solution</div>
-      <h1>Portfolio Lab</h1>
+      <div class="h1x">Portfolio Lab</div>
     </div>
     <div class="controls">
-      <div class="asof"><span id="asofLabel">Prices through</span><strong id="asofDate">—</strong></div>
       <input type="file" id="fileInput" accept=".csv,text/csv,text/plain" multiple hidden><input type="file" id="pfFile" accept=".csv,text/csv,text/plain" hidden>
     </div>
   </header>
@@ -1042,6 +1049,7 @@ tr.xecho>td{background:var(--accentBg);transition:background .2s}
   <div class="duo">
   <section class="panel builder" id="builder" aria-labelledby="bTitle">
 <div class="bheadwrap">
+    <div class="bbrand"><h1>Portfolio Lab</h1><div class="asof"><span id="asofLabel">Prices through</span><strong id="asofDate">—</strong></div></div>
     <button type="button" class="bhead" id="bToggle" aria-expanded="false" aria-controls="bBody">
             <span style="display:flex;flex-direction:column;gap:2px;min-width:0;flex:1"><h2 id="bTitle">Build a portfolio</h2><span class="sub" id="bSub"></span></span>
       <span class="bchev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
@@ -2340,7 +2348,7 @@ function xCard(c,s,kind){const col=XCOL[kind];const dr=c.r3-s.r3;const pct=Math.
     ${xSpark(c,s,col,c.t)}<div class="xrl">Returns vs ${esc(s.t)}</div><div class="xchips">${chips}</div>
     <div class="xrl xrlr">Risk vs ${esc(s.t)} · ${xRngLbl()}</div><div class="xrisk">${xRiskTiles(c,s)}</div>
     <p class="xwhy">${xWhy(c,s,kind)}</p><button type="button" class="xadd" data-xadd="${esc(c.t)}"></button></article>`}
-function xSetRange(k){XM.rng=k;XM.rngSet=1;const d=XM.d;if(!d)return;
+function xSetRange(k){XM.rng=k;XM.rngSet=1;const d=XM.d;if(!d)return;setTimeout(()=>{if(XM.tab!=='in')xMatchH()},0);
   document.querySelectorAll('#xmBody .xspark').forEach(box=>{const c=xFind(box.dataset.xsp);if(!c)return;const col=box.closest('.xcard').style.getPropertyValue('--xc');box.outerHTML=xSpark(c,d.self,col,c.t)});
   document.querySelectorAll('#xmBody [data-xrng],#xmGlance [data-xrng]').forEach(b=>{const on=b.dataset.xrng===k;b.classList.toggle('sel',on);b.setAttribute('aria-pressed',on)});{const w=document.querySelector('#xmBody .xgwrap');if(w&&w._h0&&!XGMINI())xgPaint(w,XG.cur);if(w&&XGMINI())setTimeout(()=>xgSync(true),0)}
   document.querySelectorAll('#xmBody .xcard').forEach(card=>{const c=xFind(card.dataset.xc);const rk=card.querySelector('.xrisk'),lb=card.querySelector('.xrlr');if(c&&rk)rk.innerHTML=xRiskTiles(c,d.self);if(lb)lb.textContent=`Risk vs ${d.self.t} · ${xRngLbl()}`});
@@ -2354,13 +2362,14 @@ function xChart(d){const s=d.self,seen=new Set();const pts=[{...s,k:'self'}].con
   /* axes hug the shapes: a little room on each side (more on the right and top for labels), ticks at a round step */
   const tick=(lo,hi,n)=>{const raw=(hi-lo)/n,p=Math.pow(10,Math.floor(Math.log10(raw)));return [1,2,5,10].map(m=>m*p).find(x=>x>=raw)};
   const vlo=Math.min(...vs),vhi=Math.max(...vs),rlo=Math.min(...rs),rhi=Math.max(...rs),vp=Math.max((vhi-vlo)*.1,.006),rp=Math.max((rhi-rlo)*.12,.006);
-  let x0=Math.max(0,vlo-vp),x1=vhi+vp*1.8,y0=rlo-rp,y1=rhi+rp*2.6;const MS=.04;if(x1-x0<MS){const e=(MS-(x1-x0))/2;x0-=e;x1+=e;if(x0<0){x1-=x0;x0=0}}if(y1-y0<MS){const e=(MS-(y1-y0))/2;y0-=e;y1+=e}const xs=tick(x0,x1,8),ys=tick(y0,y1,7);const pf=st=>v=>(Math.round(v*1000)/10).toFixed(st<0.01?1:0)+'%';const fx=pf(xs),fy=pf(ys);
+  const sv0=s.vol,sr0=s.r3,dv=Math.max(...vs.map(v=>Math.abs(v-sv0)),.01),dr=Math.max(...rs.map(r=>Math.abs(r-sr0)),.01);
+  let x0=Math.max(0,sv0-dv*1.3),x1=sv0+dv*1.4,y0=sr0-dr*1.3,y1=sr0+dr*1.45;const MS=.04;if(x1-x0<MS){const e=(MS-(x1-x0))/2;x0-=e;x1+=e;if(x0<0){x1-=x0;x0=0}}if(y1-y0<MS){const e=(MS-(y1-y0))/2;y0-=e;y1+=e}const xs=tick(x0,x1,8),ys=tick(y0,y1,7);const pf=st=>v=>(Math.round(v*1000)/10).toFixed(st<0.01?1:0)+'%';const fx=pf(xs),fy=pf(ys);
   const X=v=>L+(v-x0)/(x1-x0)*(R-L),Y=v=>Bm-(v-y0)/(y1-y0)*(Bm-T);
   let g='';for(let v=Math.ceil(y0/ys-1e-9)*ys;v<=y1+1e-9;v+=ys)g+=`<line x1="${L}" x2="${R}" y1="${Y(v).toFixed(1)}" y2="${Y(v).toFixed(1)}" stroke="var(--grid)"/><text x="${L-6}" y="${(Y(v)+4).toFixed(1)}" text-anchor="end" font-size="13" fill="var(--faint)">${fy(v)}</text>`;
   for(let v=Math.ceil(x0/xs-1e-9)*xs;v<=x1+1e-9;v+=xs)g+=`<text x="${X(v).toFixed(1)}" y="${Bm+19}" text-anchor="middle" font-size="13" fill="var(--faint)">${fx(v)}</text>`;
   const sx=X(s.vol),sy=Y(s.r3);
-  const sm=W<=400,zl=sm?'Higher return, less risk':'Higher return with less risk',zr=sm?'Higher return, riskier':'Higher return, but riskier',zly=(R-10-zr.length*8.4<L+10+zl.length*8.4+12)?T+40:T+20;
-  const zone=`<g class="xzone"><rect x="${L}" y="${T}" width="${Math.max(0,sx-L).toFixed(1)}" height="${Math.max(0,sy-T).toFixed(1)}" fill="var(--pos)" opacity=".08"/><line x1="${sx.toFixed(1)}" x2="${sx.toFixed(1)}" y1="${T}" y2="${Bm}" stroke="var(--ink)" stroke-opacity=".3" stroke-dasharray="4 4"/><line x1="${L}" x2="${R}" y1="${sy.toFixed(1)}" y2="${sy.toFixed(1)}" stroke="var(--ink)" stroke-opacity=".3" stroke-dasharray="4 4"/><text x="${L+10}" y="${T+20}" font-size="15" font-weight="700" fill="var(--pos)" font-family="IBM Plex Sans,sans-serif">${esc(zl)}</text><rect x="${sx.toFixed(1)}" y="${T}" width="${Math.max(0,R-sx).toFixed(1)}" height="${Math.max(0,sy-T).toFixed(1)}" fill="var(--xz)" opacity=".07"/><text x="${R-10}" y="${zly}" text-anchor="end" font-size="15" font-weight="700" fill="var(--xz)" font-family="IBM Plex Sans,sans-serif">${zr}</text>${Bm-sy>34?`<text x="${L+8}" y="${Bm-9}" font-size="12" font-weight="600" fill="var(--faint)" font-family="IBM Plex Sans,sans-serif">${sm?'Safer, less return':'Less risk, but less return'}</text><text x="${R-8}" y="${Bm-9}" text-anchor="end" font-size="12" font-weight="600" fill="var(--faint)" font-family="IBM Plex Sans,sans-serif">${sm?'Worse on both':'Less return and more risk'}</text>`:''}</g>`;
+  const sm=W<=400,zl='High return, low risk',zr='High return, high risk',zfs=sm?11:15,zcw=sm?6.3:8.4,zly=(R-10-zr.length*zcw<L+10+zl.length*zcw+12)?T+20+zfs*1.4:T+20;
+  const zone=`<g class="xzone"><rect x="${L}" y="${T}" width="${Math.max(0,sx-L).toFixed(1)}" height="${Math.max(0,sy-T).toFixed(1)}" fill="var(--pos)" opacity=".08"/><line x1="${sx.toFixed(1)}" x2="${sx.toFixed(1)}" y1="${T}" y2="${Bm}" stroke="var(--ink)" stroke-opacity=".3" stroke-dasharray="4 4"/><line x1="${L}" x2="${R}" y1="${sy.toFixed(1)}" y2="${sy.toFixed(1)}" stroke="var(--ink)" stroke-opacity=".3" stroke-dasharray="4 4"/><text x="${L+10}" y="${T+20}" font-size="${zfs}" font-weight="700" fill="var(--pos)" font-family="IBM Plex Sans,sans-serif">${esc(zl)}</text><rect x="${sx.toFixed(1)}" y="${T}" width="${Math.max(0,R-sx).toFixed(1)}" height="${Math.max(0,sy-T).toFixed(1)}" fill="var(--xz)" opacity=".07"/><text x="${R-10}" y="${zly}" text-anchor="end" font-size="${zfs}" font-weight="700" fill="var(--xz)" font-family="IBM Plex Sans,sans-serif">${zr}</text>${Bm-sy>34?`<text x="${L+10}" y="${Bm-10}" font-size="${zfs}" font-weight="700" fill="var(--muted)" font-family="IBM Plex Sans,sans-serif">Low risk, low return</text><text x="${R-10}" y="${Bm-10}" text-anchor="end" font-size="${zfs}" font-weight="700" fill="var(--muted)" font-family="IBM Plex Sans,sans-serif">High risk, low return</text>`:''}</g>`;
   /* labels: try right, left, above, below, then nudged spots; keep the one that hits no other label or dot */
   const placed=[];const lab=(p,x,y)=>{const w=p.t.length*8.2+2;const box=(lx,ly,a)=>{const x0=a==='start'?lx:a==='end'?lx-w:lx-w/2;return [x0,ly-10,x0+w,ly+2]};
     const hit=(b,q)=>Math.max(0,Math.min(b[2],q[2])-Math.max(b[0],q[0]))*Math.max(0,Math.min(b[3],q[3])-Math.max(b[1],q[1]));
@@ -2372,7 +2381,7 @@ function xChart(d){const s=d.self,seen=new Set();const pts=[{...s,k:'self'}].con
   const ord=pts.slice().sort((a,b)=>a.k==='self'?-1:b.k==='self'?1:0),xy=ord.map(spot);const dots=ord.map((p,ix)=>{const [x,y]=xy[ix];const mark=p.k==='self'?`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="9.5" fill="var(--ink)"/>`:p.k==='same'?`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="7.5" fill="var(--xs)"/>`:p.k==='mom'?`<path d="M${x.toFixed(1)} ${(y-8.5).toFixed(1)}L${(x+8.5).toFixed(1)} ${(y+6).toFixed(1)}H${(x-8.5).toFixed(1)}Z" fill="var(--xm)"/>`:`<rect x="${(x-6.5).toFixed(1)}" y="${(y-6.5).toFixed(1)}" width="13" height="13" fill="var(--xd)"/>`;
     const ok=`<g class="xok" aria-hidden="true"><circle cx="${(x+8).toFixed(1)}" cy="${(y-8).toFixed(1)}" r="5.5" fill="var(--accent)" stroke="var(--panel)" stroke-width="1.5"/><path d="M${(x+5.6).toFixed(1)} ${(y-8).toFixed(1)}l1.7 1.7 3-3.3" fill="none" stroke="var(--panel)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></g>`;
     return `<g class="xpt" data-xt="${esc(p.t)}" data-xk="${p.k}" tabindex="0" role="button" aria-label="${esc(p.t)}: ${xp(p.r3)} a year, volatility ${xu(p.vol)}"><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="16" fill="transparent"/>${mark}${ok}${lab(p,x,y)}</g>`}).join('');
-  return `<figure class="xfig"><div class="xfigt">Return vs. risk over the last 3 years</div><svg viewBox="0 0 ${W} ${H+20}" role="img" aria-label="Return versus risk over the last 3 years">${g}${zone}<g font-family="IBM Plex Sans,sans-serif" font-size="14" font-weight="600" fill="var(--ink2)"><text x="${(L+R)/2}" y="${H+14}" text-anchor="middle">Risk</text><text transform="translate(12 ${(T+Bm)/2}) rotate(-90)" text-anchor="middle">Return</text></g><g class="xdots">${dots}</g></svg><div class="xtip" id="xChartTip" hidden></div></figure>`}
+  return `<figure class="xfig"><div class="xfigt">Return vs. risk over the last 3 years</div><svg viewBox="0 0 ${W} ${H+20}" role="img" aria-label="Return versus risk over the last 3 years">${g}${zone}<g font-family="IBM Plex Sans,sans-serif" font-size="16" font-weight="700" fill="var(--ink)"><text x="${L}" y="${H+15}">Risk</text><text transform="translate(16 ${Bm}) rotate(-90)">Return</text></g><g stroke="var(--ink2)" stroke-width="1.6" fill="none" stroke-linecap="round" opacity=".75"><line x1="${L+46}" y1="${H+10}" x2="${R-2}" y2="${H+10}"/><path d="M${R-11} ${H+4}L${R-2} ${H+10}L${R-11} ${H+16}"/><line x1="10" y1="${Bm-66}" x2="10" y2="${T+2}"/><path d="M4 ${T+11}L10 ${T+2}L16 ${T+11}"/></g><g class="xdots">${dots}</g></svg><div class="xtip" id="xChartTip" hidden></div></figure>`}
 function xFind(t){const d=XM.d;if(!d||!d.self)return null;if(d.self.t===t)return {...d.self,k:'self'};if(XM.tab==='in'){const c=(d.top||[]).find(x=>x.t&&x.t===t);return c?{...c,k:'hold'}:null}for(const [arr,k] of [[d.same,'same'],[d.closest||[],'same'],[d.div,'div'],[d.mom||[],'mom']]){const c=arr.find(x=>x.t===t);if(c)return {...c,k}}return null}
 function xChartTip(t,on){if(!on&&XM.sel){t=XM.sel;on=true}
   const leg=document.querySelector('#xmBody .xlegend'),dock=$('xCardDock'),svg=document.querySelector('#xmBody .xfig svg');const p=on?xFind(t):null;
@@ -2642,7 +2651,7 @@ function xinSecHTML(d){const sec=Object.entries(d.sec||{}).filter(([,v])=>v>0.00
   const col=(x,i)=>x[2]===2?'var(--faint)':x[2]?'var(--to)':XSCOL[i%XSCOL.length];
 
   const sw=sec.length&&ind.length?`<div class="seg" role="group" aria-label="Break down by"><button type="button" data-xsm="sec" aria-pressed="${mode==='sec'}">Sectors</button><button type="button" data-xsm="ind" aria-pressed="${mode==='ind'}">Industries</button></div>`:'';
-  const note=d.pf?(mode==='ind'?`Industries of the ${d.top.length} biggest holdings across your ETFs.`:''):mode==='ind'?(one?`${esc(d.t)} is ${xw(sec[0][1])} ${esc(XSEC[sec[0][0]]||sec[0][0])}, so this opens on industries, one level down. Industries are known for the top ${d.top.length} holdings.`:`Industries of the top ${d.top.length} holdings.`):'';
+  const note=d.pf?(mode==='ind'?'':''):mode==='ind'?(one?`${esc(d.t)} is ${xw(sec[0][1])} ${esc(XSEC[sec[0][0]]||sec[0][0])}, so this opens on industries, one level down. Industries are known for the top ${d.top.length} holdings.`:''):'';
   return `<section class="xsec xsecp" id="xinSec"><div class="xsech"><h3>${mode==='ind'?'Industries':'Sectors'}</h3>${sw}</div>${note?`<p class="xsnote">${note}</p>`:''}
     <div class="xsbar" role="img" aria-label="${esc(items.map(x=>x[0]+' '+xw(x[1])).join(', '))}">${items.map((x,i)=>`<span style="flex:${x[1]};background:${col(x,i)}" title="${esc(x[0])} ${xw(x[1])}"></span>`).join('')}</div>
     <div class="xslg">${items.map((x,i)=>`<div><i style="background:${col(x,i)}"></i><span>${esc(x[0])}</span><b>${xw(x[1])}</b></div>`).join('')}</div></section>`}
