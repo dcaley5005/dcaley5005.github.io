@@ -17,7 +17,7 @@ on:
         default: "SPY QQQ XLK IWM SCHD IEUR VWO ARKK"
       contact:
         description: "Contact the SEC can see in the download request (name and email)"
-        default: "Portfolio Lab (danielcaley.com)"
+        default: "Portfolio Lab daniel.caley1@gmail.com"
 
 permissions:
   contents: write
@@ -37,7 +37,7 @@ jobs:
       - name: Try the SEC holdings
         run: python scripts/nport.py --quarter "${{ inputs.quarter || 'latest' }}" --trial ${{ inputs.tickers || 'SPY QQQ XLK IWM SCHD IEUR VWO ARKK' }} --out /tmp/nport_trial/out 2>&1 | tee /tmp/nport_trial_log.txt
         env:
-          SEC_USER_AGENT: ${{ inputs.contact || 'Portfolio Lab (danielcaley.com)' }}
+          SEC_USER_AGENT: ${{ inputs.contact || 'Portfolio Lab daniel.caley1@gmail.com' }}
       - name: Save the output to the nport-trial branch
         if: always()
         run: |
