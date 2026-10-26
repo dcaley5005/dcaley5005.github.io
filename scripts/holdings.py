@@ -195,8 +195,8 @@ def download(syms, start):
 
 # ---------- holding prices, cached between runs ----------
 PRICE_CACHE = ROOT / ".cache" / "holding_prices.pkl"   # kept by actions/cache, not in git
-PRICE_SLICES = 4          # holdings outside the priority set refresh one slice per run
-NEW_PER_RUN = int(os.environ.get("NEW_HOLDING_PRICES", "1000"))   # first downloads per run, to stay under Yahoo's limit
+PRICE_SLICES = 6          # holdings outside the priority set refresh one slice per run
+NEW_PER_RUN = int(os.environ.get("NEW_HOLDING_PRICES", "600"))   # first downloads per run, to stay under Yahoo's limit
 
 
 def download_cached(syms, start, priority):
