@@ -273,7 +273,7 @@ SUFFIX = {"GB": ".L", "DE": ".DE", "FR": ".PA", "CH": ".SW", "NL": ".AS", "ES": 
           "DK": ".CO", "FI": ".HE", "NO": ".OL", "BE": ".BR", "IE": ".IR", "AT": ".VI", "PT": ".LS", "CA": ".TO",
           "AU": ".AX", "JP": ".T", "HK": ".HK", "TW": ".TW", "KR": ".KS", "IN": ".NS", "SG": ".SI", "BR": ".SA",
           "MX": ".MX", "ZA": ".JO", "IL": ".TA", "NZ": ".NZ", "ID": ".JK", "MY": ".KL", "TH": ".BK", "SA": ".SR",
-          "PL": ".WA", "TR": ".IS"}
+          "PL": ".WA", "TR": ".IS", "JE": ".L", "GG": ".L", "IM": ".L"}
 
 
 def norm_ticker(t):
@@ -302,9 +302,11 @@ BBG = {"US": "", "UN": "", "UW": "", "UQ": "", "UA": "", "UP": "", "UR": "", "LN
 
 
 def same_company(a, b):
-    """Rough check that two names are the same company: the same first word once suffixes are gone."""
-    a, b = name_key(a or "").split(), name_key(b or "").split()
-    return bool(a and b and a[0] == b[0])
+    """Rough check that two names are the same company once suffixes like Inc or PLC are gone: the same
+    words, or the same first two words. (Prudential PLC is not Prudential Financial.)"""
+    a = [w for w in name_key(a or "").split() if len(w) > 1]
+    b = [w for w in name_key(b or "").split() if len(w) > 1]
+    return bool(a and b) and (set(a) == set(b) or (len(a) >= 2 and len(b) >= 2 and a[:2] == b[:2]))
 
 
 def yahoo_symbol(raw, s, known=None):
