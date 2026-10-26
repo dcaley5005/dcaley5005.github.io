@@ -2700,7 +2700,8 @@ function xinSecHTML(d){const sec=Object.entries(d.sec||{}).filter(([,v])=>v>0.00
   const col=(x,i)=>x[2]===2?'var(--faint)':x[2]?'var(--to)':XSCOL[i%XSCOL.length];
 
   const sw=sec.length&&ind.length?`<div class="seg" role="group" aria-label="Break down by"><button type="button" data-xsm="sec" aria-pressed="${mode==='sec'}">Sectors</button><button type="button" data-xsm="ind" aria-pressed="${mode==='ind'}">Industries</button></div>`:'';
-  const note=d.pf?(mode==='ind'?'':''):mode==='ind'?(one?`${esc(d.t)} is ${xw(sec[0][1])} ${esc(XSEC[sec[0][0]]||sec[0][0])}, so this opens on industries, one level down. Industries are known for the top ${xinN(d)} holdings; the rest of each sector is shown as "Other".`:''):'';
+  const rest=sec.length?`The top ${xinN(d)} holdings${d.pf?' across your ETFs':''} are split by industry; the rest of the ${d.pf?'portfolio':'fund'} is grouped by sector, like "Other ${esc((XSEC[sec[0][0]]||sec[0][0]).toLowerCase())}".`:'';
+  const note=mode!=='ind'?'':(one&&!d.pf?`${esc(d.t)} is ${Math.round(sec[0][1]*100)}% ${esc((XSEC[sec[0][0]]||sec[0][0]).toLowerCase())}, so this starts with industries instead of sectors. `:'')+rest;
   return `<section class="xsec xsecp" id="xinSec"><div class="xsech"><h3>${mode==='ind'?'Industries':'Sectors'}</h3>${sw}</div>${note?`<p class="xsnote">${note}</p>`:''}
     <div class="xsbar" role="img" aria-label="${esc(items.map(x=>x[0]+' '+xw(x[1])).join(', '))}">${items.map((x,i)=>`<span style="flex:${x[1]};background:${col(x,i)}" title="${esc(x[0])} ${xw(x[1])}"></span>`).join('')}</div>
     <div class="xslg">${items.map((x,i)=>`<div><i style="background:${col(x,i)}"></i><span>${esc(x[0])}</span><b>${xw(x[1])}</b></div>`).join('')}</div></section>`}
