@@ -368,21 +368,25 @@ def yahoo_symbol(raw, s, known=None):
 
 def name_key(n):
     n = re.sub(r"[^A-Z0-9 ]", " ", n.upper())
-    n = re.sub(r"\b(THE|INC|INCORPORATED|CORP|CORPORATION|CO|COMPANY|LTD|LIMITED|PLC|HOLDINGS?|GROUP|SA|NV|AG|LLC|LP|CLASS [A-Z]|CL [A-Z]|COM|NEW|DEL)\b", " ", n)
+    n = re.sub(r"\bPUBLIC LIMITED COMPANY\b|\bPUBLIC LTD CO\b", " ", n)
+    n = re.sub(r"\b(THE|INC|INCORPORATED|CORP|CORPORATION|CO|COMPANY|LTD|LIMITED|PLC|HOLDINGS?|GROUP|SA|NV|AG|SE|LLC|LP|CLASS [A-Z]|CL [A-Z]|COM|NEW|DEL)\b", " ", n)
     return " ".join(n.split())
 
 
 def company_names():
-    """SEC company list: normalized name -> ticker, only where the name gives one ticker."""
+    """SEC company list (companies listed in the US): ({normalized name: ticker} where the name gives one
+    ticker, {ticker: name})."""
     try:
         j = json.loads(get(COMPANY_URL))
     except Exception as e:
         log(f"  company list unavailable: {e}")
-        return {}
-    by = defaultdict(set)
+        return {}, {}
+    by, titles = defaultdict(set), {}
     for r in j.values():
-        by[name_key(r["title"])].add(r["ticker"].upper().replace(".", "-"))
-    return {k: next(iter(v)) for k, v in by.items() if len(v) == 1 and k}
+        tk = r["ticker"].upper().replace(".", "-")
+        by[name_key(r["title"])].add(tk)
+        titles.setdefault(tk, r["title"])
+    return {k: next(iter(v)) for k, v in by.items() if len(v) == 1 and k}, titles
 
 
 # ---------- steps ----------
@@ -463,9 +467,11 @@ def cmd_combine(a):
                 w[canon[k]] += p
             r["top"] = [[k, round(p, 6)] for k, p in w.most_common()]
 
-    names = company_names()
+    names, us_titles = company_names()
     stock_info = json.loads(STOCKS_FILE.read_text()) if STOCKS_FILE.exists() else {}
-    stocks = {k: v.get("n", "") for k, v in stock_info.items()}
+    # symbols we know and their company names: the site's stocks, plus everything listed in the US, so a
+    # foreign-registered company that trades in the US (STERIS, Medtronic) keeps its US ticker
+    stocks = {**us_titles, **{k: v.get("n", "") for k, v in stock_info.items()}}
     yname = defaultdict(list)  # Yahoo name -> symbols the site already has
     for sym_, v in stock_info.items():
         if v.get("qt") == "EQUITY" and v.get("n"):
@@ -528,12 +534,12 @@ def cmd_combine(a):
             w_all += p
             if s["sym"]:
                 w_sym += p
-                w_known += p if s["sym"] in stocks else 0
+                w_known += p if s["sym"] in stock_info else 0
             if s["cat"] in ("EC", "EP"):
                 e_all += p
                 if s["sym"]:
                     e_sym += p
-                    e_known += p if s["sym"] in stocks else 0
+                    e_known += p if s["sym"] in stock_info else 0
                 else:
                     unresolved[f'{s["name"]} ({s["country"]})'] += p
         doc = {"t": t, "sid": sid, "name": last["name"],
