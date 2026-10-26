@@ -64,7 +64,8 @@ jobs:
           [ -f data/fund_info.json ] && git add data/fund_info.json
           [ -f data/holdings.json ] && git add data/holdings.json
           [ -f data/stocks.json ] && git add data/stocks.json
-          git diff --cached --quiet || (git commit -m "Update ETF list and fund details" && git push)
+          # main may have moved while this ran (a site push or the SEC update), so catch up before pushing
+          git diff --cached --quiet || (git commit -m "Update ETF list and fund details" && git pull --rebase origin main && git push)
 
       - uses: actions/configure-pages@v5
 
