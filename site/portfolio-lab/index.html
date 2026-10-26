@@ -2383,7 +2383,7 @@ function xChart(d){const s=d.self,seen=new Set();const pts=[{...s,k:'self'}].con
     const ok=`<g class="xok" aria-hidden="true"><circle cx="${(x+8).toFixed(1)}" cy="${(y-8).toFixed(1)}" r="5.5" fill="var(--accent)" stroke="var(--panel)" stroke-width="1.5"/><path d="M${(x+5.6).toFixed(1)} ${(y-8).toFixed(1)}l1.7 1.7 3-3.3" fill="none" stroke="var(--panel)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></g>`;
     return `<g class="xpt" data-xt="${esc(p.t)}" data-xk="${p.k}" tabindex="0" role="button" aria-label="${esc(p.t)}: ${xp(p.r3)} a year, volatility ${xu(p.vol)}"><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="16" fill="transparent"/>${mark}${ok}${lab(p,x,y)}</g>`}).join('');
   return `<figure class="xfig"><div class="xfigt">Return vs. risk over the last 3 years</div><svg viewBox="0 0 ${W} ${H+20}" role="img" aria-label="Return versus risk over the last 3 years">${g}${zone}<g font-family="IBM Plex Sans,sans-serif" font-size="16" font-weight="700" fill="var(--ink)"><text x="${L}" y="${H+15}">Risk</text><text transform="translate(16 ${Bm}) rotate(-90)">Return</text></g><g stroke="var(--ink2)" stroke-width="1.6" fill="none" stroke-linecap="round" opacity=".75"><line x1="${L+46}" y1="${H+10}" x2="${R-2}" y2="${H+10}"/><path d="M${R-11} ${H+4}L${R-2} ${H+10}L${R-11} ${H+16}"/><line x1="10" y1="${Bm-66}" x2="10" y2="${T+2}"/><path d="M4 ${T+11}L10 ${T+2}L16 ${T+11}"/></g><g class="xdots">${dots}</g></svg><div class="xtip" id="xChartTip" hidden></div></figure>`}
-function xFind(t){const d=XM.d;if(!d||!d.self)return null;if(d.self.t===t)return {...d.self,k:'self'};if(XM.tab==='in'){const c=(d.top||[]).find(x=>x.t&&x.t===t);return c?{...c,k:'hold'}:null}for(const [arr,k] of [[d.same,'same'],[d.closest||[],'same'],[d.div,'div'],[d.mom||[],'mom']]){const c=arr.find(x=>x.t===t);if(c)return {...c,k}}return null}
+function xFind(t){const d=XM.d;if(!d||!d.self)return null;if(d.self.t===t)return {...d.self,k:'self'};if(t==='~rest'&&XM.tab==='in')return d.rest?{t,k:'rest'}:null;if(XM.tab==='in'){const c=(d.top||[]).find(x=>x.t&&x.t===t);return c?{...c,k:'hold'}:null}for(const [arr,k] of [[d.same,'same'],[d.closest||[],'same'],[d.div,'div'],[d.mom||[],'mom']]){const c=arr.find(x=>x.t===t);if(c)return {...c,k}}return null}
 function xChartTip(t,on){if(!on&&XM.sel){t=XM.sel;on=true}
   const leg=document.querySelector('#xmBody .xlegend'),dock=$('xCardDock'),svg=document.querySelector('#xmBody .xfig svg');const p=on?xFind(t):null;
   if(svg)svg.querySelectorAll('.xpt').forEach(g=>g.classList.toggle('pinned',!!XM.sel&&g.dataset.xt===XM.sel));
@@ -2553,7 +2553,8 @@ function xinMix(p,ws){const ok=x=>{const d=XIN[x.t];return d&&d.self&&d.self.r&&
   const top=[...keep].sort((a,b)=>b.wt-a.wt||Math.max(...b.pw)-Math.max(...a.pw)),stw=top.reduce((a,c)=>a+c.wt,0);
   const rest={wt:Math.max(0,1-stw),r:[0,1,2,3,4,5].map(k=>{const R=r[k];if(R==null)return null;const f=f3(k);let add=0,w0=0;
     for(const c of top){const q=c.r?c.r[k]:null;if(q==null||!(c.pw[k]>0))continue;add+=c.pw[k]*f(q);w0+=c.pw[k]}
-    if(1-w0<0.02)return null;const x=(f(R)-add)/(1-w0);return k===5?(x>-1?Math.pow(1+x,1/3)-1:null):x})};
+    if(1-w0<0.02)return null;const x=(f(R)-add)/(1-w0);return k===5?(x>-1?Math.pow(1+x,1/3)-1:null):x}),
+    cash:W.reduce((a,x)=>a+x.w*((x.d.rest&&x.d.rest.cash)||0),0)};
   const mix=f=>{const o={};W.forEach(x=>Object.entries(f(x.d)||{}).forEach(([k,v])=>{if(typeof v==='number')o[k]=(o[k]||0)+x.w*v}));return o};
   const asof=W.map(x=>x.d.hasof).filter(Boolean).sort()[0]||null;
   return {t:p.name,n:'Your portfolio · '+W.map(x=>x.t+' '+xw(x.w)).join(', '),pf:{id:p.id,ws:W.map(x=>[x.t,x.w]),sec:W.filter(x=>x.d.src==='sec').map(x=>x.t),miss:miss.map(x=>x.t),missW:1-tw},self,top,rest,sec:mix(d=>d.sec),ac:mix(d=>d.ac),hasof:asof,
@@ -2634,16 +2635,26 @@ function xHoldCard(c,s){const k=xRk(),nm=c.n||c.hn||'';
     ${c.r&&s.r?`<div class="xrl">Returns vs ${esc(s.t)}</div><div class="xchips">${xRetChips(c,s,true)}</div>`:''}
     ${c.vol!=null?`<div class="xrl xrlr">Risk vs ${esc(s.t)} · ${xRngLbl()}</div><div class="xrisk x3">${xRiskTiles(c,s)}</div>`:''}
     ${why?`<p class="xwhy">${why}</p>`:''}</article>`}
+/* the card for the "Everything else" tile: what's left of the fund outside the named holdings, worked out from the fund's own return */
+function xRestCard(d){const s=d.self||{},R=d.rest||{},k=xRk(),n=xinN(d),named=d.top.filter(c=>c.wt>0||c.pw);
+  const left=i=>Math.max(0,1-named.reduce((a,c)=>a+xinShare(c,i),0)),rv=R.r?R.r[k]:null,fb=s.r?s.r[k]:null;
+  const ka=k===5?4:k,ra=R.r?R.r[ka]:null,add=ra==null?null:left(ka)*ra;
+  const why=[`Was about ${xw(left(k))} of ${esc(s.t)} ${XAGO[XM.rng]}.`,add==null?'':`Added <b class="${add>=0?'pos':'neg'}">${xpts(add)} pts</b> to ${esc(s.t)}'s return ${k===5?XRWORD['1Y']:XRWORD[XM.rng]}.`,
+    R.cash>0.003?`Includes about ${xw(R.cash)} in cash and cash-like funds.`:'',`Its return is ${esc(s.t)}'s own return minus what the top ${n} added, so treat it as an estimate.`].filter(Boolean).join(' ');
+  return `<article class="xcard" data-xc="~rest" style="--xc:var(--xs)"><div class="xch"><div><b>Everything else</b><span class="nm">${d.pf?'Holdings outside the top '+n+' across your ETFs':'The holdings outside the top '+n}</span></div><span class="xchip s">${xw(R.wt)} of ${esc(s.t)}</span></div>
+    ${rv==null?'':`<div class="xhero"><b class="${rv>=0?'pos':'neg'}">≈ ${xp(rv)}</b><span class="u">${k===5?'/ yr, 3Y':esc(XM.rng)}</span>${fb==null?'':`<span class="xchip ${rv-fb>=0?'up':'dn'}">${xpts(rv-fb)} pts vs ${esc(s.t)}</span>`}</div>`}
+    ${R.r&&s.r?`<div class="xrl">Returns vs ${esc(s.t)}</div><div class="xchips">${xRetChips({t:'~rest',r:R.r},s,true)}</div>`:''}
+    <p class="xwhy">${why}</p></article>`}
 /* swap the card on the right: the hovered or locked holding, else the fund's About card */
 function xinTip(t,on){const dock=$('xInDock'),d=XM.d;if(!dock||!d)return;const show=on?t:XM.sel;
   const tm=$('xTm');if(tm){tm.classList.toggle('fade',!!show);tm.querySelectorAll('.xtile[data-ht]').forEach(x=>x.classList.toggle('on',x.dataset.ht===show))}
   const c=show?xFind(show):null,key=c?show+(XM.sel===show?'*':''):'';if(dock.dataset.t===key)return;
-  dock.innerHTML=c?xHoldCard(c,d.self):xAboutCard(d);dock.dataset.t=key;if(c&&XM.sel===show)dock.firstElementChild.classList.add('hl')}
+  dock.innerHTML=c?(c.k==='rest'?xRestCard(d):xHoldCard(c,d.self)):xAboutCard(d);dock.dataset.t=key;if(c&&XM.sel===show)dock.firstElementChild.classList.add('hl')}
 /* make the map as tall as the tallest card, so cards never get cut and the two columns end together */
 function xinFit(){const dock=$('xInDock'),d=XM.d;if(!dock||!d)return;dock.style.minHeight='';if(ph0()||!$('xTm'))return;
   const html=dock.innerHTML,key=dock.dataset.t;let mx=0;
   const meas=h=>{dock.innerHTML=h;const el=dock.firstElementChild;el.style.flex='none';mx=Math.max(mx,el.offsetHeight)};
-  meas(xAboutCard(d));d.top.forEach(c=>{if(c.t)meas(xHoldCard({...c,k:'hold'},d.self))});
+  meas(xAboutCard(d));if(d.rest)meas(xRestCard(d));d.top.forEach(c=>{if(c.t)meas(xHoldCard({...c,k:'hold'},d.self))});
   dock.innerHTML=html;dock.dataset.t=key;dock.style.minHeight=mx+'px'}
 function xSquarify(items,x,y,w,h){const out=[];let R={x,y,w,h},row=[],rest=items.slice();
   const worst=(row,len)=>{const s=row.reduce((a,b)=>a+b.a,0);let mx=0,mn=Infinity;row.forEach(r=>{mx=Math.max(mx,r.a);mn=Math.min(mn,r.a)});return Math.max(len*len*mx/(s*s),s*s/(len*len*mn))};
@@ -2664,7 +2675,7 @@ function xinPaint(){const el=$('xTm'),d=XM.d;if(!el||!d)return;const W=el.client
     h+=c.t?`<button type="button" class="xtile b-${xBucket(r)}${L?' l':''}${XM.sel===c.t?' on':''}" data-ht="${esc(c.t)}" style="${box(x,y,w,hh)}" aria-label="${esc(lab)}">${inner}</button>`
       :`<div class="xtile rest b-o" style="${box(x,y,w,hh)}" title="${esc(lab)}">${inner}</div>`});
   if(rest){const r=rest.r?rest.r[k]:null,wide=rw>=130,big=rw>=200;
-    h+=`<div class="xtile rest b-${xBucket(r)}${big&&H>=110?' l':''}" style="${box(aw,0,rw,H)}" title="Everything outside the top ${top.length}: ${xw(rest.sw)} of ${esc(d.t)} ${XAGO[XM.rng]}. Its return is worked out from the fund's return minus what the top ${top.length} added.${k===5&&r==null?' The 3-year per-year return can\'t be split this way here.':''}"><span class="xtk">${wide?'Everything else':'Rest'}</span>${wide?`<span class="xtn">the other holdings</span>`:''}<span class="xtv">${xw(rest.sw)}</span><span class="xtv">${r==null?'—':'≈ '+xp(r)}</span></div>`}
+    h+=`<button type="button" class="xtile rest b-${xBucket(r)}${big&&H>=110?' l':''}${XM.sel==='~rest'?' on':''}" data-ht="~rest" style="${box(aw,0,rw,H)}" aria-label="${esc(`Everything outside the top ${top.length}: ${xw(rest.sw)} of ${d.t} ${XAGO[XM.rng]}, ${r==null?'return unknown':'about '+xp(r)} ${XRWORD[XM.rng]}`)}"><span class="xtk">${wide?'Everything else':'Rest'}</span>${wide?`<span class="xtn">the other holdings</span>`:''}<span class="xtv">${xw(rest.sw)}</span><span class="xtv">${r==null?'—':'≈ '+xp(r)}</span></button>`}
   el.innerHTML=h;el.classList.toggle('fade',!!XM.sel)}
 function xinSecHTML(d){const sec=Object.entries(d.sec||{}).filter(([,v])=>v>0.0005).sort((a,b)=>b[1]-a[1]);
   const im={};d.top.forEach(c=>{if(c.ind)im[c.ind]=(im[c.ind]||0)+c.wt});const ind=Object.entries(im).sort((a,b)=>b[1]-a[1]);

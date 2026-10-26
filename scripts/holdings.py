@@ -442,7 +442,7 @@ def build_inside(out_dir, etf_series, hold, stocks, stock_series, names, fund=No
             # 3Y returns are per year, so they're turned into the full 3-year return to split, then back
             cum = [lambda x: x] * 5 + [lambda x: (1 + x) ** 3 - 1]
             per = [lambda x: x] * 5 + [lambda x: (1 + x) ** (1 / 3) - 1 if x > -1 else None]
-            rest = {"wt": round(max(0.0, 1 - tw), 5), "r": []}
+            rest = {"wt": round(max(0.0, 1 - tw), 5), "r": [], "cash": nport[t]["hist"][-1][1]}
             for k in range(6):
                 known = [c for c in top if c.get("r") and c["r"][k] is not None and c["pw"][k] > 0]
                 left = 1 - sum(c["pw"][k] for c in known)
