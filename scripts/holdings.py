@@ -235,18 +235,27 @@ def download_cached(syms, start, priority):
 
 
 # ---------- SEC holdings history ----------
+# Funds that don't file N-PORT (unit investment trusts and the like) but track the same index as one that does
+NPORT_TWIN = {"SPY": "IVV", "MDY": "IJH", "DLCU": "IVV"}
+
+
 def load_nport(tickers):
-    """data/nport/<T>.json for the ETFs that have one and still file: {T: doc}."""
+    """data/nport/<T>.json for the ETFs that have one and still file: {T: doc}. A fund in NPORT_TWIN without
+    its own file borrows its twin's, marked with "via"."""
     out = {}
     if not NPORT_DIR.exists():
         return out
     cut = (datetime.now(timezone.utc) - pd.Timedelta(days=NPORT_MAX_AGE_DAYS)).strftime("%Y-%m-%d")
     for t in tickers:
         fp = NPORT_DIR / f"{t}.json"
+        via = None
+        if not fp.exists() and t in NPORT_TWIN:
+            via = NPORT_TWIN[t]
+            fp = NPORT_DIR / f"{via}.json"
         if fp.exists():
             d = json.loads(fp.read_text())
             if d.get("hist") and d["asof"] >= cut:
-                out[t] = d
+                out[t] = dict(d, via=via) if via else d
     return out
 
 
@@ -425,7 +434,7 @@ def build_inside(out_dir, etf_series, hold, stocks, stock_series, names, fund=No
                 c["wt"] = round(W[q][6], 5)
                 c["pw"] = [round(x, 5) for x in W[q][:6]]
                 top.append(c)
-            extra = {"src": "sec", "pb": pb}
+            extra = {"src": "sec", "pb": pb, **({"via": nport[t]["via"]} if nport[t].get("via") else {})}
             h = dict(h, asof=nport[t]["asof"])
             sec_n += 1
         else:
