@@ -1,0 +1,131 @@
+name: SEC holdings backfill
+
+# Builds real ETF holdings history from the SEC Form N-PORT data sets: one job per quarter, then one
+# history file per ETF. The full output goes to the "nport-data" release, a trimmed copy to data/nport/
+# (on main), which the nightly build reads, and a short review report to the nport-trial branch.
+on:
+  # monthly: the SEC posts each quarter's file a month or two after it ends; quarters already done are reused
+  schedule:
+    - cron: "23 14 9 * *"
+  # also runs on pushes to the working branch, since a manual-only workflow can't be started until it's on main
+  push:
+    branches: [claude/new-session-1u2wve]
+    paths: [scripts/nport.py, .github/workflows/nport-backfill.yml]
+  workflow_dispatch:
+    inputs:
+      since:
+        description: "First quarter to include"
+        default: "2019q4"
+      reparse:
+        description: "Parse every quarter again (otherwise reuse the quarter files already in the release)"
+        type: boolean
+        default: false
+      contact:
+        description: "Contact the SEC can see in the download requests (name and email)"
+        default: "Portfolio Lab daniel.caley1@gmail.com"
+
+permissions:
+  contents: write
+
+env:
+  SEC_USER_AGENT: ${{ inputs.contact || 'Portfolio Lab daniel.caley1@gmail.com' }}
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    outputs:
+      quarters: ${{ steps.q.outputs.quarters }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: scripts/requirements.txt
+      - run: pip install -r scripts/requirements.txt
+      - id: q
+        run: |
+          q=$(python scripts/nport.py quarters --since "${{ inputs.since || '2019q4' }}")
+          echo "$q"
+          echo "quarters=$q" >> "$GITHUB_OUTPUT"
+
+  quarter:
+    needs: plan
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        q: ${{ fromJSON(needs.plan.outputs.quarters) }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: scripts/requirements.txt
+      - run: pip install -r scripts/requirements.txt
+      - name: Reuse the quarter file from the release if it's there
+        id: reuse
+        if: ${{ !inputs.reparse }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p /tmp/nport/quarters
+          if gh release download nport-data -p "${{ matrix.q }}.json.gz" -D /tmp/nport/quarters 2>/dev/null; then echo "hit=true" >> "$GITHUB_OUTPUT"; fi
+      - if: steps.reuse.outputs.hit != 'true'
+        run: python scripts/nport.py quarter ${{ matrix.q }} --out /tmp/nport/quarters
+      - uses: actions/upload-artifact@v4
+        with:
+          name: q-${{ matrix.q }}
+          path: /tmp/nport/quarters/${{ matrix.q }}.json.gz
+          retention-days: 7
+
+  combine:
+    needs: quarter
+    if: always() && needs.quarter.result != 'cancelled'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: scripts/requirements.txt
+      - run: pip install -r scripts/requirements.txt
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: q-*
+          path: /tmp/nport/quarters
+          merge-multiple: true
+      - name: Build one history file per ETF
+        run: |
+          set -o pipefail
+          python scripts/nport.py combine --inp /tmp/nport/quarters --out /tmp/nport/out 2>&1 | tee /tmp/nport/out_log.txt
+      - name: Upload to the nport-data release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release view nport-data >/dev/null 2>&1 || gh release create nport-data --prerelease --title "SEC holdings data" \
+            --notes "ETF holdings history from SEC Form N-PORT, built by the SEC holdings backfill workflow. Not used by the site yet."
+          gh release upload nport-data /tmp/nport/out/nport-etfs.tar.gz /tmp/nport/out/report.json /tmp/nport/quarters/*.json.gz --clobber
+      - name: Update the holdings history the site uses (main only)
+        if: github.ref == 'refs/heads/main'
+        run: |
+          python scripts/nport.py site --inp /tmp/nport/out/etf
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A data/nport
+          git diff --cached --quiet || (git commit -qm "Update SEC holdings history" && git push)
+      - name: Save the review report to the nport-trial branch
+        if: always()
+        run: |
+          mkdir -p /tmp/review && cp /tmp/nport/out/report.json /tmp/nport/out_log.txt /tmp/review/ || true
+          for t in SPY QQQ XLK IWM SCHD IEUR VWO ARKK; do cp /tmp/nport/out/etf/$t.json /tmp/review/ 2>/dev/null || true; done
+          cd /tmp/review
+          git init -q -b nport-trial
+          git add -A
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -qm "SEC holdings backfill review"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" nport-trial

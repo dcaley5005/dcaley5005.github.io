@@ -30,6 +30,10 @@ warnings.filterwarnings("ignore")
 
 ROOT = Path(__file__).resolve().parent.parent
 HOLD_FILE = ROOT / "data" / "holdings.json"
+BLURB_FILE = ROOT / "data" / "blurbs.json"   # plain-English summaries for the biggest ETFs, written once and edited by hand
+NPORT_DIR = ROOT / "data" / "nport"     # real holdings history from the SEC (scripts/nport.py)
+NPORT_MAX_AGE_DAYS = 270                # an SEC report older than this means the fund stopped filing; use Yahoo
+NPORT_CARDS = 12                        # the biggest holdings get a full card with a line chart, the rest just numbers
 STOCK_FILE = ROOT / "data" / "stocks.json"
 HOLD_MAX_AGE_DAYS = 14
 STOCK_MAX_AGE_DAYS = 120
@@ -144,9 +148,10 @@ def update_holdings(tickers, path=HOLD_FILE, minutes=HOLD_MINUTES):
     return keep
 
 
-def update_stocks(syms, path=STOCK_FILE, minutes=STOCK_MINUTES):
+def update_stocks(syms, path=STOCK_FILE, minutes=STOCK_MINUTES, refresh=None):
+    """Names and sectors for `syms`; only the symbols in `refresh` (in that order) are looked up."""
     old = _load(path)
-    old = _refresh(old, syms, fetch_stock, STOCK_MAX_AGE_DAYS, minutes, "Holding details")
+    old = _refresh(old, list(syms if refresh is None else refresh), fetch_stock, STOCK_MAX_AGE_DAYS, minutes, "Holding details")
     keep = {s: old[s] for s in sorted(syms) if s in old}
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(keep, separators=(",", ":")))
@@ -181,12 +186,150 @@ def download(syms, start):
                 log(f"  chunk failed ({e})")
                 failed.extend(chunk)
                 time.sleep(10)
-            time.sleep(1)
+            time.sleep(2.5)   # gentler on Yahoo, which starts refusing after a few thousand quick requests
         todo = failed
         if not todo:
             break
         time.sleep(10)
     return got, todo
+
+
+# ---------- holding prices, cached between runs ----------
+PRICE_CACHE = ROOT / ".cache" / "holding_prices.pkl"   # kept by actions/cache, not in git
+PRICE_SLICES = 6          # holdings outside the priority set refresh one slice per run
+NEW_PER_RUN = int(os.environ.get("NEW_HOLDING_PRICES", "600"))   # first downloads per run, to stay under Yahoo's limit
+
+
+def download_cached(syms, start, priority):
+    """Daily closes for the holdings, using the cache from earlier runs. Every run downloads the priority
+    symbols (the biggest holdings, which get line charts) and one slice of the rest, so the others are at
+    most PRICE_SLICES days old; symbols never seen before are added up to NEW_PER_RUN a run."""
+    import pickle
+    import zlib
+    cache = {}
+    if PRICE_CACHE.exists():
+        try:
+            cache = pickle.loads(PRICE_CACHE.read_bytes())
+        except Exception as e:
+            log(f"  price cache unreadable ({e}); starting over")
+    day = datetime.now(timezone.utc).toordinal()
+    failed = cache.pop("__failed__", {})   # symbol -> day it last failed; skipped for 30 days
+    failed = {x: d for x, d in failed.items() if day - d < 30}
+    syms = sorted(set(syms))
+    rank = priority if isinstance(priority, dict) else {x: 0 for x in priority}
+    pri = set(rank) & set(syms)
+    new = [x for x in syms if x not in cache and x not in pri and x not in failed][:NEW_PER_RUN]
+    due = [x for x in syms if x in cache and x not in pri and (zlib.crc32(x.encode()) + day) % PRICE_SLICES == 0]
+    # most important first, so if Yahoo starts refusing it's the small holdings that wait (they keep their cached prices)
+    todo = sorted(pri, key=lambda x: -rank[x]) + sorted(due) + new
+    log(f"Holding prices: {len(syms)} symbols, {len(cache)} cached; downloading {len(todo)} "
+        f"({len(pri)} priority, {len(due)} due, {len(new)} new)")
+    got, missing = download(todo, start)
+    cut = pd.Timestamp(start)
+    for x, ser in got.items():
+        cache[x] = ser[ser.index >= cut]
+    failed.update({x: day for x in missing if x not in cache})
+    PRICE_CACHE.parent.mkdir(parents=True, exist_ok=True)
+    PRICE_CACHE.write_bytes(pickle.dumps({**cache, "__failed__": failed}))
+    return {x: cache[x] for x in syms if x in cache}, missing
+
+
+# ---------- SEC holdings history ----------
+def load_nport(tickers):
+    """data/nport/<T>.json for the ETFs that have one and still file: {T: doc}."""
+    out = {}
+    if not NPORT_DIR.exists():
+        return out
+    cut = (datetime.now(timezone.utc) - pd.Timedelta(days=NPORT_MAX_AGE_DAYS)).strftime("%Y-%m-%d")
+    for t in tickers:
+        fp = NPORT_DIR / f"{t}.json"
+        if fp.exists():
+            d = json.loads(fp.read_text())
+            if d.get("hist") and d["asof"] >= cut:
+                out[t] = d
+    return out
+
+
+def period_starts(end):
+    """Start dates of 1M 3M 6M YTD 1Y 3Y, the same cuts period_returns uses."""
+    return [end - pd.DateOffset(months=m) if m != "ytd" else pd.Timestamp(end.year - 1, 12, 31)
+            for m in (1, 3, 6, "ytd", 12, 36)]
+
+
+def nport_bases(doc, starts, end):
+    """For each period start, then today: the SEC report to start from, the latest one on or before
+    that date (or the first report, for a fund younger than the period)."""
+    dates = [pd.Timestamp(h[0]) for h in doc["hist"]]
+    out = []
+    for d in list(starts) + [end]:
+        i = max((j for j, x in enumerate(dates) if x <= d), default=0)
+        out.append(i)
+    return out
+
+
+def nport_priority(nport):
+    """The symbols that get a full card, the biggest holdings in each fund's latest report: {symbol: score},
+    the score being its share summed over the funds, so the most important download first."""
+    out = {}
+    for d in nport.values():
+        for j, w in d["hist"][-1][2][:NPORT_CARDS]:
+            sym = d["sec"][j][0]
+            if sym:
+                out[sym] = out.get(sym, 0) + w
+    return out
+
+
+def nport_symbols(nport, end):
+    """Every symbol in the SEC reports the site will use."""
+    starts = period_starts(end)
+    syms = set()
+    for d in nport.values():
+        for i in set(nport_bases(d, starts, end)):
+            syms.update(d["sec"][j][0] for j, _ in d["hist"][i][2] if d["sec"][j][0])
+    return syms
+
+
+_AT = {}
+
+
+def _at(s, d):
+    """Price on date d, or the last one before it (the lookups are cached per series, since this runs
+    a few hundred times per ETF)."""
+    if s is None or not len(s):
+        return None
+    k = id(s)
+    if k not in _AT:
+        _AT[k] = (s.index.values.astype("datetime64[ns]"), s.to_numpy(dtype=float), s)
+    ix, v, _ = _AT[k]
+    i = int(ix.searchsorted(pd.Timestamp(d).to_datetime64(), side="right")) - 1
+    return float(v[i]) if i >= 0 else None
+
+
+def nport_weights(doc, etf_s, stock_series, end):
+    """{key: [share at the start of 1M 3M 6M YTD 1Y 3Y, share today]} plus the report date each
+    period starts from. A report's shares are moved to the date needed with each holding's price
+    move against the fund's own: share x (1 + holding return) / (1 + fund return)."""
+    starts = period_starts(end)
+    bases = nport_bases(doc, starts, end)
+    W, info = {}, {}
+    for k, (b, d) in enumerate(zip(bases, list(starts) + [end])):
+        h = doc["hist"][b]
+        d0 = pd.Timestamp(h[0])
+        f0, f1 = _at(etf_s, d0), _at(etf_s, d)
+        for j, w in h[2]:
+            sym, name, ctry = doc["sec"][j]
+            key = sym or "~" + name
+            info.setdefault(key, (sym, name, ctry))
+            ss = stock_series.get(sym) if sym else None
+            p0, p1 = _at(ss, d0), _at(ss, d)
+            m = (p1 / p0) / (f1 / f0) if p0 and p1 and f0 and f1 else 1.0
+            W.setdefault(key, [0.0] * 7)[k] += w * m
+    for k in range(7):  # moved shares can't add up to more than the fund
+        tot = sum(v[k] for v in W.values())
+        if tot > 0.999:
+            for v in W.values():
+                v[k] *= 0.999 / tot
+    return W, info, [doc["hist"][b][0] for b in bases]
 
 
 # ---------- building the site files ----------
@@ -204,7 +347,7 @@ def period_returns(s, last):
     return out
 
 
-def build_inside(out_dir, etf_series, hold, stocks, stock_series, names, fund=None):
+def build_inside(out_dir, etf_series, hold, stocks, stock_series, names, fund=None, nport=None):
     """Write inside/<T>.json per ETF: description, sectors, asset split, top 10 with a card each
     (same shape as the Explore cards), and the return of everything outside the top 10."""
     import numpy as np
@@ -260,19 +403,53 @@ def build_inside(out_dir, etf_series, hold, stocks, stock_series, names, fund=No
 
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
-    written = 0
-    for t, h in hold.items():
+    nport = nport or {}
+    blurbs = _load(BLURB_FILE)
+    written = sec_n = 0
+    for t in sorted(set(hold) | set(nport)):
+        h = hold.get(t) or {}
         s = etf_series.get(t)
         er = period_returns(s, end) if s is not None and len(s) else [None] * 6
         top = []
-        for sym, nm, w in h.get("top", []):
-            c = dict(card(sym)) if sym else {"t": "", "n": nm}
-            c["hn"] = nm          # the name the fund uses
-            c["wt"] = w
-            top.append(c)
+        extra = {}
+        if t in nport:
+            # real holdings from the SEC: the top 50 of the report each period starts from
+            W, info, pb = nport_weights(nport[t], s, stock_series, end)
+            keys = sorted(W, key=lambda q: (-W[q][6], -max(W[q][:6])))
+            for n_, q in enumerate(keys):
+                sym, nm, ctry = info[q]
+                c = dict(card(sym)) if sym else {"t": "", "n": nm}
+                if n_ >= NPORT_CARDS or W[q][6] <= 0:
+                    c.pop("d", None)
+                    c.pop("w", None)
+                c["hn"] = nm
+                c["wt"] = round(W[q][6], 5)
+                c["pw"] = [round(x, 5) for x in W[q][:6]]
+                top.append(c)
+            extra = {"src": "sec", "pb": pb}
+            h = dict(h, asof=nport[t]["asof"])
+            sec_n += 1
+        else:
+            for sym, nm, w in h.get("top", []):
+                c = dict(card(sym)) if sym else {"t": "", "n": nm}
+                c["hn"] = nm          # the name the fund uses
+                c["wt"] = w
+                top.append(c)
         tw = sum(c["wt"] for c in top)
         rest = None
-        if top and tw < 0.999:
+        if extra and top:
+            # the rest of the fund at the start of each period, from that period's own shares
+            rest = {"wt": round(max(0.0, 1 - tw), 5), "r": []}
+            for k in range(5):
+                known = [c for c in top if c.get("r") and c["r"][k] is not None and c["pw"][k] > 0]
+                left = 1 - sum(c["pw"][k] for c in known)
+                if er[k] is None or left < 0.02:
+                    rest["r"].append(None)
+                    continue
+                added = sum(c["pw"][k] * c["r"][k] for c in known)
+                rest["r"].append(round((er[k] - added) / left, 4))
+            rest["r"].append(None)
+        elif top and tw < 0.999:
             rest = {"wt": round(1 - tw, 5), "r": []}
             for k in range(5):        # 1M 3M 6M YTD 1Y; 3Y per year doesn't add up this way
                 # Today's weights are after the period's moves, so roll each back to where it started:
@@ -291,12 +468,12 @@ def build_inside(out_dir, etf_series, hold, stocks, stock_series, names, fund=No
                 rest["r"].append(round((er[k] - added) / left, 4))
             rest["r"].append(None)
         me = card(t, s, {"t": t, "n": names.get(t, ""), "er": (fund or {}).get(t, {}).get("er")}) if s is not None else {"t": t}
-        doc = dict(meta, self=me, t=t, n=names.get(t, ""), desc=h.get("desc", ""), hasof=h.get("asof"),
+        doc = dict(meta, self=me, t=t, n=names.get(t, ""), desc=h.get("desc", ""), blurb=blurbs.get(t, ""), hasof=h.get("asof"),
                    sec=h.get("sec", {}), ac=h.get("ac", {}), er=er, top=top, rest=rest,
-                   f={k: (fund or {}).get(t, {}).get(k) for k in ("aum", "cat", "fam", "inc")})
+                   f={k: (fund or {}).get(t, {}).get(k) for k in ("aum", "cat", "fam", "inc")}, **extra)
         (out / f"{t}.json").write_text(json.dumps(doc, separators=(",", ":")))
         written += 1
-    log(f"What's inside: wrote {written} ETFs, {len(cards)} holding cards")
+    log(f"What's inside: wrote {written} ETFs ({sec_n} from SEC reports), {len(cards)} holding cards")
     return written
 
 

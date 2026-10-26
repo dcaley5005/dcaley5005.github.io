@@ -11,7 +11,8 @@ Output, under _site/portfolio-lab/data/:
   peers/<T>.json  "Explore alternatives" picks for each ETF, from the last 3 years of prices
   pool.json       every candidate's 3-year numbers and weekly returns, so the site can pick
                   alternatives to a custom portfolio in the browser
-  inside/<T>.json "What's inside": description, sectors and the top 10 holdings with a card each
+  inside/<T>.json "What's inside": description, sectors and the top holdings with a card each (the top 50
+                  from the fund's SEC reports where it files them, else Yahoo's top 10)
   er.json         expense ratio per ETF (percent)
   fund_info.json  per-ETF details from Yahoo: fund size, expense ratio, average volume, price,
                   category, fund family, inception date (refreshed weekly, a slice per run)
@@ -372,17 +373,25 @@ def build_explore(series, names, fund):
 
 def build_whats_inside(series, names, fund):
     """Top holdings per ETF and a card for each holding (see holdings.py). Holdings and holding details
-    are refreshed a slice per run and kept in data/; holding prices are downloaded fresh each run."""
+    are refreshed a slice per run and kept in data/; holding prices are cached between runs (holdings.py)."""
     import holdings as H
     hold = H.update_holdings(list(names))
-    syms = H.holding_symbols(hold)
-    stocks = H.update_stocks(syms)
     last = series["SPY"].index[-1]
-    start = (last - pd.DateOffset(years=3, months=2)).strftime("%Y-%m-%d")
-    log(f"Downloading prices for {len(syms)} holdings…")
-    prices, missing = H.download(syms, start)
+    nport = H.load_nport(list(names))
+    # Yahoo's top 10 only matters for funds without SEC reports
+    ysyms = H.holding_symbols({t: h for t, h in hold.items() if t not in nport})
+    syms = sorted(set(ysyms) | H.nport_symbols(nport, last))
+    log(f"SEC holdings for {len(nport)} ETFs; {len(syms)} holding symbols in all")
+    # prices first, so they get Yahoo's patience before the slower name and sector lookups
+    # 3 years and 5 months: the 3Y view starts from the SEC report on or before 3 years ago
+    start = (last - pd.DateOffset(years=3, months=5)).strftime("%Y-%m-%d")
+    pri = {**{x: 0.0 for x in ysyms}, **H.nport_priority(nport)}
+    prices, missing = H.download_cached(syms, start, pri)
     log(f"Holding prices: {len(prices)} of {len(syms)}")
-    H.build_inside(OUT / "inside", series, hold, stocks, prices, names, fund)
+    # names and sectors only for symbols Yahoo has prices for, biggest holdings first
+    order = sorted((x for x in syms if x in prices), key=lambda x: x not in pri)
+    stocks = H.update_stocks(syms, refresh=order)
+    H.build_inside(OUT / "inside", series, hold, stocks, prices, names, fund, nport)
 
 
 def load_universe():

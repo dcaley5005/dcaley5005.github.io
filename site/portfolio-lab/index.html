@@ -2481,27 +2481,36 @@ const xRk=()=>XR.find(x=>x[1]===XM.rng)[2];
 function xBucket(r){if(r==null)return'o';const k=XTHR[XM.rng];return r<-k?'n3':r<-k/2?'n2':r<0?'n1':r<k/4?'p1':r<k/2?'p2':r<k?'p3':'p4'}
 function xMoney(v){return v>=1e12?'$'+(v/1e12).toFixed(2)+'T':v>=1e9?'$'+(v/1e9).toFixed(1)+'B':v>=1e6?'$'+Math.round(v/1e6)+'M':'$'+Math.round(v).toLocaleString()}
 /* what a holding added to the fund over the range: its weight rolled back to the start of the range, times its return */
-function xinAdded(c,k){if(k===5)k=4;const d=XM.d,R=d.self&&d.self.r?d.self.r[k]:d.er?d.er[k]:null,r=c.r?c.r[k]:null;if(R==null||r==null)return null;return c.wt*(1+R)/(1+r)*r}
+function xinAdded(c,k){if(k===5)k=4;const d=XM.d,R=d.self&&d.self.r?d.self.r[k]:d.er?d.er[k]:null,r=c.r?c.r[k]:null;if(R==null||r==null)return null;return (c.pw&&xinSec(d)?c.pw[k]:c.wt*(1+R)/(1+r))*r}
 function xinEq(d){return d.top.some(c=>c.r)&&(!!d.pf||!(d.ac&&d.ac.stock!=null&&d.ac.stock<.5))}
 
 /* a holding's share of the fund at the start of the period picked: today's share rolled back by its return vs the fund's */
+/* the first day of a period, the same cut the nightly build uses */
+function xinStart(rng){const d=XM.d,e=new Date((d&&d.to||'')+'T00:00:00Z');if(isNaN(e))return 0;const m={'1M':1,'3M':3,'6M':6,'1Y':12,'3Y':36}[rng];
+  if(rng==='YTD')return Date.UTC(e.getUTCFullYear()-1,11,31);const y=e.getUTCFullYear(),mo=e.getUTCMonth()-m,last=new Date(Date.UTC(y,mo+1,0)).getUTCDate();
+  return Date.UTC(y,mo,Math.min(e.getUTCDate(),last))}
 const XAGO={'1M':'a month ago','3M':'3 months ago','6M':'6 months ago','YTD':'on Jan 1','1Y':'a year ago','3Y':'3 years ago'};
-function xinShare(c,k){const d=XM.d,R0=d&&d.self&&d.self.r?d.self.r[k]:null,r0=c.r?c.r[k]:null;if(R0==null||r0==null)return c.wt;const f=k===5?x=>Math.pow(1+x,3)-1:x=>x;return c.wt*(1+f(R0))/(1+f(r0))}
-function xinNote(){return `Tile size is each holding's share of the ${XM.d&&XM.d.pf?'portfolio':'fund'} ${XAGO[XM.rng]}, worked out from today's holdings. Color is its return ${XRWORD[XM.rng]}; click a period above to change it.`}
+/* SEC-based files (src:'sec') carry each holding's real share at the start of every period (pw) */
+const xinSec=d=>!!(d&&d.src==='sec'&&!d.pf);
+const xinN=d=>d.top.filter(c=>c.wt>0).length;
+function xinShare(c,k){if(c.pw&&xinSec(XM.d))return c.pw[k]||0;const d=XM.d,R0=d&&d.self&&d.self.r?d.self.r[k]:null,r0=c.r?c.r[k]:null;if(R0==null||r0==null)return c.wt;const f=k===5?x=>Math.pow(1+x,3)-1:x=>x;return c.wt*(1+f(R0))/(1+f(r0))}
+function xinNote(){const d=XM.d;if(xinSec(d)&&d.pb){const b=d.pb[xRk()],late=b&&Date.parse(b)>xinStart(XM.rng);
+    return `Tile size is each holding's share of ${esc(d.t)} ${XAGO[XM.rng]}: ${late?`its first report to the SEC, for ${dayFmt(b)}, moved back with prices`:`its holdings as reported to the SEC for ${dayFmt(b)}, moved to then with prices`}. Color is its return ${XRWORD[XM.rng]}; click a period above to change it.`}
+  return `Tile size is each holding's share of the ${XM.d&&XM.d.pf?'portfolio':'fund'} ${XAGO[XM.rng]}, worked out from today's holdings. Color is its return ${XRWORD[XM.rng]}; click a period above to change it.`}
 function renderXI(){const b=$('xmBody');renderXMFoot();xSizeModal();
   if(XM.err||!XM.d)xSetGlance('');
   if(XM.err){b.innerHTML=`<div class="xnote"><b>Nothing to show</b><span>${esc(XM.err)}</span></div>`;return}
   const d=XM.d;if(!d){b.innerHTML='<div class="xskel" style="height:70px"></div><div class="xskel" style="height:440px"></div>';return}
   const s=d.self||{t:d.t},t=d.t;
-  $('xmSub').innerHTML=`<span class="sfull">${esc((d.n||NAMES[t]||'')+(d.hasof?' · holdings as of '+dayFmt(d.hasof):''))}</span><span class="sshort">Top holdings and what they returned</span>`;
+  $('xmSub').innerHTML=`<span class="sfull">${esc((d.n||NAMES[t]||'')+(d.hasof?' · holdings as of '+dayFmt(d.hasof)+(xinSec(d)?' (SEC report)':''):''))}</span><span class="sshort">Top holdings and what they returned</span>`;
   const rs=s.r?xRisk(s):null;
   const gl=s.r?XR.map(([l,k,i])=>`<button type="button" class="xg ${xcls(s.r[i])}${XM.rng===k?' sel':''}" data-xrng="${k}" aria-pressed="${XM.rng===k}" title="Show ${XRWORD[k]}"><span>${l}</span><b>${xp(s.r[i])}</b></button>`).join('')+`<div class="xg" id="xgSh"><span>Sharpe</span><b>${rs.sh==null?'—':rs.sh.toFixed(2)}</b></div><div class="xg n" id="xgDd"><span>Max DD</span><b>${xu(rs.dd)}</b></div><div class="xg"><span>Fee</span><b>${fmtER(s.er)}</b></div>`:'';
   const tw=d.top.reduce((a,c)=>a+c.wt,0);
-  const fig=xinEq(d)?`<figure class="xtmfig"><div class="xtmh"><b>${d.pf?`The ${d.top.length} biggest holdings across your ETFs are ${xw(tw)} of the portfolio`:`Top ${d.top.length} holdings are ${xw(tw)} of ${esc(t)}`}</b><span id="xtmNote">${xinNote()}</span></div><div class="xtm" id="xTm"></div></figure>`:xinAssetsHTML(d);
+  const fig=xinEq(d)?`<figure class="xtmfig"><div class="xtmh"><b>${d.pf?`The ${d.top.length} biggest holdings across your ETFs are ${xw(tw)} of the portfolio`:`Top ${xinN(d)} holdings are ${xw(tw)} of ${esc(t)}`}</b><span id="xtmNote">${xinNote()}</span></div><div class="xtm" id="xTm"></div></figure>`:xinAssetsHTML(d);
   const glb=xSetGlance(gl);xSizeModal();
   b.innerHTML=`${glb?`<div class="xgwrap" style="display:flex;flex-direction:column;gap:8px"><div class="xcap">${esc(t)} at a glance <span class="xcap2">· click a period to recolor the map and cards</span></div><div class="xglance">${glb}</div></div>`:''}
     <div class="xtop xin">${fig}<div class="xcdock xidock" id="xInDock">${xAboutCard(d)}</div></div>${xinSecHTML(d)}
-    <p class="xdisc">${d.pf?"Each ETF's top 10 holdings, weighted by your percentages. A stock in one ETF's top 10 but further down in another only counts the top-10 part, so overlaps are a floor. Sectors cover every holding. ":''}Holdings from Yahoo Finance. "Everything else" is worked out from the fund's own return, so treat it as an estimate. Past performance doesn't guarantee future results.</p>`;
+    <p class="xdisc">${d.pf?"Each ETF's top holdings (up to 50), weighted by your percentages. A stock in one ETF's list but further down in another only counts the listed part, so overlaps are a floor. Sectors cover every holding. ":''}${xinSec(d)?`Holdings from ${esc(t)}'s reports to the SEC (Form N-PORT), which come out about two months after each quarter; shares since the latest report are moved with prices.`:'Holdings from Yahoo Finance.'} "Everything else" is worked out from the fund's own return, so treat it as an estimate. Past performance doesn't guarantee future results.</p>`;
   $('xInDock').dataset.t='';xinFit();xinPaint();if(XM.sel&&xFind(XM.sel))xinTip(XM.sel,true);
   if(document.fonts&&document.fonts.status!=='loaded')document.fonts.ready.then(()=>{if(XM.tab==='in'&&!$('xm').hidden){xinFit();xinPaint()}})}
 
@@ -2529,7 +2538,7 @@ function xinMix(p,ws){const ok=x=>{const d=XIN[x.t];return d&&d.self&&d.self.r&&
     const mu=mean(ret),v=Math.sqrt(ret.reduce((a,y)=>a+(y-mu)**2,0)/(ret.length-1));vol=v*Math.sqrt(ppy);sh=v>0?mean(ex)*ppy/vol:0;dd=m;r3=Math.pow(sw[sw.length-1]/sw[0],1/yrs)-1;r[5]=r3}
   const self={t:p.name,ts:'mix',n:'Your portfolio',er:pfER(p),r,vol,sh,dd,r3,d:sd,w:sw};
   /* the same stock in two funds becomes one tile */
-  const M=new Map();W.forEach(x=>(x.d.top||[]).forEach(c=>{const k=c.t||c.hn||c.n;if(!k||!(c.wt>0))return;let m=M.get(k);if(!m){m={...c,wt:0,src:[]};M.set(k,m)}m.wt+=x.w*c.wt;m.src.push([x.t,x.w*c.wt])}));
+  const M=new Map();W.forEach(x=>(x.d.top||[]).forEach(c=>{const k=c.t||c.hn||c.n;if(!k||!(c.wt>0))return;let m=M.get(k);if(!m){m={...c,wt:0,src:[]};delete m.pw;M.set(k,m)}m.wt+=x.w*c.wt;m.src.push([x.t,x.w*c.wt])}));
   let all=[...M.values()];if(all.some(c=>c.r))all=all.filter(c=>c.r);const top=all.sort((a,b)=>b.wt-a.wt).slice(0,20),stw=top.reduce((a,c)=>a+c.wt,0);
   const rest={wt:Math.max(0,1-stw),r:[0,1,2,3,4].map(k=>{const R=r[k];if(R==null)return null;let add=0,w0=0;for(const c of top){const q=c.r?c.r[k]:null;if(q==null)return null;const s0=c.wt*(1+R)/(1+q);add+=s0*q;w0+=s0}return 1-w0>0.003?(R-add)/(1-w0):null}).concat([null])};
   const mix=f=>{const o={};W.forEach(x=>Object.entries(f(x.d)||{}).forEach(([k,v])=>{if(typeof v==='number')o[k]=(o[k]||0)+x.w*v}));return o};
@@ -2587,13 +2596,17 @@ function xPfCard(d){const P=d.pf,p=pf(P.id),top=d.top,tw=top.reduce((a,c)=>a+c.w
     ${P.ws.length>1?`<div class="xrl">Overlap</div><p class="xconc">${ov.length?`${esc(ov.length>4?ov.slice(0,4).map(c=>c.t||c.hn).join(', ')+` and ${ov.length-4} more`:xList(ov.map(c=>c.t||c.hn)))} ${ov.length===1?'shows':'show'} up in more than one of your ETFs. Together ${ov.length===1?"that's":"they're"} <b>${xw(ovw)}</b> of the portfolio.`:"None of your ETFs' top holdings overlap."}</p>`:''}
     ${tw>.02?`<div class="xrl">How concentrated</div><p class="xconc">The ${top.length} biggest holdings are <b>${xw(tw)}</b> of the portfolio${top.length>=3?`, and the top 3 alone are <b>${xw(t3)}</b>`:''}.</p>`:''}
     <p class="xwhy">Hover a tile to see that holding's card. Click it to keep the card here.</p></article>`}
-function xAboutCard(d){if(d.pf)return xPfCard(d);const s=d.self||{},f=d.f||{},top=d.top,tw=top.reduce((a,c)=>a+c.wt,0),t3=top.slice(0,3).reduce((a,c)=>a+c.wt,0);
+/* for funds without a written summary: one plain line from what we know (category, issuer, biggest holdings) */
+function xAutoBlurb(d){const f=d.f||{},cat=f.cat,fam=f.fam,names=d.top.filter(c=>c.wt>0).slice(0,3).map(c=>(c.n||c.hn||c.t||'').replace(/\s+(Inc|Corp|Corporation|Ltd|PLC|plc|Co|Company|Holdings?|Group|SA|AG|NV)\.?$/i,'').replace(/,$/,'')).filter(Boolean);
+  const a=cat?`${/^[AEIOU]/i.test(cat)?'An':'A'} ${cat.toLowerCase().replace(/^us /,'US ')} fund${fam?' from '+fam:''}.`:fam?`A fund from ${fam}.`:'';
+  return (a+(names.length>=2?` Its biggest holdings are ${xList(names)}.`:'')).trim()||d.desc||''}
+function xAboutCard(d){if(d.pf)return xPfCard(d);const s=d.self||{},f=d.f||{},top=d.top.filter(c=>c.wt>0),tw=top.reduce((a,c)=>a+c.wt,0),t3=top.slice(0,3).reduce((a,c)=>a+c.wt,0);
   const fact=(k,v)=>v==null||v===''?'':`<div><span>${k}</span><b title="${esc(String(v))}">${esc(String(v))}</b></div>`;
   const eq=xinEq(d);
   return `<article class="xcard xabout" style="--xc:var(--ink)"><div class="xch"><div><b>${esc(d.t)}</b><span class="nm">${esc(d.n||NAMES[d.t]||'')}</span></div><span class="xchip xbasechip">About this ETF</span></div>
-    ${d.desc?`<p class="xadesc" title="${esc(d.desc)}">${esc(d.desc)}</p>`:''}
-    <div class="xafacts">${fact('Fund size',f.aum?xMoney(f.aum):null)}${fact('Fee',s.er!=null?fmtER(s.er):null)}${fact('Category',f.cat)}${fact('Issuer',f.fam)}${fact('Since',f.inc?dayFmt(f.inc):null)}${fact('Holdings as of',d.hasof?dayFmt(d.hasof):null)}</div>
-    ${eq&&tw>.02?`<div class="xrl">How concentrated</div><p class="xconc">The top ${top.length} holdings are <b>${xw(tw)}</b> of the fund${top.length>=3?`, and the top 3 alone are <b>${xw(t3)}</b>`:''}.</p>`:''}
+    ${(()=>{const b=d.blurb||xAutoBlurb(d);return b?`<p class="xadesc"${d.desc?` title="${esc("From the fund's prospectus: "+d.desc)}"`:''}>${esc(b)}</p>`:''})()}
+    <div class="xafacts">${fact('Fund size',f.aum?xMoney(f.aum):null)}${fact('Fee',s.er!=null?fmtER(s.er):null)}${fact('Category',f.cat)}${fact('Issuer',f.fam)}${fact('Since',f.inc?dayFmt(f.inc):null)}${fact('Holdings as of',d.hasof?dayFmt(d.hasof)+(xinSec(d)?' (SEC)':''):null)}</div>
+    ${eq&&tw>.02?`<div class="xrl">How concentrated</div><p class="xconc">The top ${xinN(d)} holdings are <b>${xw(tw)}</b> of the fund${top.length>=3?`, and the top 3 alone are <b>${xw(t3)}</b>`:''}.</p>`:''}
     ${eq?`<p class="xwhy">Hover a tile to see that holding's card. Click it to keep the card here.</p>`:''}</article>`}
 function xHoldCard(c,s){const k=xRk(),nm=c.n||c.hn||'';
   const line=c.w&&c.d&&!c.w.includes(null)&&!c.d.includes(null)&&s.w;
@@ -2602,7 +2615,7 @@ function xHoldCard(c,s){const k=xRk(),nm=c.n||c.hn||'';
   const via=XM.d&&XM.d.pf&&c.src?`Held through ${xList(c.src.map(([t,w])=>`${esc(t)} (${xw(w)})`))}.`:'';
   const then=xinShare(c,k),was=Math.abs(then-c.wt)>=0.0005?`Was about ${xw(then)} of ${esc(s.t)} ${XAGO[XM.rng]}.`:'';
   const why=[c.ind?esc(c.ind)+'.':'',via,was,add==null?'':`Added <b class="${add>=0?'pos':'neg'}">${xpts(add)} pts</b> to ${esc(s.t)}'s return ${wd}.`].filter(Boolean).join(' ');
-  return `<article class="xcard" data-xc="${esc(c.t)}" style="--xc:var(--xs)"><div class="xch"><div><b>${esc(c.t)}</b><span class="nm">${esc(nm)}</span></div><span class="xchip s">${xw(c.wt)} of ${esc(s.t)}</span></div>
+  return `<article class="xcard" data-xc="${esc(c.t)}" style="--xc:var(--xs)"><div class="xch"><div><b>${esc(c.t)}</b><span class="nm">${esc(nm)}</span></div><span class="xchip s">${c.wt>0?`${xw(c.wt)} of ${esc(s.t)}`:`Not in the top ${xinN(XM.d)} now`}</span></div>
     ${hv==null?'':`<div class="xhero"><b class="${hv>=0?'pos':'neg'}">${xp(hv)}</b><span class="u">${r3?'/ yr, 3Y':'1Y'}</span>${dr==null?'':`<span class="xchip ${dr>=0?'up':'dn'}">${xpts(dr)} pts vs ${esc(s.t)}</span>`}</div>`}
     ${line?xSpark(c,s,'var(--xs)',c.t):'<div class="xnoline">Not enough price history for a line chart</div>'}
     ${c.r&&s.r?`<div class="xrl">Returns vs ${esc(s.t)}</div><div class="xchips">${xRetChips(c,s,true)}</div>`:''}
@@ -2626,7 +2639,7 @@ function xSquarify(items,x,y,w,h){const out=[];let R={x,y,w,h},row=[],rest=items
   while(rest.length){const len=Math.min(R.w,R.h),it=rest[0];if(!row.length||worst(row.concat([it]),len)<=worst(row,len)){row.push(it);rest.shift()}else{lay(row);row=[]}}
   if(row.length)lay(row);return out}
 function xinPaint(){const el=$('xTm'),d=XM.d;if(!el||!d)return;const W=el.clientWidth,H=el.clientHeight;if(!W||!H)return;
-  const k=xRk(),top=d.top.filter(c=>c.wt>0).map(c=>({...c,sw:xinShare(c,k)})).sort((a,b)=>b.sw-a.sw),tw=top.reduce((a,c)=>a+c.sw,0),rest0=d.rest&&d.rest.wt>0.003?d.rest:null,rest=rest0?{...rest0,sw:Math.max(0.003,1-tw)}:null;
+  const k=xRk(),top=d.top.filter(c=>c.wt>0||c.pw).map(c=>({...c,sw:xinShare(c,k)})).filter(c=>c.sw>0).sort((a,b)=>b.sw-a.sw),tw=top.reduce((a,c)=>a+c.sw,0),rest0=d.rest&&d.rest.wt>0.003?d.rest:null,rest=rest0?{...rest0,sw:Math.max(0.003,1-tw)}:null;
   const rw=rest?Math.max(64,Math.round(W*rest.sw)):0,aw=W-rw,g=1.5;
   const tiles=xSquarify(top.map(c=>({c,a:c.sw/tw*aw*H})),0,0,aw,H);
   const box=(x,y,w,h)=>`left:${(x+g).toFixed(1)}px;top:${(y+g).toFixed(1)}px;width:${Math.max(0,w-2*g).toFixed(1)}px;height:${Math.max(0,h-2*g).toFixed(1)}px`;
@@ -2652,7 +2665,7 @@ function xinSecHTML(d){const sec=Object.entries(d.sec||{}).filter(([,v])=>v>0.00
   const col=(x,i)=>x[2]===2?'var(--faint)':x[2]?'var(--to)':XSCOL[i%XSCOL.length];
 
   const sw=sec.length&&ind.length?`<div class="seg" role="group" aria-label="Break down by"><button type="button" data-xsm="sec" aria-pressed="${mode==='sec'}">Sectors</button><button type="button" data-xsm="ind" aria-pressed="${mode==='ind'}">Industries</button></div>`:'';
-  const note=d.pf?(mode==='ind'?'':''):mode==='ind'?(one?`${esc(d.t)} is ${xw(sec[0][1])} ${esc(XSEC[sec[0][0]]||sec[0][0])}, so this opens on industries, one level down. Industries are known for the top ${d.top.length} holdings.`:''):'';
+  const note=d.pf?(mode==='ind'?'':''):mode==='ind'?(one?`${esc(d.t)} is ${xw(sec[0][1])} ${esc(XSEC[sec[0][0]]||sec[0][0])}, so this opens on industries, one level down. Industries are known for the top ${xinN(d)} holdings.`:''):'';
   return `<section class="xsec xsecp" id="xinSec"><div class="xsech"><h3>${mode==='ind'?'Industries':'Sectors'}</h3>${sw}</div>${note?`<p class="xsnote">${note}</p>`:''}
     <div class="xsbar" role="img" aria-label="${esc(items.map(x=>x[0]+' '+xw(x[1])).join(', '))}">${items.map((x,i)=>`<span style="flex:${x[1]};background:${col(x,i)}" title="${esc(x[0])} ${xw(x[1])}"></span>`).join('')}</div>
     <div class="xslg">${items.map((x,i)=>`<div><i style="background:${col(x,i)}"></i><span>${esc(x[0])}</span><b>${xw(x[1])}</b></div>`).join('')}</div></section>`}
