@@ -6,7 +6,7 @@ name: Site preview
 on:
   push:
     branches: [claude/new-session-1u2wve]
-    paths: [site/**, scripts/build_data.py, scripts/holdings.py, data/nport/**, .github/workflows/site-preview.yml]
+    paths: [site/**, scripts/build_data.py, scripts/holdings.py, data/nport/**, data/blurbs.json, .github/workflows/site-preview.yml]
   workflow_dispatch:
 
 permissions:
