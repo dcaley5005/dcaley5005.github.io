@@ -385,7 +385,7 @@ def build_whats_inside(series, names, fund):
     # prices first, so they get Yahoo's patience before the slower name and sector lookups
     # 3 years and 5 months: the 3Y view starts from the SEC report on or before 3 years ago
     start = (last - pd.DateOffset(years=3, months=5)).strftime("%Y-%m-%d")
-    pri = set(ysyms) | H.nport_priority(nport)
+    pri = {**{x: 0.0 for x in ysyms}, **H.nport_priority(nport)}
     prices, missing = H.download_cached(syms, start, pri)
     log(f"Holding prices: {len(prices)} of {len(syms)}")
     # names and sectors only for symbols Yahoo has prices for, biggest holdings first

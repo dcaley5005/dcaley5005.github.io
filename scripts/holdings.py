@@ -185,7 +185,7 @@ def download(syms, start):
                 log(f"  chunk failed ({e})")
                 failed.extend(chunk)
                 time.sleep(10)
-            time.sleep(1)
+            time.sleep(2.5)   # gentler on Yahoo, which starts refusing after a few thousand quick requests
         todo = failed
         if not todo:
             break
@@ -215,10 +215,12 @@ def download_cached(syms, start, priority):
     failed = cache.pop("__failed__", {})   # symbol -> day it last failed; skipped for 30 days
     failed = {x: d for x, d in failed.items() if day - d < 30}
     syms = sorted(set(syms))
-    pri = set(priority) & set(syms)
+    rank = priority if isinstance(priority, dict) else {x: 0 for x in priority}
+    pri = set(rank) & set(syms)
     new = [x for x in syms if x not in cache and x not in pri and x not in failed][:NEW_PER_RUN]
     due = [x for x in syms if x in cache and x not in pri and (zlib.crc32(x.encode()) + day) % PRICE_SLICES == 0]
-    todo = sorted(pri | set(new) | set(due))
+    # most important first, so if Yahoo starts refusing it's the small holdings that wait (they keep their cached prices)
+    todo = sorted(pri, key=lambda x: -rank[x]) + sorted(due) + new
     log(f"Holding prices: {len(syms)} symbols, {len(cache)} cached; downloading {len(todo)} "
         f"({len(pri)} priority, {len(due)} due, {len(new)} new)")
     got, missing = download(todo, start)
@@ -265,12 +267,14 @@ def nport_bases(doc, starts, end):
 
 
 def nport_priority(nport):
-    """The symbols that get a full card: the biggest holdings in each fund's latest report."""
-    out = set()
+    """The symbols that get a full card, the biggest holdings in each fund's latest report: {symbol: score},
+    the score being its share summed over the funds, so the most important download first."""
+    out = {}
     for d in nport.values():
-        for j, _ in d["hist"][-1][2][:NPORT_CARDS]:
-            if d["sec"][j][0]:
-                out.add(d["sec"][j][0])
+        for j, w in d["hist"][-1][2][:NPORT_CARDS]:
+            sym = d["sec"][j][0]
+            if sym:
+                out[sym] = out.get(sym, 0) + w
     return out
 
 
