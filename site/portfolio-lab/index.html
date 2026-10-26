@@ -2596,11 +2596,15 @@ function xPfCard(d){const P=d.pf,p=pf(P.id),top=d.top,tw=top.reduce((a,c)=>a+c.w
     ${P.ws.length>1?`<div class="xrl">Overlap</div><p class="xconc">${ov.length?`${esc(ov.length>4?ov.slice(0,4).map(c=>c.t||c.hn).join(', ')+` and ${ov.length-4} more`:xList(ov.map(c=>c.t||c.hn)))} ${ov.length===1?'shows':'show'} up in more than one of your ETFs. Together ${ov.length===1?"that's":"they're"} <b>${xw(ovw)}</b> of the portfolio.`:"None of your ETFs' top holdings overlap."}</p>`:''}
     ${tw>.02?`<div class="xrl">How concentrated</div><p class="xconc">The ${top.length} biggest holdings are <b>${xw(tw)}</b> of the portfolio${top.length>=3?`, and the top 3 alone are <b>${xw(t3)}</b>`:''}.</p>`:''}
     <p class="xwhy">Hover a tile to see that holding's card. Click it to keep the card here.</p></article>`}
+/* for funds without a written summary: one plain line from what we know (category, issuer, biggest holdings) */
+function xAutoBlurb(d){const f=d.f||{},cat=f.cat,fam=f.fam,names=d.top.filter(c=>c.wt>0).slice(0,3).map(c=>(c.n||c.hn||c.t||'').replace(/\s+(Inc|Corp|Corporation|Ltd|PLC|plc|Co|Company|Holdings?|Group|SA|AG|NV)\.?$/i,'').replace(/,$/,'')).filter(Boolean);
+  const a=cat?`${/^[AEIOU]/i.test(cat)?'An':'A'} ${cat.toLowerCase().replace(/^us /,'US ')} fund${fam?' from '+fam:''}.`:fam?`A fund from ${fam}.`:'';
+  return (a+(names.length>=2?` Its biggest holdings are ${xList(names)}.`:'')).trim()||d.desc||''}
 function xAboutCard(d){if(d.pf)return xPfCard(d);const s=d.self||{},f=d.f||{},top=d.top.filter(c=>c.wt>0),tw=top.reduce((a,c)=>a+c.wt,0),t3=top.slice(0,3).reduce((a,c)=>a+c.wt,0);
   const fact=(k,v)=>v==null||v===''?'':`<div><span>${k}</span><b title="${esc(String(v))}">${esc(String(v))}</b></div>`;
   const eq=xinEq(d);
   return `<article class="xcard xabout" style="--xc:var(--ink)"><div class="xch"><div><b>${esc(d.t)}</b><span class="nm">${esc(d.n||NAMES[d.t]||'')}</span></div><span class="xchip xbasechip">About this ETF</span></div>
-    ${d.desc?`<p class="xadesc" title="${esc(d.desc)}">${esc(d.desc)}</p>`:''}
+    ${(()=>{const b=d.blurb||xAutoBlurb(d);return b?`<p class="xadesc"${d.desc?` title="${esc("From the fund's prospectus: "+d.desc)}"`:''}>${esc(b)}</p>`:''})()}
     <div class="xafacts">${fact('Fund size',f.aum?xMoney(f.aum):null)}${fact('Fee',s.er!=null?fmtER(s.er):null)}${fact('Category',f.cat)}${fact('Issuer',f.fam)}${fact('Since',f.inc?dayFmt(f.inc):null)}${fact('Holdings as of',d.hasof?dayFmt(d.hasof)+(xinSec(d)?' (SEC)':''):null)}</div>
     ${eq&&tw>.02?`<div class="xrl">How concentrated</div><p class="xconc">The top ${xinN(d)} holdings are <b>${xw(tw)}</b> of the fund${top.length>=3?`, and the top 3 alone are <b>${xw(t3)}</b>`:''}.</p>`:''}
     ${eq?`<p class="xwhy">Hover a tile to see that holding's card. Click it to keep the card here.</p>`:''}</article>`}

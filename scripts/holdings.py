@@ -30,6 +30,7 @@ warnings.filterwarnings("ignore")
 
 ROOT = Path(__file__).resolve().parent.parent
 HOLD_FILE = ROOT / "data" / "holdings.json"
+BLURB_FILE = ROOT / "data" / "blurbs.json"   # plain-English summaries for the biggest ETFs, written once and edited by hand
 NPORT_DIR = ROOT / "data" / "nport"     # real holdings history from the SEC (scripts/nport.py)
 NPORT_MAX_AGE_DAYS = 270                # an SEC report older than this means the fund stopped filing; use Yahoo
 NPORT_CARDS = 12                        # the biggest holdings get a full card with a line chart, the rest just numbers
@@ -403,6 +404,7 @@ def build_inside(out_dir, etf_series, hold, stocks, stock_series, names, fund=No
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
     nport = nport or {}
+    blurbs = _load(BLURB_FILE)
     written = sec_n = 0
     for t in sorted(set(hold) | set(nport)):
         h = hold.get(t) or {}
@@ -466,7 +468,7 @@ def build_inside(out_dir, etf_series, hold, stocks, stock_series, names, fund=No
                 rest["r"].append(round((er[k] - added) / left, 4))
             rest["r"].append(None)
         me = card(t, s, {"t": t, "n": names.get(t, ""), "er": (fund or {}).get(t, {}).get("er")}) if s is not None else {"t": t}
-        doc = dict(meta, self=me, t=t, n=names.get(t, ""), desc=h.get("desc", ""), hasof=h.get("asof"),
+        doc = dict(meta, self=me, t=t, n=names.get(t, ""), desc=h.get("desc", ""), blurb=blurbs.get(t, ""), hasof=h.get("asof"),
                    sec=h.get("sec", {}), ac=h.get("ac", {}), er=er, top=top, rest=rest,
                    f={k: (fund or {}).get(t, {}).get(k) for k in ("aum", "cat", "fam", "inc")}, **extra)
         (out / f"{t}.json").write_text(json.dumps(doc, separators=(",", ":")))
