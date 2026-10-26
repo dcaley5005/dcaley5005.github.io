@@ -291,12 +291,29 @@ def norm_ticker(t):
     return t if re.match(r"^[A-Z0-9\-]{1,12}$", t) else ""
 
 
-def yahoo_symbol(raw, s, known=()):
+# Bloomberg-style exchange codes some funds add to the ticker ("DG FP"): code -> Yahoo ending ("" = US)
+BBG = {"US": "", "UN": "", "UW": "", "UQ": "", "UA": "", "UP": "", "UR": "", "LN": ".L", "FP": ".PA", "GY": ".DE",
+       "GR": ".DE", "SW": ".SW", "SE": ".SW", "VX": ".SW", "NA": ".AS", "SM": ".MC", "IM": ".MI", "SS": ".ST",
+       "DC": ".CO", "FH": ".HE", "NO": ".OL", "BB": ".BR", "ID": ".IR", "AV": ".VI", "PL": ".LS", "CN": ".TO",
+       "CT": ".TO", "AU": ".AX", "AT": ".AX", "JP": ".T", "JT": ".T", "HK": ".HK", "TT": ".TW", "KS": ".KS",
+       "KP": ".KS", "KQ": ".KQ", "IN": ".NS", "IS": ".NS", "IB": ".BO", "SP": ".SI", "BZ": ".SA", "MM": ".MX",
+       "SJ": ".JO", "IT": ".TA", "NZ": ".NZ", "IJ": ".JK", "MK": ".KL", "TB": ".BK", "AB": ".SR", "PW": ".WA",
+       "TI": ".IS"}
+
+
+def same_company(a, b):
+    """Rough check that two names are the same company: the same first word once suffixes are gone."""
+    a, b = name_key(a or "").split(), name_key(b or "").split()
+    return bool(a and b and a[0] == b[0])
+
+
+def yahoo_symbol(raw, s, known=None):
     """Best guess at the Yahoo symbol for a holding ("" when there's nothing to go on).
-    known: symbols the site already has (data/stocks.json); a candidate found there wins."""
-    raw = (raw or "").upper().strip()
+    known: {symbol: name} for the stocks the site already has (data/stocks.json)."""
+    known = known or {}
+    raw = (raw or "").upper().replace(" EQUITY", "").strip()
     c, isin = s.get("country", ""), s.get("isin", "").upper()
-    foreign = bool(isin) and not isin.startswith("US")
+    foreign = (bool(isin) and not isin.startswith("US")) or (not isin and c not in ("US", ""))
 
     def first(cands, default):
         return next((x for x in cands if x in known), default)
@@ -308,11 +325,19 @@ def yahoo_symbol(raw, s, known=()):
         return first([isin[5:9] + ".TW", isin[5:9] + ".TWO"], isin[5:9] + ".TW")
     if re.match(r"^KR7\d{6}", isin):
         return first([isin[3:9] + ".KS", isin[3:9] + ".KQ"], isin[3:9] + ".KS")
-    t = norm_ticker(raw)
+    tok = raw.split()
+    code = tok[-1] if len(tok) >= 2 and tok[-1] in BBG else None
+    t = norm_ticker(" ".join(tok[:-1]) if code else raw)
     if not t:
         return ""
     if foreign and re.match(r"^[A-Z]{4}[FY]$", t):
         return ""  # a US over-the-counter line for a foreign stock (TCTZF, BABAF), not its home listing
+    if code is not None:
+        # the fund said which exchange
+        suf = BBG[code]
+        if suf == ".HK" and t.isdigit():
+            return t.zfill(4) + suf
+        return t + suf
     if t.isdigit():
         if len(t) == 6 and (c == "CN" or isin.startswith("CNE")):
             cands = [t + (".SS" if t.startswith("6") else ".SZ")]
@@ -325,13 +350,18 @@ def yahoo_symbol(raw, s, known=()):
         else:
             return ""
         return first(cands, cands[0])
-    if foreign and (c in ("HK", "CN", "JP", "TW", "KR") or isin.startswith(("HK", "JP", "CNE", "TW", "KR"))):
+    if not foreign:
+        return t
+    if c in ("HK", "CN", "JP", "TW", "KR") or isin.startswith(("HK", "JP", "CNE", "TW", "KR")):
         return ""  # those markets use number codes, so a letter ticker is a US line
-    cands = [t]
-    if c in SUFFIX:
-        # a foreign ISIN usually means the local listing (ASML.AS), a US one the US listing
-        cands.insert(0, t + SUFFIX[c]) if foreign else cands.append(t + SUFFIX[c])
-    return first(cands, cands[0] if foreign and c not in ("US", "") else t)
+    # a foreign stock: its home listing, unless the plain ticker is a US listing of the same company
+    # (Chubb is CB, but DG is Dollar General, not Vinci)
+    local = t + SUFFIX[c] if c in SUFFIX else ""
+    if local and local in known:
+        return local
+    if t in known and same_company(known[t], s.get("name", "")):
+        return t
+    return local or t
 
 
 def name_key(n):
@@ -433,7 +463,7 @@ def cmd_combine(a):
 
     names = company_names()
     stock_info = json.loads(STOCKS_FILE.read_text()) if STOCKS_FILE.exists() else {}
-    stocks = set(stock_info)
+    stocks = {k: v.get("n", "") for k, v in stock_info.items()}
     yname = defaultdict(list)  # Yahoo name -> symbols the site already has
     for sym_, v in stock_info.items():
         if v.get("qt") == "EQUITY" and v.get("n"):
