@@ -33,7 +33,7 @@ HOLD_FILE = ROOT / "data" / "holdings.json"
 BLURB_FILE = ROOT / "data" / "blurbs.json"   # plain-English summaries for the biggest ETFs, written once and edited by hand
 NPORT_DIR = ROOT / "data" / "nport"     # real holdings history from the SEC (scripts/nport.py)
 NPORT_MAX_AGE_DAYS = 270                # an SEC report older than this means the fund stopped filing; use Yahoo
-NPORT_CARDS = 12                        # the biggest holdings get a full card with a line chart, the rest just numbers
+NPORT_CARDS = 12                        # each fund's biggest holdings get fresh prices every night; the rest every few days
 STOCK_FILE = ROOT / "data" / "stocks.json"
 HOLD_MAX_AGE_DAYS = 14
 STOCK_MAX_AGE_DAYS = 120
@@ -268,7 +268,7 @@ def nport_bases(doc, starts, end):
 
 
 def nport_priority(nport):
-    """The symbols that get a full card, the biggest holdings in each fund's latest report: {symbol: score},
+    """The symbols priced every night, the biggest holdings in each fund's latest report: {symbol: score},
     the score being its share summed over the funds, so the most important download first."""
     out = {}
     for d in nport.values():
@@ -419,9 +419,8 @@ def build_inside(out_dir, etf_series, hold, stocks, stock_series, names, fund=No
             for n_, q in enumerate(keys):
                 sym, nm, ctry = info[q]
                 c = dict(card(sym)) if sym else {"t": "", "n": nm}
-                if n_ >= NPORT_CARDS or W[q][6] <= 0:
-                    c.pop("d", None)
-                    c.pop("w", None)
+                c.pop("d", None)   # line charts live in stock/<symbol>.json, loaded when a card opens
+                c.pop("w", None)
                 c["hn"] = nm
                 c["wt"] = round(W[q][6], 5)
                 c["pw"] = [round(x, 5) for x in W[q][:6]]
@@ -432,6 +431,8 @@ def build_inside(out_dir, etf_series, hold, stocks, stock_series, names, fund=No
         else:
             for sym, nm, w in h.get("top", []):
                 c = dict(card(sym)) if sym else {"t": "", "n": nm}
+                c.pop("d", None)
+                c.pop("w", None)
                 c["hn"] = nm          # the name the fund uses
                 c["wt"] = w
                 top.append(c)
@@ -476,7 +477,15 @@ def build_inside(out_dir, etf_series, hold, stocks, stock_series, names, fund=No
                    f={k: (fund or {}).get(t, {}).get(k) for k in ("aum", "cat", "fam", "inc")}, **extra)
         (out / f"{t}.json").write_text(json.dumps(doc, separators=(",", ":")))
         written += 1
-    log(f"What's inside: wrote {written} ETFs ({sec_n} from SEC reports), {len(cards)} holding cards")
+    # one small file per holding with its line chart, shared by every fund that holds it
+    sdir = out.parent / "stock"
+    sdir.mkdir(parents=True, exist_ok=True)
+    lines = 0
+    for sym, c in cards.items():
+        if c.get("d") and c.get("w"):
+            (sdir / f"{sym}.json").write_text(json.dumps({"d": c["d"], "w": c["w"]}, separators=(",", ":")))
+            lines += 1
+    log(f"What's inside: wrote {written} ETFs ({sec_n} from SEC reports), {len(cards)} holding cards, {lines} line charts")
     return written
 
 
