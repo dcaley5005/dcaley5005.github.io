@@ -1008,6 +1008,35 @@ tr.xecho>td{background:var(--accentBg);transition:background .2s}
 @media (prefers-reduced-motion: reduce){.xdrawer{transition:none}}
 .xmhr .cnt{font-size:13px;color:var(--accent);font-weight:600;max-width:260px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .xdisc{margin:4px 0 0;font-size:12px;color:var(--faint)}
+.xflipcard{padding:0;overflow:hidden}
+.xflip{flex:1 1 auto;min-height:0;display:flex;perspective:1400px}
+.xflipin{flex:1 1 auto;min-height:0;display:grid;transform-style:preserve-3d;transition:transform .55s cubic-bezier(.25,.7,.25,1)}
+.xflip.on .xflipin{transform:rotateY(180deg)}
+.xface{grid-area:1/1;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column;gap:11px;padding:16px;min-height:0;overflow:hidden}
+.xface.bk{transform:rotateY(180deg)}
+.xface.fr .xchips{flex:2 1 0;grid-auto-rows:1fr}
+.xface.fr .xrisk{flex:1 1 0;grid-auto-rows:1fr}
+.xface.fr .xpc,.xface.fr .xrk{justify-content:center}
+.xflipbtn{display:flex;align-items:center;gap:12px;width:100%;padding:10px 14px;border-radius:12px;border:1px solid color-mix(in srgb,var(--xo) 55%,transparent);background:linear-gradient(180deg,color-mix(in srgb,var(--xo) 26%,var(--panel2)),color-mix(in srgb,var(--xo) 14%,var(--panel2)));color:var(--ink);font:600 16px "IBM Plex Sans",sans-serif;cursor:pointer;margin-top:10px;text-align:left}
+.xflipbtn .xic{flex:none;width:38px;height:38px;border-radius:10px;background:color-mix(in srgb,var(--xo) 30%,var(--panel));display:flex;align-items:center;justify-content:center;color:var(--xo)}
+.xflipcard .xface .xadd{margin-top:10px}
+.xbk-body{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;gap:11px}
+.xbk-desc{font-size:14.5px;line-height:1.55;color:var(--ink);margin:0}
+.xbk-facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.xbk-facts div{background:var(--panel);border-radius:8px;padding:6px 9px;display:flex;flex-direction:column;min-width:0}
+.xbk-facts span{font-size:11px;letter-spacing:.04em;color:var(--muted);text-transform:uppercase}
+.xbk-facts b{font-size:14px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.xseg{display:flex;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:3px;gap:3px}
+.xseg button{flex:1;border:0;background:transparent;color:var(--ink2);font:600 13.5px "IBM Plex Sans",sans-serif;padding:7px 4px;border-radius:8px;cursor:pointer}
+.xseg button.sel{background:var(--panel2);color:var(--ink);box-shadow:0 1px 4px rgba(0,0,0,.25)}
+.xftm{position:relative;flex:1 1 auto;min-height:170px;margin-bottom:10px}
+.xftile{position:absolute;border-radius:8px;padding:7px 9px;overflow:hidden;color:#14181d;display:flex;flex-direction:column;gap:1px}
+.xftile b{font-size:13.5px;line-height:1.15}
+.xftile span{font-size:12px;opacity:.85;line-height:1.15}
+.xftile i{font-style:normal;font-size:12.5px;font-weight:600}
+.xftip{position:absolute;z-index:5;background:var(--panel);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:6px 9px;font-size:12.5px;box-shadow:0 6px 18px rgba(0,0,0,.35);pointer-events:none;white-space:nowrap}
+.xbk-load{color:var(--muted);font-size:14px;margin:0}
+@media (prefers-reduced-motion:reduce){.xflipin{transition:none}}
 @media (max-width:700px){.xmhr .cnt{display:none}}
 .xrl{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);font-weight:600;margin-bottom:-5px}
 .xrisk{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
@@ -2348,13 +2377,55 @@ function xHero(c,s,kind){const k=xRk();
   const v=c.r&&c.r[k]!=null?c.r[k]:c.r3,bv=s.r&&s.r[k]!=null?s.r[k]:s.r3,lab=k===5?'/ yr, 3Y':esc(XM.rng);
   if(kind==='self')return `<div class="xhero"><b class="${v>=0?'pos':'neg'}">${xp(v)}</b><span class="u">${lab}</span><span class="xchip xbasechip">The base</span></div>`;
   return `<div class="xhero"><b class="${v>=0?'pos':'neg'}">${xp(v)}</b><span class="u">${lab}</span><span class="xchip ${v-bv>=0?'up':'dn'}">${xpts(v-bv)} pts vs ${esc(s.t)}</span></div>`}
-function xCard(c,s,kind){const col=XCOL[kind];const dr=c.r3-s.r3;const pct=Math.round(c.c*100);
+function xCorrWord(v){return v>=.85?'Nearly identical':v>=.70?'Very similar':v>=.60?'Some diversification':'Strong diversification'}
+function xCard(c,s,kind,flip){const col=XCOL[kind];const dr=c.r3-s.r3;const pct=Math.round(c.c*100);
   const chips=xRetChips(c,s,true);
-  return `<article class="xcard" data-xc="${esc(c.t)}" style="--xc:${col}"><div class="xch"><div><b>${esc(c.t)}</b><span class="nm">${esc(c.n||NAMES[c.t]||'')}</span></div><span class="xchip ${kind==='same'?'s':kind==='mom'?'m':kind==='own'?'o':'d'}">${pct}% correlated with ${esc(s.t)}</span></div>
-    ${xHero(c,s,kind)}
+  const head=`<div class="xch"><div><b>${esc(c.t)}</b><span class="nm">${esc(c.n||NAMES[c.t]||'')}</span></div><span class="xchip ${kind==='same'?'s':kind==='mom'?'m':kind==='own'?'o':'d'}">${pct}% correlated · ${xCorrWord(c.c)}</span></div>`;
+  const main=`${xHero(c,s,kind)}
     ${xSpark(c,s,col,c.t)}<div class="xrl">Returns vs ${esc(s.t)}</div><div class="xchips">${chips}</div>
-    <div class="xrl xrlr">Risk vs ${esc(s.t)} · ${xRngLbl()}</div><div class="xrisk">${xRiskTiles(c,s)}</div>
-    <p class="xwhy">${xWhy(c,s,kind)}</p><button type="button" class="xadd" data-xadd="${esc(c.t)}"></button></article>`}
+    <div class="xrl xrlr">Risk vs ${esc(s.t)} · ${xRngLbl()}</div><div class="xrisk">${xRiskTiles(c,s)}</div>`;
+  const add=`<button type="button" class="xadd" data-xadd="${esc(c.t)}"></button>`;
+  if(!flip)return `<article class="xcard" data-xc="${esc(c.t)}" style="--xc:${col}">${head}
+    ${main}
+    <p class="xwhy">${xWhy(c,s,kind)}</p>${add}</article>`;
+  return `<article class="xcard xflipcard" data-xc="${esc(c.t)}" style="--xc:${col}"><div class="xflip"><div class="xflipin"><div class="xface fr">${head}
+    ${main}
+    ${xFlipBtn(0,c.t)}${add}</div><div class="xface bk">${xBackHTML(c)}</div></div></div></article>`}
+const XICONDESC='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h7l4 4v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v4h4"/><path d="M9.5 12h5M9.5 15.5h5"/></svg>';
+const XICONCHART='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4v15a1 1 0 0 0 1 1h15"/><path d="M7.5 15.5l3.5-4 2.5 2.5L18 8.5"/></svg>';
+function xFlipBtn(back,t){return `<button type="button" class="xflipbtn" data-xflip="1" aria-label="${back?'Back to returns and risk':'Show description and holdings'} for ${esc(t)}"><span class="xic">${back?XICONCHART:XICONDESC}</span><span>${back?'Returns &amp; risk':'Description &amp; holdings'}</span></button>`}
+function xBackHTML(c){return `<div class="xbk-body" data-er="${c.er!=null?c.er:''}"><p class="xbk-load">Loading the description and holdings…</p></div>${xFlipBtn(1,c.t)}<button type="button" class="xadd" data-xadd="${esc(c.t)}"></button>`}
+function xBackFill(card){const body=card.querySelector('.xbk-body');if(!body||body.dataset.done)return;body.dataset.done='1';const t=card.dataset.xc;
+  xinLoad(t).then(d=>{const top=(d.top||[]).filter(c=>c.wt>0).sort((a,b)=>b.wt-a.wt),f=d.f||{};
+    const fact=(k,v)=>v==null||v===''?'':`<div><span>${k}</span><b title="${esc(String(v))}">${esc(String(v))}</b></div>`;
+    const ser=d.self&&d.self.er!=null?d.self.er:(body.dataset.er!==''?+body.dataset.er:null);
+    const b=d.blurb||xAutoBlurb(d);
+    body.innerHTML=`<div class="xch"><div><b>${esc(d.t)}</b><span class="nm">${esc(d.n||NAMES[d.t]||'')}</span></div></div>
+    ${b?`<p class="xbk-desc">${esc(b)}</p>`:''}
+    <div class="xbk-facts">${fact('Holdings',top.length?top.length+' stocks':null)}${fact('Fee',ser!=null?fmtER(ser):null)}${fact('Assets',f.aum?xMoney(f.aum):null)}${fact('Category',f.cat)}</div>
+    <div class="xseg" role="group" aria-label="Map view"><button type="button" data-xseg="ind" class="sel">Industries</button><button type="button" data-xseg="sec">Sectors</button><button type="button" data-xseg="stk">Top 10 stocks</button></div>
+    <div class="xftm"></div>`;
+    body._d=d;xTmPaint(body,'ind')}).catch(()=>{delete body.dataset.done;body.innerHTML=`<p class="xbk-load">Holdings aren't available for ${esc(t)} yet. They're added a slice at a time each night, so check back soon.</p>`})}
+function xTmItems(d,mode){const top=(d.top||[]).filter(c=>c.wt>0);
+  if(mode==='stk')return top.slice().sort((a,b)=>b.wt-a.wt).slice(0,10).map(c=>({t:c.t,n:c.n||c.hn||'',w:c.wt}));
+  if(mode==='sec')return Object.entries(d.sec||{}).map(([k,v])=>({t:XSEC[k]||k,n:'',w:v})).filter(x=>x.w>0.002).sort((a,b)=>b.w-a.w);
+  const agg={};let other=0;top.forEach(c=>{if(c.ind)agg[c.ind]=(agg[c.ind]||0)+c.wt;else other+=c.wt});
+  const out=Object.entries(agg).map(([k,v])=>({t:k,n:'',w:v})).sort((a,b)=>b.w-a.w);if(other>0.005)out.push({t:'Other holdings',n:'',w:other});return out}
+function xTmPaint(body,mode){const box=body.querySelector('.xftm');if(!box||!body._d)return;const W=box.clientWidth,H=box.clientHeight;if(!W||!H)return;
+  const items=xTmItems(body._d,mode),tw=items.reduce((a,x)=>a+x.w,0)||1;
+  const tiles=xSquarify(items.map(x=>({c:x,a:x.w/tw*W*H})),0,0,W,H);
+  box.innerHTML=tiles.map(({c,x,y,w,h},i)=>{const pc=c.w*100,p1=pc.toFixed(1)+'%',lab=`${c.t}${c.n?' · '+c.n:''} · ${p1}`;
+    const inner=w>=120&&h>=62?`<b>${esc(c.t)}</b><i>${p1}</i>${c.n?`<span>${esc(c.n)}</span>`:''}`:w>=58&&h>=36?`<b>${esc(c.t)}</b><i>${p1}</i>`:`<i>${pc<10?p1:Math.round(pc)+'%'}</i>`;
+    return `<div class="xftile" data-tip="${esc(lab)}" style="left:${x.toFixed(1)}px;top:${y.toFixed(1)}px;width:${Math.max(0,w-3).toFixed(1)}px;height:${Math.max(0,h-3).toFixed(1)}px;background:${XSCOL[i%XSCOL.length]}">${inner}</div>`}).join('')+'<div class="xftip" hidden></div>'}
+function xTmTip(tl,on){const box=tl.parentElement,tip=box&&box.querySelector('.xftip');if(!tip)return;if(!on){tip.hidden=true;return}
+  tip.textContent=tl.dataset.tip;tip.hidden=false;let x=tl.offsetLeft+tl.offsetWidth/2-tip.offsetWidth/2;x=Math.max(2,Math.min(box.clientWidth-tip.offsetWidth-2,x));let y=tl.offsetTop-tip.offsetHeight-6;if(y<0)y=tl.offsetTop+tl.offsetHeight+6;tip.style.left=x+'px';tip.style.top=y+'px'}
+document.addEventListener('click',e=>{if(!e.target.closest)return;
+  const fb=e.target.closest('[data-xflip]');if(fb){const card=fb.closest('.xcard'),fl=card&&card.querySelector('.xflip');if(fl){fl.classList.toggle('on');if(fl.classList.contains('on'))requestAnimationFrame(()=>xBackFill(card))}return}
+  const sg=e.target.closest('[data-xseg]');if(sg){const body=sg.closest('.xbk-body');if(body){body.querySelectorAll('[data-xseg]').forEach(b=>b.classList.toggle('sel',b===sg));xTmPaint(body,sg.dataset.xseg)}return}
+  const tl=e.target.closest('.xftile');if(tl){const tip=tl.parentElement.querySelector('.xftip');xTmTip(tl,tip&&tip.hidden);return}
+  if(!e.target.closest('.xftm'))document.querySelectorAll('.xftip').forEach(tp=>tp.hidden=true)});
+document.addEventListener('mouseover',e=>{if(!e.target.closest)return;const tl=e.target.closest('.xftile');if(tl)xTmTip(tl,true)});
+document.addEventListener('mouseout',e=>{if(!e.target.closest)return;const tl=e.target.closest('.xftile');if(tl&&!(e.relatedTarget&&e.relatedTarget.closest&&e.relatedTarget.closest('.xftile')===tl))xTmTip(tl,false)});
 function xSetRange(k){XM.rng=k;XM.rngSet=1;const d=XM.d;if(!d)return;
   /* redraw each line chart at the height it already has, so nothing jumps while periods are clicked through */
   document.querySelectorAll('#xmBody .xspark').forEach(box=>{const c=xFind(box.dataset.xsp);if(!c)return;const col=box.closest('.xcard').style.getPropertyValue('--xc'),sv=box.querySelector('svg'),h=sv&&sv.style.height;let html=xSpark(c,d.self,col,c.t);if(h)html=html.replace('<svg ','<svg style="height:'+h+'" ');box.outerHTML=html});
@@ -2396,7 +2467,7 @@ function xChartTip(t,on){if(!on&&XM.sel){t=XM.sel;on=true}
   if(svg)svg.querySelectorAll('.xpt').forEach(g=>g.classList.toggle('pinned',!!XM.sel&&g.dataset.xt===XM.sel));
   if(!dock||!leg||!p){if(dock&&!dock.hidden){dock.hidden=true;dock.innerHTML='';dock.dataset.t=''}if(leg)leg.classList.remove('showcard');xMatchH();return xTipBase(t,on)}
   xTipBase(t,false);if(svg){svg.querySelector('.xdots').classList.add('xfade');svg.querySelectorAll('.xpt').forEach(g=>g.classList.toggle('on',g.dataset.xt===t))}
-  if(dock.dataset.t!==t){dock.innerHTML=p.k==='self'?xSelfCard(XM.d.self):xCard(p,XM.d.self,p.k);dock.dataset.t=t}dock.firstElementChild.classList.toggle('hl',XM.sel===t);dock.hidden=false;leg.classList.add('showcard');renderXMButtons();xMatchH()}
+  if(dock.dataset.t!==t){dock.innerHTML=p.k==='self'?xSelfCard(XM.d.self):xCard(p,XM.d.self,p.k,true);dock.dataset.t=t}dock.firstElementChild.classList.toggle('hl',XM.sel===t);dock.hidden=false;leg.classList.add('showcard');renderXMButtons();xMatchH()}
 /* the card and the chart box share one height */
 function xMatchH(){const fig=document.querySelector('#xmBody .xfig'),dock=$('xCardDock'),c=dock&&!dock.hidden&&dock.firstElementChild;if(!fig||!c||ph0())return;const sv=c.querySelector('.xspark svg');if(sv)sv.style.height='';c.style.height='';c.style.flex='none';const H=fig.offsetHeight,over=c.offsetHeight-H;c.style.flex='';if(sv&&over>0)sv.style.height=Math.max(24,sv.clientHeight-over)+'px';else if(sv&&over<-8)sv.style.height=Math.min(240,sv.clientHeight-over)+'px';c.style.height=H+'px'}
 function xTipBase(t,on){const tip=$('xChartTip'),svg=document.querySelector('#xmBody .xfig svg');if(!tip||!svg)return;const zone=svg.querySelector('.xzone');
@@ -2415,7 +2486,7 @@ function xTipBase(t,on){const tip=$('xChartTip'),svg=document.querySelector('#xm
     const vr=p.vol/s.vol-1,risk=vr>0.05?'with more risk':vr<-0.05?'with less risk':'with about the same risk';
     const lead={same:`Earned ${xpts(p.r3-s.r3)} points a year more than ${s.t}`,div:`Earned ${xpts(p.r3-s.r3)} points a year vs ${s.t}`,mom:`Up ${xp(m3(p))} over the last 3 months vs ${xp(m3(s))} for ${s.t}`,own:`Higher Sharpe than ${s.t} (${p.sh.toFixed(2)} vs ${s.sh.toFixed(2)})`}[p.k];
     const sent=`${lead}, ${risk}.${p.k==='mom'?' Placed on the chart by its 3-year numbers.':''}`;
-    h=head(p.t,p.n,p.k)+`<span class="xttag ${p.k}">${tagTxt} · ${Math.round(p.c*100)}% correlated with ${esc(s.t)}</span><div class="xrl">Returns vs ${esc(s.t)}</div><div class="xchips">${xRetChips(p,s,false)}</div><div class="xrl xrlr">Risk vs ${esc(s.t)} · ${xRngLbl()}</div><div class="xrisk">${xRiskTiles(p,s)}</div><p class="xtw">${esc(sent)}</p>`}
+    h=head(p.t,p.n,p.k)+`<span class="xttag ${p.k}">${tagTxt} · ${Math.round(p.c*100)}% correlated · ${xCorrWord(p.c)}</span><div class="xrl">Returns vs ${esc(s.t)}</div><div class="xchips">${xRetChips(p,s,false)}</div><div class="xrl xrlr">Risk vs ${esc(s.t)} · ${xRngLbl()}</div><div class="xrisk">${xRiskTiles(p,s)}</div>`}
   tip.innerHTML=h;const leg=document.querySelector('#xmBody .xlegend'),side=leg&&leg.getBoundingClientRect().left>svg.getBoundingClientRect().right-4;
   if(side){/* wide screens: show the details in the column beside the chart so nothing on the chart is covered */
     if(tip.parentElement!==leg)leg.appendChild(tip);tip.classList.add('dock');leg.classList.add('showtip');tip.style.left='';tip.style.top='';tip.hidden=false;
@@ -2431,10 +2502,14 @@ function xSparkMove(box,e){const d=XM.d,c=xFind(box.dataset.xsp),s=d.self;if(!c)
   tip.innerHTML=`<div class="xth"><b>${dayFmt(R.dates[i])}</b><span>growth since ${dayFmt(R.dates[0])}</span></div><div class="xtt c2"><span class="l" style="color:var(--xc);font-weight:600">${esc(c.lbl||c.t)}</span><span class="v">${f(a)}</span><span class="l" style="color:var(--ink);font-weight:600">${esc(s.t)}</span><span class="v">${f(b)}</span></div><div class="xtf"><span style="color:var(--xc)">${gap===0?'Even':esc(gap>0?(c.lbl||c.t):s.t)+' ahead by '+Math.abs(gap).toFixed(1)+' pts'}</span></div>`;
   tip.hidden=false;const bx=box.getBoundingClientRect();let tx=e.clientX-bx.left+12;if(tx+tip.offsetWidth>bx.width)tx=e.clientX-bx.left-tip.offsetWidth-12;tip.style.left=Math.max(0,tx)+'px';tip.style.top=(-tip.offsetHeight-6)+'px'}
 function xSparkOut(box){const cr=box.querySelector('.xcross');if(cr)cr.style.display='none';const tip=box.querySelector('.xtip');if(tip)tip.hidden=true}
-function xSelfCard(s){if(XM.d&&XM.d.pf)return xSelfCard0(s).replace('>The ETF you clicked<','>Your portfolio<').replace(/<button type="button" class="xadd"[^>]*><\/button>/,'');return xSelfCard0(s)}
-function xSelfCard0(s){const n=XM.d.same.length,m=XM.d.div.length,mo=XM.d.mom?XM.d.mom.length:null,ow=(XM.d.own||[]).length;
+function xSelfCard(s){if(XM.d&&XM.d.pf)return xSelfCard0(s,false).replace('>The ETF you clicked<','>Your portfolio<').replace(/<button type="button" class="xadd"[^>]*><\/button>/,'');return xSelfCard0(s,true)}
+function xSelfCard0(s,flip){const n=XM.d.same.length,m=XM.d.div.length,mo=XM.d.mom?XM.d.mom.length:null,ow=(XM.d.own||[]).length;
   const sp=xSpark(s,s,'var(--ink)',s.t).replace(/<polyline[^>]*stroke-dasharray="4 3"[^>]*\/>/,'').replace(/<span>┅[^<]*<\/span>/,'');
-  return `<article class="xcard" data-xc="${esc(s.t)}" style="--xc:var(--ink)"><div class="xch"><div><b>${esc(s.t)}</b><span class="nm">${esc(s.n&&s.n!==s.t?s.n:NAMES[s.t]||'')}</span></div><span class="xchip xbasechip">The ETF you clicked</span></div>${xHero(s,s,'self')}${sp}<div class="xrl">Returns · the base</div><div class="xchips">${xRetChips(s,s,true).replace(/<\/b>/g,'</b><i class="xbase">base</i>')}</div><div class="xrl xrlr">Risk · ${xRngLbl()}</div><div class="xrisk">${xRiskTiles(s,s).replace(/<\/b><\/div>/g,'</b><i class="xbase">base</i></div>')}</div><p class="xwhy xsfnd">Found ${n} higher return, ${m} less risk${mo==null?'':`, ${mo} momentum`}, ${ow} moves on its own pick${n+m+(mo||0)+ow===1?'':'s'}.</p><button type="button" class="xadd" data-xadd="${esc(s.t)}"></button></article>`}
+  const head=`<div class="xch"><div><b>${esc(s.t)}</b><span class="nm">${esc(s.n&&s.n!==s.t?s.n:NAMES[s.t]||'')}</span></div><span class="xchip xbasechip">The ETF you clicked</span></div>`;
+  const main=`${xHero(s,s,'self')}${sp}<div class="xrl">Returns · the base</div><div class="xchips">${xRetChips(s,s,true).replace(/<\/b>/g,'</b><i class="xbase">base</i>')}</div><div class="xrl xrlr">Risk · ${xRngLbl()}</div><div class="xrisk">${xRiskTiles(s,s).replace(/<\/b><\/div>/g,'</b><i class="xbase">base</i></div>')}</div><p class="xwhy xsfnd">Found ${n} higher return, ${m} less risk${mo==null?'':`, ${mo} momentum`}, ${ow} moves on its own pick${n+m+(mo||0)+ow===1?'':'s'}.</p>`;
+  const add=`<button type="button" class="xadd" data-xadd="${esc(s.t)}"></button>`;
+  if(!flip)return `<article class="xcard" data-xc="${esc(s.t)}" style="--xc:var(--ink)">${head}${main}${add}</article>`;
+  return `<article class="xcard xflipcard" data-xc="${esc(s.t)}" style="--xc:var(--ink)"><div class="xflip"><div class="xflipin"><div class="xface fr">${head}${main}${xFlipBtn(0,s.t)}${add}</div><div class="xface bk">${xBackHTML(s)}</div></div></div></article>`}
 function xMini(c,s,col){const R=xRange(c,s),n=R.a.length;if(n<2)return '';const self=c===s;const all=self?R.a:R.a.concat(R.b);const lo=Math.min(0,...all),hi=Math.max(0,...all),rg=(hi-lo)||1;const X=i=>1+i*94/(n-1),Y=v=>2+(hi-v)/rg*24;
   const path=a=>a.map((v,i)=>(i?'L':'M')+X(i).toFixed(1)+' '+Y(v).toFixed(1)).join('');
   return `<svg class="xmini" viewBox="0 0 96 28" width="96" height="28" aria-hidden="true"><line x1="0" x2="96" y1="${Y(0).toFixed(1)}" y2="${Y(0).toFixed(1)}" stroke="var(--grid)"/>${self?'':`<path d="${path(R.b)}" fill="none" stroke="var(--faint)" stroke-width="1" stroke-dasharray="2 2"/>`}<path d="${path(R.a)}" fill="none" stroke="${col}" stroke-width="1.6"/></svg>`}
@@ -2475,7 +2550,7 @@ function renderXM(){const b=$('xmBody');renderXMFoot();XM.chH=null;xSizeModal();
   b.innerHTML=`${glb?`<div class="xgwrap" style="display:flex;flex-direction:column;gap:8px"><div class="xcap">${esc(t)} at a glance <span class="xcap2">· click a period to change the line charts</span></div><div class="xglance">${glb}</div></div>`:''}
     <div class="xtop">${xChart(d)}<div class="xlegend"><div class="li"><svg width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="6" fill="var(--ink)"/></svg><span>${esc(t)}, ${d.pf?'your portfolio':'the ETF you clicked'}</span></div><div class="li" data-xk="same"><svg width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="6" fill="var(--xs)"/></svg><span>Highly correlated w/ higher returns</span></div><div class="li" data-xk="div"><svg width="14" height="14" aria-hidden="true"><rect x="1" y="1" width="12" height="12" fill="var(--xd)"/></svg><span>Highly correlated w/ less volatility</span></div>${d.mom?`<div class="li" data-xk="mom"><svg width="14" height="14" aria-hidden="true"><path d="M7 1L13 12H1Z" fill="var(--xm)"/></svg><span>Highly correlated w/ more momentum</span></div>`:''}<div class="li" data-xk="own"><svg width="14" height="14" aria-hidden="true"><path d="M7 1L13 7L7 13L1 7Z" fill="var(--xo)"/></svg><span>Barely correlated w/ higher Sharpe</span></div>
     <div class="xcdock" id="xCardDock" hidden></div><div class="xsteps"><b class="xsth">How to use this</b><ol><li><span>${matchMedia('(hover:none)').matches?'Tap':'Click'} any shape on the chart to open its card.</span></li><li><span>Compare its returns and risk with ${esc(t)}.</span></li><li><span>Like it? Hit <b>+ Add to build</b> to try it in your Portfolio Lab.</span></li></ol><span class="xstf">Picked from ${d.pool.toLocaleString()} ETFs.</span></div></div></div>
-    <p class="xdisc">Past performance doesn't guarantee future results. These are ideas to research, not advice.</p>`;
+    `;
   renderXMButtons();xgSync(true);xFitChart();if(document.fonts&&document.fonts.status!=='loaded')document.fonts.ready.then(()=>{if(XM.d&&!$('xm').hidden){xFitChart();if(XM.sel)xChartTip(XM.sel,true)}});if(XM.sel&&xFind(XM.sel))xChartTip(XM.sel,true)}
 
 /* ---------- what's inside: top holdings as a map sized by weight and colored by return ---------- */
