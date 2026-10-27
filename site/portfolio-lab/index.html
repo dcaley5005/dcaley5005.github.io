@@ -897,7 +897,7 @@ button.xg{cursor:pointer}button.xg:hover{box-shadow:inset 0 0 0 1px var(--inputL
 .xcdock .xcard .xhero b{font-size:26px}
 
 .xcdock .xcard{min-width:0}.xcdock .xcard .xpc{min-width:0;overflow:hidden}
-.xcdock .xcard .nm{white-space:nowrap;overflow:hidden;max-width:100%;display:block}.xcdock .xcard .xch>div{min-width:0}.xcdock .xcard .xrisk{min-width:0}.xcdock .xcard .xrk{min-width:0;overflow:hidden}
+.xcdock .xcard .nm{display:block}.xcdock .xcard .xch>div{min-width:0}.xcdock .xcard .xrisk{min-width:0}.xcdock .xcard .xrk{min-width:0;overflow:hidden}
 .xcdock .xcard .xadd{height:34px}
 .xcdock .xcard.hl{border-color:var(--xc);box-shadow:0 0 0 3px color-mix(in srgb,var(--xc) 22%,transparent)}
 .xpt .xok{display:none}
@@ -931,9 +931,9 @@ button.xg{cursor:pointer}button.xg:hover{box-shadow:inset 0 0 0 1px var(--inputL
 .xcard{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:11px;transition:box-shadow .12s,border-color .12s,opacity .12s}
 .xcard.hl{border-color:var(--xc);box-shadow:0 0 0 3px color-mix(in srgb,var(--xc) 22%,transparent)}
 .xcards.dim .xcard:not(.hl){opacity:.55}
-.xch{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.xch{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap}.xch>div{display:contents}
 .xch b{font-family:"IBM Plex Mono",monospace;font-size:19px}
-.xch .nm{font-size:12px;color:var(--muted);display:block;max-width:220px;white-space:nowrap;overflow:hidden}
+.xch .nm{font-size:12px;color:var(--muted);display:block;flex:1 1 100%;order:3;max-width:100%}
 .xchip{font-size:12px;font-weight:600;border-radius:99px;padding:3px 9px;white-space:nowrap}
 .xchip.s{color:var(--xs);background:var(--xsBg)}.xchip.d{color:var(--xd);background:var(--xdBg)}.xchip.o{color:var(--xo);background:var(--xoBg)}
 .xchip.up{color:var(--pos);background:var(--xposBg)}.xchip.dn{color:var(--xz);background:var(--xzBg)}
@@ -2396,10 +2396,9 @@ function xChartTip(t,on){if(!on&&XM.sel){t=XM.sel;on=true}
   if(svg)svg.querySelectorAll('.xpt').forEach(g=>g.classList.toggle('pinned',!!XM.sel&&g.dataset.xt===XM.sel));
   if(!dock||!leg||!p){if(dock&&!dock.hidden){dock.hidden=true;dock.innerHTML='';dock.dataset.t=''}if(leg)leg.classList.remove('showcard');xMatchH();return xTipBase(t,on)}
   xTipBase(t,false);if(svg){svg.querySelector('.xdots').classList.add('xfade');svg.querySelectorAll('.xpt').forEach(g=>g.classList.toggle('on',g.dataset.xt===t))}
-  if(dock.dataset.t!==t){dock.innerHTML=p.k==='self'?xSelfCard(XM.d.self):xCard(p,XM.d.self,p.k);dock.dataset.t=t}dock.firstElementChild.classList.toggle('hl',XM.sel===t);dock.hidden=false;leg.classList.add('showcard');renderXMButtons();xMatchH();xFitName()}
+  if(dock.dataset.t!==t){dock.innerHTML=p.k==='self'?xSelfCard(XM.d.self):xCard(p,XM.d.self,p.k);dock.dataset.t=t}dock.firstElementChild.classList.toggle('hl',XM.sel===t);dock.hidden=false;leg.classList.add('showcard');renderXMButtons();xMatchH()}
 /* the card and the chart box share one height */
-function xFitName(){document.querySelectorAll('.xcard .nm').forEach(el=>{let fs=12;el.style.fontSize=fs+'px';let g=0;while(el.scrollWidth>el.clientWidth+1&&fs>8.5&&g<24){fs-=0.5;el.style.fontSize=fs+'px';g++}})}
-function xMatchH(){const fig=document.querySelector('#xmBody .xfig'),dock=$('xCardDock'),c=dock&&!dock.hidden&&dock.firstElementChild;if(!fig||!c||ph0())return;const sv=c.querySelector('.xspark svg');if(sv)sv.style.height='';c.style.height='';c.style.flex='none';const H=fig.offsetHeight,over=c.offsetHeight-H;c.style.flex='';if(sv&&over>0)sv.style.height=Math.max(24,sv.clientHeight-over)+'px';else if(sv&&over<-8)sv.style.height=Math.min(240,sv.clientHeight-over)+'px';c.style.height=H+'px';xFitName()}
+function xMatchH(){const fig=document.querySelector('#xmBody .xfig'),dock=$('xCardDock'),c=dock&&!dock.hidden&&dock.firstElementChild;if(!fig||!c||ph0())return;const sv=c.querySelector('.xspark svg');if(sv)sv.style.height='';c.style.height='';c.style.flex='none';const H=fig.offsetHeight,over=c.offsetHeight-H;c.style.flex='';if(sv&&over>0)sv.style.height=Math.max(24,sv.clientHeight-over)+'px';else if(sv&&over<-8)sv.style.height=Math.min(240,sv.clientHeight-over)+'px';c.style.height=H+'px'}
 function xTipBase(t,on){const tip=$('xChartTip'),svg=document.querySelector('#xmBody .xfig svg');if(!tip||!svg)return;const zone=svg.querySelector('.xzone');
   svg.querySelector('.xdots').classList.toggle('xfade',!!on&&t!==XM.d.self.t);svg.querySelectorAll('.xpt').forEach(g=>g.classList.toggle('on',on&&g.dataset.xt===t));
   document.querySelectorAll('#xmBody .xcard').forEach(c=>c.classList.toggle('hl',on&&c.dataset.xc===t));document.querySelectorAll('#xmBody .xcards').forEach(c=>c.classList.toggle('dim',!!on&&!!c.querySelector('.xcard.hl')));
@@ -2477,7 +2476,7 @@ function renderXM(){const b=$('xmBody');renderXMFoot();XM.chH=null;xSizeModal();
     <div class="xtop">${xChart(d)}<div class="xlegend"><div class="li"><svg width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="6" fill="var(--ink)"/></svg><span>${esc(t)}, ${d.pf?'your portfolio':'the ETF you clicked'}</span></div><div class="li" data-xk="same"><svg width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="6" fill="var(--xs)"/></svg><span>Highly correlated w/ higher returns</span></div><div class="li" data-xk="div"><svg width="14" height="14" aria-hidden="true"><rect x="1" y="1" width="12" height="12" fill="var(--xd)"/></svg><span>Highly correlated w/ less volatility</span></div>${d.mom?`<div class="li" data-xk="mom"><svg width="14" height="14" aria-hidden="true"><path d="M7 1L13 12H1Z" fill="var(--xm)"/></svg><span>Highly correlated w/ more momentum</span></div>`:''}<div class="li" data-xk="own"><svg width="14" height="14" aria-hidden="true"><path d="M7 1L13 7L7 13L1 7Z" fill="var(--xo)"/></svg><span>Barely correlated w/ higher Sharpe</span></div>
     <div class="xcdock" id="xCardDock" hidden></div><div class="xsteps"><b class="xsth">How to use this</b><ol><li><span>${matchMedia('(hover:none)').matches?'Tap':'Click'} any shape on the chart to open its card.</span></li><li><span>Compare its returns and risk with ${esc(t)}.</span></li><li><span>Like it? Hit <b>+ Add to build</b> to try it in your Portfolio Lab.</span></li></ol><span class="xstf">Picked from ${d.pool.toLocaleString()} ETFs.</span></div></div></div>
     <p class="xdisc">Past performance doesn't guarantee future results. These are ideas to research, not advice.</p>`;
-  renderXMButtons();xgSync(true);xFitChart();xFitName();if(document.fonts&&document.fonts.status!=='loaded')document.fonts.ready.then(()=>{if(XM.d&&!$('xm').hidden){xFitChart();if(XM.sel)xChartTip(XM.sel,true)}});if(XM.sel&&xFind(XM.sel))xChartTip(XM.sel,true)}
+  renderXMButtons();xgSync(true);xFitChart();if(document.fonts&&document.fonts.status!=='loaded')document.fonts.ready.then(()=>{if(XM.d&&!$('xm').hidden){xFitChart();if(XM.sel)xChartTip(XM.sel,true)}});if(XM.sel&&xFind(XM.sel))xChartTip(XM.sel,true)}
 
 /* ---------- what's inside: top holdings as a map sized by weight and colored by return ---------- */
 const XIN={},XINL={};
@@ -2682,7 +2681,7 @@ function xRestCard(d){const s=d.self||{},R=d.rest||{},k=xRk(),n=xinN(d),named=d.
 function xinTip(t,on){const dock=$('xInDock'),d=XM.d;if(!dock||!d)return;const show=on?t:XM.sel;
   const tm=$('xTm');if(tm){tm.classList.toggle('fade',!!show);tm.querySelectorAll('.xtile[data-ht]').forEach(x=>x.classList.toggle('on',x.dataset.ht===show))}
   const c=show?xFind(show):null,key=c?show+(XM.sel===show?'*':''):'';if(dock.dataset.t===key)return;
-  dock.innerHTML=c?(c.k==='rest'?xRestCard(d):xHoldCard(c,d.self)):xAboutCard(d);dock.dataset.t=key;if(c&&XM.sel===show)dock.firstElementChild.classList.add('hl');xFitName()}
+  dock.innerHTML=c?(c.k==='rest'?xRestCard(d):xHoldCard(c,d.self)):xAboutCard(d);dock.dataset.t=key;if(c&&XM.sel===show)dock.firstElementChild.classList.add('hl')}
 /* make the map as tall as the tallest card, so cards never get cut and the two columns end together */
 function xinFit(){const dock=$('xInDock'),d=XM.d;if(!dock||!d)return;dock.style.minHeight='';if(ph0()||!$('xTm'))return;
   const html=dock.innerHTML,key=dock.dataset.t;let mx=0;
