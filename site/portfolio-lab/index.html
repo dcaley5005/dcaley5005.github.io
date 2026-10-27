@@ -1014,10 +1014,10 @@ tr.xecho>td{background:var(--accentBg);transition:background .2s}
 .xdisc{margin:4px 0 0;font-size:12px;color:var(--faint)}
 .xflipcard{padding:0;overflow:hidden}
 .xflip{flex:1 1 auto;min-height:0;display:flex;perspective:1400px}
-.xflipin{flex:1 1 auto;min-height:0;display:grid;transform-style:preserve-3d;-webkit-transform-style:preserve-3d;transition:transform .55s cubic-bezier(.35,.55,.35,1);will-change:transform}
-.xflip.on .xflipin{transform:rotateY(180deg)}
-.xface{grid-area:1/1;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column;gap:11px;padding:16px;min-height:0;overflow:hidden;transition:visibility 0s linear .25s;transform:translateZ(0)}
-.xface.bk{transform:rotateY(180deg);visibility:hidden}
+.xflipin{flex:1 1 auto;min-height:0;display:grid;will-change:transform}
+
+.xface{grid-area:1/1;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column;gap:11px;padding:16px;min-height:0;overflow:hidden;transition:none;transform:translateZ(0)}
+.xface.bk{transform:none;visibility:hidden}
 .xflip.on .xface.bk{visibility:visible}
 .xflip.on .xface.fr{visibility:hidden}
 .xface.fr .xchips{flex:2 1 0;grid-auto-rows:1fr}
@@ -2404,6 +2404,7 @@ function xCard(c,s,kind,flip){const col=XCOL[kind];const dr=c.r3-s.r3;const pct=
 const XICONDESC='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h7l4 4v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v4h4"/><path d="M9.5 12h5M9.5 15.5h5"/></svg>';
 const XICONCHART='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4v15a1 1 0 0 0 1 1h15"/><path d="M7.5 15.5l3.5-4 2.5 2.5L18 8.5"/></svg>';
 const XICONFLIP='<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>';
+function xDoFlip(fl,card){if(fl._fx)return;fl._fx=1;const inner=fl.querySelector('.xflipin');if(!inner||XREDUCE.matches){fl.classList.toggle('on');fl._fx=0;if(fl.classList.contains('on'))requestAnimationFrame(()=>xBackFill(card));return}inner.style.transition='transform .15s ease-in';inner.style.transform='scaleX(0)';setTimeout(()=>{fl.classList.toggle('on');if(fl.classList.contains('on'))requestAnimationFrame(()=>xBackFill(card));inner.style.transition='transform .27s cubic-bezier(.25,.8,.3,1.12)';inner.style.transform='scaleX(1)';setTimeout(()=>{inner.style.transition='';inner.style.transform='';fl._fx=0},290)},158)}
 function xFlipBtn(back,t){return `<button type="button" class="xflipbtn" data-xflip="1" aria-label="${back?'Back to returns and risk':'Show description and holdings'} for ${esc(t)}"><span class="xic">${back?XICONCHART:XICONDESC}</span><span>${back?'Returns &amp; risk':'Description &amp; holdings'}</span><span class="xfliparr">${XICONFLIP}</span></button>`}
 function xBackHTML(c){return `<div class="xbk-body" data-er="${c.er!=null?c.er:''}"><p class="xbk-load">Loading the description and holdings…</p></div>${xFlipBtn(1,c.t)}<button type="button" class="xadd" data-xadd="${esc(c.t)}"></button>`}
 function xBackFill(card){const body=card.querySelector('.xbk-body');if(!body||body.dataset.done)return;body.dataset.done='1';const t=card.dataset.xc;
@@ -2435,7 +2436,7 @@ function xTmPaint(body,mode){const box=body.querySelector('.xftm');if(!box||!bod
 function xTmTip(tl,on){const box=tl.parentElement,tip=box&&box.querySelector('.xftip');if(!tip)return;if(!on){tip.hidden=true;return}
   tip.textContent=tl.dataset.tip;tip.hidden=false;let x=tl.offsetLeft+tl.offsetWidth/2-tip.offsetWidth/2;x=Math.max(2,Math.min(box.clientWidth-tip.offsetWidth-2,x));let y=tl.offsetTop-tip.offsetHeight-6;if(y<0)y=tl.offsetTop+tl.offsetHeight+6;tip.style.left=x+'px';tip.style.top=y+'px'}
 document.addEventListener('click',e=>{if(!e.target.closest)return;
-  const fb=e.target.closest('[data-xflip]');if(fb){const card=fb.closest('.xcard'),fl=card&&card.querySelector('.xflip');if(fl){fl.classList.toggle('on');if(fl.classList.contains('on'))requestAnimationFrame(()=>xBackFill(card))}return}
+  const fb=e.target.closest('[data-xflip]');if(fb){const card=fb.closest('.xcard'),fl=card&&card.querySelector('.xflip');if(fl)xDoFlip(fl,card);return}
   const sg=e.target.closest('[data-xseg]');if(sg){const body=sg.closest('.xbk-body');if(body){body.querySelectorAll('[data-xseg]').forEach(b=>b.classList.toggle('sel',b===sg));xTmPaint(body,sg.dataset.xseg)}return}
   const tl=e.target.closest('.xftile');if(tl){const tip=tl.parentElement.querySelector('.xftip');xTmTip(tl,tip&&tip.hidden);return}
   if(!e.target.closest('.xftm'))document.querySelectorAll('.xftip').forEach(tp=>tp.hidden=true)});
