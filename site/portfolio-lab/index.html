@@ -911,7 +911,7 @@ button.xg{cursor:pointer}button.xg:hover{box-shadow:inset 0 0 0 1px var(--inputL
 .xrm svg{opacity:.6}.xrm:hover{border-color:var(--neg);color:var(--neg)}.xrm:hover svg{opacity:1}
 .xrm:focus-visible{outline:2px solid var(--focus)}
 /* an added card's button says Remove when you point at it */
-.xadd.on:hover{background:transparent;color:var(--neg);border-color:var(--neg);font-size:0}.xadd.on:hover::after{content:'Remove from build';font-size:14px}
+.xadd.on:hover{background:transparent;color:var(--neg);border-color:var(--neg);font-size:0}.xadd.on:hover::after{content:'Remove from portfolio';font-size:14px}
 .xpt .xok{display:none!important}
 .xpt.pinned>:not(text):not([fill="transparent"]):not(.xok){stroke:var(--ink);stroke-width:2}
 .xtip{position:absolute;pointer-events:none;z-index:3;min-width:230px;max-width:320px;background:var(--panel);border:1px solid var(--inputLine);border-radius:10px;padding:10px 12px;font-size:12.5px;box-shadow:0 8px 20px rgba(0,0,0,.25);display:flex;flex-direction:column;gap:8px}
@@ -1025,8 +1025,8 @@ tr.xecho>td{background:var(--accentBg);transition:background .2s}
 .xflipbtn .xic{flex:none;width:38px;height:38px;border-radius:10px;background:color-mix(in srgb,var(--xo) 30%,var(--panel));display:flex;align-items:center;justify-content:center;color:var(--xo)}
 .xflipbtn .xfliparr{margin-left:auto;flex:none;width:34px;height:34px;border-radius:50%;border:1px solid color-mix(in srgb,var(--xo) 55%,transparent);display:flex;align-items:center;justify-content:center;color:var(--xo)}
 .xflipcard .xface .xadd{margin-top:10px;height:60px;border-radius:12px;font-size:16px}
-.xflipcard .xface .xadd{display:flex;align-items:center;gap:12px;padding:10px 14px;text-align:left;border:1px solid color-mix(in srgb,#6c5ce7 55%,transparent);background:linear-gradient(180deg,color-mix(in srgb,#6c5ce7 30%,var(--panel2)),color-mix(in srgb,#6c5ce7 16%,var(--panel2)));color:var(--ink)}
-.xflipcard .xface .xadd .xadic{flex:none;width:38px;height:38px;border-radius:10px;background:color-mix(in srgb,#6c5ce7 34%,var(--panel));display:flex;align-items:center;justify-content:center;color:#c2bafa}
+.xflipcard .xface .xadd{display:flex;align-items:center;gap:12px;padding:10px 14px;text-align:left;border:1px solid color-mix(in srgb,#1faa59 55%,transparent);background:linear-gradient(180deg,color-mix(in srgb,#1faa59 30%,var(--panel2)),color-mix(in srgb,#1faa59 16%,var(--panel2)));color:var(--ink)}
+.xflipcard .xface .xadd .xadic{flex:none;width:38px;height:38px;border-radius:10px;background:color-mix(in srgb,#1faa59 34%,var(--panel));display:flex;align-items:center;justify-content:center;color:#7be2a8}
 .xflipcard .xface .xadd.on:hover{font-size:16px}.xflipcard .xface .xadd.on:hover::after{content:none}
 .xbk-body{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;gap:11px}
 .xbk-desc{font-size:14.5px;line-height:1.55;color:var(--ink);margin:0}
@@ -1039,7 +1039,7 @@ tr.xecho>td{background:var(--accentBg);transition:background .2s}
 .xseg button.sel{background:var(--panel2);color:var(--ink);box-shadow:0 1px 4px rgba(0,0,0,.25)}
 .xftm{position:relative;flex:1 1 auto;min-height:118px;margin-bottom:10px}
 .xftile{position:absolute;border-radius:8px;padding:7px 9px;overflow:hidden;color:#14181d;display:flex;flex-direction:column;gap:1px}
-.xftile b{font-size:13.5px;line-height:1.15;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.xftile b{font-size:13.5px;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .xftile span{font-size:12px;opacity:.85;line-height:1.15;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word}
 .xftile i{font-style:normal;font-size:12.5px;font-weight:600}
 .xftip{position:absolute;z-index:5;background:var(--panel);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:6px 9px;font-size:12.5px;box-shadow:0 6px 18px rgba(0,0,0,.35);pointer-events:none;white-space:nowrap}
@@ -2331,17 +2331,17 @@ function closeExplore(){if($('xm').hidden||XM.closing)return;const el=xSrc(),row
   a.onfinish=()=>{finish();a.cancel();bk.getAnimations().forEach(x=>x.cancel())}}
 function xFinishClose(row){document.body.classList.remove('xm-open');const added=XM.added.slice();XM.t=null;xDrawer(false);
   document.querySelectorAll('tr.xecho').forEach(r=>r.classList.remove('xecho'));if(row&&document.contains(row)){row.classList.remove('flash');void row.offsetWidth;row.classList.add('flash')}
-  if(added.length){toast('Added '+(added.length===1?added[0]:added.slice(0,-1).join(', ')+' and '+added[added.length-1])+' to your build');
+  if(added.length){toast('Added '+(added.length===1?added[0]:added.slice(0,-1).join(', ')+' and '+added[added.length-1])+' to your portfolio');
     setTimeout(()=>added.forEach(t=>{const tr=document.querySelector(`#bTable tr[data-bt="${CSS.escape(t)}"]`);if(tr){tr.classList.remove('flash');void tr.offsetWidth;tr.classList.add('flash')}}),60)}
   if(XM.from&&document.contains(XM.from))XM.from.focus()}
 function xToggleAdd(t){const B=S.b;const i=B.rows.findIndex(r=>r.t===t);
   if(XM.added.includes(t)){if(i>=0)B.rows.splice(i,1);XM.added=XM.added.filter(x=>x!==t)}
   else{if(i>=0||B.rows.length>=MAXETF||!xCanPrice(t))return;B.rows.push({t,w:'',c:bFreeColor()});XM.added.push(t);if(!S.b.open)S.b.open=true}
   persist();render();renderXMButtons();renderXMFoot()}
-function xBtnState(t){if(XM.added.includes(t))return ['✓ Added','on',false];if(xInBuild(t))return ['In your build','',true];if(S.b.rows.length>=MAXETF)return ['Build is full (15)','',true];if(!xCanPrice(t))return ['No prices','',true];return ['+ Add to build','',false]}
-const XSHORT={'✓ Added':'✓ Added','In your build':'In build','Build is full (15)':'Full','No prices':'No data','+ Add to build':'+ Add'};
+function xBtnState(t){if(XM.added.includes(t))return ['✓ Added','on',false];if(xInBuild(t))return ['In your portfolio','',true];if(S.b.rows.length>=MAXETF)return ['Portfolio is full (15)','',true];if(!xCanPrice(t))return ['No prices','',true];return ['+ Add to Portfolio','',false]}
+const XSHORT={'✓ Added':'✓ Added','In your portfolio':'In portfolio','Portfolio is full (15)':'Full','No prices':'No data','+ Add to Portfolio':'+ Add'};
 function renderXMButtons(){document.querySelectorAll('#xmBody .xpt').forEach(g=>{const t=g.dataset.xt;g.classList.toggle('added',g.dataset.xk!=='self'&&(XM.added.includes(t)||xInBuild(t)))});document.querySelectorAll('#xmBody .xadd').forEach(b=>{const [txt0,c,dis]=xBtnState(b.dataset.xadd);const txt=b.dataset.sm?XSHORT[txt0]||txt0:txt0;if(b.closest('.xface')){const ic=c==='on'?'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l4.8 4.8L19.5 7"/></svg>':'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>';b.innerHTML='<span class="xadic">'+ic+'</span><span>'+esc(txt.replace('✓ ','').replace(/^\+ /,''))+'</span>'}else b.textContent=txt;b.title=txt0;b.className='xadd'+(c?' '+c:'');b.disabled=dis;b.setAttribute('aria-pressed',c==='on')})}
-function renderXMFoot(){const a=XM.added;$('xmCount').innerHTML=a.length?`<span class="xcl">✓ ${a.length} added</span>${a.map(t=>`<button type="button" class="xrm" data-xadd="${esc(t)}" aria-label="Remove ${esc(t)} from your build" title="Remove ${esc(t)} from your build">${esc(t)}<svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 2l6 6M8 2L2 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>`).join('')}`:''}
+function renderXMFoot(){const a=XM.added;$('xmCount').innerHTML=a.length?`<span class="xcl">✓ ${a.length} added</span>${a.map(t=>`<button type="button" class="xrm" data-xadd="${esc(t)}" aria-label="Remove ${esc(t)} from your portfolio" title="Remove ${esc(t)} from your portfolio">${esc(t)}<svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 2l6 6M8 2L2 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>`).join('')}`:''}
 /* plain-language reason for each card */
 function xWhy(c,s,kind){const b=s.t,dr=c.r3-s.r3,ddw=c.dd<s.dd-0.05,cheaper=c.er!=null&&s.er!=null&&c.er<s.er-0.02;
   const vr=c.vol/s.vol-1;let w;
@@ -2414,7 +2414,7 @@ function xBackFill(card){const body=card.querySelector('.xbk-body');if(!body||bo
     <div class="xbk-facts">${fact('Holdings',top.length?top.length+' stocks':null)}${fact('Fee',ser!=null?fmtER(ser):null)}${fact('Assets',f.aum?xMoney(f.aum):null)}${fact('Category',f.cat)}</div>
     <div class="xseg" role="group" aria-label="Map view"><button type="button" data-xseg="ind" class="sel">Industries</button><button type="button" data-xseg="sec">Sectors</button><button type="button" data-xseg="stk">Top 10 stocks</button></div>
     <div class="xftm"></div>`;
-    body._d=d;xTmPaint(body,'ind')}).catch(()=>{delete body.dataset.done;body.innerHTML=`<p class="xbk-load">Holdings aren't available for ${esc(t)} yet. They're added a slice at a time each night, so check back soon.</p>`})}
+    body._d=d;xTmPaint(body,'ind');xFitNow()}).catch(()=>{delete body.dataset.done;body.innerHTML=`<p class="xbk-load">Holdings aren't available for ${esc(t)} yet. They're added a slice at a time each night, so check back soon.</p>`})}
 function xTmItems(d,mode){const top=(d.top||[]).filter(c=>c.wt>0);
   if(mode==='stk')return top.slice().sort((a,b)=>b.wt-a.wt).slice(0,10).map(c=>({t:c.t,n:c.n||c.hn||'',w:c.wt}));
   if(mode==='sec')return Object.entries(d.sec||{}).map(([k,v])=>({t:XSEC[k]||k,n:'',w:v})).filter(x=>x.w>0.002).sort((a,b)=>b.w-a.w);
@@ -2428,7 +2428,7 @@ function xTmPaint(body,mode){const box=body.querySelector('.xftm');if(!box||!bod
   const items=xTmItems(body._d,mode),tw=items.reduce((a,x)=>a+x.w,0)||1;
   const tiles=xSquarify(items.map(x=>({c:x,a:x.w/tw*W*H})),0,0,W,H);
   box.innerHTML=tiles.map(({c,x,y,w,h},i)=>{const pc=c.w*100,p1=pc.toFixed(1)+'%',lab=`${c.t}${c.n?' · '+c.n:''} · ${p1}`;
-    const lw=c.t.split(' ').reduce((a,x)=>Math.max(a,x.length),0),bfs=Math.max(9.5,Math.min(13.5,(w-16)/(lw*0.6),(w-16)*2/(c.t.length*0.58)));const inner=w>=110&&h>=54?`<b style="font-size:${bfs.toFixed(1)}px">${esc(c.t)}</b><i>${p1}</i>${c.n?`<span>${esc(c.n)}</span>`:''}`:w>=54&&h>=34?`<b style="font-size:${bfs.toFixed(1)}px">${esc(c.t)}</b><i>${p1}</i>`:w>=36&&h>=22?`<i style="font-size:${Math.max(10,Math.min(12.5,w/3.8)).toFixed(1)}px">${pc<10?p1:Math.round(pc)+'%'}</i>`:'';
+    const lw=c.t.split(' ').reduce((a,x)=>Math.max(a,x.length),0),bfs=Math.max(9,Math.min(13,(w-22)/(lw*0.68),(w-22)*2/(c.t.length*0.62)));const inner=w>=110&&h>=54?`<b style="font-size:${bfs.toFixed(1)}px">${esc(c.t)}</b><i>${p1}</i>${c.n?`<span>${esc(c.n)}</span>`:''}`:w>=54&&h>=34&&bfs>=9.5?`<b style="font-size:${bfs.toFixed(1)}px">${esc(c.t)}</b><i>${p1}</i>`:w>=36&&h>=22?`<i style="font-size:${Math.max(10,Math.min(12.5,w/3.8)).toFixed(1)}px">${pc<10?p1:Math.round(pc)+'%'}</i>`:'';
     return `<div class="xftile" data-tip="${esc(lab)}" style="left:${x.toFixed(1)}px;top:${y.toFixed(1)}px;width:${Math.max(0,w-3).toFixed(1)}px;height:${Math.max(0,h-3).toFixed(1)}px;background:${XSCOL[i%XSCOL.length]}">${inner}</div>`}).join('')+'<div class="xftip" hidden></div>'}
 function xTmTip(tl,on){const box=tl.parentElement,tip=box&&box.querySelector('.xftip');if(!tip)return;if(!on){tip.hidden=true;return}
   tip.textContent=tl.dataset.tip;tip.hidden=false;let x=tl.offsetLeft+tl.offsetWidth/2-tip.offsetWidth/2;x=Math.max(2,Math.min(box.clientWidth-tip.offsetWidth-2,x));let y=tl.offsetTop-tip.offsetHeight-6;if(y<0)y=tl.offsetTop+tl.offsetHeight+6;tip.style.left=x+'px';tip.style.top=y+'px'}
@@ -2445,7 +2445,7 @@ function xSetRange(k){XM.rng=k;XM.rngSet=1;const d=XM.d;if(!d)return;
   document.querySelectorAll('#xmBody [data-xrng],#xmGlance [data-xrng]').forEach(b=>{const on=b.dataset.xrng===k;b.classList.toggle('sel',on);b.setAttribute('aria-pressed',on)});{const w=document.querySelector('#xmBody .xgwrap');if(w&&w._h0&&!XGMINI())xgPaint(w,XG.cur);if(w&&XGMINI())setTimeout(()=>xgSync(true),0)}
   document.querySelectorAll('#xmBody .xcard').forEach(card=>{const c=xFind(card.dataset.xc);const rk=card.querySelector('.xrisk'),lb=card.querySelector('.xrlr'),hr=card.querySelector('.xhero');if(c&&rk)rk.innerHTML=xRiskTiles(c,d.self);if(lb)lb.textContent=`Risk vs ${d.self.t} · ${xRngLbl()}`;if(c&&hr&&['self','same','div','mom','own'].includes(c.k))hr.outerHTML=xHero(c,d.self,c.k)});
   {const T=$('xCmp');if(T){T.innerHTML=xCmpTable();renderXMButtons()}}
-  const rs=xRisk(d.self),gs=$('xgSh'),gd=$('xgDd');if(gs)gs.innerHTML=`<span>Sharpe</span><b>${rs.sh==null?'—':rs.sh.toFixed(2)}</b>`;if(gd)gd.innerHTML=`<span>Max DD</span><b>${xu(rs.dd)}</b>`;if(XM.tab!=='in')xMatchH();if(XM.tab==='in'){xinPaint();const dk=$('xInDock');if(dk){dk.dataset.t='~';xinTip(null,false)}const n=$('xtmNote');if(n)n.textContent=xinNote()}}
+  const rs=xRisk(d.self),gs=$('xgSh'),gd=$('xgDd');if(gs)gs.innerHTML=`<span>Sharpe</span><b>${rs.sh==null?'—':rs.sh.toFixed(2)}</b>`;if(gd)gd.innerHTML=`<span>Max DD</span><b>${xu(rs.dd)}</b>`;if(XM.tab!=='in'){xMatchH();xFitNow()}if(XM.tab==='in'){xinPaint();const dk=$('xInDock');if(dk){dk.dataset.t='~';xinTip(null,false)}const n=$('xtmNote');if(n)n.textContent=xinNote()}}
 /* return vs volatility dot chart */
 function ph0(){return innerWidth<=1000}
 function xChart(d){const s=d.self,seen=new Set();const pts=[{...s,k:'self'}].concat(d.same.map(c=>({...c,k:'same'})),(d.closest||[]).map(c=>({...c,k:'same'})),d.div.map(c=>({...c,k:'div'})),(d.mom||[]).map(c=>({...c,k:'mom'})),(d.own||[]).map(c=>({...c,k:'own'}))).filter(p=>!seen.has(p.t)&&seen.add(p.t));
@@ -2545,7 +2545,7 @@ const XHG=()=>innerWidth>640;
 /* one window height for both tabs, sized to what the Alternatives chart needs at a 3:2 shape, so neither tab has dead space or jumps */
 function xSizeModal(){const md=$('xm').querySelector('.xmd'),h=$('xm').querySelector('.xmh');if(!md||!h)return;if(ph0()){md.style.height='';return}
   const mw=innerWidth>=1880?Math.min(1640,innerWidth*.88):Math.min(1480,innerWidth*.94),lw=Math.max(330,Math.min(460,(mw-56)*.32)),fw=mw-56-lw-24;
-  md.style.height=Math.round(Math.min(innerHeight-24,1000,h.offsetHeight+Math.max(590,fw/1.35)+62))+'px'}
+  const gl=$('xmGlance'),ft=$('xmFoot');md.style.height=Math.round(Math.min(innerHeight-24,1000,h.offsetHeight+(ft?ft.offsetHeight:49)+124+Math.max(590,fw/1.35)+(gl&&!gl.hidden?gl.offsetHeight:0)))+'px'}
 function xSetGlance(gl){const g=$('xmGlance');if(!g)return '';XM.hg=XHG();if(XM.hg&&gl){g.innerHTML=gl;g.hidden=false;return ''}g.innerHTML='';g.hidden=true;return gl}
 addEventListener('resize',()=>{if($('xm').hidden||!XM.d)return;xSizeModal();if(XHG()!==XM.hg)xRender()});
 function renderXM(){const b=$('xmBody');renderXMFoot();XM.chH=null;xSizeModal();
@@ -2562,9 +2562,9 @@ function renderXM(){const b=$('xmBody');renderXMFoot();XM.chH=null;xSizeModal();
   const glb=xSetGlance(gl);xSizeModal();
   b.innerHTML=`${glb?`<div class="xgwrap" style="display:flex;flex-direction:column;gap:8px"><div class="xcap">${esc(t)} at a glance <span class="xcap2">· click a period to change the line charts</span></div><div class="xglance">${glb}</div></div>`:''}
     <div class="xtop">${xChart(d)}<div class="xlegend"><div class="li"><svg width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="6" fill="var(--ink)"/></svg><span>${esc(t)}, ${d.pf?'your portfolio':'the ETF you clicked'}</span></div><div class="li" data-xk="same"><svg width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="6" fill="var(--xs)"/></svg><span>Highly correlated w/ higher returns</span></div><div class="li" data-xk="div"><svg width="14" height="14" aria-hidden="true"><rect x="1" y="1" width="12" height="12" fill="var(--xd)"/></svg><span>Highly correlated w/ less volatility</span></div>${d.mom?`<div class="li" data-xk="mom"><svg width="14" height="14" aria-hidden="true"><path d="M7 1L13 12H1Z" fill="var(--xm)"/></svg><span>Highly correlated w/ more momentum</span></div>`:''}<div class="li" data-xk="own"><svg width="14" height="14" aria-hidden="true"><path d="M7 1L13 7L7 13L1 7Z" fill="var(--xo)"/></svg><span>Barely correlated w/ higher Sharpe</span></div>
-    <div class="xcdock" id="xCardDock" hidden></div><div class="xsteps"><b class="xsth">How to use this</b><ol><li><span>${matchMedia('(hover:none)').matches?'Tap':'Click'} any shape on the chart to open its card.</span></li><li><span>Compare its returns and risk with ${esc(t)}.</span></li><li><span>Like it? Hit <b>+ Add to build</b> to try it in your Portfolio Lab.</span></li></ol><span class="xstf">Picked from ${d.pool.toLocaleString()} ETFs.</span></div></div></div>
+    <div class="xcdock" id="xCardDock" hidden></div><div class="xsteps"><b class="xsth">How to use this</b><ol><li><span>${matchMedia('(hover:none)').matches?'Tap':'Click'} any shape on the chart to open its card.</span></li><li><span>Compare its returns and risk with ${esc(t)}.</span></li><li><span>Like it? Hit <b>Add to Portfolio</b> to add it to your portfolio.</span></li></ol><span class="xstf">Picked from ${d.pool.toLocaleString()} ETFs.</span></div></div></div>
     `;
-  renderXMButtons();xgSync(true);xFitChart();if(document.fonts&&document.fonts.status!=='loaded')document.fonts.ready.then(()=>{if(XM.d&&!$('xm').hidden){xFitChart();if(XM.sel)xChartTip(XM.sel,true)}});if(XM.sel&&xFind(XM.sel))xChartTip(XM.sel,true)}
+  renderXMButtons();xgSync(true);xFitChart();if(document.fonts&&document.fonts.status!=='loaded')document.fonts.ready.then(()=>{if(XM.d&&!$('xm').hidden){xMatchH();xFitNow();if(XM.sel)xChartTip(XM.sel,true)}});if(XM.sel&&xFind(XM.sel))xChartTip(XM.sel,true)}
 
 /* ---------- what's inside: top holdings as a map sized by weight and colored by return ---------- */
 const XIN={},XINL={};
@@ -2823,6 +2823,7 @@ function xinAssetsHTML(d){const L={stock:'Stocks',bond:'Bonds',cash:'Cash',prefe
     ${a.length?`<div class="xsbar">${a.map(([k,v],i)=>`<span style="flex:${v};background:${cols[i%cols.length]}" title="${L[k]||k} ${xw(v)}"></span>`).join('')}</div><div class="xslg">${a.map(([k,v],i)=>`<div><i style="background:${cols[i%cols.length]}"></i><span>${L[k]||esc(k)}</span><b>${xw(v)}</b></div>`).join('')}</div>`:'<p>No breakdown is available.</p>'}
     ${named.length?`<p>Largest listed: ${named.slice(0,5).map(c=>`${esc(c.hn||c.n||c.t)} (${xw(c.wt)})`).join(', ')}.</p>`:''}</div></figure>`}
 /* make the chart as tall as the tallest card, so a card never has to be cut down to fit beside it */
+function xFitNow(){if(ph0()||!XM.d||XM.tab==='in')return;const B=$('xmBody'),fig=document.querySelector('#xmBody .xfig'),tp=document.querySelector('#xmBody .xtop');if(!B||!fig||!tp)return;const av=B.clientHeight-(tp.offsetTop-B.offsetTop)-parseFloat(getComputedStyle(B).paddingBottom)-6;if(av<200||fig.offsetHeight<=av+2)return;const svg=fig.querySelector('svg');if(!svg||!svg.clientWidth||!svg.clientHeight)return;const over=fig.offsetHeight-av,vb=svg.viewBox.baseVal;XM.chH=Math.max(140,Math.round((svg.clientHeight-over)*vb.width/svg.clientWidth)-20);const nf=document.createElement('div');nf.innerHTML=xChart(XM.d);fig.replaceWith(nf.firstElementChild);renderXMButtons();document.querySelectorAll('#xmBody .xpt').forEach(g=>g.classList.toggle('on',g.dataset.xt===XM.sel));xMatchH();const dk=$('xCardDock'),card=dk&&dk.firstElementChild;if(card&&card.querySelector('.xflip.on')){const body=card.querySelector('.xbk-body');if(body&&body._d){const sel=body.querySelector('[data-xseg].sel');xTmPaint(body,sel?sel.dataset.xseg:'ind')}}}
 function xFitChart(){if(ph0()||!XM.d)return;const dock=$('xCardDock'),fig=document.querySelector('#xmBody .xfig'),leg=document.querySelector('#xmBody .xlegend');if(!dock||!fig||!leg)return;const d=XM.d;
   const was=dock.hidden,html=dock.innerHTML,show=leg.classList.contains('showcard');dock.style.visibility='hidden';dock.hidden=false;leg.classList.add('showcard');let mx=0;
   [d.self,...d.same,...(d.closest||[]),...d.div,...(d.mom||[]),...(d.own||[])].forEach(c=>{const q=xFind(c.t);if(!q)return;dock.innerHTML=q.k==='self'?xSelfCard(d.self):xCard(q,d.self,q.k);mx=Math.max(mx,dock.firstElementChild.offsetHeight)});
@@ -2852,8 +2853,8 @@ document.addEventListener('click',e=>{{const q=e.target.closest('[data-xpf]');if
   const a=e.target.closest('[data-xadd]');if(a&&!a.disabled){xToggleAdd(a.dataset.xadd);return}
   const g=e.target.closest('#xmBody [data-xrng],#xgMini [data-xrng],#xmGlance [data-xrng]');if(g){xSetRange(g.dataset.xrng);return}
   const p=e.target.closest('#xmBody .xpt');if(p){XM.sel=p.dataset.xt;xChartTip(p.dataset.xt,true);
-    /* when the card sits under the chart (narrow screens), bring it into view */const lg=document.querySelector('#xmBody .xlegend'),B=$('xmBody'),svg=p.closest('svg');if(XM.sel&&lg&&B&&svg&&lg.getBoundingClientRect().top>svg.getBoundingClientRect().bottom-4){const r=lg.getBoundingClientRect(),b=B.getBoundingClientRect(),m=$('xgMini'),off=(XGMINI()&&m?m.offsetHeight:70)+10;if(r.top>b.bottom-120||r.top<b.top+off)B.scrollTo({top:B.scrollTop+(r.top-b.top)-off,behavior:XREDUCE.matches?'auto':'smooth'})}return}
-  const rw=e.target.closest('#xCmp tr[data-xrow]');if(rw){const t=rw.dataset.xrow;XM.sel=t;xChartTip(t,true);const tp=document.querySelector('#xmBody .xtop'),B=$('xmBody');if(tp&&B){const r=tp.getBoundingClientRect(),bb=B.getBoundingClientRect();if(r.top<bb.top+60)B.scrollTo({top:B.scrollTop+(r.top-bb.top)-80,behavior:XREDUCE.matches?'auto':'smooth'})}return}
+    /* when the card sits under the chart (narrow screens), bring it into view */const lg=document.querySelector('#xmBody .xlegend'),B=$('xmBody'),svg=p.closest('svg');if(XM.sel&&lg&&B&&svg&&lg.getBoundingClientRect().top>svg.getBoundingClientRect().bottom-4){const r=lg.getBoundingClientRect(),b=B.getBoundingClientRect(),m=$('xgMini'),off=(XGMINI()&&m?m.offsetHeight:70)+10;if(r.top>b.bottom-120||r.top<b.top+off)B.scrollTo({top:B.scrollTop+(r.top-b.top)-off,behavior:XREDUCE.matches?'auto':'smooth'})}xFitNow();return}
+  const rw=e.target.closest('#xCmp tr[data-xrow]');if(rw){const t=rw.dataset.xrow;XM.sel=t;xChartTip(t,true);const tp=document.querySelector('#xmBody .xtop'),B=$('xmBody');if(tp&&B){const r=tp.getBoundingClientRect(),bb=B.getBoundingClientRect();if(r.top<bb.top+60)B.scrollTo({top:B.scrollTop+(r.top-bb.top)-80,behavior:XREDUCE.matches?'auto':'smooth'})}xFitNow();return}
   if(XM.sel&&!e.target.closest('#xCardDock,#xInDock,[data-xrng],#xgMini,.xmh,#xmDrawer,#xmFoot,.xmf')){const t=XM.sel;XM.sel=null;XM.tab==='in'?xinTip(t,false):xChartTip(t,false)}});
 /* touch screens send pretend mouse events with every tap; hover behavior ignores them, so a tap does only what it says */
 let xTouchAt=0;document.addEventListener('touchstart',()=>{xTouchAt=Date.now()},{passive:true,capture:true});
