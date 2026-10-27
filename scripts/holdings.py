@@ -19,6 +19,7 @@ import warnings
 import os
 import sys
 import time
+import unicodedata
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 from pathlib import Path
@@ -31,10 +32,33 @@ warnings.filterwarnings("ignore")
 ROOT = Path(__file__).resolve().parent.parent
 HOLD_FILE = ROOT / "data" / "holdings.json"
 BLURB_FILE = ROOT / "data" / "blurbs.json"   # plain-English summaries for the biggest ETFs, written once and edited by hand
+MAP_FILE = ROOT / "data" / "holding_map.json"   # company name -> industry/sector for foreign holdings the SEC data leaves unclassified
 NPORT_DIR = ROOT / "data" / "nport"     # real holdings history from the SEC (scripts/nport.py)
 NPORT_MAX_AGE_DAYS = 270                # an SEC report older than this means the fund stopped filing; use Yahoo
 NPORT_CARDS = 12                        # each fund's biggest holdings get fresh prices every night; the rest every few days
 STOCK_FILE = ROOT / "data" / "stocks.json"
+
+_MAP_SUFFIX = {"SA", "ESP", "LTD", "PLC", "AG", "NV", "BV", "SPA", "SRL", "INC", "CORP", "CO",
+               "DE", "CV", "THE", "PJSC", "JSC", "OOO", "KK", "GK", "SDN", "BHD", "TBK", "SC",
+               "SAS", "SAB", "SAOG"}
+_HOLDING_MAP = None
+
+
+def _norm_name(n):
+    """Canonical company-name key for the holding map: accents stripped, legal suffixes dropped."""
+    n = unicodedata.normalize("NFKD", n or "").encode("ascii", "ignore").decode()
+    n = re.sub(r"[^A-Z0-9 ]", " ", n.upper())
+    return " ".join(t for t in n.split() if t not in _MAP_SUFFIX)
+
+
+def _holding_map():
+    global _HOLDING_MAP
+    if _HOLDING_MAP is None:
+        try:
+            _HOLDING_MAP = _load(MAP_FILE) or {}
+        except Exception:
+            _HOLDING_MAP = {}
+    return _HOLDING_MAP
 HOLD_MAX_AGE_DAYS = 14
 STOCK_MAX_AGE_DAYS = 120
 HOLD_MINUTES = float(os.environ.get("HOLDINGS_MINUTES", "15"))
@@ -445,6 +469,13 @@ def build_inside(out_dir, etf_series, hold, stocks, stock_series, names, fund=No
                 c["hn"] = nm          # the name the fund uses
                 c["wt"] = w
                 top.append(c)
+        for c in top:
+            if not c.get("ind"):
+                m = _holding_map().get(_norm_name(c.get("hn") or c.get("n") or ""))
+                if m:
+                    c["ind"] = m.get("ind")
+                    if not c.get("sec"):
+                        c["sec"] = m.get("sec")
         tw = sum(c["wt"] for c in top)
         rest = None
         if extra and top:
