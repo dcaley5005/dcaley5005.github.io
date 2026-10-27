@@ -2343,10 +2343,15 @@ function xRiskTiles(c0,s0){const same=c0===s0;const c={...c0,...xRisk(c0)},s={..
   const ok=(a,b)=>a!=null&&b!=null;
   return t('Volatility',xu(c.vol),ok(c.vol,s.vol)?xpts(c.vol-s.vol):null,c.vol<=s.vol)+t('Sharpe',c.sh==null?'—':c.sh.toFixed(2),ok(c.sh,s.sh)?f2(c.sh-s.sh):null,c.sh>=s.sh)+t('Max DD',xu(c.dd),ok(c.dd,s.dd)?xpts(c.dd-s.dd):null,c.dd>=s.dd)
    +('er' in c0?t('Fee',fmtER(c.er),c.er!=null&&s.er!=null?f2(c.er-s.er):null,c.er!=null&&s.er!=null&&c.er<=s.er):'')}
+function xHero(c,s,kind){const k=xRk();
+  if(kind==='mom'&&c.m3!=null)return `<div class="xhero"><b class="${c.m3>=0?'pos':'neg'}">${xp(c.m3)}</b><span class="u">last 3 months</span><span class="xchip up">${xpts(c.m3-s.m3)} pts vs ${esc(s.t)}</span></div>`;
+  const v=c.r&&c.r[k]!=null?c.r[k]:c.r3,bv=s.r&&s.r[k]!=null?s.r[k]:s.r3,lab=k===5?'/ yr, 3Y':esc(XM.rng);
+  if(kind==='self')return `<div class="xhero"><b class="${v>=0?'pos':'neg'}">${xp(v)}</b><span class="u">${lab}</span><span class="xchip xbasechip">The base</span></div>`;
+  return `<div class="xhero"><b class="${v>=0?'pos':'neg'}">${xp(v)}</b><span class="u">${lab}</span><span class="xchip ${v-bv>=0?'up':'dn'}">${xpts(v-bv)} pts vs ${esc(s.t)}</span></div>`}
 function xCard(c,s,kind){const col=XCOL[kind];const dr=c.r3-s.r3;const pct=Math.round(c.c*100);
   const chips=xRetChips(c,s,true);
-  return `<article class="xcard" data-xc="${esc(c.t)}" style="--xc:${col}"><div class="xch"><div><b>${esc(c.t)}</b><span class="nm">${esc(c.n||NAMES[c.t]||'')}</span></div><span class="xchip ${kind==='same'?'s':kind==='mom'?'m':kind==='own'?'o':'d'}">${kind==='own'?'Moves with':'Tracks'} ${esc(s.t)} ${pct}%</span></div>
-    ${kind==='mom'&&c.m3!=null?`<div class="xhero"><b class="${c.m3>=0?'pos':'neg'}">${xp(c.m3)}</b><span class="u">last 3 months</span><span class="xchip up">${xpts(c.m3-s.m3)} pts vs ${esc(s.t)}</span></div>`:`<div class="xhero"><b class="${c.r3>=0?'pos':'neg'}">${xp(c.r3)}</b><span class="u">/ yr, 3Y</span><span class="xchip ${dr>=0?'up':'dn'}">${xpts(dr)} pts vs ${esc(s.t)}</span></div>`}
+  return `<article class="xcard" data-xc="${esc(c.t)}" style="--xc:${col}"><div class="xch"><div><b>${esc(c.t)}</b><span class="nm">${esc(c.n||NAMES[c.t]||'')}</span></div><span class="xchip ${kind==='same'?'s':kind==='mom'?'m':kind==='own'?'o':'d'}">${pct}% correlated with ${esc(s.t)}</span></div>
+    ${xHero(c,s,kind)}
     ${xSpark(c,s,col,c.t)}<div class="xrl">Returns vs ${esc(s.t)}</div><div class="xchips">${chips}</div>
     <div class="xrl xrlr">Risk vs ${esc(s.t)} · ${xRngLbl()}</div><div class="xrisk">${xRiskTiles(c,s)}</div>
     <p class="xwhy">${xWhy(c,s,kind)}</p><button type="button" class="xadd" data-xadd="${esc(c.t)}"></button></article>`}
@@ -2354,7 +2359,7 @@ function xSetRange(k){XM.rng=k;XM.rngSet=1;const d=XM.d;if(!d)return;
   /* redraw each line chart at the height it already has, so nothing jumps while periods are clicked through */
   document.querySelectorAll('#xmBody .xspark').forEach(box=>{const c=xFind(box.dataset.xsp);if(!c)return;const col=box.closest('.xcard').style.getPropertyValue('--xc'),sv=box.querySelector('svg'),h=sv&&sv.style.height;let html=xSpark(c,d.self,col,c.t);if(h)html=html.replace('<svg ','<svg style="height:'+h+'" ');box.outerHTML=html});
   document.querySelectorAll('#xmBody [data-xrng],#xmGlance [data-xrng]').forEach(b=>{const on=b.dataset.xrng===k;b.classList.toggle('sel',on);b.setAttribute('aria-pressed',on)});{const w=document.querySelector('#xmBody .xgwrap');if(w&&w._h0&&!XGMINI())xgPaint(w,XG.cur);if(w&&XGMINI())setTimeout(()=>xgSync(true),0)}
-  document.querySelectorAll('#xmBody .xcard').forEach(card=>{const c=xFind(card.dataset.xc);const rk=card.querySelector('.xrisk'),lb=card.querySelector('.xrlr');if(c&&rk)rk.innerHTML=xRiskTiles(c,d.self);if(lb)lb.textContent=`Risk vs ${d.self.t} · ${xRngLbl()}`});
+  document.querySelectorAll('#xmBody .xcard').forEach(card=>{const c=xFind(card.dataset.xc);const rk=card.querySelector('.xrisk'),lb=card.querySelector('.xrlr'),hr=card.querySelector('.xhero');if(c&&rk)rk.innerHTML=xRiskTiles(c,d.self);if(lb)lb.textContent=`Risk vs ${d.self.t} · ${xRngLbl()}`;if(c&&hr&&['self','same','div','mom','own'].includes(c.k))hr.outerHTML=xHero(c,d.self,c.k)});
   {const T=$('xCmp');if(T){T.innerHTML=xCmpTable();renderXMButtons()}}
   const rs=xRisk(d.self),gs=$('xgSh'),gd=$('xgDd');if(gs)gs.innerHTML=`<span>Sharpe</span><b>${rs.sh==null?'—':rs.sh.toFixed(2)}</b>`;if(gd)gd.innerHTML=`<span>Max DD</span><b>${xu(rs.dd)}</b>`;if(XM.tab!=='in')xMatchH();if(XM.tab==='in'){xinPaint();const dk=$('xInDock');if(dk){dk.dataset.t='~';xinTip(null,false)}const n=$('xtmNote');if(n)n.textContent=xinNote()}}
 /* return vs volatility dot chart */
@@ -2410,7 +2415,7 @@ function xTipBase(t,on){const tip=$('xChartTip'),svg=document.querySelector('#xm
     const vr=p.vol/s.vol-1,risk=vr>0.05?'with more risk':vr<-0.05?'with less risk':'with about the same risk';
     const lead={same:`Earned ${xpts(p.r3-s.r3)} points a year more than ${s.t}`,div:`Earned ${xpts(p.r3-s.r3)} points a year vs ${s.t}`,mom:`Up ${xp(m3(p))} over the last 3 months vs ${xp(m3(s))} for ${s.t}`,own:`Higher Sharpe than ${s.t} (${p.sh.toFixed(2)} vs ${s.sh.toFixed(2)})`}[p.k];
     const sent=`${lead}, ${risk}.${p.k==='mom'?' Placed on the chart by its 3-year numbers.':''}`;
-    h=head(p.t,p.n,p.k)+`<span class="xttag ${p.k}">${tagTxt} · ${p.k==='own'?'moves with':'tracks'} ${esc(s.t)} ${Math.round(p.c*100)}%</span><div class="xrl">Returns vs ${esc(s.t)}</div><div class="xchips">${xRetChips(p,s,false)}</div><div class="xrl xrlr">Risk vs ${esc(s.t)} · ${xRngLbl()}</div><div class="xrisk">${xRiskTiles(p,s)}</div><p class="xtw">${esc(sent)}</p>`}
+    h=head(p.t,p.n,p.k)+`<span class="xttag ${p.k}">${tagTxt} · ${Math.round(p.c*100)}% correlated with ${esc(s.t)}</span><div class="xrl">Returns vs ${esc(s.t)}</div><div class="xchips">${xRetChips(p,s,false)}</div><div class="xrl xrlr">Risk vs ${esc(s.t)} · ${xRngLbl()}</div><div class="xrisk">${xRiskTiles(p,s)}</div><p class="xtw">${esc(sent)}</p>`}
   tip.innerHTML=h;const leg=document.querySelector('#xmBody .xlegend'),side=leg&&leg.getBoundingClientRect().left>svg.getBoundingClientRect().right-4;
   if(side){/* wide screens: show the details in the column beside the chart so nothing on the chart is covered */
     if(tip.parentElement!==leg)leg.appendChild(tip);tip.classList.add('dock');leg.classList.add('showtip');tip.style.left='';tip.style.top='';tip.hidden=false;
@@ -2429,7 +2434,7 @@ function xSparkOut(box){const cr=box.querySelector('.xcross');if(cr)cr.style.dis
 function xSelfCard(s){if(XM.d&&XM.d.pf)return xSelfCard0(s).replace('>The ETF you clicked<','>Your portfolio<').replace(/<button type="button" class="xadd"[^>]*><\/button>/,'');return xSelfCard0(s)}
 function xSelfCard0(s){const n=XM.d.same.length,m=XM.d.div.length,mo=XM.d.mom?XM.d.mom.length:null,ow=(XM.d.own||[]).length;
   const sp=xSpark(s,s,'var(--ink)',s.t).replace(/<polyline[^>]*stroke-dasharray="4 3"[^>]*\/>/,'').replace(/<span>┅[^<]*<\/span>/,'');
-  return `<article class="xcard" data-xc="${esc(s.t)}" style="--xc:var(--ink)"><div class="xch"><div><b>${esc(s.t)}</b><span class="nm">${esc(s.n&&s.n!==s.t?s.n:NAMES[s.t]||'')}</span></div><span class="xchip xbasechip">The ETF you clicked</span></div><div class="xhero"><b class="${s.r3>=0?'pos':'neg'}">${xp(s.r3)}</b><span class="u">/ yr, 3Y</span><span class="xchip xbasechip">The base</span></div>${sp}<div class="xrl">Returns · the base</div><div class="xchips">${xRetChips(s,s,true).replace(/<\/b>/g,'</b><i class="xbase">base</i>')}</div><div class="xrl xrlr">Risk · ${xRngLbl()}</div><div class="xrisk">${xRiskTiles(s,s).replace(/<\/b><\/div>/g,'</b><i class="xbase">base</i></div>')}</div><p class="xwhy xsfnd">Found ${n} higher return, ${m} less risk${mo==null?'':`, ${mo} momentum`}, ${ow} moves on its own pick${n+m+(mo||0)+ow===1?'':'s'}.</p><button type="button" class="xadd" data-xadd="${esc(s.t)}"></button></article>`}
+  return `<article class="xcard" data-xc="${esc(s.t)}" style="--xc:var(--ink)"><div class="xch"><div><b>${esc(s.t)}</b><span class="nm">${esc(s.n&&s.n!==s.t?s.n:NAMES[s.t]||'')}</span></div><span class="xchip xbasechip">The ETF you clicked</span></div>${xHero(s,s,'self')}${sp}<div class="xrl">Returns · the base</div><div class="xchips">${xRetChips(s,s,true).replace(/<\/b>/g,'</b><i class="xbase">base</i>')}</div><div class="xrl xrlr">Risk · ${xRngLbl()}</div><div class="xrisk">${xRiskTiles(s,s).replace(/<\/b><\/div>/g,'</b><i class="xbase">base</i></div>')}</div><p class="xwhy xsfnd">Found ${n} higher return, ${m} less risk${mo==null?'':`, ${mo} momentum`}, ${ow} moves on its own pick${n+m+(mo||0)+ow===1?'':'s'}.</p><button type="button" class="xadd" data-xadd="${esc(s.t)}"></button></article>`}
 function xMini(c,s,col){const R=xRange(c,s),n=R.a.length;if(n<2)return '';const self=c===s;const all=self?R.a:R.a.concat(R.b);const lo=Math.min(0,...all),hi=Math.max(0,...all),rg=(hi-lo)||1;const X=i=>1+i*94/(n-1),Y=v=>2+(hi-v)/rg*24;
   const path=a=>a.map((v,i)=>(i?'L':'M')+X(i).toFixed(1)+' '+Y(v).toFixed(1)).join('');
   return `<svg class="xmini" viewBox="0 0 96 28" width="96" height="28" aria-hidden="true"><line x1="0" x2="96" y1="${Y(0).toFixed(1)}" y2="${Y(0).toFixed(1)}" stroke="var(--grid)"/>${self?'':`<path d="${path(R.b)}" fill="none" stroke="var(--faint)" stroke-width="1" stroke-dasharray="2 2"/>`}<path d="${path(R.a)}" fill="none" stroke="${col}" stroke-width="1.6"/></svg>`}
@@ -2595,12 +2600,12 @@ async function xPfAlt(p){const ws=weights(p);
   const self={t:p.name,ts:'mix',n:'Your portfolio · '+ws.map(x=>x.t+' '+xw(x.w)).join(', '),er:pfER(p),r,r3,vol,sh,dd,m3,d:P.dd.map(rel),w:P.wd.map(rel)};
   /* the same four rules as for a single ETF */
   const mem=new Set(ws.map(x=>x.t)),rows=[];for(let k=0;k<P.N;k++)if(!mem.has(P.t[k]))rows.push(k);
-  const rb=r3,bv=vol,mb=m3,R3=P.r3,VO=P.vol,SH=P.sh,M3=P.m3,sg=0.9*sh;
+  const rb=r3,bv=vol,mb=m3,R3=P.r3,VO=P.vol,SH=P.sh,M3=P.m3,sg=0.9*sh,flr=rb>0?0.75*rb:rb;
   const same=rows.filter(k=>corr[k]>0.70&&R3[k]>rb&&SH[k]>=sg).sort((a,b)=>SH[b]-SH[a]).slice(0,4);
   const closest=same.length?[]:rows.filter(k=>corr[k]>0.70).sort((a,b)=>corr[b]-corr[a]).slice(0,4);
-  const div=rows.filter(k=>corr[k]>0.70&&VO[k]<=bv*0.85&&SH[k]>=sg).sort((a,b)=>SH[b]-SH[a]).slice(0,4);
+  const div=rows.filter(k=>corr[k]>0.70&&VO[k]<=bv*0.85&&SH[k]>=sg&&R3[k]>=flr).sort((a,b)=>SH[b]-SH[a]).slice(0,4);
   const mom=rows.filter(k=>corr[k]>0.70&&SH[k]>=sg&&M3[k]>mb).sort((a,b)=>M3[b]-M3[a]).slice(0,4);
-  const own=rows.filter(k=>corr[k]<0.60&&SH[k]>sh&&R3[k]>=(rb>0?0.5*rb:rb)).sort((a,b)=>SH[b]-SH[a]).slice(0,4);
+  const own=rows.filter(k=>corr[k]<0.60&&SH[k]>sh&&R3[k]>=flr).sort((a,b)=>SH[b]-SH[a]).slice(0,4);
   /* each pick's card comes from its own nightly file, which also has its line chart */
   const picks=[...new Set([...same,...closest,...div,...mom,...own])];await Promise.allSettled(picks.map(k=>xLoad(P.t[k])));
   const card=k=>{const x=XDATA[P.t[k]];return x&&x.self?{...x.self,c:Math.round(corr[k]*1000)/1000}:null},cards=a=>a.map(card).filter(Boolean);
@@ -2740,9 +2745,9 @@ function xFitChart(){if(ph0()||!XM.d)return;const dock=$('xCardDock'),fig=docume
 function xHowHTML(){const t=XM.t||'this ETF',d=XM.d;const st=(k,p)=>`<div class="xstep"><span class="k">${k}</span><p>${p}</p></div>`;
   return st('The pool',`${d?d.pool.toLocaleString():'About 1,800'} ETFs with at least 3 years of prices and $50M in assets. Left out: buffer, option-income and covered-call funds, trading funds, hedged, tactical and long/short strategies, ETNs, and anything charging more than 1% a year.`)
    +st('Higher return, similar risk',`Moves more than 70% in step with ${t} and earned more than it over 3 years, with a Sharpe at least 90% of ${t}'s. Best Sharpe first.`)
-   +st('Less risk',`Moves more than 70% in step with ${t}, with at least 15% less volatility over 3 years and a Sharpe at least 90% of ${t}'s. Best Sharpe first.`)
+   +st('Less risk',`Moves more than 70% in step with ${t}, with at least 15% less volatility over 3 years, a Sharpe at least 90% of ${t}'s, and at least 75% of its return. Best Sharpe first.`)
    +st('Momentum',`Moves more than 70% in step with ${t} and is ahead of it over the last 3 months, using the average of the last 10 days so one week can't flip it, with a Sharpe at least 90% of ${t}'s. Strongest 3 months first.`)
-   +st('Moves on its own',`Moves less than 60% in step with ${t}, so it tends to zig when ${t} zags, with a higher Sharpe than ${t} and at least half its 3-year return, which keeps near-cash funds out. Best Sharpe first.`)
+   +st('Moves on its own',`Moves less than 60% in step with ${t}, so it tends to zig when ${t} zags, with a higher Sharpe than ${t} and at least 75% of its 3-year return, which keeps near-cash funds and much weaker funds out. Best Sharpe first.`)
    +(XM.pf?`<p class="xstepn">For a portfolio, "moves in step" is measured on weekly returns over the last 3 years, and the portfolio is bought at your percentages 3 years ago and held. Its own ETFs are left out of the picks.</p>`:'')
    +`<p class="xstepn">Return and volatility are measured over the last 3 years, and everything refreshes every morning. Sharpe is return per unit of volatility. These are ideas to research, not advice.</p>`}
 function xDrawer(on){const dr=$('xmDrawer'),b=$('xmHow');if(on){dr.querySelector('.xdb').innerHTML=xHowHTML();dr.style.top=document.querySelector('#xm .xmh').offsetHeight+'px'}dr.classList.toggle('open',!!on);dr.setAttribute('aria-hidden',!on);b.setAttribute('aria-expanded',!!on)}
