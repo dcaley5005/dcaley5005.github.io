@@ -261,8 +261,11 @@ def period_returns(s, last):
 
 
 def build_explore(series, names, fund):
-    """For every ETF with 3 years of prices: up to 3 that track it and beat it on return and
-    Sharpe, up to 3 that move differently with a Sharpe within 20% of it, and its closest peers."""
+    """For every ETF with 3 years of prices: four groups of up to 4 alternatives. Correlated
+    picks must move more than 70% in step with the fund and carry a Sharpe at least 90% of the
+    fund's own: higher return (earned more), less risk (swings 15%+ less), momentum (ahead over
+    the last 3 months). A fourth group moves on its own: less than 60% in step, a strictly
+    higher Sharpe, and at least half the fund's return, so cash-like funds can't fill it."""
     import numpy as np
     spy = series["SPY"]
     cut = spy.index[-1] - pd.DateOffset(years=3)
@@ -333,23 +336,28 @@ def build_explore(series, names, fund):
         corr = (z[:, i] @ zc) / n
         rows = [(tick[cand[k]], float(corr[k])) for k in range(len(cand)) if tick[cand[k]] != t]
         sb, rb, bv = float(sharpe[t]), float(r3[t]), float(vol[t])
-        # Higher return, similar ride: moves 85%+ in step, 1+ point a year more return,
-        # swings no more than 25% more; best Sharpe first
-        same = sorted([(u, c) for u, c in rows if c >= 0.85 and r3[u] >= rb + 0.01 and vol[u] <= bv * 1.25],
-                      key=lambda x: -sharpe[x[0]])[:3]
-        closest = [] if same else sorted([(u, c) for u, c in rows if c >= 0.85], key=lambda x: -x[1])[:3]
-        # Smoother ride, similar return: swings 15%+ less, return no more than 2 points a year lower;
-        # best Sharpe first
-        div = sorted([(u, c) for u, c in rows if vol[u] <= bv * 0.85 and r3[u] >= rb - 0.02],
-                     key=lambda x: -sharpe[x[0]])[:3]
-        # Momentum: moves 85%+ in step, ahead by 2+ points over 3 months (10-day average), swings no
-        # more than 25% more, and a 3-year return within 3 points; strongest 3 months first
+        sg = 0.9 * sb   # every correlated pick needs a Sharpe at least 90% of the fund's own
+        # Higher return: moves 70%+ in step and earned more over 3 years; best Sharpe first
+        same = sorted([(u, c) for u, c in rows if c > 0.70 and r3[u] > rb and sharpe[u] >= sg],
+                      key=lambda x: -sharpe[x[0]])[:4]
+        closest = [] if same else sorted([(u, c) for u, c in rows if c > 0.70], key=lambda x: -x[1])[:4]
+        # Less risk: moves 70%+ in step and swings 15%+ less; no return floor; best Sharpe first
+        div = sorted([(u, c) for u, c in rows if c > 0.70 and vol[u] <= bv * 0.85 and sharpe[u] >= sg],
+                     key=lambda x: -sharpe[x[0]])[:4]
+        # Momentum: moves 70%+ in step and ahead over the last 3 months (10-day average);
+        # strongest 3 months first
         mb = float(m3s[t])
-        mom = sorted([(u, c) for u, c in rows if c >= 0.85 and vol[u] <= bv * 1.25 and r3[u] >= rb - 0.03
-                      and m3s[u] >= mb + 0.02], key=lambda x: -m3s[x[0]])[:3]
+        mom = sorted([(u, c) for u, c in rows if c > 0.70 and sharpe[u] >= sg
+                      and m3s[u] > mb], key=lambda x: -m3s[x[0]])[:4]
+        # Moves on its own: less than 60% in step, a strictly higher Sharpe, and at least half
+        # the fund's 3-year return (for a fund with a negative return, at least its own return),
+        # so near-cash funds with huge Sharpes can't take the group; best Sharpe first
+        own_floor = 0.5 * rb if rb > 0 else rb
+        own = sorted([(u, c) for u, c in rows if c < 0.60 and sharpe[u] > sb and r3[u] >= own_floor],
+                     key=lambda x: -sharpe[x[0]])[:4]
         doc = dict(meta, self=card(t), same=[card(u, c) for u, c in same],
                    closest=[card(u, c) for u, c in closest], div=[card(u, c) for u, c in div],
-                   mom=[card(u, c) for u, c in mom],
+                   mom=[card(u, c) for u, c in mom], own=[card(u, c) for u, c in own],
                    pool=len(cand))
         (out / f"{t}.json").write_text(json.dumps(doc, separators=(",", ":")))
         written += 1
