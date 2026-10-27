@@ -1012,9 +1012,9 @@ tr.xecho>td{background:var(--accentBg);transition:background .2s}
 .xdisc{margin:4px 0 0;font-size:12px;color:var(--faint)}
 .xflipcard{padding:0;overflow:hidden}
 .xflip{flex:1 1 auto;min-height:0;display:flex;perspective:1400px}
-.xflipin{flex:1 1 auto;min-height:0;display:grid;transform-style:preserve-3d;transition:transform .62s cubic-bezier(.22,.68,.24,1);will-change:transform}
+.xflipin{flex:1 1 auto;min-height:0;display:grid;transform-style:preserve-3d;-webkit-transform-style:preserve-3d;transition:transform .55s cubic-bezier(.35,.55,.35,1);will-change:transform}
 .xflip.on .xflipin{transform:rotateY(180deg)}
-.xface{grid-area:1/1;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column;gap:11px;padding:16px;min-height:0;overflow:hidden;transition:visibility 0s linear .31s;transform:translateZ(0)}
+.xface{grid-area:1/1;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column;gap:11px;padding:16px;min-height:0;overflow:hidden;transition:visibility 0s linear .25s;transform:translateZ(0)}
 .xface.bk{transform:rotateY(180deg);visibility:hidden}
 .xflip.on .xface.bk{visibility:visible}
 .xflip.on .xface.fr{visibility:hidden}
@@ -1039,8 +1039,8 @@ tr.xecho>td{background:var(--accentBg);transition:background .2s}
 .xseg button.sel{background:var(--panel2);color:var(--ink);box-shadow:0 1px 4px rgba(0,0,0,.25)}
 .xftm{position:relative;flex:1 1 auto;min-height:118px;margin-bottom:10px}
 .xftile{position:absolute;border-radius:8px;padding:7px 9px;overflow:hidden;color:#14181d;display:flex;flex-direction:column;gap:1px}
-.xftile b{font-size:13.5px;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.xftile span{font-size:12px;opacity:.85;line-height:1.15;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word}
+.xftile b{font-size:13.5px;line-height:1.25;display:block;overflow:hidden;padding-top:1px}.xftile b.one{white-space:nowrap;text-overflow:ellipsis}
+.xftile span{font-size:12px;opacity:.85;line-height:1.2;display:block;overflow:hidden;max-height:15px}
 .xftile i{font-style:normal;font-size:12.5px;font-weight:600}
 .xftip{position:absolute;z-index:5;background:var(--panel);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:6px 9px;font-size:12.5px;box-shadow:0 6px 18px rgba(0,0,0,.35);pointer-events:none;white-space:nowrap}
 .xbk-load{color:var(--muted);font-size:14px;margin:0}
@@ -2428,7 +2428,7 @@ function xTmPaint(body,mode){const box=body.querySelector('.xftm');if(!box||!bod
   const items=xTmItems(body._d,mode),tw=items.reduce((a,x)=>a+x.w,0)||1;
   const tiles=xSquarify(items.map(x=>({c:x,a:x.w/tw*W*H})),0,0,W,H);
   box.innerHTML=tiles.map(({c,x,y,w,h},i)=>{const pc=c.w*100,p1=pc.toFixed(1)+'%',lab=`${c.t}${c.n?' · '+c.n:''} · ${p1}`;
-    const lw=c.t.split(' ').reduce((a,x)=>Math.max(a,x.length),0),bfs=Math.max(9,Math.min(13,(w-22)/(lw*0.68),(w-22)*2/(c.t.length*0.62)));const inner=w>=110&&h>=54?`<b style="font-size:${bfs.toFixed(1)}px">${esc(c.t)}</b><i>${p1}</i>${c.n?`<span>${esc(c.n)}</span>`:''}`:w>=54&&h>=34&&bfs>=9.5?`<b style="font-size:${bfs.toFixed(1)}px">${esc(c.t)}</b><i>${p1}</i>`:w>=36&&h>=22?`<i style="font-size:${Math.max(10,Math.min(12.5,w/3.8)).toFixed(1)}px">${pc<10?p1:Math.round(pc)+'%'}</i>`:'';
+    const lw=c.t.split(' ').reduce((a,x)=>Math.max(a,x.length),0),bfs=Math.max(9,Math.min(13,(w-22)/(lw*0.68),(w-22)*2/(c.t.length*0.62))),bfs1=Math.min(13,(w-22)/(c.t.length*0.6));const inner=w>=110&&h>=54?`<b style="font-size:${bfs.toFixed(1)}px">${esc(c.t)}</b><i>${p1}</i>${c.n?`<span>${esc(c.n)}</span>`:''}`:w>=54&&h>=54&&bfs1>=9?`<b class="one" style="font-size:${bfs1.toFixed(1)}px">${esc(c.t)}</b><i>${p1}</i>`:w>=36&&h>=22?`<i style="font-size:${Math.max(10,Math.min(12.5,w/3.8)).toFixed(1)}px">${pc<10?p1:Math.round(pc)+'%'}</i>`:'';
     return `<div class="xftile" data-tip="${esc(lab)}" style="left:${x.toFixed(1)}px;top:${y.toFixed(1)}px;width:${Math.max(0,w-3).toFixed(1)}px;height:${Math.max(0,h-3).toFixed(1)}px;background:${XSCOL[i%XSCOL.length]}">${inner}</div>`}).join('')+'<div class="xftip" hidden></div>'}
 function xTmTip(tl,on){const box=tl.parentElement,tip=box&&box.querySelector('.xftip');if(!tip)return;if(!on){tip.hidden=true;return}
   tip.textContent=tl.dataset.tip;tip.hidden=false;let x=tl.offsetLeft+tl.offsetWidth/2-tip.offsetWidth/2;x=Math.max(2,Math.min(box.clientWidth-tip.offsetWidth-2,x));let y=tl.offsetTop-tip.offsetHeight-6;if(y<0)y=tl.offsetTop+tl.offsetHeight+6;tip.style.left=x+'px';tip.style.top=y+'px'}
