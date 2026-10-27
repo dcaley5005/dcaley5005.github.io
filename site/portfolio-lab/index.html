@@ -2600,7 +2600,7 @@ async function xPfAlt(p){const ws=weights(p);
   const self={t:p.name,ts:'mix',n:'Your portfolio · '+ws.map(x=>x.t+' '+xw(x.w)).join(', '),er:pfER(p),r,r3,vol,sh,dd,m3,d:P.dd.map(rel),w:P.wd.map(rel)};
   /* the same four rules as for a single ETF */
   const mem=new Set(ws.map(x=>x.t)),rows=[];for(let k=0;k<P.N;k++)if(!mem.has(P.t[k]))rows.push(k);
-  const rb=r3,bv=vol,mb=m3,R3=P.r3,VO=P.vol,SH=P.sh,M3=P.m3,sg=0.9*sh,flr=rb>0?0.75*rb:rb;
+  const rb=r3,bv=vol,mb=m3,R3=P.r3,VO=P.vol,SH=P.sh,M3=P.m3,sg=0.9*sh,flr=rb>0?0.9*rb:rb;
   const same=rows.filter(k=>corr[k]>0.70&&R3[k]>rb&&SH[k]>=sg).sort((a,b)=>SH[b]-SH[a]).slice(0,3);
   const closest=same.length?[]:rows.filter(k=>corr[k]>0.70).sort((a,b)=>corr[b]-corr[a]).slice(0,3);
   const div=rows.filter(k=>corr[k]>0.70&&VO[k]<=bv*0.85&&SH[k]>=sg&&R3[k]>=flr).sort((a,b)=>SH[b]-SH[a]).slice(0,3);
@@ -2745,9 +2745,9 @@ function xFitChart(){if(ph0()||!XM.d)return;const dock=$('xCardDock'),fig=docume
 function xHowHTML(){const t=XM.t||'this ETF',d=XM.d;const st=(k,p)=>`<div class="xstep"><span class="k">${k}</span><p>${p}</p></div>`;
   return st('The pool',`${d?d.pool.toLocaleString():'About 1,800'} ETFs with at least 3 years of prices and $50M in assets. Left out: buffer, option-income and covered-call funds, trading funds, hedged, tactical and long/short strategies, ETNs, and anything charging more than 1% a year.`)
    +st('Higher return, similar risk',`Moves more than 70% in step with ${t} and earned more than it over 3 years, with a Sharpe at least 90% of ${t}'s. Best Sharpe first.`)
-   +st('Less risk',`Moves more than 70% in step with ${t}, with at least 15% less volatility over 3 years, a Sharpe at least 90% of ${t}'s, and at least 75% of its return. Best Sharpe first.`)
+   +st('Less risk',`Moves more than 70% in step with ${t}, with at least 15% less volatility over 3 years, a Sharpe at least 90% of ${t}'s, and at least 90% of its return. Best Sharpe first.`)
    +st('Momentum',`Moves more than 70% in step with ${t} and is ahead of it over the last 3 months, using the average of the last 10 days so one week can't flip it, with a Sharpe at least 90% of ${t}'s. Strongest 3 months first.`)
-   +st('Moves on its own',`Moves less than 60% in step with ${t}, so it tends to zig when ${t} zags, with a higher Sharpe than ${t} and at least 75% of its 3-year return, which keeps near-cash funds and much weaker funds out. Best Sharpe first.`)
+   +st('Moves on its own',`Moves less than 60% in step with ${t}, so it tends to zig when ${t} zags, with a higher Sharpe than ${t} and at least 90% of its 3-year return, which keeps near-cash funds and much weaker funds out. Best Sharpe first.`)
    +(XM.pf?`<p class="xstepn">For a portfolio, "moves in step" is measured on weekly returns over the last 3 years, and the portfolio is bought at your percentages 3 years ago and held. Its own ETFs are left out of the picks.</p>`:'')
    +`<p class="xstepn">Return and volatility are measured over the last 3 years, and everything refreshes every morning. Sharpe is return per unit of volatility. These are ideas to research, not advice.</p>`}
 function xDrawer(on){const dr=$('xmDrawer'),b=$('xmHow');if(on){dr.querySelector('.xdb').innerHTML=xHowHTML();dr.style.top=document.querySelector('#xm .xmh').offsetHeight+'px'}dr.classList.toggle('open',!!on);dr.setAttribute('aria-hidden',!on);b.setAttribute('aria-expanded',!!on)}
