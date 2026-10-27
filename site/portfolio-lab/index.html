@@ -2632,13 +2632,13 @@ function xHoldCard(c,s,noload){const k=xRk(),nm=c.n||c.hn||'';if(c.t&&!c.d&&XSTK
   /* not fetched yet: an empty chart of the same size, filled in when the file arrives */
   const wait=!line&&c.t&&c.r&&s.w&&XSTK[c.t]===undefined;
   if(wait&&!noload)xStkLoad(c.t).then(()=>{const dk=$('xInDock');if(dk&&dk.querySelector('.xwait')&&dk.firstElementChild&&dk.firstElementChild.dataset.xc===c.t){dk.dataset.t='~';xinTip(XM.sel||c.t,true)}});
-  const r3=c.r3!=null,hv=r3?c.r3:c.r?c.r[4]:null,hb=r3?s.r3:s.r?s.r[4]:null,dr=hv!=null&&hb!=null?hv-hb:null;
+  const useR=c.r&&c.r[k]!=null,hv=useR?c.r[k]:c.r3!=null?c.r3:c.r?c.r[4]:null,hb=useR?(s.r?s.r[k]:null):s.r3!=null?s.r3:s.r?s.r[4]:null,dr=hv!=null&&hb!=null?hv-hb:null,hlab=useR?(k===5?'/ yr, 3Y':esc(XM.rng)):c.r3!=null?'/ yr, 3Y':'1Y';
   const add=xinAdded(c,k),wd=k===5?XRWORD['1Y']:XRWORD[XM.rng];
   const via=XM.d&&XM.d.pf&&c.src?`Held through ${xList(c.src.map(([t,w])=>`${esc(t)} (${xw(w)})`))}.`:'';
   const then=xinShare(c,k),was=Math.abs(then-c.wt)>=0.0005?`Was about ${xw(then)} of ${esc(s.t)} ${XAGO[XM.rng]}.`:'';
   const why=[c.ind?esc(c.ind)+'.':'',via,was,add==null?'':`Added <b class="${add>=0?'pos':'neg'}">${xpts(add)} pts</b> to ${esc(s.t)}'s return ${wd}.`].filter(Boolean).join(' ');
   return `<article class="xcard" data-xc="${esc(c.t)}" style="--xc:var(--xs)"><div class="xch"><div><b>${esc(c.t)}</b><span class="nm">${esc(nm)}</span></div><span class="xchip s">${c.wt>0?`${xw(c.wt)} of ${esc(s.t)}`:`Not in the top ${xinN(XM.d)} now`}</span></div>
-    ${hv==null?'':`<div class="xhero"><b class="${hv>=0?'pos':'neg'}">${xp(hv)}</b><span class="u">${r3?'/ yr, 3Y':'1Y'}</span>${dr==null?'':`<span class="xchip ${dr>=0?'up':'dn'}">${xpts(dr)} pts vs ${esc(s.t)}</span>`}</div>`}
+    ${hv==null?'':`<div class="xhero"><b class="${hv>=0?'pos':'neg'}">${xp(hv)}</b><span class="u">${hlab}</span>${dr==null?'':`<span class="xchip ${dr>=0?'up':'dn'}">${xpts(dr)} pts vs ${esc(s.t)}</span>`}</div>`}
     ${line?xSpark(c,s,'var(--xs)',c.t):wait?`<div class="xspark xwait"><svg viewBox="0 0 300 60" preserveAspectRatio="none" aria-hidden="true"><line x1="0" x2="300" y1="30" y2="30" stroke="var(--line)" vector-effect="non-scaling-stroke"/></svg><div class="lg"><span>&nbsp;</span></div></div>`:'<div class="xnoline">Not enough price history for a line chart</div>'}
     ${c.r&&s.r?`<div class="xrl">Returns vs ${esc(s.t)}</div><div class="xchips">${xRetChips(c,s,true)}</div>`:''}
     ${c.vol!=null?`<div class="xrl xrlr">Risk vs ${esc(s.t)} · ${xRngLbl()}</div><div class="xrisk x3">${xRiskTiles(c,s)}</div>`:''}
