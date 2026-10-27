@@ -1,0 +1,1180 @@
+[
+{
+"t": "RBTX",
+"name": "iShares Future Robotics and Related Technologies Active ETF",
+"fee_pct": 0.65,
+"category": "Technology",
+"issuer": "BlackRock Fund Advisors",
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": "Under normal market conditions, the fund invests at least 80% of its net assets, plus the amount of any borrowings for investment purposes, in equity securities issued by robotics companies and related technology companies and derivatives that provide investment exposure to such securities or to one or more market risk factors associated with such securities. It is non-diversified."
+},
+{
+"t": "EUHY",
+"name": "iShares Euro High Yield Corporate Bond USD Hedged ETF",
+"fee_pct": null,
+"category": null,
+"issuer": null,
+"top_holdings_pct": [
+[
+"STELLANTIS NV",
+0.5
+],
+[
+"Stellantis NV",
+0.5
+],
+[
+"COREWEAVE INC",
+0.5
+],
+[
+"VMED O2 UK FINANCING I",
+0.4
+],
+[
+"FIBERCOP SPA",
+0.4
+],
+[
+"Bond US Bidco 1, Inc.",
+0.3
+],
+[
+"OPAL BIDCO SAS",
+0.3
+],
+[
+"CAB",
+0.3
+]
+],
+"holdings_source": "SEC report 2026-07-31",
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": ""
+},
+{
+"t": "HSBH",
+"name": "HSBC Holdings plc ADRhedged",
+"fee_pct": null,
+"category": null,
+"issuer": null,
+"top_holdings_pct": [
+[
+"HSBC Holdings PLC",
+96.2
+],
+[
+"CANADIAN IMPERIAL BANK OF COMMERCE",
+-0.2
+]
+],
+"holdings_source": "SEC report 2026-06-30",
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": ""
+},
+{
+"t": "FTPA",
+"name": "Franklin Pennsylvania Municipal Income ETF",
+"fee_pct": null,
+"category": null,
+"issuer": null,
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": ""
+},
+{
+"t": "SCOP",
+"name": "Sprott Physical Copper Trust Units",
+"fee_pct": null,
+"category": null,
+"issuer": null,
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": ""
+},
+{
+"t": "SSK",
+"name": "REX-Osprey SOL + Staking ETF",
+"fee_pct": null,
+"category": null,
+"issuer": null,
+"top_holdings_pct": [
+[
+"Solana",
+51.5
+],
+[
+"Coinshares Jersey Ltd",
+43.2
+],
+[
+"LSD SOLANA",
+3.6
+]
+],
+"holdings_source": "SEC report 2026-07-31",
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": ""
+},
+{
+"t": "ACLC",
+"name": "American Century Large Cap Equity ETF",
+"fee_pct": null,
+"category": null,
+"issuer": null,
+"top_holdings_pct": [
+[
+"NVIDIA CORP",
+8.5
+],
+[
+"ALPHABET INC",
+6.9
+],
+[
+"Microsoft Corp",
+6.6
+],
+[
+"APPLE INC",
+5.1
+],
+[
+"Amazon.com Inc",
+3.9
+],
+[
+"BROADCOM INC",
+3.9
+],
+[
+"META PLATFORMS INC",
+1.7
+],
+[
+"MICRON TECHNOLOGY INC",
+1.7
+]
+],
+"holdings_source": "SEC report 2026-05-31",
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": ""
+},
+{
+"t": "BSMA",
+"name": "Invesco BulletShares 2036 Municipal Bond ETF",
+"fee_pct": null,
+"category": null,
+"issuer": null,
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": ""
+},
+{
+"t": "MBCE",
+"name": "Monarch Blue Chips Elite Index ETF",
+"fee_pct": null,
+"category": null,
+"issuer": null,
+"top_holdings_pct": [
+[
+"Advanced Micro Devices Inc",
+9.8
+],
+[
+"TEXAS INSTRUMENTS INC",
+5.5
+],
+[
+"BROADCOM INC",
+5.3
+],
+[
+"Amazon.com Inc",
+4.9
+],
+[
+"NVIDIA CORP",
+4.6
+],
+[
+"APPLE INC",
+4.5
+],
+[
+"Microsoft Corp",
+4.4
+],
+[
+"PALANTIR TECHNOLOGIES INC",
+4.4
+]
+],
+"holdings_source": "SEC report 2026-05-31",
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": ""
+},
+{
+"t": "SLVI",
+"name": "NEOS Silver High Income ETF",
+"fee_pct": 0.78,
+"category": "Derivative Income",
+"issuer": "Neos Funds",
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": "Silver ETPs are funds that track the price of silver by directly holding physical silver as their underlying asset. Silver ETPs seek to provide the performance of the price of silver before the payment of fees and expenses. The price of a Silver ETP fluctuates with the price of silver. Under normal circumstances, the fund will invest at least 80% of its net assets in Silver ETPs and/or options on the Silver ETPs. It is non-diversified."
+},
+{
+"t": "HINC",
+"name": "Hartford High Yield ETF",
+"fee_pct": null,
+"category": null,
+"issuer": null,
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": ""
+},
+{
+"t": "ZVOL",
+"name": "Volatility Premium Plus ETF",
+"fee_pct": null,
+"category": null,
+"issuer": null,
+"top_holdings_pct": [
+[
+"",
+1.8
+],
+[
+"",
+1.7
+],
+[
+"",
+1.1
+],
+[
+"",
+0.2
+]
+],
+"holdings_source": "SEC report 2026-05-31",
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": ""
+},
+{
+"t": "AIBN",
+"name": "Defiance AI Infrastructure Bond ETF",
+"fee_pct": null,
+"category": "Corporate Bond",
+"issuer": "Defiance ETFs LLC",
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": "Under normal circumstances, the fund will invest at least 80% of its net assets, plus borrowings for investment purposes, in the component securities that make up the index. It is non-diversified."
+},
+{
+"t": "QQDH",
+"name": "Tuttle Capital Innovation 100 Income & Hedge ETF",
+"fee_pct": null,
+"category": null,
+"issuer": null,
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": "The fund is an actively managed exchange-traded fund (\u201cETF\u201d) that seeks to achieve its investment objectives by maintaining exposure to the price return of the Invesco QQQ TrustSM (\u201cQQQ\u201d) and/or options on the Nasdaq-100\u00ae Index (collectively, the \u201cReference Asset\u201d) and by implementing two separate options overlays: an income strategy using put credit spreads and a daily downside-hedging strategy using short-dated broken-strike put ratio backspreads. It is non-diversified."
+},
+{
+"t": "GOLY",
+"name": "Strategy Shares Gold Enhanced Yield ETF",
+"fee_pct": null,
+"category": null,
+"issuer": null,
+"top_holdings_pct": [
+[
+"ISHARES TRUST",
+23.5
+],
+[
+"State Street SPDR Portfolio Intermediate Term Corporate Bond ETF",
+19.2
+],
+[
+"iShares Broad USD Investment Grade Corporate Bond",
+14.0
+],
+[
+"iShares 5-10 Year Investment G",
+14.0
+],
+[
+"UNITED STATES OF AMERICA - BUREAU OF THE PUBLIC DEBT",
+13.0
+],
+[
+"TREASURY BILL",
+8.2
+],
+[
+"Schwab 5-10 Year Corporate Bond ETF",
+4.1
+],
+[
+"Vanguard Intermediate-Term Corporate Bond ETF",
+4.1
+]
+],
+"holdings_source": "SEC report 2026-07-31",
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": ""
+},
+{
+"t": "BCOM",
+"name": "Rareview Bloomberg Commodity Index ETF",
+"fee_pct": 0.49,
+"category": "Commodities Broad Basket",
+"issuer": "Rareview Capital LLC",
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": "The fund utilizes a passive investment approach designed to track the performance of the index. It operates as an index fund and is not actively managed. Under normal circumstances, it invests at least 80% of its net assets (plus any borrowings for investment purposes) in instruments that, in total, have rate of return characteristics that are the economic equivalent of an investment in the components of the Bloomberg Commodity Index."
+},
+{
+"t": "SHEH",
+"name": "Shell plc ADRhedged",
+"fee_pct": null,
+"category": null,
+"issuer": null,
+"top_holdings_pct": [
+[
+"SHELL PLC",
+96.0
+],
+[
+"CANADIAN IMPERIAL BANK OF COMMERCE",
+-0.2
+]
+],
+"holdings_source": "SEC report 2026-06-30",
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": ""
+},
+{
+"t": "PBSC",
+"name": "Pacer Barings Secured Credit Flex ETF",
+"fee_pct": null,
+"category": null,
+"issuer": null,
+"top_holdings_pct": [
+[
+"1261229 BC LTD",
+1.3
+],
+[
+"OCP CLO Ltd",
+1.2
+],
+[
+"CIFC Funding Ltd",
+1.2
+],
+[
+"GoldenTree Loan Management US",
+1.2
+],
+[
+"Battalion CLO LTD",
+1.2
+],
+[
+"Invesco CLO LTD",
+1.1
+],
+[
+"HLF FIN SARL LLC/HERBALI",
+1.0
+],
+[
+"TIME WARNER CABLE ENTRMN",
+1.0
+]
+],
+"holdings_source": "SEC report 2026-07-31",
+"sectors_pct": {},
+"asset_mix_pct": {
+"cash": 5,
+"bond": 97
+},
+"fund_description": "Under normal circumstances, the fund will invest at least 80% of its net assets (plus any borrowings for investment purposes) in debt instruments that are secured by collateral. It is non-diversified."
+},
+{
+"t": "UPSD",
+"name": "Aptus Large Cap Upside ETF",
+"fee_pct": null,
+"category": null,
+"issuer": null,
+"top_holdings_pct": [
+[
+"APPLE INC",
+5.1
+],
+[
+"NVIDIA CORP",
+4.7
+],
+[
+"",
+4.0
+],
+[
+"Microsoft Corp",
+3.3
+],
+[
+"Amazon.com Inc",
+2.1
+],
+[
+"ALPHABET INC",
+1.7
+],
+[
+"ALPHABET INC",
+1.6
+],
+[
+"MARATHON PETROLEUM CORP",
+1.6
+]
+],
+"holdings_source": "SEC report 2026-07-31",
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": ""
+},
+{
+"t": "WSML",
+"name": "iShares MSCI World Small-Cap ETF",
+"fee_pct": null,
+"category": null,
+"issuer": null,
+"top_holdings_pct": [
+[
+"Sandisk Corp",
+2.2
+],
+[
+"TECHNIPFMC PLC",
+0.3
+],
+[
+"NVENT ELECTRIC PLC",
+0.2
+],
+[
+"Sterling Infrastructure Inc",
+0.2
+],
+[
+"XPO INC",
+0.2
+],
+[
+"MACOM Technology Solutions Holdings Inc",
+0.2
+],
+[
+"ATI Inc.",
+0.2
+],
+[
+"MasTec Inc",
+0.2
+]
+],
+"holdings_source": "SEC report 2026-05-31",
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": ""
+},
+{
+"t": "WBIE",
+"name": "William Blair International Equity ETF",
+"fee_pct": 0.55,
+"category": "Foreign Large Growth",
+"issuer": "William Blair",
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": "Under normal circumstances, the fund invests at least 80% of its net assets (plus the amount of any borrowings for investment purposes) in equity securities, including common stocks and other forms of equity investments."
+},
+{
+"t": "XRPR",
+"name": "REX-Osprey XRP ETF",
+"fee_pct": null,
+"category": null,
+"issuer": null,
+"top_holdings_pct": [
+[
+"XRP",
+58.7
+],
+[
+"Coinshares Jersey Ltd",
+39.5
+]
+],
+"holdings_source": "SEC report 2026-05-31",
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": ""
+},
+{
+"t": "AVUC",
+"name": "Avantis U.S. Core Equity ETF",
+"fee_pct": 0.15,
+"category": "Large Blend",
+"issuer": "Avantis Investors",
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": "Under normal market conditions, the fund will invest at least 80% of its assets in equity securities of U.S. companies. It invests primarily in a diverse group of U.S. companies across market sectors and industry groups. The fund may invest in companies of all market capitalizations. The fund seeks securities of companies that the Advisor expects to have higher returns by placing an enhanced emphasis on securities of companies with smaller market capitalizations and securities of companies with higher profitability and value characteristics."
+},
+{
+"t": "LIGB",
+"name": "Corgi FTSE 10 Year IG Corporate Bond ETF",
+"fee_pct": 0.02,
+"category": "Corporate Bond",
+"issuer": "Corgi Funds",
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": "Under normal circumstances, at least 80% of the value of its net assets, plus borrowings for investment purposes, in U.S. dollar-denominated investment-grade corporate bonds of U.S. and foreign issuers with a remaining maturity of at least ten years that comprise the index. It is non-diversified."
+},
+{
+"t": "SMTJ",
+"name": "Synera Funds Takumi+ ETF",
+"fee_pct": 0.86,
+"category": "Japan Stock",
+"issuer": "Takumi + Synera Funds",
+"top_holdings_pct": [
+[
+"Mitsubishi UFJ Financial Group Inc",
+8.5
+],
+[
+"Hitachi Ltd",
+6.3
+],
+[
+"Sumitomo Electric Industries Ltd",
+6.0
+],
+[
+"Sony Group Corp",
+5.4
+],
+[
+"Sumitomo Mitsui Financial Group Inc",
+5.0
+],
+[
+"Recruit Holdings Co Ltd",
+4.8
+],
+[
+"Mitsubishi Corp",
+4.1
+],
+[
+"Fuji Electric Co Ltd",
+4.0
+]
+],
+"holdings_source": "Yahoo",
+"sectors_pct": {
+"Industrials": 27,
+"Financials": 21,
+"Technology": 17,
+"Consumer discretionary": 12
+},
+"asset_mix_pct": {
+"stock": 100
+},
+"fund_description": "The Advisor expects to invest between 80-100% of its assets in Japanese equity and equity-related instruments. The advisor seeks long-term capital appreciation by investing primarily in equity securities of Japanese companies that the advisor believes are positioned to benefit from medium- to long-term structural changes in society and industry. It is non-diversified."
+},
+{
+"t": "WTAL",
+"name": "WisdomTree Global Alpha Fund",
+"fee_pct": 0.88,
+"category": "Long-Short Equity",
+"issuer": "WisdomTree",
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": "The fund may invest in U.S. Treasury securities and cash and cash equivalents to serve as collateral or margin for the fund\u2019s investments in swap contracts and other derivatives."
+},
+{
+"t": "PEPT",
+"name": "REX Peptide ETF",
+"fee_pct": 0.65,
+"category": "Health",
+"issuer": "Rex",
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": "It tracks the investment results, before fees and expenses, of the VettaFi Peptide Index? (the \u201cIndex\u201d), which is designed to track the performance of equity securities of companies that are strategically positioned to advance the development, manufacturing, and commercial adoption of peptide-based products\u2014including therapeutics, supplements, cosmetics, and medical devices\u2014along with the enabling technologies essential for peptides. The fund is non-diversified."
+},
+{
+"t": "ACVU",
+"name": "Hartford Alpha Capture Value ETF",
+"fee_pct": null,
+"category": null,
+"issuer": null,
+"top_holdings_pct": [
+[
+"Amazon.com Inc",
+7.1
+],
+[
+"Microsoft Corp",
+6.7
+],
+[
+"APPLE INC",
+4.0
+],
+[
+"CONOCOPHILLIPS",
+3.7
+],
+[
+"Chubb Ltd",
+3.1
+],
+[
+"DUKE ENERGY CORP",
+2.2
+],
+[
+"JOHNSON & JOHNSON",
+2.1
+],
+[
+"ABBVIE INC",
+2.0
+]
+],
+"holdings_source": "SEC report 2026-07-31",
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": ""
+},
+{
+"t": "GTOS",
+"name": "Invesco Short Duration Total Return Bond ETF",
+"fee_pct": null,
+"category": null,
+"issuer": null,
+"top_holdings_pct": [
+[
+"UNITED STATES OF AMERICA - BUREAU OF THE PUBLIC DEBT",
+2.4
+],
+[
+"CoreWeave Compute Acquisition Co. VIII, LLC",
+1.5
+],
+[
+"United States Treasury",
+1.5
+],
+[
+"ENERGY TRANSFER LP",
+1.2
+],
+[
+"BX Trust",
+0.9
+],
+[
+"Qdoba Funding LLC",
+0.9
+],
+[
+"VoltaGrid LLC",
+0.8
+],
+[
+"Whetstone Park Clo, Ltd.",
+0.8
+]
+],
+"holdings_source": "SEC report 2026-07-31",
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": ""
+},
+{
+"t": "DBAR",
+"name": "IMGP DBI Absolute Return ETF",
+"fee_pct": null,
+"category": null,
+"issuer": null,
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": "Under normal circumstances, the fund will invest at least 80% of its net assets, plus borrowings for investment purposes, in the Managed Futures Strategy and the U.S. Equity Strategy. It is non-diversified."
+},
+{
+"t": "IGB",
+"name": "Corgi FTSE U.S. IG Corporate Bond ETF",
+"fee_pct": 0.02,
+"category": "Intermediate Core Bond",
+"issuer": "Corgi Funds",
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": "Under normal circumstances, at least 80% of the value of its net assets, plus borrowings for investment purposes, in U.S. dollar-denominated investment-grade corporate bonds of U.S. and foreign issuers that comprise the index."
+},
+{
+"t": "DOJE",
+"name": "REX-Osprey DOGE ETF",
+"fee_pct": null,
+"category": null,
+"issuer": null,
+"top_holdings_pct": [
+[
+"DOGE",
+58.7
+],
+[
+"21Shares AG",
+39.4
+]
+],
+"holdings_source": "SEC report 2026-07-31",
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": ""
+},
+{
+"t": "VGTX",
+"name": "XFUNDS Technology Income ETF",
+"fee_pct": 0.75,
+"category": "Technology",
+"issuer": "Tidal Investments LLC",
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": "Under normal circumstances, the fund will invest at least 80% of the value of its assets, plus borrowings for investment purposes, in (1) equity securities of information technology companies and ETFs that track U.S. information technology company indices and (2) options on such securities. It is non-diversified."
+},
+{
+"t": "AIQU",
+"name": "MicroSectors 3? Long Artificial Intelligence (AI) ETNs",
+"fee_pct": null,
+"category": null,
+"issuer": null,
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": ""
+},
+{
+"t": "WBEM",
+"name": "William Blair Emerging Markets Equity ETF",
+"fee_pct": 0.65,
+"category": "Diversified Emerging Mkts",
+"issuer": "William Blair",
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": "Under normal circumstances, the fund invests at least 80% of its net assets (plus the amount of any borrowings for investment purposes) in emerging markets equity securities. It is non-diversified."
+},
+{
+"t": "HH",
+"name": "Corgi FTSE High Yield Corporate Bond ETF",
+"fee_pct": 0.05,
+"category": "High Yield Bond",
+"issuer": "Corgi Funds",
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": "Under normal circumstances, at least 80% of the value of its net assets, plus borrowings for investment purposes, in U.S. dollar-denominated below-investment-grade corporate bonds of U.S. and foreign issuers that comprise the index. It is non-diversified."
+},
+{
+"t": "AGGB",
+"name": "Corgi FTSE U.S. Aggregate Bond ETF",
+"fee_pct": 0.02,
+"category": "Intermediate Core Bond",
+"issuer": "Corgi Funds",
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": "Under normal circumstances, at least 80% of the value of its net assets, plus borrowings for investment purposes, in U.S. dollar-denominated investment-grade bonds issued in the U.S. market that comprise the index. It is non-diversified."
+},
+{
+"t": "MMF",
+"name": "Corgi Money Market ETF",
+"fee_pct": 0.1,
+"category": "Money Market-Taxable",
+"issuer": "Corgi Strategies LLC",
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": "Under normal circumstances, the fund invests at least 80% of the value of its net assets (plus any borrowings for investment purposes) in Money Market Securities."
+},
+{
+"t": "DDX",
+"name": "Defined Duration 10 ETF",
+"fee_pct": null,
+"category": null,
+"issuer": null,
+"top_holdings_pct": [
+[
+"United States Treasury",
+25.2
+],
+[
+"United States Treasury",
+19.2
+],
+[
+"State Street SPDR Portfolio De",
+15.3
+],
+[
+"Vanguard Value ETF",
+14.6
+],
+[
+"Vanguard FTSE Emerging Markets ETF",
+4.9
+],
+[
+"Vanguard Long-Term Treasury ET",
+3.7
+],
+[
+"Vanguard 500 Index Fund",
+2.0
+]
+],
+"holdings_source": "SEC report 2026-07-31",
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": ""
+},
+{
+"t": "GANZ",
+"name": "Tuttle Capital Thematic ETF",
+"fee_pct": 0.75,
+"category": "Large Growth",
+"issuer": "Tuttle Capital Management, LLC",
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": "Under normal market conditions, the fund seeks to achieve its investment objective by investing primarily in equity securities of U.S.-listed companies, including common stocks, exchange-listed options on individual equity securities, and exchange-listed equity index options. It is non-diversified."
+},
+{
+"t": "PSOX",
+"name": "Tema MLCC & PowerSemi ETF",
+"fee_pct": null,
+"category": null,
+"issuer": null,
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": ""
+},
+{
+"t": "JUDB",
+"name": "Aptus July Deep Buffer ETF",
+"fee_pct": null,
+"category": null,
+"issuer": null,
+"top_holdings_pct": [
+[
+"",
+99.4
+]
+],
+"holdings_source": "SEC report 2026-07-31",
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": ""
+},
+{
+"t": "ACMG",
+"name": "American Century Mid Cap Growth Insights ETF",
+"fee_pct": null,
+"category": null,
+"issuer": null,
+"top_holdings_pct": [
+[
+"MONOLITHIC POWER SYSTEMS INC",
+8.2
+],
+[
+"CLOUDFLARE INC",
+7.3
+],
+[
+"OKTA INC",
+7.0
+],
+[
+"Johnson Controls International plc",
+5.4
+],
+[
+"CADENCE DESIGN SYS INC",
+4.8
+],
+[
+"WESCO INTERNATIONAL INC",
+4.7
+],
+[
+"Targa Resources Corp",
+4.5
+],
+[
+"VISTRA CORP",
+4.1
+]
+],
+"holdings_source": "SEC report 2026-05-31",
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": ""
+},
+{
+"t": "NUIF",
+"name": "Nuveen US Infrastructure ETF",
+"fee_pct": null,
+"category": null,
+"issuer": null,
+"top_holdings_pct": [
+[
+"American Electric Power Co Inc",
+8.9
+],
+[
+"Entergy Corp",
+6.6
+],
+[
+"Xcel Energy Inc",
+5.6
+],
+[
+"Cheniere Energy Inc",
+5.0
+],
+[
+"Waste Management Inc",
+5.0
+],
+[
+"NextEra Energy Inc",
+4.9
+],
+[
+"Alliant Energy Corp",
+4.7
+],
+[
+"Ameren Corp",
+4.5
+]
+],
+"holdings_source": "Yahoo",
+"sectors_pct": {
+"Utilities": 49,
+"Energy": 30,
+"Industrials": 20
+},
+"asset_mix_pct": {
+"stock": 100
+},
+"fund_description": "Under normal market conditions, the fund invests at least 80% of the sum of its net assets and the amount of any borrowings for investment purposes in securities issued by infrastructure-related companies that are economically tied to the U.S. The fund is non-diversified."
+},
+{
+"t": "MAGC",
+"name": "Roundhill China Magnificent Seven ETF",
+"fee_pct": null,
+"category": null,
+"issuer": null,
+"top_holdings_pct": [
+[
+"TREASURY BILL",
+82.8
+],
+[
+"PDD HOLDINGS INC",
+5.1
+],
+[
+"BYD Co Ltd",
+4.8
+],
+[
+"NETEASE INC",
+4.8
+],
+[
+"Xiaomi Corp",
+4.1
+],
+[
+"Tencent Holdings Ltd",
+3.4
+],
+[
+"Alibaba Group Holding Ltd.",
+3.2
+],
+[
+"Meituan",
+2.0
+]
+],
+"holdings_source": "SEC report 2026-06-30",
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": ""
+},
+{
+"t": "SMRZ",
+"name": "Global X Small Modular Reactor ETF",
+"fee_pct": 0.75,
+"category": "Infrastructure",
+"issuer": "Global X Funds",
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": "Under normal circumstances, the fund invests at least 80% of its net assets, plus the amount of any borrowings for investment purposes, in SMR Companies and/or derivative instruments that provide economic exposure to SMR Companies. It is non-diversified."
+},
+{
+"t": "FTN",
+"name": "Corgi FTSE 5-10 Year IG Corporate Bond ETF",
+"fee_pct": 0.02,
+"category": "Corporate Bond",
+"issuer": "Corgi Funds",
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": "Under normal circumstances, at least 80% of the value of its net assets, plus borrowings for investment purposes, in U.S. dollar-denominated investment-grade corporate bonds of U.S. and foreign issuers with a remaining maturity of at least five years and less than ten years that comprise the index. It is non-diversified."
+},
+{
+"t": "VOXP",
+"name": "Vox Populi ETF",
+"fee_pct": null,
+"category": null,
+"issuer": null,
+"top_holdings_pct": [
+[
+"NVIDIA CORP",
+7.2
+],
+[
+"APPLE INC",
+6.6
+],
+[
+"ALPHABET INC",
+6.3
+],
+[
+"Microsoft Corp",
+5.2
+],
+[
+"Amazon.com Inc",
+4.6
+],
+[
+"BROADCOM INC",
+2.6
+],
+[
+"META PLATFORMS INC",
+1.8
+],
+[
+"ELI LILLY & COMPANY",
+1.4
+]
+],
+"holdings_source": "SEC report 2026-07-31",
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": ""
+},
+{
+"t": "SMNG",
+"name": "xETFs Samsung Group ETF",
+"fee_pct": null,
+"category": null,
+"issuer": null,
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": ""
+},
+{
+"t": "ANG",
+"name": "Corgi FTSE Fallen Angels Bond ETF",
+"fee_pct": 0.08,
+"category": "High Yield Bond",
+"issuer": "Corgi Funds",
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": "Under normal circumstances, at least 80% of the value of its net assets, plus borrowings for investment purposes, in U.S. dollar-denominated below-investment-grade corporate bonds of U.S. and Canadian issuers that were previously rated investment grade and subsequently downgraded (\"fallen angels\") that comprise the index. It is non-diversified."
+}
+]

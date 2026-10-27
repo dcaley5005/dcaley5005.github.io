@@ -1,0 +1,2077 @@
+[
+{
+"t": "NRR",
+"name": "Common Shares of Beneficial Interest of Bitwise NEAR ETF",
+"fee_pct": 0.75,
+"category": "Digital Assets",
+"issuer": "Bitwise Investments",
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {
+"other": 100
+},
+"fund_description": "The Trust will stake a portion of its NEAR with the NEAR custodian. As consideration for participating in staking activities, the trust will receive a portion of the reward generated from such participation in the form of additional NEAR, which may be treated as income to the trust."
+},
+{
+"t": "JULZ",
+"name": "TrueShares Structured Outcome (July) ETF",
+"fee_pct": 0.79,
+"category": "Defined Outcome",
+"issuer": "TrueShares",
+"top_holdings_pct": [
+[
+"United States Treasury Bill",
+87.5
+],
+[
+"The Options Clearing Corp",
+10.0
+],
+[
+"The Options Clearing Corp",
+0.7
+],
+[
+"The Options Clearing Corp",
+0.4
+],
+[
+"The Options Clearing Corp",
+0.4
+],
+[
+"The Options Clearing Corp",
+0.3
+],
+[
+"The Options Clearing Corp",
+0.1
+],
+[
+"The Options Clearing Corp",
+0.0
+]
+],
+"holdings_source": "SEC report 2026-06-30",
+"sectors_pct": {
+"Technology": 38,
+"Financials": 12,
+"Communication": 10,
+"Consumer discretionary": 10
+},
+"asset_mix_pct": {
+"cash": 5,
+"bond": 95
+},
+"fund_description": "The fund is an actively-managed ETF that seeks to achieve its investment objective by investing substantially all of its assets in options on the S&P 500 Price Index. It will purchase call options and sell put options on the S&P 500 Price Index or an ETF that seeks to track the performance of the S&P 500 Price Index on each Initial Investment Day with an expiration on the next Roll Date."
+},
+{
+"t": "PSFO",
+"name": "Pacer Swan SOS Flex (October) ETF",
+"fee_pct": 0.49,
+"category": "Defined Outcome",
+"issuer": "Pacer",
+"top_holdings_pct": [
+[
+"",
+99.5
+]
+],
+"holdings_source": "SEC report 2026-07-31",
+"sectors_pct": {
+"Technology": 39,
+"Financials": 11,
+"Communication": 11,
+"Consumer discretionary": 10
+},
+"asset_mix_pct": {
+"stock": 204
+},
+"fund_description": "The fund is an actively managed ETF that, under normal market conditions, invests substantially all of its assets in FLexible EXchange\u00ae Options that reference the market price of the SPDR\u00ae S&P 500\u00ae ETF Trust. The fund is non-diversified."
+},
+{
+"t": "STEN",
+"name": "iShares Large Cap 10% Target Buffer Sep ETF",
+"fee_pct": 0.5,
+"category": "Defined Outcome",
+"issuer": "iShares",
+"top_holdings_pct": [
+[
+"iShares Core S&P 500 ETF",
+98.8
+],
+[
+"CHICAGO MERCANTILE EXCHANGE",
+0.0
+],
+[
+"JANE STREET LLC",
+-0.2
+]
+],
+"holdings_source": "SEC report 2026-07-31",
+"sectors_pct": {
+"Technology": 40,
+"Financials": 11,
+"Communication": 10,
+"Health care": 9
+},
+"asset_mix_pct": {
+"cash": 36,
+"stock": 64
+},
+"fund_description": "The Outcomes are intended to be realized only by investors who hold Fund shares at the outset of the Outcome Period and continue to hold the shares through the end of the Outcome Period. The fund will be offered indefinitely and is not intended to terminate after one or more Outcome Periods."
+},
+{
+"t": "QIDX",
+"name": "Indexperts Quality Earnings Focused ETF",
+"fee_pct": 0.5,
+"category": "Mid-Cap Blend",
+"issuer": "Indexperts",
+"top_holdings_pct": [
+[
+"ARISTA NETWORKS INC",
+3.8
+],
+[
+"ALPHABET INC",
+3.2
+],
+[
+"THERMO FISHER SCIENTIFIC INC",
+2.8
+],
+[
+"CISCO SYSTEMS INC",
+2.7
+],
+[
+"HEICO CORP",
+2.6
+],
+[
+"APPLE INC",
+2.2
+],
+[
+"F5 Inc",
+2.1
+],
+[
+"ExxonMobil Holdings Corp.",
+2.0
+]
+],
+"holdings_source": "SEC report 2026-07-31",
+"sectors_pct": {
+"Technology": 24,
+"Industrials": 18,
+"Health care": 12,
+"Consumer discretionary": 11
+},
+"asset_mix_pct": {
+"stock": 98
+},
+"fund_description": "Under normal circumstances, the fund seeks to achieve its investment objective by investing at least 80% of the fund\u2019s net assets (plus borrowings for investment purposes) in common stocks of companies the funds\u2019 investment advisor, Indexperts, LLC (the \u201cAdvisor\u201d), believes have a consistent history of earnings stability or growth, and strong prospects for continued earnings stability and growth based on the Advisor\u2019s research and analysis."
+},
+{
+"t": "FDIQ",
+"name": "Invesco Bloomberg Financial Data Providers ETF",
+"fee_pct": 0.35,
+"category": "Financial",
+"issuer": "Invesco",
+"top_holdings_pct": [
+[
+"MSCI INC",
+5.2
+],
+[
+"CBOE GLOBAL MARKETS INC",
+5.1
+],
+[
+"FAIR ISAAC CORP",
+5.1
+],
+[
+"COINBASE GLOBAL INC",
+4.9
+],
+[
+"NASDAQ INC",
+4.8
+],
+[
+"Moody's Corp",
+4.6
+],
+[
+"London Stock Exchange Group PLC",
+4.6
+],
+[
+"HONG KONG EXCHANGES AND CLEARING LTD",
+4.5
+]
+],
+"holdings_source": "SEC report 2026-05-31",
+"sectors_pct": {
+"Financials": 78,
+"Industrials": 12,
+"Technology": 10
+},
+"asset_mix_pct": {
+"stock": 100
+},
+"fund_description": "The fund generally will invest at least 90% of its total assets in the securities, including American depositary receipts (\u201cADRs\u201d) and global depositary receipts (\u201cGDRs\u201d), that comprise the underlying index. The underlying index is a modified market capitalization-weighted index, where the weight of a security is based on the number of securities selected for inclusion in the underlying index and issuer free float market capitalization."
+},
+{
+"t": "PBMY",
+"name": "PGIM S&P 500 Buffer 20 ETF - May",
+"fee_pct": 0.5,
+"category": "Defined Outcome",
+"issuer": "PGIM",
+"top_holdings_pct": [
+[
+"CBOE GLOBAL MARKETS, INC.",
+99.1
+]
+],
+"holdings_source": "SEC report 2026-07-31",
+"sectors_pct": {
+"Technology": 40,
+"Financials": 11,
+"Communication": 10,
+"Health care": 9
+},
+"asset_mix_pct": {
+"stock": 99
+},
+"fund_description": "Under normal market conditions, the fund will invest at least 80% of its net assets (plus any borrowings for investment purposes) in investments that provide exposure to securities included in the S&P 500 Index. The fund is an actively managed exchange-traded fund (\u201cETF\u201d). The fund is non-diversified."
+},
+{
+"t": "XOMO",
+"name": "YieldMax XOM Option Income Strategy ETF",
+"fee_pct": 1.17,
+"category": "Derivative Income",
+"issuer": "YieldMax ETFs",
+"top_holdings_pct": [
+[
+"TREASURY BILL",
+37.3
+],
+[
+"TREASURY BILL",
+17.8
+],
+[
+"TREASURY BILL",
+17.8
+],
+[
+"TREASURY BILL",
+11.9
+],
+[
+"TREASURY BILL",
+9.7
+],
+[
+"",
+4.6
+],
+[
+"",
+0.0
+],
+[
+"",
+0.0
+]
+],
+"holdings_source": "SEC report 2026-07-31",
+"sectors_pct": {},
+"asset_mix_pct": {
+"cash": 26,
+"stock": 6,
+"bond": 68
+},
+"fund_description": "The fund will seek to employ its investment strategy as it relates to XOM regardless of whether there are periods of adverse market, economic, or other conditions and will not seek to take temporary defensive positions during such periods. The fund advisor uses a synthetic covered call strategy to provide income and indirect exposure to the share price returns of XOM. The fund is non-diversified."
+},
+{
+"t": "GLDB",
+"name": "IDX Alternative FIAT ETF",
+"fee_pct": 0.96,
+"category": "Miscellaneous Sector",
+"issuer": "IDX Advisors, LLC",
+"top_holdings_pct": [
+[
+"SPDR Gold MiniShares Trust",
+0.6
+],
+[
+"iShares Silver Trust",
+0.3
+],
+[
+"iShares Bitcoin Trust ETF",
+0.2
+],
+[
+"",
+0.1
+],
+[
+"iShares Ethereum Trust ETF",
+0.1
+],
+[
+"",
+-0.4
+],
+[
+"",
+-0.9
+],
+[
+"",
+-1.9
+]
+],
+"holdings_source": "SEC report 2026-07-31",
+"sectors_pct": {},
+"asset_mix_pct": {
+"other": 125
+},
+"fund_description": "The fund seeks to provide exposure to a blend of digital assets and precious metals, primarily focusing on bitcoin and gold. The fund employs a dynamic asset allocation strategy that targets balanced exposure to its core assets of bitcoin and gold, with dynamic tilts in allocation up or down to either asset based on proprietary risk metrics, including volatility, momentum, and other quantitative factors. To implement this strategy, it primarily invests in derivatives linked to Bitcoin and gold, including futures and other instruments that provide direct or synthetic exposure to Bitcoin and gol"
+},
+{
+"t": "SEPT",
+"name": "AllianzIM U.S. Large Cap Buffer10 Sep ETF",
+"fee_pct": 0.74,
+"category": "Defined Outcome",
+"issuer": "AllianzIM",
+"top_holdings_pct": [
+[
+"SPY 08/31/2026 4.77 C",
+102.5
+],
+[
+"SPY 08/31/2026 644.99 P",
+0.1
+],
+[
+"SPY 08/31/2026 580.55 P",
+-0.0
+],
+[
+"SPY 08/31/2026 739.81 C",
+-2.4
+]
+],
+"holdings_source": "SEC report 2026-07-31",
+"sectors_pct": {
+"Technology": 40,
+"Financials": 11,
+"Communication": 10,
+"Health care": 9
+},
+"asset_mix_pct": {
+"stock": 100
+},
+"fund_description": "Under normal market conditions, the fund invests at least 80% of its net assets in instruments with economic characteristics similar to U.S. large cap equity securities. Specifically, the adviser intends to invest substantially all of the fund's assets in FLexible EXchange Options (\u201cFLEX Options\u201d) that reference the Underlying ETF. -null-. The fund is non-diversified."
+},
+{
+"t": "PBDE",
+"name": "PGIM S&P 500 Buffer 20 ETF - December",
+"fee_pct": 0.5,
+"category": "Defined Outcome",
+"issuer": "PGIM",
+"top_holdings_pct": [
+[
+"CBOE GLOBAL MARKETS, INC.",
+99.4
+]
+],
+"holdings_source": "SEC report 2026-07-31",
+"sectors_pct": {
+"Technology": 40,
+"Financials": 11,
+"Communication": 10,
+"Health care": 9
+},
+"asset_mix_pct": {
+"stock": 99
+},
+"fund_description": "Under normal market conditions, the fund will invest at least 80% of its net assets (plus any borrowings for investment purposes) in investments that provide exposure to securities included in the S&P 500 Index. It will invest substantially all of its assets in customized equity or index option contracts known as FLexible EXchange\u00ae Options on the SPDR\u00ae S&P 500\u00ae ETF Trust. The fund is non-diversified."
+},
+{
+"t": "THEQ",
+"name": "T. Rowe Price Hedged Equity ETF",
+"fee_pct": 0.46,
+"category": "Equity Hedged",
+"issuer": "T. Rowe Price",
+"top_holdings_pct": [
+[
+"TRP US EQUITY RESEARCH ETF",
+81.9
+],
+[
+"Treasury Bill",
+0.4
+],
+[
+"UNITED STATES OF AMERICA - BUREAU OF THE PUBLIC DEBT",
+0.4
+],
+[
+"CISCO SYSTEMS INC",
+0.3
+],
+[
+"Chubb Ltd",
+0.3
+],
+[
+"MOTOROLA SOLUTIONS INC",
+0.3
+],
+[
+"MERCK & COMPANY INC",
+0.2
+],
+[
+"DUKE ENERGY CORP",
+0.2
+]
+],
+"holdings_source": "SEC report 2026-06-30",
+"sectors_pct": {
+"Technology": 38,
+"Financials": 13,
+"Health care": 10,
+"Communication": 9
+},
+"asset_mix_pct": {
+"stock": 82,
+"bond": 11,
+"other": 5
+},
+"fund_description": "The fund normally invests at least 80% of its net assets (plus any borrowings for investments purposes) in equities The fund\u2019s overall goal is to combine a long equity strategy with a derivatives hedging strategy that reduces portfolio volatility and provides protection during equity market downturns. As part of the long equity strategy, the majority of the fund invests in T. Rowe Price and third-party exchange-traded funds and particularly in the T. Rowe Price U.S. Equity Research ETF (TSPA). The fund is non-diversified."
+},
+{
+"t": "KSEP",
+"name": "Innovator U.S. Small Cap Power Buffer ETF - September",
+"fee_pct": 0.79,
+"category": "Defined Outcome",
+"issuer": "Innovator ETFs",
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {
+"Health care": 21,
+"Financials": 18,
+"Technology": 14,
+"Industrials": 13
+},
+"asset_mix_pct": {
+"cash": 5,
+"stock": 95
+},
+"fund_description": "The fund invests at least 80% of its net assets (plus any borrowings for investment purposes) in FLexible EXchange\u00ae Options (\u201cFLEX Options\u201d) that reference the iShares Russell 2000 ETF (the \u201cUnderlying ETF\u201d). The fund is non-diversified."
+},
+{
+"t": "OAKG",
+"name": "Oakmark Global Large Cap ETF",
+"fee_pct": 0.62,
+"category": "Global Large-Stock Value",
+"issuer": "Oakmark",
+"top_holdings_pct": [
+[
+"BNP Paribas",
+3.8
+],
+[
+"IQVIA HOLDINGS INC",
+3.7
+],
+[
+"adidas AG",
+3.5
+],
+[
+"AIRBNB INC",
+3.4
+],
+[
+"Sunbelt Rentals Holdings, Inc.",
+3.0
+],
+[
+"SYSCO CORP",
+2.9
+],
+[
+"Samsung Electronics Co Ltd",
+2.8
+],
+[
+"Bayer AG",
+2.8
+]
+],
+"holdings_source": "SEC report 2026-06-30",
+"sectors_pct": {
+"Financials": 19,
+"Health care": 15,
+"Technology": 15,
+"Consumer discretionary": 15
+},
+"asset_mix_pct": {
+"stock": 99
+},
+"fund_description": "Under normal market conditions, the fund will not invest more than 30% of its total assets (measured at time of investment) in companies located in a single country (other than the U.S.) and will not invest more than 25% of its assets in one industry. Typically, the fund invests between 25-65% of its total assets in securities of U.S. companies and between 25-65% of its total assets in securities of non-U.S. companies."
+},
+{
+"t": "TPFG",
+"name": "Timothy Plan Free Cash Flow Growth ETF",
+"fee_pct": 0.59,
+"category": "Large Growth",
+"issuer": "Timothy Plan",
+"top_holdings_pct": [
+[
+"Newmont Corp",
+5.0
+],
+[
+"Palo Alto Networks Inc",
+4.3
+],
+[
+"ServiceNow Inc",
+4.1
+],
+[
+"Costco Wholesale Corp",
+4.1
+],
+[
+"Arista Networks Inc",
+4.0
+],
+[
+"Amphenol Corp Class A",
+3.8
+],
+[
+"Seagate Technology Holdings PLC",
+3.8
+],
+[
+"Comfort Systems USA Inc",
+3.7
+]
+],
+"holdings_source": "Yahoo",
+"sectors_pct": {
+"Technology": 44,
+"Industrials": 22,
+"Health care": 15,
+"Materials": 7
+},
+"asset_mix_pct": {
+"stock": 100
+},
+"fund_description": "Under normal circumstances, the fund seeks to achieve its investment objective by investing at least 80% of its assets directly or indirectly in the securities included in the Victory Free Cash Flow Growth BRI Index. VettaFi LLC constructs the index in accordance with a rules-based methodology that screens for positive free cash flow and selects 50 growth companies with the highest score within the Victory U.S. Large/Mid Cap Volatility Weighted BRI Index (the \u201cparent index\u201d)."
+},
+{
+"t": "SQLV",
+"name": "Royce Quant Small-Cap Quality Value ETF",
+"fee_pct": 0.6,
+"category": "Small Value",
+"issuer": "Franklin Templeton, Inc",
+"top_holdings_pct": [
+[
+"VICTORY CAPITAL HOLDINGS INC",
+0.9
+],
+[
+"DXC Technology Co",
+0.7
+],
+[
+"FEDERATED HERMES INC",
+0.7
+],
+[
+"Cable One, Inc.",
+0.7
+],
+[
+"CABOT CORP",
+0.7
+],
+[
+"INTERNATIONAL BANCSHARES CORP",
+0.7
+],
+[
+"BATH & BODY WORKS INC",
+0.7
+],
+[
+"Kyndryl Holdings Inc",
+0.7
+]
+],
+"holdings_source": "SEC report 2026-06-30",
+"sectors_pct": {
+"Financials": 19,
+"Health care": 19,
+"Technology": 15,
+"Consumer discretionary": 13
+},
+"asset_mix_pct": {
+"stock": 100
+},
+"fund_description": "Under normal circumstances, the fund invests at least 80% of its net assets, plus borrowings for investment purposes, if any, in equity securities of quality value small-cap companies. It may engage in active and frequent trading to achieve its investment objective, resulting in high portfolio turnover."
+},
+{
+"t": "AGGS",
+"name": "Harbor Disciplined Bond ETF",
+"fee_pct": 0.35,
+"category": "Intermediate Core-Plus Bond",
+"issuer": "Harbor Capital Advisors Inc",
+"top_holdings_pct": [
+[
+"United States Treasury",
+7.2
+],
+[
+"United States Treasury",
+5.4
+],
+[
+"United States Treasury",
+2.3
+],
+[
+"Government National Mortgage Association",
+1.0
+],
+[
+"UNITED STATES OF AMERICA - BUREAU OF THE PUBLIC DEBT",
+1.0
+],
+[
+"Freddie Mac",
+0.9
+],
+[
+"FEDERAL HOME LOAN BANKS",
+0.8
+],
+[
+"Freddie Mac",
+0.8
+]
+],
+"holdings_source": "SEC report 2026-07-31",
+"sectors_pct": {},
+"asset_mix_pct": {
+"bond": 97
+},
+"fund_description": "The fund invests primarily in U.S. dollar denominated fixed income securities. Under normal market conditions, the fund invests at least 80% of its net assets, plus borrowings for investment purposes, in a diversified portfolio of fixed income instruments. Fixed income instruments include, but are not limited to: obligations issued or guaranteed by the U.S. government, its agencies, or instrumentalities."
+},
+{
+"t": "MAXI",
+"name": "Simplify Bitcoin Strategy ETF",
+"fee_pct": 1.31,
+"category": "Digital Assets",
+"issuer": "Simplify Asset Management",
+"top_holdings_pct": [
+[
+"UNITED STATES OF AMERICA - BUREAU OF THE PUBLIC DEBT",
+414.0
+],
+[
+"iShares Bitcoin Trust ETF",
+69.8
+],
+[
+"THE OPTIONS CLEARING CORPORATION",
+0.9
+],
+[
+"THE OPTIONS CLEARING CORPORATION",
+0.0
+]
+],
+"holdings_source": "SEC report 2026-06-30",
+"sectors_pct": {
+"Consumer discretionary": 100
+},
+"asset_mix_pct": {
+"stock": 8,
+"bond": 133,
+"other": 106
+},
+"fund_description": "The fund is an actively managed exchange-traded fund (an \u201cETF\u201d). The fund\u2019s adviser seeks to achieve its investment objective by using three strategies: (1) a Bitcoin strategy, (2) an income strategy, and (3) an option overlay strategy. Under normal market conditions, the adviser selects investments in Bitcoin related instruments so that the total value of economic Bitcoin exposure is approximately 50% to 200% of the net assets of the fund. It is non-diversified."
+},
+{
+"t": "HFND",
+"name": "Unlimited HFND Multi-Strategy Return Tracker ETF",
+"fee_pct": 1.07,
+"category": "Multistrategy",
+"issuer": "Unlimited",
+"top_holdings_pct": [
+[
+"Vanguard Value ETF",
+6.1
+],
+[
+"Vanguard Growth ETF",
+5.9
+],
+[
+"iShares Agency Bond ETF",
+5.5
+],
+[
+"Materials Select Sec",
+3.6
+],
+[
+"ISHARES TRUST",
+3.6
+],
+[
+"Vanguard Mid-Cap ETF",
+3.3
+],
+[
+"Financial Select Sec",
+3.3
+],
+[
+"iShares J.P. Morgan EM High Yi",
+3.3
+]
+],
+"holdings_source": "SEC report 2026-05-31",
+"sectors_pct": {
+"Technology": 27,
+"Financials": 14,
+"Industrials": 14,
+"Consumer discretionary": 11
+},
+"asset_mix_pct": {
+"cash": 9,
+"stock": 67,
+"bond": 15,
+"other": 7
+},
+"fund_description": "The fund\u2019s portfolio will generally consist of long and short positions in 30 to 50 Underlying ETFs and futures contracts. In addition, the fund may invest in swap agreements. It will not invest in hedge funds. To achieve an appropriate risk/return profile for the fund\u2019s portfolio, the fund will also \u201cshort\u201d the securities of Underlying ETFs. It is non-diversified."
+},
+{
+"t": "LDDR",
+"name": "LifeX 2035 Income Bucket ETF",
+"fee_pct": 0.25,
+"category": "Target Maturity",
+"issuer": "STONE RIDGE",
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {
+"bond": 99
+},
+"fund_description": "The fund is an exchange-traded fund (\u201cETF\u201d) that pursues its investment objective by investing in debt securities issued by the U.S. Treasury (which the manager refers to as \u201cU.S. government bonds\u201d) as well as money market funds that invest exclusively in U.S. government bonds or repurchase agreements collateralized by such securities."
+},
+{
+"t": "MUSE",
+"name": "TCW Multisector Credit Income ETF",
+"fee_pct": 0.56,
+"category": "High Yield Bond",
+"issuer": "TCW",
+"top_holdings_pct": [
+[
+"TCW Central Cash Cash Management",
+2.6
+]
+],
+"holdings_source": "Yahoo",
+"sectors_pct": {
+"Health care": 100
+},
+"asset_mix_pct": {
+"cash": 3,
+"bond": 96
+},
+"fund_description": "The fund will invest, under normal circumstances, at least 80% of the value of its net assets, plus the amount of any borrowings for investment purposes, in a multisector portfolio of fixed income securities and instruments. It will generally allocate its assets among several fixed income sectors, including high yield securities; bank loans; and foreign securities, including emerging market securities."
+},
+{
+"t": "WCME",
+"name": "First Trust WCM Developing World Equity ETF",
+"fee_pct": 0.95,
+"category": "Diversified Emerging Mkts",
+"issuer": "First Trust",
+"top_holdings_pct": [
+[
+"TAIWAN SEMICONDUCTOR MANUFACTURING COMPANY LTD",
+13.3
+],
+[
+"SK Hynix Inc.",
+6.4
+],
+[
+"SK SQUARE CO LTD",
+6.3
+],
+[
+"Samsung Electronics Co., Ltd.",
+4.9
+],
+[
+"TEVA PHARMACEUTICAL INDUSTRIES LTD",
+3.7
+],
+[
+"Embraer SA",
+3.1
+],
+[
+"ACM Research, Inc.",
+3.0
+],
+[
+"Glencore PLC",
+2.9
+]
+],
+"holdings_source": "SEC report 2026-06-30",
+"sectors_pct": {
+"Technology": 40,
+"Financials": 19,
+"Health care": 11,
+"Consumer discretionary": 8
+},
+"asset_mix_pct": {
+"stock": 98
+},
+"fund_description": "Under normal circumstances, the fund will invest at least 80% of its net assets (plus any borrowings for investment purposes) in equity securities of companies located in developing countries. The fund is non-diversified."
+},
+{
+"t": "JULP",
+"name": "PGIM S&P 500 Buffer 12 ETF - July",
+"fee_pct": 0.5,
+"category": "Defined Outcome",
+"issuer": "PGIM",
+"top_holdings_pct": [
+[
+"CBOE GLOBAL MARKETS, INC.",
+99.2
+]
+],
+"holdings_source": "SEC report 2026-07-31",
+"sectors_pct": {
+"Technology": 40,
+"Financials": 11,
+"Communication": 10,
+"Health care": 9
+},
+"asset_mix_pct": {
+"stock": 99
+},
+"fund_description": "Under normal market conditions, at least 80% of its net assets in investments that provide exposure to securities included in the S&P 500 Index. The fund will invest substantially all of its assets in customized equity or index option contracts known as FLexible EXchange\u00ae Options on the SPDR\u00ae S&P 500\u00ae ETF Trust. It is non-diversified."
+},
+{
+"t": "RAAA",
+"name": "Reckoner Yield Enhanced AAA CLO ETF",
+"fee_pct": 0.3,
+"category": "Securitized Bond - Focused",
+"issuer": "Reckoner Capital Management LLC",
+"top_holdings_pct": [
+[
+"GOLDENTREE LOAN MANAGEMENT US CLO 17 LTD",
+6.1
+],
+[
+"REGATTA 32 FUNDING LTD",
+5.7
+],
+[
+"SIXTH STREET CLO XX LTD",
+5.7
+],
+[
+"Oak Hill Credit",
+5.7
+],
+[
+"Magnetite CLO Ltd",
+5.7
+],
+[
+"Texas Debt Capital CLO, Ltd",
+5.7
+],
+[
+"Orchard Park CLO, LTD.",
+5.7
+],
+[
+"Apidos CLO",
+5.7
+]
+],
+"holdings_source": "SEC report 2026-06-30",
+"sectors_pct": {},
+"asset_mix_pct": {
+"bond": 189
+},
+"fund_description": "The fund is an actively-managed ETF that pursues its investment objective by investing, under normal circumstances, at least 80% of its net assets in debt tranches of collateralized loan obligations of any maturity or duration that are rated, at the time of purchase, AAA, which is the most senior level of debt tranche and considered to be investment-grade. The fund is non-diversified."
+},
+{
+"t": "BRCE",
+"name": "MFS Blended Research Core Equity ETF",
+"fee_pct": 0.24,
+"category": "Large Blend",
+"issuer": "MFS",
+"top_holdings_pct": [
+[
+"NVIDIA CORP",
+9.2
+],
+[
+"APPLE INC",
+8.3
+],
+[
+"Microsoft Corp",
+4.9
+],
+[
+"Amazon.com Inc",
+4.7
+],
+[
+"ALPHABET INC",
+3.1
+],
+[
+"BROADCOM INC",
+2.7
+],
+[
+"META PLATFORMS INC",
+2.5
+],
+[
+"ALPHABET INC",
+2.1
+]
+],
+"holdings_source": "SEC report 2026-05-31",
+"sectors_pct": {
+"Technology": 40,
+"Financials": 12,
+"Health care": 10,
+"Industrials": 9
+},
+"asset_mix_pct": {
+"stock": 100
+},
+"fund_description": "The fund advisor normally invests at least 80% of the fund\u2019s net assets in equity securities. Equity securities include common stocks, depositary receipts, and other securities that represent an ownership interest (or right to acquire an ownership interest) in a company or other issuer. The fund advisor normally invests the fund's assets across different industries and sectors, but he may invest a significant percentage of the fund's assets in issuers in a single industry or sector."
+},
+{
+"t": "SLDR",
+"name": "Global X Short-Term Treasury Ladder ETF",
+"fee_pct": 0.12,
+"category": "Short Government",
+"issuer": "Global X Funds",
+"top_holdings_pct": [
+[
+"United States Treasury",
+5.1
+],
+[
+"UNITED STATES OF AMERICA - BUREAU OF THE PUBLIC DEBT",
+3.1
+],
+[
+"United States Treasury",
+3.0
+],
+[
+"US TREASURY N/B",
+3.0
+],
+[
+"United States Treasury",
+2.9
+],
+[
+"UNITED STATES OF AMERICA - BUREAU OF THE PUBLIC DEBT",
+2.8
+],
+[
+"United States Treasury",
+2.8
+],
+[
+"UNITED STATES OF AMERICA - BUREAU OF THE PUBLIC DEBT",
+2.4
+]
+],
+"holdings_source": "SEC report 2026-05-31",
+"sectors_pct": {},
+"asset_mix_pct": {
+"bond": 100
+},
+"fund_description": "The fund invests at least 80% of its total assets, plus borrowings for investment purposes (if any), in the securities of the index. The index is designed to measure the performance of a strategy commonly referred to as bond \u201claddering\u201d as applied to public obligations of the U.S. Treasury that have maturities between 1 and 3 years as of the last business day of February of each year."
+},
+{
+"t": "AADR",
+"name": "AdvisorShares Dorsey Wright ADR ETF",
+"fee_pct": 1.09,
+"category": "Foreign Large Growth",
+"issuer": "AdvisorShares",
+"top_holdings_pct": [
+[
+"Banco Bilbao Vizcaya",
+4.9
+],
+[
+"Mitsubishi UFJ Finan",
+4.5
+],
+[
+"China Yuchai International Ltd",
+4.5
+],
+[
+"Barclays PLC",
+4.1
+],
+[
+"Nokia Oyj",
+3.9
+],
+[
+"TAIWAN SEMICONDUCTOR-SP ADR",
+3.9
+],
+[
+"COMPANIA DE MINAS BUENAVENTURA SA",
+3.4
+],
+[
+"ASCENDIS PHARMA A/S",
+3.2
+]
+],
+"holdings_source": "SEC report 2026-06-30",
+"sectors_pct": {
+"Health care": 20,
+"Financials": 18,
+"Industrials": 12,
+"Technology": 12
+},
+"asset_mix_pct": {
+"stock": 99
+},
+"fund_description": "The fund seeks to achieve the fund's investment objective by selecting primarily a portfolio of U.S.-traded securities of non-U.S. organizations, most often American Depositary Receipts (\"ADRs\"). It will invest at least 80% of its total assets in ADRs and in securities that have economic characteristics similar to ADRs."
+},
+{
+"t": "IBTR",
+"name": "iShares iBonds Dec 2036 Term Treasury ETF",
+"fee_pct": 0.07,
+"category": "Target Maturity",
+"issuer": "iShares",
+"top_holdings_pct": [
+[
+"United States Treasury",
+55.9
+],
+[
+"UNITED STATES OF AMERICA - BUREAU OF THE PUBLIC DEBT",
+38.5
+],
+[
+"United States Treasury",
+4.0
+]
+],
+"holdings_source": "SEC report 2026-07-31",
+"sectors_pct": {},
+"asset_mix_pct": {
+"bond": 100
+},
+"fund_description": "The fund will invest at least 80% of its assets in the component securities of the underlying index, and it will invest at least 90% of its assets in U.S. Treasury securities that BFA believes will help the fund track the underlying index. The underlying index is market value-weighted based on amounts outstanding reduced by amounts held by the Federal Reserve SOMA times price plus accrued interest."
+},
+{
+"t": "VGVT",
+"name": "Vanguard Government Securities Active ETF",
+"fee_pct": 0.1,
+"category": "Intermediate Government",
+"issuer": "Vanguard",
+"top_holdings_pct": [
+[
+"FNMA",
+5.0
+],
+[
+"Fanniemae-Aces",
+2.5
+],
+[
+"Fanniemae-Aces",
+2.3
+],
+[
+"United States Treasury Note/Bond",
+2.2
+],
+[
+"United States Treasury",
+2.1
+],
+[
+"UNITED STATES OF AMERICA - BUREAU OF THE PUBLIC DEBT",
+1.9
+],
+[
+"United States Treasury",
+1.8
+],
+[
+"United States Treasury",
+1.7
+]
+],
+"holdings_source": "SEC report 2026-06-30",
+"sectors_pct": {},
+"asset_mix_pct": {
+"cash": 5,
+"bond": 95
+},
+"fund_description": "The fund invests at least 80% of its net assets, plus the amount of any borrowings for investment purposes, in bonds issued or guaranteed by the U.S. government and its agencies and instrumentalities. The fund may purchase bonds of any maturity. At a minimum, all bonds purchased by the fund will be rated investment-grade. Investment-grade bonds are those rated the equivalent of Baa3 or higher by Moody\u2019s or another independent rating agency or, if unrated, are determined to be of comparable quality by the fund\u2019s advisor."
+},
+{
+"t": "FTBD",
+"name": "Fidelity Tactical Bond ETF",
+"fee_pct": 0.55,
+"category": "Multisector Bond",
+"issuer": "Fidelity Investments",
+"top_holdings_pct": [
+[
+"United States Treasury",
+16.6
+],
+[
+"United States of America",
+6.7
+],
+[
+"UNITED STATES OF AMERICA - BUREAU OF THE PUBLIC DEBT",
+5.8
+],
+[
+"United States Treasury",
+4.8
+],
+[
+"United States Treasury",
+3.4
+],
+[
+"UNITED STATES OF AMERICA - BUREAU OF THE PUBLIC DEBT",
+1.9
+],
+[
+"UNITED STATES TREASURY BOND",
+1.7
+],
+[
+"UNITED STATES OF AMERICA - BUREAU OF THE PUBLIC DEBT",
+1.5
+]
+],
+"holdings_source": "SEC report 2026-05-31",
+"sectors_pct": {
+"Energy": 100
+},
+"asset_mix_pct": {
+"bond": 92,
+"other": 6
+},
+"fund_description": "The fund invests at least 80% of assets in debt securities of all types and repurchase agreements for those securities. The advisor allocates assets across the full spectrum of the debt market, including investment-grade, high yield and emerging markets debt securities across different maturities. The fund invests in both U.S. dollar-denominated and non-U.S. dollar-denominated securities, and generally hedging the fund's foreign currency exposures utilizing forward foreign currency exchange contracts."
+},
+{
+"t": "CPST",
+"name": "Calamos S&P 500 Structured Alt Protection ETF  September",
+"fee_pct": 0.69,
+"category": "Defined Outcome",
+"issuer": "Calamos",
+"top_holdings_pct": [
+[
+"Goldman Sachs & Co. LLC",
+108.9
+],
+[
+"Goldman Sachs & Co. LLC",
+0.1
+],
+[
+"Goldman Sachs & Co. LLC",
+-9.3
+]
+],
+"holdings_source": "SEC report 2026-07-31",
+"sectors_pct": {},
+"asset_mix_pct": {
+"stock": 100
+},
+"fund_description": "Under normal market conditions, the fund will invest substantially all of its assets in FLexible EXchange Options (\"FLEX Options\") that reference the price performance of the SPDR\u00ae? S&P 500\u00ae? ETF Trust (the \"Underlying ETF\"). The fund is non-diversified."
+},
+{
+"t": "TXXI",
+"name": "BondBloxx IR+M Tax-Aware Intermediate Duration ETF",
+"fee_pct": 0.35,
+"category": "Muni National Interm",
+"issuer": "BondBloxx Investment Management",
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {
+"bond": 96
+},
+"fund_description": "The fund is newly organized and invests in a diversified portfolio of U.S. dollar-denominated municipal and taxable intermediate duration fixed income securities that in the Sub-Adviser\u2019s view offers relatively attractive after-tax income. The fund invests, under normal circumstances, at least 50% of its total assets in municipal securities that pay interest that is exempt from U.S. federal income tax."
+},
+{
+"t": "FLGR",
+"name": "Franklin FTSE Germany ETF",
+"fee_pct": 0.09,
+"category": "Focused Region",
+"issuer": "Franklin Templeton, Inc",
+"top_holdings_pct": [
+[
+"SIEMENS AG",
+12.1
+],
+[
+"Allianz SE",
+9.3
+],
+[
+"SAP SE /EUR/",
+8.1
+],
+[
+"Siemens Energy AG",
+7.4
+],
+[
+"INFINEON TECHNOLOGIES AG /EUR/",
+6.3
+],
+[
+"Deutsche Telekom AG",
+4.9
+],
+[
+"Muenchener Rueckversicherungs-Gesellschaft AG in Muenchen",
+4.7
+],
+[
+"Rheinmetall AG",
+3.1
+]
+],
+"holdings_source": "SEC report 2026-06-30",
+"sectors_pct": {
+"Industrials": 29,
+"Financials": 24,
+"Technology": 16,
+"Consumer discretionary": 7
+},
+"asset_mix_pct": {
+"stock": 100
+},
+"fund_description": "Under normal market conditions, the fund invests at least 80% of its assets in the component securities of the FTSE Germany Capped Index and in depositary receipts representing such securities. The FTSE Germany Capped Index is based on the FTSE Germany Index and is designed to measure the performance of German large- and mid-capitalization stocks. The fund is non-diversified."
+},
+{
+"t": "DURA",
+"name": "VanEck Durable High Dividend ETF",
+"fee_pct": 0.3,
+"category": "Large Value",
+"issuer": "VanEck",
+"top_holdings_pct": [
+[
+"MERCK & COMPANY INC",
+5.4
+],
+[
+"PHILIP MORRIS INTERNATIONAL INC",
+5.1
+],
+[
+"BANK OF AMERICA CORP",
+5.1
+],
+[
+"THE COCA-COLA COMPANY",
+5.0
+],
+[
+"TEXAS INSTRUMENTS INC",
+4.6
+],
+[
+"EXXONMOBIL HOLDINGS CORP",
+4.6
+],
+[
+"ALTRIA GROUP INC",
+4.5
+],
+[
+"CHEVRON CORP",
+4.4
+]
+],
+"holdings_source": "SEC report 2026-06-30",
+"sectors_pct": {
+"Health care": 19,
+"Energy": 17,
+"Consumer staples": 17,
+"Utilities": 11
+},
+"asset_mix_pct": {
+"stock": 100
+},
+"fund_description": "The fund normally invests at least 80% of its total assets in securities that comprise the fund\u2019s benchmark index. The index is comprised of securities of companies with a high dividend yield, strong financial health and an attractive uncertainty-adjusted valuation. The fund is non-diversified."
+},
+{
+"t": "GHTA",
+"name": "Goose Hollow Tactical Allocation ETF",
+"fee_pct": 1.77,
+"category": "Tactical Allocation",
+"issuer": "Goose Hollow ETF",
+"top_holdings_pct": [
+[
+"WisdomTree Floating Rate Treasury Fund",
+15.7
+],
+[
+"iShares Treasury Floating Rate Bond ETF",
+14.6
+],
+[
+"PIMCO 25+ Year Zero Coupon US Treasury Index ETF",
+11.2
+],
+[
+"State Street SPDR FTSE Interna",
+10.5
+],
+[
+"Vanguard Short Term Treasury ETF",
+9.9
+],
+[
+"AGNC Investment Corp",
+4.6
+],
+[
+"iShares 20+ Year Tre",
+4.0
+],
+[
+"Health Care Select S",
+3.7
+]
+],
+"holdings_source": "SEC report 2026-06-30",
+"sectors_pct": {
+"Consumer staples": 20,
+"Technology": 19,
+"Industrials": 17,
+"Real estate": 16
+},
+"asset_mix_pct": {
+"cash": 3,
+"stock": 27,
+"bond": 63,
+"other": 6
+},
+"fund_description": "The fund is an actively managed ETF that invests in a combination of equity and fixed income ETFs. The underlying funds in which the fund invests each primarily invest in (1) U.S. common, preferred, or convertible stocks, (2) foreign common, preferred, or convertible stocks, (3) emerging market common, preferred, or convertible stocks, (4) U.S. fixed income securities, (5) real estate investment trusts, (6) master-limited partnerships, and (7) agency and mortgage-backed securities."
+},
+{
+"t": "HEMI",
+"name": "Hartford Equity Premium Income ETF",
+"fee_pct": 0.49,
+"category": "Derivative Income",
+"issuer": "Hartford Mutual Funds",
+"top_holdings_pct": [
+[
+"NVIDIA CORP",
+8.5
+],
+[
+"ALPHABET INC",
+6.6
+],
+[
+"APPLE INC",
+6.4
+],
+[
+"Microsoft Corp",
+6.1
+],
+[
+"Amazon.com Inc",
+5.1
+],
+[
+"BROADCOM INC",
+3.6
+],
+[
+"JP MORGAN CHASE & COMPANY",
+2.3
+],
+[
+"META PLATFORMS INC",
+2.3
+]
+],
+"holdings_source": "SEC report 2026-07-31",
+"sectors_pct": {
+"Technology": 40,
+"Communication": 12,
+"Financials": 11,
+"Consumer discretionary": 9
+},
+"asset_mix_pct": {
+"cash": 4,
+"stock": 96
+},
+"fund_description": "Under normal circumstances, the fund invests at least 80% of its assets in common stocks. It invests in a portfolio of common stocks of issuers located primarily in the United States. Wellington Management Company LLP (\u201cWellington Management\u201d), the fund\u2019s sub-adviser, chooses the fund\u2019s investments for the long equity portfolio by using fundamental research designed to identify issuers with improving quality metrics, business momentum and attractive relative valuations. It is non-diversified."
+},
+{
+"t": "NOVZ",
+"name": "TrueShares Structured Outcome (November) ETF",
+"fee_pct": 0.79,
+"category": "Defined Outcome",
+"issuer": "TrueShares",
+"top_holdings_pct": [
+[
+"UNITED STATES OF AMERICA - BUREAU OF THE PUBLIC DEBT",
+93.1
+],
+[
+"The Options Clearing Corp",
+4.0
+],
+[
+"The Options Clearing Corp",
+0.9
+],
+[
+"The Options Clearing Corp",
+0.9
+],
+[
+"The Options Clearing Corp",
+0.5
+],
+[
+"The Options Clearing Corp",
+0.3
+],
+[
+"The Options Clearing Corp",
+0.2
+],
+[
+"The Options Clearing Corp",
+0.2
+]
+],
+"holdings_source": "SEC report 2026-06-30",
+"sectors_pct": {
+"Technology": 38,
+"Financials": 12,
+"Communication": 10,
+"Consumer discretionary": 10
+},
+"asset_mix_pct": {
+"cash": 100
+},
+"fund_description": "The fund is an actively-managed ETF that seeks to achieve its investment objective by investing substantially all of its assets in options on the S&P 500 Price Index. It will purchase call options and sell put options on the S&P 500 Price Index or an ETF that seeks to track the performance of the S&P 500 Price Index on each Initial Investment Day with an expiration on the next Roll Date."
+},
+{
+"t": "GYLD",
+"name": "Arrow Dow Jones Global Yield ETF ETF",
+"fee_pct": 0.75,
+"category": "Global Moderate Allocation",
+"issuer": "ArrowShares",
+"top_holdings_pct": [
+[
+"Teleperformance SE",
+1.1
+],
+[
+"Surya Citra Media Tbk PT",
+1.0
+],
+[
+"Robert Half Inc",
+0.9
+],
+[
+"Ternium S.A.",
+0.9
+],
+[
+"Standard Life plc",
+0.9
+],
+[
+"PT Alamtri Resources Indonesia Tbk",
+0.9
+],
+[
+"KOMERCNI BANKA AS",
+0.9
+],
+[
+"CAL-MAINE FOODS INC",
+0.9
+]
+],
+"holdings_source": "SEC report 2026-07-31",
+"sectors_pct": {
+"Real estate": 33,
+"Energy": 30,
+"Financials": 13,
+"Materials": 8
+},
+"asset_mix_pct": {
+"cash": 5,
+"stock": 58,
+"bond": 36
+},
+"fund_description": "The fund uses a \"passive\" or \"indexing\" investment approach to seek to track the price and yield performance of the index. It invests at least 80% of its total assets in the component securities of the index (or depositary receipts representing those securities). The index seeks to identify the 150 highest yielding investable securities in the world within three \"asset classes.\""
+},
+{
+"t": "HYP",
+"name": "Golden Eagle Dynamic Hypergrowth ETF",
+"fee_pct": 0.85,
+"category": "Large Growth",
+"issuer": "Golden Eagle Strategies, LLC",
+"top_holdings_pct": [
+[
+"ARGAN INC",
+3.2
+],
+[
+"Oscar Health, Inc.",
+3.1
+],
+[
+"Comfort Systems USA Inc",
+3.0
+],
+[
+"MODINE MANUFACTURING COMPANY",
+2.9
+],
+[
+"AMN Healthcare Services, Inc.",
+2.9
+],
+[
+"KULICKE AND SOFFA INDUSTRIES INC",
+2.8
+],
+[
+"Ouster Inc",
+2.8
+],
+[
+"Clover Health Investments, Corp.",
+2.8
+]
+],
+"holdings_source": "SEC report 2026-06-30",
+"sectors_pct": {
+"Technology": 48,
+"Energy": 21,
+"Health care": 20,
+"Materials": 5
+},
+"asset_mix_pct": {
+"stock": 100
+},
+"fund_description": "The fund is an actively managed exchange-traded fund that seeks to achieve its investment objective by investing, under normal market conditions, at least 80% of its net assets (plus any borrowings for investment purposes) in the common stock of \u201chypergrowth companies."
+},
+{
+"t": "PBAP",
+"name": "PGIM S&P 500 Buffer 20 ETF - April",
+"fee_pct": 0.5,
+"category": "Defined Outcome",
+"issuer": "PGIM",
+"top_holdings_pct": [
+[
+"CBOE GLOBAL MARKETS, INC.",
+99.3
+]
+],
+"holdings_source": "SEC report 2026-07-31",
+"sectors_pct": {
+"Technology": 40,
+"Financials": 11,
+"Communication": 10,
+"Health care": 9
+},
+"asset_mix_pct": {
+"stock": 99
+},
+"fund_description": "Under normal market conditions, the fund will invest at least 80% of its net assets in investments that provide exposure to equity securities issued by large-capitalization U.S. companies. The fund is an actively managed ETF. It will invest substantially all of its assets in customized equity or index option contracts known as FLexible EXchange\u00ae Options (\u201cFLEX Options\u201d) on the SPDR\u00ae S&P 500\u00ae ETF Trust (the \u201cUnderlying ETF\u201d). The fund is non-diversified."
+},
+{
+"t": "JANM",
+"name": "FT Vest U.S. Equity Max Buffer ETF - January",
+"fee_pct": 0.85,
+"category": "Defined Outcome",
+"issuer": "First Trust",
+"top_holdings_pct": [
+[
+"CBOE GLOBAL MARKETS, INC.",
+99.2
+]
+],
+"holdings_source": "SEC report 2026-05-31",
+"sectors_pct": {
+"Technology": 40,
+"Financials": 11,
+"Communication": 10,
+"Health care": 9
+},
+"asset_mix_pct": {
+"stock": 99
+},
+"fund_description": "Under normal market conditions, the fund will invest at least 80% of its net assets (plus any investment borrowings) in investments that provide exposure to equity securities issued by U.S. companies. Under normal market conditions, the fund will invest substantially all of its assets in FLexible EXchange\u00ae Options (\u201cFLEX Options\u201d) that reference the price performance of the Underlying ETF. The fund is non-diversified."
+},
+{
+"t": "FTDS",
+"name": "First Trust Dividend Strength ETF",
+"fee_pct": 0.7,
+"category": "Mid-Cap Value",
+"issuer": "First Trust",
+"top_holdings_pct": [
+[
+"RELIANCE INC",
+2.3
+],
+[
+"Targa Resources Corp",
+2.3
+],
+[
+"COMMERCE BANCSHARES INC (MO)",
+2.3
+],
+[
+"FIFTH THIRD BANCORP",
+2.2
+],
+[
+"Popular Inc",
+2.2
+],
+[
+"CINCINNATI FINANCIAL CORP",
+2.2
+],
+[
+"ZIONS BANCORP NA",
+2.2
+],
+[
+"IDEX Corp",
+2.2
+]
+],
+"holdings_source": "SEC report 2026-06-30",
+"sectors_pct": {
+"Financials": 26,
+"Energy": 21,
+"Industrials": 17,
+"Technology": 15
+},
+"asset_mix_pct": {
+"stock": 100
+},
+"fund_description": "The fund will normally invest at least 90% of its net assets (plus any borrowings for investment purposes) in the common stocks and real estate investment trusts (\u201cREITs\u201d) that comprise the index. The index is designed to provide exposure to well-capitalized companies with a history of increasing their dividends. The term \u201cwell-capitalized\u201d reflects companies that have strong balance sheets with durable cash flow and a record of profitability."
+},
+{
+"t": "DECZ",
+"name": "TrueShares Structured Outcome (December) ETF",
+"fee_pct": 0.79,
+"category": "Defined Outcome",
+"issuer": "TrueShares",
+"top_holdings_pct": [
+[
+"UNITED STATES OF AMERICA - BUREAU OF THE PUBLIC DEBT",
+90.6
+],
+[
+"The Options Clearing Corp",
+7.9
+],
+[
+"The Options Clearing Corp",
+0.5
+],
+[
+"The Options Clearing Corp",
+0.4
+],
+[
+"The Options Clearing Corp",
+0.2
+],
+[
+"The Options Clearing Corp",
+0.2
+],
+[
+"The Options Clearing Corp",
+0.2
+],
+[
+"The Options Clearing Corp",
+0.1
+]
+],
+"holdings_source": "SEC report 2026-06-30",
+"sectors_pct": {
+"Technology": 38,
+"Financials": 12,
+"Communication": 10,
+"Consumer discretionary": 10
+},
+"asset_mix_pct": {
+"cash": 100
+},
+"fund_description": "The fund is an actively-managed ETF that seeks to achieve its investment objective by investing substantially all of its assets in options on the S&P 500 Price Index. It will purchase call options and sell put options on the S&P 500 Price Index or an ETF that seeks to track the performance of the S&P 500 Price Index on each Initial Investment Day with an expiration on the next Roll Date."
+},
+{
+"t": "KCOP",
+"name": "Kurv Copper & Mining Enhanced Income ETF",
+"fee_pct": 0.99,
+"category": "Commodities Focused",
+"issuer": "Kurv Investment Management LLC",
+"top_holdings_pct": [
+[
+"UNITED STATES OF AMERICA - BUREAU OF THE PUBLIC DEBT",
+33.4
+],
+[
+"TREASURY BILL",
+33.0
+],
+[
+"TREASURY BILL",
+17.5
+],
+[
+"",
+7.3
+],
+[
+"",
+6.5
+],
+[
+"",
+3.3
+],
+[
+"",
+2.4
+],
+[
+"",
+0.1
+]
+],
+"holdings_source": "SEC report 2026-05-31",
+"sectors_pct": {},
+"asset_mix_pct": {
+"cash": 23,
+"stock": 15,
+"bond": 62
+},
+"fund_description": "Under normal circumstances, the fund invests at least 80% of its net assets plus any borrowings for investment purposes in copper, the securities of copper-related ETPs, derivatives on copper or copper-related ETPs, or the securities of companies that are primarily involved in the copper mining industry. The fund is non-diversified."
+},
+{
+"t": "VUSG",
+"name": "Vanguard Wellington U.S. Growth Active ETF",
+"fee_pct": 0.35,
+"category": "Large Growth",
+"issuer": "Vanguard",
+"top_holdings_pct": [
+[
+"NVIDIA CORP",
+15.6
+],
+[
+"ALPHABET INC",
+11.7
+],
+[
+"MICRON TECHNOLOGY INC",
+6.0
+],
+[
+"BROADCOM INC",
+5.5
+],
+[
+"Microsoft Corp",
+4.6
+],
+[
+"ELI LILLY & COMPANY",
+4.5
+],
+[
+"Advanced Micro Devices Inc",
+4.1
+],
+[
+"APPLE INC",
+3.9
+]
+],
+"holdings_source": "SEC report 2026-06-30",
+"sectors_pct": {
+"Technology": 55,
+"Communication": 15,
+"Consumer discretionary": 10,
+"Health care": 9
+},
+"asset_mix_pct": {
+"stock": 100
+},
+"fund_description": "The fund employs an active management approach, investing primarily in large- and mid-capitalization stocks of U.S. companies considered to have above-average earnings growth. Under normal circumstances, it invests at least 80% of its net assets, plus the amount of any borrowings for investment purposes, in U.S. growth securities. The fund is non-diversified."
+},
+{
+"t": "AZTD",
+"name": "Aztlan Global Stock Selection DM SMID ETF",
+"fee_pct": 0.75,
+"category": "Global Small/Mid Stock",
+"issuer": "Aztlan ETFs",
+"top_holdings_pct": [
+[
+"DAVITA INC",
+3.1
+],
+[
+"Enova International, Inc.",
+3.0
+],
+[
+"MEDPACE HOLDINGS INC",
+2.9
+],
+[
+"Cybozu Inc",
+2.5
+],
+[
+"HAPPINET CORP",
+2.5
+],
+[
+"HALOZYME THERAPEUTICS INC",
+2.4
+],
+[
+"VIRTU FINANCIAL INC",
+2.4
+],
+[
+"DOCUSIGN INC",
+2.4
+]
+],
+"holdings_source": "SEC report 2026-07-31",
+"sectors_pct": {
+"Technology": 22,
+"Consumer discretionary": 20,
+"Industrials": 20,
+"Financials": 10
+},
+"asset_mix_pct": {
+"stock": 100
+},
+"fund_description": "The index is comprised of equity securities of companies from the following three developed markets (DM) regions. Under normal circumstances, at least 80% of the fund\u2019s net assets, plus borrowings for investment purposes, will be invested in equity securities of SMID-capitalization companies incorporated in or that are listed in developed markets."
+},
+{
+"t": "FXED",
+"name": "Sound Enhanced Fixed Income ETF",
+"fee_pct": 1.89,
+"category": "Conservative Allocation",
+"issuer": "Sound ETF",
+"top_holdings_pct": [
+[
+"ARES CAPITAL CORP",
+3.2
+],
+[
+"iShares 0-5 Year High Yield Co",
+3.1
+],
+[
+"HERCULES CAPITAL INC",
+3.0
+],
+[
+"AllianceBernstein Global High Income Fund, Inc.",
+2.9
+],
+[
+"iShares J.P. Morgan EM High Yi",
+2.9
+],
+[
+"SIMON PROPERTY GROUP INC",
+2.7
+],
+[
+"GOLUB CAPITAL BDC INC",
+2.6
+],
+[
+"JPMORGAN CHASE & CO",
+2.5
+]
+],
+"holdings_source": "SEC report 2026-05-31",
+"sectors_pct": {
+"Financials": 61,
+"Real estate": 39
+},
+"asset_mix_pct": {
+"stock": 24,
+"bond": 45,
+"preferred": 30
+},
+"fund_description": "Under normal market conditions, the fund will invest at least 80% of its net assets in fixed income securities. The fund's investments in fixed income securities will typically include U.S. corporate bonds, preferred stock and ETFs that invest in bonds, sovereign debt, and private placement debt securities. It may also invest in fixed income securities issued by U.S. and foreign corporations, securities issued by governments and their agencies, instrumentalities, or sponsored corporations, including supranational organizations."
+},
+{
+"t": "PBNV",
+"name": "PGIM S&P 500 Buffer 20 ETF - November",
+"fee_pct": 0.5,
+"category": "Defined Outcome",
+"issuer": "PGIM",
+"top_holdings_pct": [
+[
+"CBOE GLOBAL MARKETS, INC.",
+99.4
+]
+],
+"holdings_source": "SEC report 2026-07-31",
+"sectors_pct": {
+"Technology": 40,
+"Financials": 11,
+"Communication": 10,
+"Health care": 9
+},
+"asset_mix_pct": {
+"stock": 99
+},
+"fund_description": "Under normal market conditions, the fund will invest at least 80% of its net assets (plus any borrowings for investment purposes) in investments that provide exposure to securities included in the S&P 500 Index. The fund is an actively managed exchange-traded fund (\u201cETF\u201d). The fund is non-diversified."
+},
+{
+"t": "TGLR",
+"name": "Wedbush LAFFER TENGLER New Era Value ETF",
+"fee_pct": 0.85,
+"category": "Large Value",
+"issuer": "Wedbush Funds",
+"top_holdings_pct": [
+[
+"LAM RESEARCH CORP",
+5.9
+],
+[
+"GOLDMAN SACHS GROUP INC (THE)",
+4.9
+],
+[
+"AMERICAN EXPRESS COMPANY",
+4.8
+],
+[
+"WALMART INC",
+4.7
+],
+[
+"RTX CORP",
+4.5
+],
+[
+"JP MORGAN CHASE & COMPANY",
+4.4
+],
+[
+"BROADCOM INC",
+4.2
+],
+[
+"ALPHABET INC",
+4.1
+]
+],
+"holdings_source": "SEC report 2026-01-31",
+"sectors_pct": {
+"Technology": 25,
+"Financials": 15,
+"Industrials": 15,
+"Consumer discretionary": 13
+},
+"asset_mix_pct": {
+"stock": 100
+},
+"fund_description": "The fund is an actively managed fund that seeks to achieve its investment objective by investing in high quality, large-cap stocks that the Sub-Adviser believes have strong earnings and dividend growth potential and an above market dividend yield. Under normal circumstances, it will invest at least 80% of its net assets, including borrowings for investment purposes, in equity securities of companies. The fund is non-diversified."
+},
+{
+"t": "TMLP",
+"name": "Tortoise MLP ETF",
+"fee_pct": 0.5,
+"category": "Energy Limited Partnership",
+"issuer": "Tortoise Capital",
+"top_holdings_pct": [
+[
+"Hess Midstream LP Class A",
+5.6
+]
+],
+"holdings_source": "Yahoo",
+"sectors_pct": {
+"Energy": 100
+},
+"asset_mix_pct": {
+"stock": 6,
+"other": 96
+},
+"fund_description": "The underlying index is comprised of publicly traded companies organized in the form of limited partnerships and limited liability companies engaged in the transportation, production, processing or storage of energy commodities. The fund will invest primarily in total return swaps intended to provide exposure to the securities that comprise the underlying index. The fund is non-diversified."
+}
+]

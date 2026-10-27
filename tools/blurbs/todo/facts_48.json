@@ -1,0 +1,849 @@
+[
+{
+"t": "CPU",
+"name": "Amplify Top 10 Semiconductors ETF",
+"fee_pct": 0.49,
+"category": "Technology",
+"issuer": "Amplify ETFs",
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": "Under normal circumstances, the fund invests at least 80% of its net assets in equity securities, or derivative instruments, such as swap agreements and options contracts, that provide exposure to Semiconductor Companies. For purposes of compliance with this investment policy, derivative instruments will be valued at their notional value. It is non-diversified."
+},
+{
+"t": "ABLG",
+"name": "Abacus FCF International Leaders ETF",
+"fee_pct": null,
+"category": null,
+"issuer": null,
+"top_holdings_pct": [
+[
+"TAIWAN SEMICONDUCTOR-SP ADR",
+4.9
+],
+[
+"ASML Holding NV",
+4.9
+],
+[
+"SK Hynix Inc.",
+4.1
+],
+[
+"Advantest Corp",
+3.9
+],
+[
+"Novartis AG",
+3.3
+],
+[
+"Rolls-Royce Holdings PLC",
+3.2
+],
+[
+"TENCENT HOLDINGS LTD",
+3.1
+],
+[
+"Roche Holding AG",
+2.7
+]
+],
+"holdings_source": "SEC report 2026-07-31",
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": ""
+},
+{
+"t": "WSLS",
+"name": "WisdomTree Efficient Long/Short U.S. SmallCap Equity Fund",
+"fee_pct": 0.88,
+"category": "Long-Short Equity",
+"issuer": "WisdomTree",
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": "The fund seeks to achieve its investment objective by investing its assets in accordance with both (i) a long/short U.S. small-capitalization equity strategy and (ii) a long-only U.S. small-capitalization equity strategy. Under normal circumstances, it invests at least 80% of its net assets, plus any borrowings for investment purposes, in U.S. small-capitalization equity securities and derivative instruments that provide exposure to U.S. small-capitalization equity securities. The fund is non-diversified."
+},
+{
+"t": "XXQQ",
+"name": "Subversive Growth 100 Redacted ETF",
+"fee_pct": 0.3,
+"category": "Large Growth",
+"issuer": "Tidal Investments LLC",
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": "The fund will invest at least 80% of the value of its net assets, plus the amount of any borrowings for investment purposes, in a portfolio consisting of exposure to the equity securities of growth companies (i.e., companies included in the Nasdaq-100 Index), other than the equity securities of the Excluded Enterprises. The Nasdaq-100 Index includes approximately 100 of the largest domestic and international non-financial companies listed on the Nasdaq Stock Market based on market capitalization. It is non-diversified."
+},
+{
+"t": "AAAB",
+"name": "Corgi FTSE Aaa-A Intermediate Corporate Bond ETF",
+"fee_pct": 0.05,
+"category": "Corporate Bond",
+"issuer": "Corgi Funds",
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": "Under normal circumstances, at least 80% of the value of its net assets, plus borrowings for investment purposes, in U.S. dollar-denominated Aaa through A-rated corporate bonds of U.S. and foreign issuers with a remaining maturity of less than ten years that comprise the index. It is non-diversified."
+},
+{
+"t": "BBBB",
+"name": "Corgi FTSE BBB Rated Corporate Bond ETF",
+"fee_pct": 0.05,
+"category": "Corporate Bond",
+"issuer": "Corgi Funds",
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": "Under normal circumstances, at least 80% of the value of its net assets, plus borrowings for investment purposes, in U.S. dollar-denominated BBB-rated corporate bonds of U.S. and foreign issuers that comprise the index. It is non-diversified."
+},
+{
+"t": "FIFT",
+"name": "HCM Select 50 ETF",
+"fee_pct": 1.35,
+"category": "Large Value",
+"issuer": "Howard Capital Management",
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": "The fund\u2019s investment advisor, Howard Capital Management, LLC (the \u201cAdviser\u201d), actively manages the fund\u2019s portfolio using a proprietary investment model co-developed with Ned Davis Research, Inc. to select a portfolio of common or preferred stocks of any market capitalization of companies from the S&P 500 Index designed to provide investment results that correspond, before fees and expenses, generally to the performance of the Total Return Scotiabank U.S. Top 50 Large Cap Dividend Index."
+},
+{
+"t": "XXSP",
+"name": "Subversive S&P 500 Redacted ETF",
+"fee_pct": 0.3,
+"category": "Large Blend",
+"issuer": "Tidal Investments LLC",
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": "The fund will invest at least 80% of the value of its net assets, plus the amount of any borrowings for investment purposes, in a portfolio consisting of exposure to the equity securities of the companies included in the S&P 500 Index, other than the equity securities of the Excluded Enterprises (defined below). The S&P 500 Index includes approximately 500 of the largest U.S. companies listed on U.S. stock exchanges based on market capitalization. It is non-diversified."
+},
+{
+"t": "TPAY",
+"name": "Roundhill S&P 500 Target 10 Managed Distribution ETF",
+"fee_pct": null,
+"category": null,
+"issuer": null,
+"top_holdings_pct": [
+[
+"",
+88.4
+],
+[
+"",
+6.7
+]
+],
+"holdings_source": "SEC report 2026-06-30",
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": ""
+},
+{
+"t": "SCIN",
+"name": "Schwab International Bond ETF",
+"fee_pct": null,
+"category": null,
+"issuer": null,
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": ""
+},
+{
+"t": "LTB",
+"name": "Corgi FTSE 20 Year U.S. Treasury Bond ETF",
+"fee_pct": 0.05,
+"category": "Long Government",
+"issuer": "Corgi Funds",
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": "Under normal circumstances, at least 80% of the value of its net assets, plus borrowings for investment purposes, in U.S. dollar-denominated U.S. Treasury bond with a remaining maturity of at least twenty years that comprise the index. It is non-diversified."
+},
+{
+"t": "ACYB",
+"name": "FT Vest Laddered Autocallable Buffer & Resilient Income ETF",
+"fee_pct": 0.75,
+"category": "Defined Outcome",
+"issuer": "First Trust",
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": "Under normal market conditions, the fund will invest at least 80% of its net assets (plus any borrowings for investment purposes) in financial instruments, such as swaps, that provide exposure to Synthetic Autocallable Contracts, and/or other income-producing investments. It is non-diversified."
+},
+{
+"t": "UB",
+"name": "Corgi FTSE U.S. Treasury Bond ETF",
+"fee_pct": 0.02,
+"category": "Intermediate Government",
+"issuer": "Corgi Funds",
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": "Under normal circumstances, at least 80% of the value of its net assets, plus borrowings for investment purposes, in U.S. dollar-denominated U.S. Treasury bonds that comprise the index. It is non-diversified."
+},
+{
+"t": "OPTO",
+"name": "Tuttle Capital Photonics Income Blast ETF",
+"fee_pct": 0.99,
+"category": "Derivative Income",
+"issuer": "Tuttle Capital Management, LLC",
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": "Under normal market conditions, the fund will invest at least 80% of its net assets (plus any borrowings for investment purposes) in equity securities and swaps referencing companies whose primary business operations are directly related to photonics. It is non-diversified."
+},
+{
+"t": "TTTT",
+"name": "Corgi FTSE U.S. TIPS Bond ETF",
+"fee_pct": 0.02,
+"category": "Inflation-Protected Bond",
+"issuer": "Corgi Funds",
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": "Under normal circumstances, at least 80% of the value of its net assets, plus borrowings for investment purposes, in inflation-protected U.S. Treasury bonds (\"TIPS\") that comprise the index. It is non-diversified."
+},
+{
+"t": "SPXP",
+"name": "Direxion U.S. 500 Plus ETF",
+"fee_pct": 0.92,
+"category": "Multi-Asset Overlay",
+"issuer": "Direxion Funds",
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": "The fund, under normal circumstances, invests at least 80% of its net assets (plus any borrowings for investment purposes) in the instruments that comprise the index or investments with economic characteristics similar to the instruments included in the index. It is non-diversified."
+},
+{
+"t": "GTOH",
+"name": "Invesco Short Duration High Yield ETF",
+"fee_pct": null,
+"category": null,
+"issuer": null,
+"top_holdings_pct": [
+[
+"Carrix Holdings, LLC",
+1.8
+],
+[
+"VOC Escrow Ltd.",
+1.5
+],
+[
+"BATH & BODY WORKS INC",
+1.5
+],
+[
+"VENTURE GLOBAL PLAQUE",
+1.5
+],
+[
+"NESCO HOLDINGS II INC",
+1.5
+],
+[
+"Melco Resorts Finance Ltd.",
+1.5
+],
+[
+"STUDIO CITY FINANCE LTD",
+1.5
+],
+[
+"GLOBAL AIR LEASE CO LTD",
+1.5
+]
+],
+"holdings_source": "SEC report 2026-07-31",
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": ""
+},
+{
+"t": "HOID",
+"name": "Tuttle - Rareview Humanoid Robotics ETF",
+"fee_pct": 0.75,
+"category": "Technology",
+"issuer": "Rareview Capital LLC",
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": "Under normal circumstances, the fund invests at least 80% of its net assets in Humanoid Robotics Companies. Humanoid Robotics Companies are issuers that derive at least 50% of their revenue from, or commit at least 50% of their assets to, one or more of the following activities: (1) the manufacture of humanoid robotics; or (2) development, production or supply of critical hardware software or other enabling technology essential to humanoid robots. It is non-diversified."
+},
+{
+"t": "IPB",
+"name": "Merrill Lynch & Co., Inc. 6.0518% Index Plus Trust Certificates Series 2003-1",
+"fee_pct": null,
+"category": null,
+"issuer": null,
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": ""
+},
+{
+"t": "ACHP",
+"name": "Global X Asia Semiconductor ETF",
+"fee_pct": 0.5,
+"category": "Technology",
+"issuer": "Global X Funds",
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": "The fund invests at least 80% of its net assets, plus borrowings for investment purposes (if any), in the securities of the underlying index. Securities of the underlying index may include common stocks and American Depositary Receipts (\"ADRs\"). The underlying index, as presently constituted, is designed to track the performance of companies listed in Asian countries that are involved in the semiconductor ecosystem. The fund is non-diversified."
+},
+{
+"t": "XLPM",
+"name": "State Street S&P 500 Consumer Staples Market Sector SPDR ETF",
+"fee_pct": 0.12,
+"category": "Consumer Defensive",
+"issuer": "State Street Investment Management",
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": "Under normal market circumstances, at least 80% of the fund's net assets (plus any borrowings for investment purposes) in securities comprising the index the fund seeks to track, either directly or indirectly through underlying exchange-traded funds (\u201cETFs\u201d), and derivatives that provide exposure to such securities."
+},
+{
+"t": "AIQD",
+"name": "MicroSectors -3? Short Artificial Intelligence (AI) ETNs",
+"fee_pct": null,
+"category": "Trading--Inverse Equity",
+"issuer": "BMO Capital Markets",
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": ""
+},
+{
+"t": "XLEM",
+"name": "State Street S&P 500 Energy Market Sector SPDR ETF",
+"fee_pct": 0.12,
+"category": "Equity Energy",
+"issuer": "State Street Investment Management",
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": "Under normal market circumstances, at least 80% of the fund's net assets (plus any borrowings for investment purposes) in securities comprising the index the fund seeks to track, either directly or indirectly through underlying exchange-traded funds (\u201cETFs\u201d), and derivatives that provide exposure to such securities."
+},
+{
+"t": "ACGR",
+"name": "American Century Large Cap Growth ETF",
+"fee_pct": null,
+"category": null,
+"issuer": null,
+"top_holdings_pct": [
+[
+"NVIDIA CORP",
+13.6
+],
+[
+"Microsoft Corp",
+10.3
+],
+[
+"APPLE INC",
+9.6
+],
+[
+"ALPHABET INC",
+7.5
+],
+[
+"BROADCOM INC",
+6.5
+],
+[
+"Amazon.com Inc",
+4.1
+],
+[
+"Mastercard Inc",
+2.9
+],
+[
+"META PLATFORMS INC",
+2.8
+]
+],
+"holdings_source": "SEC report 2026-05-31",
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": ""
+},
+{
+"t": "XLKM",
+"name": "State Street S&P 500 Technology Market Sector SPDR ETF",
+"fee_pct": 0.12,
+"category": "Technology",
+"issuer": "State Street Investment Management",
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": "Under normal market circumstances, at least 80% of the fund's net assets (plus any borrowings for investment purposes) in securities comprising the index the fund seeks to track, either directly or indirectly through underlying exchange-traded funds (\u201cETFs\u201d), and derivatives that provide exposure to such securities."
+},
+{
+"t": "ABOT",
+"name": "Abacus FCF Innovation Leaders ETF",
+"fee_pct": null,
+"category": null,
+"issuer": null,
+"top_holdings_pct": [
+[
+"APPLE INC",
+4.9
+],
+[
+"NVIDIA CORP",
+4.7
+],
+[
+"BROADCOM INC",
+3.9
+],
+[
+"ABBVIE INC",
+3.3
+],
+[
+"AIRBNB INC",
+2.7
+],
+[
+"SNOWFLAKE INC",
+2.7
+],
+[
+"BRISTOL-MYERS SQUIBB COMPANY",
+2.6
+],
+[
+"FORTINET INC",
+2.5
+]
+],
+"holdings_source": "SEC report 2026-07-31",
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": ""
+},
+{
+"t": "CTJN",
+"name": "Corgi U.S. Equities 30% Structured Buffer ETF - June Series",
+"fee_pct": null,
+"category": null,
+"issuer": null,
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": ""
+},
+{
+"t": "EMAG",
+"name": "Emerging Markets AI Mag 3 ETF",
+"fee_pct": 0.76,
+"category": null,
+"issuer": "Tidal Investments LLC",
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": ""
+},
+{
+"t": "MTGG",
+"name": "MayTech Global Growth ETF",
+"fee_pct": 0.75,
+"category": "Global Large-Stock Growth",
+"issuer": "Maytech ETF",
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": "Under normal circumstances, the fund will invest at least 80% of the value of its assets, plus borrowings for investment purposes, in the equity securities of growth companies. As part of the 80%, the fund will invest at least 40% of its net assets, or if conditions are not favorable, invest at least 30% of its net assets, in equity securities of growth companies whose primary operations or principal trading market is in a foreign market, and that are not subject to the requirements of the U.S. securities laws, markets and accounting requirements, i.e., foreign securities. It is non-diversifie"
+},
+{
+"t": "XLYM",
+"name": "State Street S&P 500 Consumer Discretionary Market Sector SPDR ETF",
+"fee_pct": 0.12,
+"category": "Consumer Cyclical",
+"issuer": "State Street Investment Management",
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": "Under normal market circumstances, at least 80% of the fund's net assets (plus any borrowings for investment purposes) in securities comprising the index the fund seeks to track, either directly or indirectly through underlying exchange-traded funds (\u201cETFs\u201d), and derivatives that provide exposure to such securities."
+},
+{
+"t": "TIPG",
+"name": "Northern Trust 2046 Inflation-Linked Distributing Ladder ETF",
+"fee_pct": null,
+"category": null,
+"issuer": null,
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": ""
+},
+{
+"t": "HF",
+"name": "DGA Core Plus Absolute Return ETF",
+"fee_pct": null,
+"category": null,
+"issuer": null,
+"top_holdings_pct": [
+[
+"PROSHARES SHORT S&P500",
+19.0
+],
+[
+"Vanguard Value ETF",
+9.0
+],
+[
+"State Street SPDR Portfolio S&P 500 Value ETF",
+9.0
+],
+[
+"SPDR Portfolio S&P 5",
+8.9
+],
+[
+"Vanguard Growth ETF",
+8.9
+],
+[
+"iShares MSCI ACWI ETF",
+7.0
+],
+[
+"VANGUARD INTERNATIONAL EQUITY INDEX FUNDS",
+7.0
+],
+[
+"Schwab US Dividend Equity ETF",
+5.1
+]
+],
+"holdings_source": "SEC report 2026-07-31",
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": ""
+},
+{
+"t": "RNMN",
+"name": "RiverNorth Market Neutral ETF",
+"fee_pct": null,
+"category": null,
+"issuer": null,
+"top_holdings_pct": [
+[
+"Graf Global Corp",
+2.6
+],
+[
+"Solarius Capital Acquisition C",
+2.1
+],
+[
+"Activate Energy Acquisition Co",
+2.0
+],
+[
+"Bitcoin Infrastructure Acquisi",
+2.0
+],
+[
+"Lafayette Digital Acquisition",
+2.0
+],
+[
+"United Acquisition Corp I",
+2.0
+],
+[
+"Legato Merger Corp IV",
+2.0
+],
+[
+"SC II Acquisition Corp",
+2.0
+]
+],
+"holdings_source": "SEC report 2026-06-30",
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": ""
+},
+{
+"t": "ABXB",
+"name": "Abacus Flexible Bond Leaders ETF",
+"fee_pct": null,
+"category": null,
+"issuer": null,
+"top_holdings_pct": [
+[
+"Vanguard Short Term Treasury ETF",
+17.6
+],
+[
+"ISHARES TRUST",
+17.4
+],
+[
+"ISHARES TRUST",
+17.2
+],
+[
+"iShares 10-20 Year Treasury Bond ETF",
+17.0
+],
+[
+"VanEck JP Morgan EM Local Currency Bond ETF",
+10.2
+],
+[
+"iShares 0-5 Year High Yield Co",
+10.1
+],
+[
+"iShares J.P. Morgan USD Emergi",
+10.0
+]
+],
+"holdings_source": "SEC report 2026-07-31",
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": ""
+},
+{
+"t": "USFI",
+"name": "BrandywineGLOBAL - U.S. Fixed Income ETF",
+"fee_pct": null,
+"category": null,
+"issuer": null,
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": ""
+},
+{
+"t": "CTJL",
+"name": "Corgi U.S. Equities 30% Structured Buffer ETF - July Series",
+"fee_pct": null,
+"category": null,
+"issuer": null,
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": ""
+},
+{
+"t": "PBWN",
+"name": "Portfolio Building Block World Ex US Industrials ETF",
+"fee_pct": null,
+"category": null,
+"issuer": null,
+"top_holdings_pct": [
+[
+"Siemens AG",
+5.8
+],
+[
+"Schneider Electric SE",
+4.6
+],
+[
+"Rolls-Royce Holdings PLC",
+4.1
+],
+[
+"Hitachi Ltd",
+3.8
+],
+[
+"ABB Ltd",
+3.7
+],
+[
+"Recruit Holdings Co Ltd",
+3.4
+],
+[
+"Airbus SE",
+3.3
+],
+[
+"Safran SA",
+3.2
+]
+],
+"holdings_source": "Yahoo",
+"sectors_pct": {
+"Industrials": 96,
+"Communication": 3
+},
+"asset_mix_pct": {
+"stock": 100
+},
+"fund_description": "Under normal circumstances, the fund will invest at least 80% of the fund\u2019s net assets (plus borrowings for investment purposes) in component securities that make up the index. The fund is non-diversified."
+},
+{
+"t": "TNTW",
+"name": "Corgi FTSE 10-20 Year U.S. Treasury Bond ETF",
+"fee_pct": 0.02,
+"category": "Long Government",
+"issuer": "Corgi Funds",
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": ""
+},
+{
+"t": "SVTN",
+"name": "Corgi FTSE 7-10 Year U.S. Treasury Bond ETF",
+"fee_pct": 0.05,
+"category": "Long Government",
+"issuer": "Corgi Funds",
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": ""
+},
+{
+"t": "SQBR",
+"name": "FT Vest U.S. Equity Quarterly 20 Barrier ETF",
+"fee_pct": null,
+"category": null,
+"issuer": null,
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": ""
+},
+{
+"t": "GCB",
+"name": "Corgi FTSE Intermediate Government/Credit Bond ETF",
+"fee_pct": 0.05,
+"category": "Intermediate Core Bond",
+"issuer": "Corgi Funds",
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": ""
+},
+{
+"t": "EAFH",
+"name": "Xtrackers MSCI EAFE 50% Hedged Equity ETF",
+"fee_pct": null,
+"category": null,
+"issuer": null,
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": ""
+},
+{
+"t": "ICOM",
+"name": "Tema Commodity Income ETF",
+"fee_pct": 0.75,
+"category": "Natural Resources",
+"issuer": "Tema ETFs",
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": ""
+},
+{
+"t": "AMHI",
+"name": "American Beacon Aberdeen Municipal High Income ETF",
+"fee_pct": null,
+"category": null,
+"issuer": null,
+"top_holdings_pct": [
+[
+"CHANDLER INDL DEV-2",
+3.9
+],
+[
+"Minnesota Municipal Gas Agency",
+3.6
+],
+[
+"PUBLIC FIN AUTH WI EDU REVENUE",
+3.6
+],
+[
+"Montana Facility Finance Authority",
+3.6
+],
+[
+"NEVADA DEPT OF BUSINESS & INDUSTRY NV",
+3.5
+],
+[
+"Public Finance Authority",
+3.4
+],
+[
+"PUBLIC FIN AUTH WI RETMNT FAC REVENUE",
+3.4
+],
+[
+"Public Finance Authority",
+3.2
+]
+],
+"holdings_source": "SEC report 2026-07-31",
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": ""
+},
+{
+"t": "THRU",
+"name": "Tema Commodity Infrastructure ETF",
+"fee_pct": 0.75,
+"category": "Infrastructure",
+"issuer": "Tema ETFs",
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {},
+"fund_description": ""
+}
+]

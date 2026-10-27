@@ -1,0 +1,2223 @@
+[
+{
+"t": "HAIL",
+"name": "State Street SPDR S&P Kensho Smart Mobility ETF",
+"fee_pct": 0.45,
+"category": "Technology",
+"issuer": "State Street Investment Management",
+"top_holdings_pct": [
+[
+"Allegro MicroSystems Inc",
+2.1
+],
+[
+"Lucid Group, Inc.",
+2.0
+],
+[
+"Ambarella, Inc.",
+1.9
+],
+[
+"Aeva Technologies Inc",
+1.7
+],
+[
+"VIA TRANSPORTATION, INC.",
+1.7
+],
+[
+"RIVIAN AUTOMOTIVE INC",
+1.6
+],
+[
+"Aspen Aerogels, Inc.",
+1.6
+],
+[
+"indie Semiconductor, Inc.",
+1.6
+]
+],
+"holdings_source": "SEC report 2026-06-30",
+"sectors_pct": {
+"Technology": 39,
+"Consumer discretionary": 36,
+"Industrials": 17,
+"Communication": 4
+},
+"asset_mix_pct": {
+"stock": 100
+},
+"fund_description": "Under normal market conditions, the fund generally invests substantially all, but at least 80%, of its total assets in the securities comprising the index. The index is comprised of U.S.-listed equity securities (including depositary receipts) of companies domiciled across developed and emerging markets worldwide which are included in the Smart Transportation sector as determined by a classification standard produced by the index provider."
+},
+{
+"t": "MOTG",
+"name": "VanEck Morningstar Global Wide Moat ETF",
+"fee_pct": 0.52,
+"category": "Global Large-Stock Blend",
+"issuer": "VanEck",
+"top_holdings_pct": [
+[
+"TAIWAN SEMICONDUCTOR MANUFACTURING COMPANY LTD",
+2.3
+],
+[
+"US BANCORP",
+2.2
+],
+[
+"Ambev S.A.",
+2.1
+],
+[
+"CHARLES SCHWAB CORP (THE)",
+2.0
+],
+[
+"DATADOG INC",
+2.0
+],
+[
+"NVIDIA CORP",
+2.0
+],
+[
+"BROADCOM INC",
+2.0
+],
+[
+"BRISTOL-MYERS SQUIBB COMPANY",
+2.0
+]
+],
+"holdings_source": "SEC report 2026-06-30",
+"sectors_pct": {
+"Industrials": 28,
+"Technology": 21,
+"Consumer staples": 18,
+"Health care": 15
+},
+"asset_mix_pct": {
+"stock": 100
+},
+"fund_description": "The fund normally invests at least 80% of its total assets in securities that comprise the fund's benchmark index. The index is comprised of securities issued by companies that Morningstar, Inc. determines to have sustainable competitive advantages based on a proprietary methodology that considers quantitative and qualitative factors (\"wide moat companies\"). The fund is non-diversified."
+},
+{
+"t": "RULE",
+"name": "Adaptive Core ETF",
+"fee_pct": 1.84,
+"category": "Moderate Allocation",
+"issuer": "Mohrfunds",
+"top_holdings_pct": [
+[
+"SEAGATE TECHNOLOGY HOLDINGS PUBLIC LIMITED COMPANY",
+6.0
+],
+[
+"MICRON TECHNOLOGY INC",
+5.7
+],
+[
+"CORNING INC",
+5.4
+],
+[
+"LAM RESEARCH CORP",
+4.5
+],
+[
+"KLA Corp",
+4.2
+],
+[
+"Advanced Micro Devices Inc",
+3.8
+],
+[
+"INTEL CORP",
+3.1
+],
+[
+"DELL TECHNOLOGIES INC",
+3.1
+]
+],
+"holdings_source": "SEC report 2026-06-30",
+"sectors_pct": {
+"Technology": 58,
+"Health care": 9,
+"Industrials": 6,
+"Energy": 6
+},
+"asset_mix_pct": {
+"cash": 4,
+"stock": 93
+},
+"fund_description": "The fund invests in individual equity securities without regard to market capitalization and ETFs that invest in equity securities of any market capitalization including convertible equity securities and fixed income ETFs. The fund\u2019s portfolio may hold securities from issuers of any market capitalization, credit quality, maturity, or country. Fixed income securities may include securities with credit quality below investment grade (commonly referred to as \u201cjunk bond\u201d credit quality)."
+},
+{
+"t": "BUYO",
+"name": "KraneShares Man Buyout Beta Index ETF",
+"fee_pct": 0.89,
+"category": "Small Blend",
+"issuer": "KraneShares",
+"top_holdings_pct": [
+[
+"Onto Innovation Inc",
+1.7
+],
+[
+"DIGITALOCEAN HOLDINGS INC",
+1.6
+],
+[
+"MKS INC",
+1.5
+],
+[
+"JABIL INC",
+1.4
+],
+[
+"MATERION CORP",
+1.4
+],
+[
+"FLEX LTD",
+1.4
+],
+[
+"COHERENT CORP",
+1.3
+],
+[
+"NEWS CORP",
+1.3
+]
+],
+"holdings_source": "SEC report 2026-06-30",
+"sectors_pct": {
+"Technology": 25,
+"Industrials": 21,
+"Health care": 13,
+"Consumer discretionary": 11
+},
+"asset_mix_pct": {
+"stock": 100
+},
+"fund_description": "Under normal circumstances, the fund will invest at least 80% of its net assets (plus borrowings for investment purposes) in instruments in its underlying index or in instruments that have economic characteristics similar to those in the index. The index is designed to provide a proxy for private equity performance and risk exposures by focusing on small- and mid-capitalization stocks that have characteristics similar to companies in private equity buyout funds. The fund is non-diversified."
+},
+{
+"t": "VRAI",
+"name": "Virtus Real Asset Income ETF",
+"fee_pct": 0.55,
+"category": "Global Small/Mid Stock",
+"issuer": "Virtus",
+"top_holdings_pct": [
+[
+"HF SINCLAIR CORP",
+1.5
+],
+[
+"STEPAN COMPANY",
+1.3
+],
+[
+"SM ENERGY COMPANY",
+1.3
+],
+[
+"Cenovus Energy Inc",
+1.2
+],
+[
+"CAL-MAINE FOODS INC",
+1.2
+],
+[
+"SHELL PLC",
+1.2
+],
+[
+"MURPHY OIL CORP",
+1.2
+],
+[
+"BROOKFIELD INFRASTRUCTURE PARTNERS LP",
+1.2
+]
+],
+"holdings_source": "SEC report 2026-07-31",
+"sectors_pct": {
+"Energy": 39,
+"Real estate": 31,
+"Utilities": 16,
+"Materials": 8
+},
+"asset_mix_pct": {
+"stock": 98
+},
+"fund_description": "Under normal market conditions, the fund will invest not less than 80% of its assets in component securities of the underlying index. The underlying index is designed to track the performance of U.S.-listed \"Real Asset\" companies, as defined by Indxx, LLC. The underlying index includes common stock, real estate investment trusts, master limited partnerships, American depositary receipts."
+},
+{
+"t": "BTCC",
+"name": "Grayscale Bitcoin High Income ETF",
+"fee_pct": 0.65,
+"category": "Digital Assets",
+"issuer": "Grayscale",
+"top_holdings_pct": [
+[
+"United States Treasury Bills",
+85.6
+],
+[
+"",
+12.8
+]
+],
+"holdings_source": "SEC report 2026-06-30",
+"sectors_pct": {},
+"asset_mix_pct": {
+"cash": 103
+},
+"fund_description": "Under normal circumstances, the fund will invest at least 80% of its net assets (including investment borrowings) in options contracts that utilize a Bitcoin ETP as the reference asset. The fund is non-diversified."
+},
+{
+"t": "TSEP",
+"name": "FT Vest Emerging Market Buffer ETF - September",
+"fee_pct": 0.95,
+"category": "Defined Outcome",
+"issuer": "First Trust",
+"top_holdings_pct": [
+[
+"CBOE GLOBAL MARKETS, INC.",
+99.4
+]
+],
+"holdings_source": "SEC report 2026-05-31",
+"sectors_pct": {},
+"asset_mix_pct": {
+"stock": 99
+},
+"fund_description": "Under normal market conditions, the fund will invest substantially all of its assets in FLexible EXchange\u00ae Options that reference the price performance of the iShares MSCI Emerging Markets ETF. The underlying ETF is an exchange-traded fund that generally invests at least 80% of its assets in securities of the MSCI Emerging Markets Index and in depositary receipts representing securities of the MSCI Emerging Markets Index. The fund is non-diversified."
+},
+{
+"t": "SOEZ",
+"name": "Franklin Solana ETF",
+"fee_pct": 0.19,
+"category": "Digital Assets",
+"issuer": "Franklin Templeton",
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {
+"other": 100
+},
+"fund_description": "The fund seeks to reflect such performance before payment of the fund\u2019s expenses and liabilities."
+},
+{
+"t": "INDE",
+"name": "Matthews India Active ETF",
+"fee_pct": 0.79,
+"category": "India Equity",
+"issuer": "Matthews Asia Funds",
+"top_holdings_pct": [
+[
+"THANGAMAYIL JEWELLERY LTD",
+7.5
+],
+[
+"HDFC Bank Ltd.",
+7.0
+],
+[
+"ETERNAL LTD",
+6.6
+],
+[
+"ICICI Bank Ltd.",
+5.7
+],
+[
+"NEULAND LABORATORIES LTD",
+3.9
+],
+[
+"Bajaj Finance Ltd",
+3.7
+],
+[
+"Shriram Finance Ltd.",
+3.6
+],
+[
+"Bharti Airtel Ltd.",
+3.2
+]
+],
+"holdings_source": "SEC report 2026-06-30",
+"sectors_pct": {
+"Financials": 31,
+"Consumer discretionary": 24,
+"Industrials": 13,
+"Health care": 9
+},
+"asset_mix_pct": {
+"stock": 99
+},
+"fund_description": "Under normal circumstances, the fund seeks to achieve its investment objective by investing at least 80% of its net assets, which include borrowings for investment purposes, in the common stocks, preferred stocks and convertible securities, of any duration or credit quality, including those that are unrated, or would be below investment grade (referred to as \u201cjunk bonds\u201d) if rated, of companies located in India. The fund is non-diversified."
+},
+{
+"t": "SMHC",
+"name": "VanEck China Semiconductor ETF",
+"fee_pct": 0.65,
+"category": "Greater China Region",
+"issuer": "VanEck",
+"top_holdings_pct": [
+[
+"CAMBRICON TECHNOLOGIES CORP LTD",
+8.8
+],
+[
+"Hygon Information Technology Co Ltd",
+7.6
+],
+[
+"Eoptolink Technology Inc Ltd",
+6.7
+],
+[
+"GigaDevice Semiconductor Inc",
+6.4
+],
+[
+"Advanced Micro-Fabrication Equipment Inc China",
+6.1
+],
+[
+"NAURA Technology Group Co Ltd",
+5.8
+],
+[
+"Suzhou Dongshan Precision Manufacturing Co Ltd",
+4.7
+],
+[
+"Montage Technology Co Ltd",
+4.6
+]
+],
+"holdings_source": "SEC report 2026-06-30",
+"sectors_pct": {
+"Technology": 100
+},
+"asset_mix_pct": {
+"cash": 6,
+"stock": 94
+},
+"fund_description": "The fund normally invests at least 80% of its total assets in securities that comprise the fund\u2019s benchmark index. The index is a rules-based, modified capitalization-weighted, float-adjusted index intended to track the performance of 25 of the largest and most liquid Chinese companies in the semiconductor industry. It will seek to achieve its investment objective by primarily investing directly in A-shares. The fund is non-diversified."
+},
+{
+"t": "RDTY",
+"name": "YieldMax R2000 0DTE Covered Strategy ETF",
+"fee_pct": 1.73,
+"category": "Derivative Income",
+"issuer": "YieldMax ETFs",
+"top_holdings_pct": [
+[
+"",
+88.6
+],
+[
+"TREASURY BILL",
+0.1
+]
+],
+"holdings_source": "SEC report 2026-07-31",
+"sectors_pct": {
+"Health care": 21,
+"Financials": 18,
+"Technology": 15,
+"Industrials": 13
+},
+"asset_mix_pct": {
+"stock": 172,
+"other": 4
+},
+"fund_description": "The fund seeks to achieve its investment objective by employing a synthetic covered call strategy, designed to generate current income on a weekly basis while also providing exposure to the price return of the Russell 2000 Index. In executing this strategy, the manager will utilize call options that reference the index or on passively managed ETFs that seek to track the index\u2019s performance. The fund is non-diversified."
+},
+{
+"t": "VBCG",
+"name": "Vanguard Target Maturity 2033 Corporate Bond ETF",
+"fee_pct": 0.08,
+"category": "Target Maturity",
+"issuer": "Vanguard",
+"top_holdings_pct": [
+[
+"WELLS FARGO & COMPANY",
+1.5
+],
+[
+"BANK OF AMERICA CORP",
+1.4
+],
+[
+"MORGAN STANLEY",
+1.3
+],
+[
+"PFIZER INVESTMENT ENTERPRISES PTE LTD",
+1.3
+],
+[
+"JP MORGAN CHASE & COMPANY",
+1.0
+],
+[
+"GOLDMAN SACHS GROUP INC (THE)",
+0.9
+],
+[
+"JPMORGAN CHASE & CO",
+0.9
+],
+[
+"ORACLE CORP",
+0.9
+]
+],
+"holdings_source": "SEC report 2026-06-30",
+"sectors_pct": {},
+"asset_mix_pct": {
+"bond": 99
+},
+"fund_description": "Under normal circumstances, the fund invests at least 80% of its net assets, plus the amount of any borrowings for investment purposes, in the components of the Target Index or in securities determined by the fund\u2019s advisor to have economic characteristics substantially identical to those of the Target Index components."
+},
+{
+"t": "AMZP",
+"name": "Kurv Yield Premium Strategy Amazon (AMZN) ETF",
+"fee_pct": 0.99,
+"category": "Derivative Income",
+"issuer": "Kurv Investment Management LLC",
+"top_holdings_pct": [
+[
+"TREASURY BILL",
+33.3
+],
+[
+"TREASURY BILL",
+23.7
+],
+[
+"UNITED STATES OF AMERICA - BUREAU OF THE PUBLIC DEBT",
+9.3
+],
+[
+"",
+8.4
+],
+[
+"",
+8.0
+],
+[
+"",
+0.1
+],
+[
+"",
+-0.0
+],
+[
+"",
+-0.5
+]
+],
+"holdings_source": "SEC report 2026-05-31",
+"sectors_pct": {},
+"asset_mix_pct": {
+"cash": 28,
+"stock": 7,
+"bond": 65
+},
+"fund_description": "The fund is an actively managed exchange traded fund that seeks current income while maintaining the opportunity for exposure to the share price (i.e., the price returns) of the common stock of Amazon.com, Inc. (\u201cAMZN\u201d); however the strategy limits potential investment gains related to share price appreciation. The fund seeks to employ its investment strategy as it relates to AMZN in all market, economic, or other conditions. The fund is non-diversified."
+},
+{
+"t": "COYY",
+"name": "GraniteShares YieldBOOST COIN ETF",
+"fee_pct": 1.07,
+"category": "Derivative Income",
+"issuer": "Graniteshares",
+"top_holdings_pct": [
+[
+"Treasury Bill",
+47.3
+],
+[
+"Treasury Bill",
+32.8
+],
+[
+"The Options Clearing Corporation",
+0.6
+],
+[
+"The Options Clearing Corporation",
+0.4
+],
+[
+"The Options Clearing Corporation",
+0.4
+],
+[
+"The Options Clearing Corporation",
+-0.7
+],
+[
+"The Options Clearing Corporation",
+-1.1
+],
+[
+"The Options Clearing Corporation",
+-1.8
+]
+],
+"holdings_source": "SEC report 2026-06-30",
+"sectors_pct": {},
+"asset_mix_pct": {
+"cash": 73,
+"bond": 29
+},
+"fund_description": "The fund will invest at least 80% of its net assets (plus any borrowings for investment purposes) in derivatives contracts that utilize the underlying COIN ETF as the reference asset. The fund is non-diversified."
+},
+{
+"t": "VUS",
+"name": "Virtus US Dividend ETF",
+"fee_pct": 0.25,
+"category": "Large Blend",
+"issuer": "Virtus",
+"top_holdings_pct": [
+[
+"APPLE INC",
+6.1
+],
+[
+"NVIDIA CORP",
+5.3
+],
+[
+"Microsoft Corp",
+3.7
+],
+[
+"BROADCOM INC",
+3.6
+],
+[
+"Amazon.com Inc",
+2.4
+],
+[
+"MICRON TECHNOLOGY INC",
+2.3
+],
+[
+"JP MORGAN CHASE & COMPANY",
+2.2
+],
+[
+"JOHNSON & JOHNSON",
+2.0
+]
+],
+"holdings_source": "SEC report 2026-07-31",
+"sectors_pct": {
+"Technology": 41,
+"Financials": 13,
+"Health care": 10,
+"Real estate": 9
+},
+"asset_mix_pct": {
+"stock": 100
+},
+"fund_description": "Under normal circumstances, the fund invests at least 80% of its net assets (plus borrowings made for investment purposes) in the common stocks of companies that pay dividend income and that are listed on U.S. exchanges. In addition to common stocks, equity securities in which the fund may invest include, without limitation, preferred stocks, American Depositary Receipts (\u201cADRs\u201d), convertible securities and warrants."
+},
+{
+"t": "NBCE",
+"name": "Neuberger China Equity ETF",
+"fee_pct": 0.75,
+"category": "Greater China Region",
+"issuer": "Neuberger Berman",
+"top_holdings_pct": [
+[
+"Montage Technology Co Ltd",
+4.0
+],
+[
+"CONTEMPORARY AMPEREX TECHNOLOGY CO LTD",
+3.9
+],
+[
+"Zhongji Innolight Co Ltd",
+3.9
+],
+[
+"Chaozhou Three-Circle Group Co Ltd",
+3.1
+],
+[
+"CAMBRICON TECHNOLOGIES CORP LTD",
+3.1
+],
+[
+"Jiangsu Zhongtian Technology Co Ltd",
+2.9
+],
+[
+"Weichai Power Co Ltd",
+2.9
+],
+[
+"Luxshare Precision Industry Co Ltd",
+2.6
+]
+],
+"holdings_source": "SEC report 2026-05-31",
+"sectors_pct": {
+"Technology": 39,
+"Financials": 18,
+"Industrials": 12,
+"Materials": 9
+},
+"asset_mix_pct": {
+"cash": 5,
+"stock": 95
+},
+"fund_description": "The fund normally invests at least 80% of its net assets in equity investments that are tied economically to China. It primarily invests in China A-Share equity securities, Chinese securities listed in Hong Kong and American Depositary Receipts, which may be variable interest entities. An equity investment will be considered to be tied economically to China if the issuer is domiciled in China or has at least 50% of its assets in or derives 50% or more of its revenues or profits from China. The fund is non-diversified."
+},
+{
+"t": "SPUT",
+"name": "Innovator Equity Premium Income - Daily PutWrite ETF",
+"fee_pct": 0.79,
+"category": "Equity Hedged",
+"issuer": "Innovator ETFs",
+"top_holdings_pct": [
+[
+"NVIDIA Corp",
+4.0
+],
+[
+"Apple Inc",
+3.6
+],
+[
+"Microsoft Corp",
+2.8
+],
+[
+"Amazon.com Inc",
+1.8
+],
+[
+"Alphabet Inc Class A",
+1.5
+],
+[
+"Alphabet Inc Class C",
+1.3
+],
+[
+"Broadcom Inc",
+1.2
+],
+[
+"Meta Platforms Inc Class A",
+1.2
+]
+],
+"holdings_source": "Yahoo",
+"sectors_pct": {
+"Technology": 40,
+"Financials": 11,
+"Communication": 10,
+"Health care": 9
+},
+"asset_mix_pct": {
+"cash": 50,
+"stock": 50
+},
+"fund_description": "The fund is an actively managed exchange-traded fund (\u201cETF\u201d) that, under normal market circumstances, seeks to provide current income while maintaining capital appreciation. It will invest at least 80% of its net assets (including borrowings for investment purposes) in equity securities and financial instruments that give economic exposure to equity securities through a daily put-write options strategy. It is non-diversified."
+},
+{
+"t": "GGTL",
+"name": "Gabelli Global Technology Leaders ETF",
+"fee_pct": 0.0,
+"category": "Technology",
+"issuer": "Gabelli",
+"top_holdings_pct": [
+[
+"TAIWAN SEMICONDUCTOR-SP ADR",
+8.9
+],
+[
+"Treasury Bill",
+6.0
+],
+[
+"Advanced Micro Devices Inc",
+4.9
+],
+[
+"ORACLE CORP",
+3.8
+],
+[
+"UNITED STATES OF AMERICA - BUREAU OF THE PUBLIC DEBT",
+3.5
+],
+[
+"RENESAS ELECTRONICS CORP",
+3.4
+],
+[
+"BROADCOM INC",
+3.2
+],
+[
+"SONY GROUP CORP",
+3.1
+]
+],
+"holdings_source": "SEC report 2026-06-30",
+"sectors_pct": {
+"Technology": 87,
+"Industrials": 5,
+"Communication": 5
+},
+"asset_mix_pct": {
+"cash": 10,
+"stock": 90
+},
+"fund_description": "The fund is an actively managed exchange-traded fund. Under normal market conditions, the fund invests at least 80% of the value of its net assets in the securities of companies principally engaged in the group of industries comprising the technology sector. As a fundamental policy, the fund will concentrate (invest at least 25% of the value of its net assets) in the securities of companies principally engaged in the group of industries comprising the technology sector."
+},
+{
+"t": "PRTO",
+"name": "RCN Pareto Strategic Allocation ETF",
+"fee_pct": 0.82,
+"category": "Tactical Allocation",
+"issuer": "Tidal Investments LLC.",
+"top_holdings_pct": [
+[
+"iShares Russell 2000",
+21.1
+],
+[
+"Schwab US Small-Cap ETF",
+21.0
+],
+[
+"abrdn Physical Gold Shares ETF",
+13.0
+],
+[
+"Invesco QQQ Trust Se",
+8.0
+],
+[
+"State Street SPDR",
+7.7
+],
+[
+"SPDR Gold MiniShares Trust",
+7.2
+],
+[
+"Schwab US Dividend Equity ETF",
+5.0
+],
+[
+"Simplify Managed Futures Strat",
+3.6
+]
+],
+"holdings_source": "SEC report 2026-05-31",
+"sectors_pct": {
+"Technology": 27,
+"Health care": 14,
+"Financials": 13,
+"Industrials": 13
+},
+"asset_mix_pct": {
+"stock": 74,
+"other": 23
+},
+"fund_description": "The fund, an actively-managed exchange-traded fund (\u201cETF\u201d), seeks to achieve its investment objective by dynamically allocating across multiple asset classes based on systematic trend-following and momentum-driven signals. Under normal market conditions, allocation to the equity asset class is approximately 70% of the fund\u2019s net assets."
+},
+{
+"t": "EZPZ",
+"name": "Franklin Crypto Index ETF",
+"fee_pct": 0.19,
+"category": "Digital Assets",
+"issuer": "Franklin Templeton, Inc",
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {
+"other": 100
+},
+"fund_description": "The underlying index\u2019s only constituent digital assets are bitcoin and ether (the \u201cDigital Assets\u201d). The fund will seek to achieve its investment objective by investing in the Digital Assets in approximately the same weights as they represent in the underlying index."
+},
+{
+"t": "IBHM",
+"name": "iShares iBonds 2033 Term High Yield and Income ETF",
+"fee_pct": 0.35,
+"category": "High Yield Bond",
+"issuer": "iShares",
+"top_holdings_pct": [
+[
+"NEXSTAR MEDIA INC",
+2.3
+],
+[
+"OAK-EAGLE ACQUIRECO INC",
+2.0
+],
+[
+"TRANSDIGM INC",
+1.8
+],
+[
+"BEACH ACQUISITION BIDCO",
+1.7
+],
+[
+"JANE STREET GRP/JSG FIN",
+1.4
+],
+[
+"LEVEL 3 FINANCING INC",
+1.4
+],
+[
+"ROCKET COS INC",
+1.4
+],
+[
+"MICHAELS COS INC/THE",
+1.3
+]
+],
+"holdings_source": "SEC report 2026-07-31",
+"sectors_pct": {},
+"asset_mix_pct": {
+"bond": 99
+},
+"fund_description": "The underlying index is composed of U.S. dollar denominated, taxable, fixed-rate, high yield and BBB or equivalently rated corporate bonds scheduled to mature between January 1, 2033 and December 15, 2033, inclusive. The fund will invest at least 80% of its assets in the component instruments of the underlying index. It is non-diversified."
+},
+{
+"t": "XTJL",
+"name": "Innovator U.S. Equity Accelerated Plus ETF - July",
+"fee_pct": 0.79,
+"category": "Defined Outcome",
+"issuer": "Innovator ETFs",
+"top_holdings_pct": [
+[
+"Vanguard S&P 500 ETF",
+84.7
+]
+],
+"holdings_source": "Yahoo",
+"sectors_pct": {
+"Technology": 39,
+"Financials": 12,
+"Communication": 10,
+"Consumer discretionary": 9
+},
+"asset_mix_pct": {
+"cash": 14,
+"stock": 86
+},
+"fund_description": "The fund manager has adopted a policy pursuant to Rule 35d-1 under the 1940 Act to invest, under normal circumstances, at least 80% of its net assets (plus any borrowings for investment purposes) in investments that provide exposure to the State Street\u00ae SPDR\u00ae S&P 500\u00ae ETF Trust. It is non-diversified."
+},
+{
+"t": "QLVE",
+"name": "Northern Trust Emerging Markets Quality Low Volatility ETF",
+"fee_pct": 0.18,
+"category": "Diversified Emerging Mkts",
+"issuer": "Northern Trust",
+"top_holdings_pct": [
+[
+"TAIWAN SEMICONDUCTOR MANUFACTURING COMPANY LTD",
+15.1
+],
+[
+"Samsung Electronics Co., Ltd.",
+6.5
+],
+[
+"International Holding Co. PJSC",
+3.7
+],
+[
+"SK Hynix Inc.",
+3.1
+],
+[
+"TENCENT HOLDINGS LTD",
+2.5
+],
+[
+"Samsung Electronics Co Ltd",
+2.0
+],
+[
+"Alibaba Group Holding Ltd.",
+1.3
+],
+[
+"HDFC Bank Ltd.",
+1.2
+]
+],
+"holdings_source": "SEC report 2026-07-31",
+"sectors_pct": {
+"Technology": 41,
+"Financials": 16,
+"Communication": 10,
+"Energy": 9
+},
+"asset_mix_pct": {
+"stock": 100
+},
+"fund_description": "The index is designed to construct a high-quality universe of companies, that in aggregate, possess lower overall absolute volatility characteristics relative to an eligible emerging market universe. The fund will invest at least 80% of its total assets in the securities of the index and in ADRs and GDRs based on the securities in the index."
+},
+{
+"t": "SROI",
+"name": "Calamos Antetokounmpo Global Sustainable Equities ETF",
+"fee_pct": 0.95,
+"category": "Global Large-Stock Blend",
+"issuer": "Calamos",
+"top_holdings_pct": [
+[
+"Alphabet Inc Class A",
+5.4
+],
+[
+"Apple Inc",
+4.3
+],
+[
+"NVIDIA Corp",
+4.2
+],
+[
+"Microsoft Corp",
+3.9
+],
+[
+"Taiwan Semiconductor Manufacturing Co Ltd ADR",
+3.4
+],
+[
+"Amazon.com Inc",
+2.7
+],
+[
+"SK hynix Inc",
+1.8
+],
+[
+"Visa Inc Class A",
+1.7
+]
+],
+"holdings_source": "Yahoo",
+"sectors_pct": {
+"Technology": 33,
+"Industrials": 17,
+"Financials": 13,
+"Health care": 9
+},
+"asset_mix_pct": {
+"stock": 99
+},
+"fund_description": "The fund is an actively managed exchange-traded fund (\"ETF\") that does not seek to replicate the performance of a specified index. The fund will, under normal circumstances, invest at least 80% of its net assets (plus borrowings for investment purposes, if any) in equity securities of companies in developed markets (including the U.S.) and emerging markets (including frontier market countries) that, in the view of Calamos Advisors LLC's (\"Calamos Advisors\") investment team (the \"Team\"), have above average growth potential and meet the sustainable investment criteria."
+},
+{
+"t": "QIG",
+"name": "WisdomTree U.S. Corporate Bond Fund",
+"fee_pct": 0.18,
+"category": "Corporate Bond",
+"issuer": "WisdomTree",
+"top_holdings_pct": [
+[
+"BANK OF AMERICA CORP",
+1.2
+],
+[
+"WELLS FARGO & COMPANY",
+0.9
+],
+[
+"HCA INC",
+0.9
+],
+[
+"US BANCORP",
+0.9
+],
+[
+"MORGAN STANLEY",
+0.9
+],
+[
+"DEUTSCHE BANK AG NEW YORK BRANCH",
+0.9
+],
+[
+"BANK OF AMERICA CORP",
+0.9
+],
+[
+"CAPITAL ONE FINANCIAL CORP",
+0.8
+]
+],
+"holdings_source": "SEC report 2026-06-30",
+"sectors_pct": {},
+"asset_mix_pct": {
+"bond": 98
+},
+"fund_description": "Under normal circumstances, at least 80% of the fund's total assets will be invested in component securities of the index and investments that have economic characteristics that are substantially identical to the economic characteristics of such component securities. The index is designed to capture the performance of selected issuers in the U.S. investment grade corporate bond market that are deemed to have favorable fundamental and income characteristics. The fund is non-diversified."
+},
+{
+"t": "HCOW",
+"name": "Amplify COWS Covered Call ETF",
+"fee_pct": 0.65,
+"category": "Derivative Income",
+"issuer": "Amplify ETFs",
+"top_holdings_pct": [
+[
+"Amplify Cash Flow Dividend Leaders ETF",
+4.9
+],
+[
+"Hewlett Packard Enterprise Co",
+4.4
+],
+[
+"Qualcomm Inc",
+4.2
+],
+[
+"TE Connectivity PLC Registered Shares",
+4.2
+],
+[
+"Avery Dennison Corp",
+4.1
+],
+[
+"ExxonMobil Holdings Corp",
+4.0
+],
+[
+"Hasbro Inc",
+4.0
+],
+[
+"Cheniere Energy Inc",
+4.0
+]
+],
+"holdings_source": "Yahoo",
+"sectors_pct": {
+"Technology": 25,
+"Energy": 24,
+"Financials": 16,
+"Industrials": 14
+},
+"asset_mix_pct": {
+"stock": 98
+},
+"fund_description": "The fund invests at least 80% of its net assets (plus borrowings for investment purposes) in shares of the COWS ETF, a series of the Amplify ETF Trust advised by Amplify Investments, LLC, the investment advisor to the fund. Pursuant to its investment objective, it will additionally seek to implement the Call Income Strategy for the purposes of providing income to the fund that supplements the cash flows received through the fund\u2019s investment in the COWS ETF. The fund is non-diversified."
+},
+{
+"t": "JULH",
+"name": "Innovator Premium Income 20 Barrier ETF - July",
+"fee_pct": 0.79,
+"category": "Defined Outcome",
+"issuer": "Innovator ETFs",
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {
+"Technology": 39,
+"Financials": 12,
+"Communication": 10,
+"Consumer discretionary": 9
+},
+"asset_mix_pct": {
+"cash": 19,
+"bond": 83
+},
+"fund_description": "The fund is an actively managed exchange-traded fund (\u201cETF\u201d) that invests in U.S. Treasury bills (the \u201cU.S. Treasuries\u201d) and FLexible EXchange\u00ae Options (\u201cFLEX Options\u201d) that use as a reference asset a broad-based U.S. equity index, specifically the S&P 500\u00ae Price Return Index (the \u201cU.S. Equity index\u201d). The fund is non-diversified."
+},
+{
+"t": "CQTM",
+"name": "Corgi Quantum Computing ETF",
+"fee_pct": 0.35,
+"category": "Technology",
+"issuer": "Corgi Funds",
+"top_holdings_pct": [
+[
+"IonQ Inc",
+17.8
+],
+[
+"D-Wave Quantum Inc",
+9.7
+],
+[
+"Rigetti Computing Inc",
+7.6
+],
+[
+"Quantinuum Inc Class A",
+7.4
+],
+[
+"Infleqtion Inc",
+5.6
+],
+[
+"FormFactor Inc",
+5.1
+],
+[
+"Alphabet Inc Class A",
+4.6
+],
+[
+"Arqit Quantum Inc",
+4.6
+]
+],
+"holdings_source": "Yahoo",
+"sectors_pct": {
+"Technology": 91,
+"Communication": 5,
+"Industrials": 4
+},
+"asset_mix_pct": {
+"stock": 96,
+"other": 7
+},
+"fund_description": "The fund is an exchange-traded fund (\"ETF\") that seeks to meet its objective by having Corgi Strategies, LLC (the \"adviser\") actively manage the fund and, under ordinary market conditions, invest at least 80% of its net assets (plus any borrowings for investment purposes) in a portfolio of companies materially involved in the research, development, manufacturing, and commercialization of quantum computing and quantum-enabled technologies, along with security solutions designed to protect data and communications against future quantum capabilities. It is non-diversified."
+},
+{
+"t": "TSLP",
+"name": "Kurv Yield Premium Strategy Tesla (TSLA) ETF",
+"fee_pct": 1.0,
+"category": "Derivative Income",
+"issuer": "Kurv Investment Management LLC",
+"top_holdings_pct": [
+[
+"TREASURY BILL",
+34.0
+],
+[
+"TREASURY BILL",
+21.7
+],
+[
+"UNITED STATES OF AMERICA - BUREAU OF THE PUBLIC DEBT",
+19.4
+],
+[
+"",
+14.7
+],
+[
+"",
+9.9
+],
+[
+"",
+0.1
+],
+[
+"",
+-0.0
+],
+[
+"",
+-0.3
+]
+],
+"holdings_source": "SEC report 2026-05-31",
+"sectors_pct": {},
+"asset_mix_pct": {
+"cash": 25,
+"stock": 22,
+"bond": 53
+},
+"fund_description": "The fund is an actively managed exchange traded fund that seeks current income while maintaining the opportunity for exposure to the share price (i.e., the price returns) of the common stock of Tesla Inc. (\u201cTSLA\u201d); however the strategy limits potential investment gains related to share price appreciation. The fund seeks to employ its investment strategy as it relates to TSLA in all market, economic, or other conditions. The fund is non-diversified."
+},
+{
+"t": "CLCV",
+"name": "Crossmark Large Cap Value ETF",
+"fee_pct": 0.5,
+"category": "Large Value",
+"issuer": "Crossmark Inc",
+"top_holdings_pct": [
+[
+"Amazon.com Inc",
+4.0
+],
+[
+"Apple Inc",
+3.9
+],
+[
+"Microsoft Corp",
+3.2
+],
+[
+"Cisco Systems Inc",
+3.0
+],
+[
+"Bank of America Corp",
+2.9
+],
+[
+"Gilead Sciences Inc",
+2.8
+],
+[
+"Dell Technologies Inc Ordinary Shares - Class C",
+2.7
+],
+[
+"Salesforce Inc",
+2.5
+]
+],
+"holdings_source": "Yahoo",
+"sectors_pct": {
+"Technology": 30,
+"Financials": 20,
+"Health care": 13,
+"Industrials": 12
+},
+"asset_mix_pct": {
+"stock": 100
+},
+"fund_description": "Under normal circumstances, the fund invests at least 80% of its net assets, plus the amount of any borrowings for investment purposes, in securities of large-cap value companies. Large-cap value companies are defined as companies included in the Russell 1000 Value Index from time to time. The fund is non-diversified."
+},
+{
+"t": "RNEM",
+"name": "Emerging Markets Equity Select ETF",
+"fee_pct": 0.75,
+"category": "Diversified Emerging Mkts",
+"issuer": "First Trust",
+"top_holdings_pct": [
+[
+"Novatek Microelectronics Corp.",
+4.1
+],
+[
+"Titan Co. Ltd.",
+3.3
+],
+[
+"ANTA Sports Products Ltd.",
+2.8
+],
+[
+"TENCENT HOLDINGS LTD",
+2.6
+],
+[
+"Reliance Industries Ltd",
+2.6
+],
+[
+"SHREE CEMENT LTD",
+2.5
+],
+[
+"PIDILITE INDUSTRIES LTD",
+2.4
+],
+[
+"UltraTech Cement Ltd.",
+2.3
+]
+],
+"holdings_source": "SEC report 2026-06-30",
+"sectors_pct": {
+"Financials": 37,
+"Materials": 13,
+"Consumer discretionary": 10,
+"Communication": 8
+},
+"asset_mix_pct": {
+"stock": 99
+},
+"fund_description": "Under normal market conditions, the fund will invest at least 80% of its net assets (plus any investment borrowings) in the securities that comprise the index. The Base index is a float adjusted market capitalization index designed to track the performance of securities in the index that comprise the Large Mid-cap segment of securities in countries which are designated as Emerging Markets."
+},
+{
+"t": "DQJN",
+"name": "FT Vest Nasdaq-100 Dual Directional Buffer ETF - June",
+"fee_pct": 0.9,
+"category": "Defined Outcome",
+"issuer": "First Trust",
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {
+"stock": 99
+},
+"fund_description": "Under normal market conditions, the fund will invest substantially all of its assets in FLexible EXchange\u00ae Options (\u201cFLEX Options\u201d) that reference the price performance of the Invesco QQQ TrustSM, Series 1 (\"QQQ\" or the \u201cUnderlying ETF\u201d). It is non-diversified."
+},
+{
+"t": "ESLV",
+"name": "Eventide Large Cap Value ETF",
+"fee_pct": 0.39,
+"category": "Large Value",
+"issuer": "Eventide Funds",
+"top_holdings_pct": [
+[
+"ExxonMobil Holdings Corp.",
+5.1
+],
+[
+"HOME DEPOT INC (THE)",
+2.8
+],
+[
+"UNION PACIFIC CORP",
+2.6
+],
+[
+"MEDTRONIC PUBLIC LIMITED COMPANY",
+2.6
+],
+[
+"CONOCOPHILLIPS",
+2.5
+],
+[
+"Amgen Inc",
+2.4
+],
+[
+"DUKE ENERGY CORP",
+2.4
+],
+[
+"PROGRESSIVE CORP (THE)",
+2.3
+]
+],
+"holdings_source": "SEC report 2026-07-31",
+"sectors_pct": {
+"Financials": 18,
+"Technology": 15,
+"Industrials": 14,
+"Energy": 13
+},
+"asset_mix_pct": {
+"stock": 100
+},
+"fund_description": "Under normal market conditions, the fund invests at least 80% of its net assets (plus the amount of any borrowings for investment purposes) in the securities of large cap companies and companies that exhibit value style characteristics. The equity securities that the fund may invest in include common stock and real estate investment trusts (\u201cREITs\u201d)."
+},
+{
+"t": "TLTX",
+"name": "Global X Treasury Bond Enhanced Income ETF",
+"fee_pct": 0.29,
+"category": "Intermediate Government",
+"issuer": "Global X Funds",
+"top_holdings_pct": [
+[
+"Global X Long-Term Treasury Ladder ETF",
+41.0
+],
+[
+"United States Treasury",
+9.3
+],
+[
+"UNITED STATES OF AMERICA - BUREAU OF THE PUBLIC DEBT",
+8.4
+],
+[
+"United States Treasury",
+7.2
+],
+[
+"United States Treasury",
+6.3
+],
+[
+"United States of America",
+5.9
+],
+[
+"United States Treasury",
+4.2
+],
+[
+"United States Treasury",
+3.9
+]
+],
+"holdings_source": "SEC report 2026-07-31",
+"sectors_pct": {},
+"asset_mix_pct": {
+"bond": 100
+},
+"fund_description": "The fund is an actively managed ETF that seeks to achieve its investment objective by investing in assets providing direct or indirect exposure to U.S. Treasury bond obligations, such as U.S. Treasuries, U.S. Treasury STRIPS, and/or U.S. Treasury ETFs and selling call options on U.S. Treasury ETFs to generate additional income. The fund is non-diversified."
+},
+{
+"t": "EMFI",
+"name": "Pictet Emerging Markets Debt ETF",
+"fee_pct": 0.5,
+"category": "Emerging Markets Bond",
+"issuer": "Pictet Asset Management Ltd",
+"top_holdings_pct": [
+[
+"Egypt Government International Bond",
+3.0
+],
+[
+"Nigeria Government International Bond",
+2.8
+],
+[
+"REPUBLIC OF GUATEMALA",
+2.7
+],
+[
+"REPUBLIC OF CO 7.375% 09/18/37",
+2.6
+],
+[
+"REPUBLIC OF KENY 9.5% 03/05/36",
+2.4
+],
+[
+"ARGENTINA, REPUBLIC OF - SUBSECRETARIA DE FINANCIAMIENTO",
+2.3
+],
+[
+"REPUBLIC OF ECU 8.75% 01/29/34",
+2.3
+],
+[
+"Ghana Government International Bond",
+1.7
+]
+],
+"holdings_source": "SEC report 2026-06-30",
+"sectors_pct": {},
+"asset_mix_pct": {
+"cash": 7,
+"bond": 93
+},
+"fund_description": "Under normal market conditions, the fund will invest at least 80% of its net assets (plus borrowings for investment purposes) in debt securities issued or guaranteed by government and quasi-governmental entities and corporations located in emerging market countries and denominated in U.S. dollars (\u201cUSD\u201d) along with euro denominated debt hedged in USD."
+},
+{
+"t": "MEDX",
+"name": "Horizon Kinetics Medical ETF",
+"fee_pct": 0.85,
+"category": "Health",
+"issuer": "Horizon Kinetics",
+"top_holdings_pct": [
+[
+"ELI LILLY & COMPANY",
+18.5
+],
+[
+"ABBVIE INC",
+8.9
+],
+[
+"Novartis AG",
+6.9
+],
+[
+"JOHNSON & JOHNSON",
+5.6
+],
+[
+"Alkermes PLC",
+5.5
+],
+[
+"Astrazeneca Plc",
+5.0
+],
+[
+"Ionis Pharmaceuticals Inc",
+4.5
+],
+[
+"BRISTOL-MYERS SQUIBB COMPANY",
+4.4
+]
+],
+"holdings_source": "SEC report 2026-06-30",
+"sectors_pct": {
+"Health care": 100
+},
+"asset_mix_pct": {
+"cash": 8,
+"stock": 92
+},
+"fund_description": "The fund is an actively-managed exchange-traded fund (\u201cETF\u201d) that pursues its investment objective by investing, under normal circumstances, at least 80% of its net assets plus any borrowings for investment purposes in common stocks, convertible securities, warrants and other equity securities having the characteristics of common stocks of U.S. and foreign companies engaged in medical research, pharmaceutical and medical technology industries and related technology industries. The fund is non-diversified."
+},
+{
+"t": "LCDS",
+"name": "JPMorgan Fundamental Data Science Large Core ETF",
+"fee_pct": 0.3,
+"category": "Large Blend",
+"issuer": "JPMorgan",
+"top_holdings_pct": [
+[
+"NVIDIA CORP",
+8.3
+],
+[
+"APPLE INC",
+6.7
+],
+[
+"ALPHABET INC",
+5.3
+],
+[
+"Microsoft Corp",
+5.0
+],
+[
+"Amazon.com Inc",
+4.1
+],
+[
+"MICRON TECHNOLOGY INC",
+3.0
+],
+[
+"BROADCOM INC",
+2.6
+],
+[
+"META PLATFORMS INC",
+2.4
+]
+],
+"holdings_source": "SEC report 2026-06-30",
+"sectors_pct": {
+"Technology": 41,
+"Financials": 12,
+"Communication": 10,
+"Health care": 9
+},
+"asset_mix_pct": {
+"stock": 100
+},
+"fund_description": "Under normal circumstances, the fund invests at least 80% of its assets in equity securities of large, well established companies. Many of the equity securities in the fund\u2019s portfolio will be technology companies or companies that rely heavily on technological advances. In managing the fund, the adviser employs a fundamental data science enabled investment approach that combines research, data insights, and risk management. The fund is non-diversified."
+},
+{
+"t": "FEAC",
+"name": "Fidelity Enhanced U.S. All-Cap Equity ETF",
+"fee_pct": 0.18,
+"category": "Large Blend",
+"issuer": "Fidelity Investments",
+"top_holdings_pct": [
+[
+"NVIDIA CORP",
+7.0
+],
+[
+"APPLE INC",
+6.1
+],
+[
+"Microsoft Corp",
+3.1
+],
+[
+"BROADCOM INC",
+3.0
+],
+[
+"ALPHABET INC",
+2.8
+],
+[
+"Amazon.com Inc",
+2.5
+],
+[
+"MICRON TECHNOLOGY INC",
+2.5
+],
+[
+"ALPHABET INC",
+1.7
+]
+],
+"holdings_source": "SEC report 2026-06-30",
+"sectors_pct": {
+"Technology": 41,
+"Financials": 12,
+"Health care": 12,
+"Industrials": 10
+},
+"asset_mix_pct": {
+"stock": 99
+},
+"fund_description": "Normally investing at least 80% of assets in U.S. equity securities. The fund invests primarily in common stocks. Investing assets across market cap ranges in large cap, mid cap, and small cap stocks. Generally utilizing a research-driven approach identifying long-term drivers of stock returns that may include, but are not limited to, valuation, growth, quality, and other factors."
+},
+{
+"t": "TDEC",
+"name": "FT Vest Emerging Markets Buffer ETF - December",
+"fee_pct": 0.95,
+"category": "Defined Outcome",
+"issuer": "First Trust",
+"top_holdings_pct": [
+[
+"CBOE GLOBAL MARKETS, INC.",
+99.2
+]
+],
+"holdings_source": "SEC report 2026-05-31",
+"sectors_pct": {
+"Technology": 44,
+"Financials": 19,
+"Consumer discretionary": 8,
+"Industrials": 6
+},
+"asset_mix_pct": {
+"stock": 99
+},
+"fund_description": "Under normal market conditions, the fund will invest substantially all of its assets in FLexible EXchange\u00ae Options (\u201cFLEX Options\u201d) that reference the price performance of the iShares MSCI Emerging Markets ETF. The fund is non-diversified."
+},
+{
+"t": "USAF",
+"name": "Atlas America Fund",
+"fee_pct": 0.89,
+"category": "Moderate Allocation",
+"issuer": "Atlas Fund",
+"top_holdings_pct": [
+[
+"Invesco Agriculture Commodity Strategy No K-1 ETF",
+9.2
+],
+[
+"iShares 0-5 Year TIPS Bond ETF",
+8.1
+],
+[
+"Vanguard Short Term Treasury ETF",
+7.7
+],
+[
+"iShares Gold Trust Micro",
+7.6
+],
+[
+"Schwab Short Term Us Treasury Etf",
+6.7
+],
+[
+"ISHARES TRUST",
+6.7
+],
+[
+"State Street SPDR Portfolio Sh",
+6.7
+],
+[
+"SPDR Gold MiniShares Trust",
+6.4
+]
+],
+"holdings_source": "SEC report 2026-06-30",
+"sectors_pct": {
+"Real estate": 59,
+"Technology": 23,
+"Industrials": 17
+},
+"asset_mix_pct": {
+"cash": 28,
+"stock": 20,
+"bond": 27,
+"other": 25
+},
+"fund_description": "The fund is an actively managed ETF that seeks to achieve its investment objective by investing primarily in a portfolio of investments in the following asset classes: real estate investment trusts, investment grade fixed income securities including U.S. government securities, municipal securities, and corporate bonds, gold trusts, structured securities, equity securities of U.S. and non-U.S. companies, including common stocks, ADRs, preferred stocks, and alternative strategies. The fund is non-diversified."
+},
+{
+"t": "GENZ",
+"name": "VanEck Digital Native Economy ETF",
+"fee_pct": 0.51,
+"category": "Consumer Cyclical",
+"issuer": "VanEck",
+"top_holdings_pct": [
+[
+"Shopify Inc",
+8.0
+],
+[
+"UBER TECHNOLOGIES INC",
+7.9
+],
+[
+"NETEASE INC",
+7.7
+],
+[
+"Electronic Arts Inc",
+7.6
+],
+[
+"CHARLES SCHWAB CORP (THE)",
+7.3
+],
+[
+"TAKE-TWO INTERACTIVE SOFTWARE INC",
+6.9
+],
+[
+"ROBLOX CORP",
+5.6
+],
+[
+"DoorDash Inc",
+5.2
+]
+],
+"holdings_source": "SEC report 2026-06-30",
+"sectors_pct": {
+"Financials": 29,
+"Communication": 28,
+"Technology": 22,
+"Consumer discretionary": 21
+},
+"asset_mix_pct": {
+"stock": 100
+},
+"fund_description": "The fund normally invests at least 80% of its total assets in securities that comprise the fund\u2019s benchmark index. To be initially eligible for the Gaming Index, companies must generate at least 50% of their revenues from gaming. Gaming includes casinos and casino hotels, sports betting (including internet gambling and racetracks) and lottery services as well as gaming services, gaming technology and gaming equipment. It is non-diversified."
+},
+{
+"t": "VDI",
+"name": "Virtus International Dividend ETF",
+"fee_pct": 0.39,
+"category": "Foreign Large Blend",
+"issuer": "Virtus",
+"top_holdings_pct": [
+[
+"ASML Holding N.V.",
+3.2
+],
+[
+"Hsbc Holdings Plc",
+2.5
+],
+[
+"ROCHE HOLDING AG",
+2.1
+],
+[
+"BNP Paribas",
+2.0
+],
+[
+"TORONTO DOMINION BANK (THE)",
+1.8
+],
+[
+"SUMITOMO MITSUI FINANCIAL GROUP INC",
+1.8
+],
+[
+"SITC International Holdings Co. Ltd.",
+1.7
+],
+[
+"TOKYO ELECTRON LTD /JPY/",
+1.7
+]
+],
+"holdings_source": "SEC report 2026-07-31",
+"sectors_pct": {
+"Financials": 42,
+"Industrials": 15,
+"Energy": 9,
+"Technology": 9
+},
+"asset_mix_pct": {
+"stock": 100
+},
+"fund_description": "Under normal circumstances, the fund invests at least 80% of its net assets (plus borrowings made for investment purposes) in common stocks of small capitalization companies. The fund normally invests principally in securities of international issuers, which are those located outside the United States, and allocates its investments among at least eight different countries. The fund may invest in emerging market securities."
+},
+{
+"t": "LBAY",
+"name": "Leatherback Long/Short Alternative Yield ETF",
+"fee_pct": 1.2,
+"category": "Long-Short Equity",
+"issuer": "Leatherback",
+"top_holdings_pct": [
+[
+"HECLA MINING COMPANY",
+5.2
+],
+[
+"ALTRIA GROUP INC",
+5.2
+],
+[
+"HONEYWELL INTERNATIONAL INC",
+4.9
+],
+[
+"VAIL RESORTS INC",
+4.9
+],
+[
+"VISA INC",
+4.7
+],
+[
+"KEURIG DR PEPPER INC",
+4.7
+],
+[
+"AGNC INVESTMENT CORP",
+4.6
+],
+[
+"Alamos Gold, Inc.",
+4.4
+]
+],
+"holdings_source": "SEC report 2026-05-31",
+"sectors_pct": {
+"Financials": 25,
+"Materials": 22,
+"Consumer staples": 10,
+"Utilities": 8
+},
+"asset_mix_pct": {
+"cash": 19,
+"stock": 82,
+"preferred": 9
+},
+"fund_description": "Under normal circumstances, the fund will invest at least 80% of its net assets (plus any borrowings for investment purposes) in income producing securities that are an alternative to traditional debt instruments. Alternative Yield Investments are investments, other than traditional debt instruments (e.g., bonds), that generate interest and dividend income. It is non-diversified."
+},
+{
+"t": "IVEP",
+"name": "Dan IVES Wedbush AI Power & Infrastructure ETF",
+"fee_pct": 0.75,
+"category": "Industrials",
+"issuer": "Wedbush Funds",
+"top_holdings_pct": [
+[
+"Schneider Electric SE ADR",
+4.7
+],
+[
+"Eaton Corp PLC",
+4.6
+],
+[
+"Bloom Energy Corp Class A",
+4.3
+],
+[
+"Johnson Controls International PLC Registered Shares",
+4.2
+],
+[
+"Siemens Energy AG ADR - Sponsored",
+4.2
+],
+[
+"Equinix Inc",
+4.1
+],
+[
+"Quanta Services Inc",
+4.1
+],
+[
+"Constellation Energy Corp",
+4.1
+]
+],
+"holdings_source": "Yahoo",
+"sectors_pct": {
+"Industrials": 44,
+"Utilities": 21,
+"Energy": 14,
+"Technology": 10
+},
+"asset_mix_pct": {
+"stock": 100
+},
+"fund_description": "The index is comprised exclusively of equity securities (or corresponding American Depositary Receipts (\u201cADRs\u201d)) of companies included in the Dan Ives AI Power & Infrastructure 30 Research Report (the \u201cAI Power Report\u201d). Under normal circumstances, the fund will invest at least 80% of its net assets (plus borrowings for investment purposes) in the securities of AI Power Companies. It is non-diversified."
+},
+{
+"t": "RW",
+"name": "Rainwater Equity ETF",
+"fee_pct": 0.95,
+"category": "Global Large-Stock Growth",
+"issuer": "Rainwater Equity, LLC",
+"top_holdings_pct": [
+[
+"Loar Holdings Inc",
+6.9
+],
+[
+"HEICO CORP",
+6.8
+],
+[
+"Diploma PLC",
+6.0
+],
+[
+"BERKSHIRE HATHAWAY INC",
+5.1
+],
+[
+"General Electric Co",
+4.5
+],
+[
+"Constellation Software Inc.",
+4.4
+],
+[
+"APPLE INC",
+4.3
+],
+[
+"AMETEK INC",
+3.5
+]
+],
+"holdings_source": "SEC report 2026-07-31",
+"sectors_pct": {
+"Industrials": 37,
+"Technology": 28,
+"Financials": 14,
+"Health care": 7
+},
+"asset_mix_pct": {
+"cash": 12,
+"stock": 88
+},
+"fund_description": "The fund will seek to invest globally across all market capitalizations (i.e., large-, mid-, and small- capitalization), although the Sub-Adviser expects the portfolio will consist primarily of mid- and large-capitalization companies from developed market countries, including the United States. Under normal circumstances, at least 80% of the fund\u2019s net assets, plus any borrowings for investment purposes, will be invested in equity securities. It is non-diversified."
+},
+{
+"t": "TACU",
+"name": "T. Rowe Price Active Core U.S. Equity ETF",
+"fee_pct": 0.0,
+"category": "Large Blend",
+"issuer": "T. Rowe Price",
+"top_holdings_pct": [
+[
+"NVIDIA CORP",
+6.9
+],
+[
+"APPLE INC",
+6.1
+],
+[
+"Microsoft Corp",
+4.1
+],
+[
+"ALPHABET INC",
+3.8
+],
+[
+"Amazon.com Inc",
+3.2
+],
+[
+"BROADCOM INC",
+2.6
+],
+[
+"META PLATFORMS INC",
+1.9
+],
+[
+"MICRON TECHNOLOGY INC",
+1.9
+]
+],
+"holdings_source": "SEC report 2026-06-30",
+"sectors_pct": {
+"Technology": 40,
+"Financials": 11,
+"Health care": 10,
+"Communication": 10
+},
+"asset_mix_pct": {
+"stock": 100
+},
+"fund_description": "The fund normally invests at least 80% of its net assets (plus any borrowings for investment purposes) in U.S. equity securities, such as common stock. The fund relies on MSCI Inc., or another unaffiliated data provider to determine the country assigned to a security. Any derivatives that provide exposure to the investment focus suggested by the fund\u2019s name, or to one or more market risk factors associated with the investment focus suggested by the fund\u2019s name, are counted (as applicable) toward compliance with the fund\u2019s 80% investment policy. The fund is non-diversified."
+},
+{
+"t": "TMAR",
+"name": "FT Vest Emerging Markets Buffer ETF - March",
+"fee_pct": 0.95,
+"category": "Defined Outcome",
+"issuer": "First Trust",
+"top_holdings_pct": [
+[
+"CBOE GLOBAL MARKETS, INC.",
+98.9
+]
+],
+"holdings_source": "SEC report 2026-05-31",
+"sectors_pct": {
+"Technology": 44,
+"Financials": 19,
+"Consumer discretionary": 8,
+"Industrials": 6
+},
+"asset_mix_pct": {
+"stock": 99
+},
+"fund_description": "Under normal market conditions, the fund will invest substantially all of its assets in FLexible EXchange\u00ae Options (\u201cFLEX Options\u201d) that reference the price performance of the iShares MSCI Emerging Markets ETF. The fund is non-diversified."
+},
+{
+"t": "PCLN",
+"name": "Pictet Cleaner Planet ETF",
+"fee_pct": 0.7,
+"category": "Global Small/Mid Stock",
+"issuer": "Pictet Asset Management Ltd",
+"top_holdings_pct": [
+[
+"Applied Materials Inc",
+6.5
+],
+[
+"ASML Holding N.V.",
+5.5
+],
+[
+"TAIWAN SEMICONDUCTOR-SP ADR",
+4.8
+],
+[
+"ECOLAB INC",
+3.7
+],
+[
+"CADENCE DESIGN SYS INC",
+3.4
+],
+[
+"INFINEON TECHNOLOGIES AG /EUR/",
+3.2
+],
+[
+"SCHNEIDER ELECTRIC SE",
+3.0
+],
+[
+"MARVELL TECHNOLOGY INC",
+2.9
+]
+],
+"holdings_source": "SEC report 2026-06-30",
+"sectors_pct": {
+"Technology": 57,
+"Industrials": 30,
+"Materials": 6
+},
+"asset_mix_pct": {
+"stock": 100
+},
+"fund_description": "The fund is an actively managed exchange-traded fund (\u201cETF\u201d) that seeks to achieve its investment objective by investing at least 80% of its net assets (plus borrowings for investment purposes) in securities of \u201cCleaner Planet\u201d companies. The Adviser seeks to achieve the fund\u2019s investment objective by outperforming (net of fees) the MSCI All Country World Index net total return USD over a full market cycle. The fund is non-diversified."
+},
+{
+"t": "LSEQ",
+"name": "Harbor Long-Short Equity ETF",
+"fee_pct": 2.28,
+"category": "Long-Short Equity",
+"issuer": "Harbor Capital Advisors Inc",
+"top_holdings_pct": [
+[
+"Liberty Global Ltd.",
+2.6
+],
+[
+"Avantor Inc",
+2.5
+],
+[
+"VIATRIS INC",
+2.5
+],
+[
+"PG&E CORP",
+2.5
+],
+[
+"HECLA MINING COMPANY",
+2.4
+],
+[
+"FREEPORT-MCMORAN INC",
+2.3
+],
+[
+"10X Genomics Inc",
+2.1
+],
+[
+"ANTERO MIDSTREAM CORP",
+2.1
+]
+],
+"holdings_source": "SEC report 2026-07-31",
+"sectors_pct": {
+"Health care": 25,
+"Materials": 19,
+"Technology": 16,
+"Consumer discretionary": 13
+},
+"asset_mix_pct": {
+"cash": 47,
+"stock": 53
+},
+"fund_description": "Under normal market circumstances, the fund invests at least 80% of its net assets, plus borrowings for investment purposes, in long and short positions in equity securities. The fund advisor seeks to achieve the fund's investment objective by establishing long and/or short positions in equity securities."
+},
+{
+"t": "UNL",
+"name": "United States 12 Month Natural Gas Fund",
+"fee_pct": 1.65,
+"category": "Commodities Focused",
+"issuer": "USCF Investments",
+"top_holdings_pct": [],
+"holdings_source": null,
+"sectors_pct": {},
+"asset_mix_pct": {
+"cash": 25,
+"preferred": 29,
+"other": 47
+},
+"fund_description": "The Benchmark Futures Contracts are the futures contracts on natural gas as traded on the NYMEX that are the near month contract to expire, and the contracts for the following 11 months, for a total of 12 consecutive months\u2019 contracts, except when the near month contract is within two weeks of expiration."
+}
+]
