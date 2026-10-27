@@ -746,7 +746,7 @@ header.top{display:none!important}
 .xsteps li b{color:var(--ink);font-weight:600}
 .xstf{font-size:12px;color:var(--faint)}
 /* one window size for both tabs: as tall as the screen allows, the body scrolls inside it */
-@media (min-width:701px){.xmd{height:min(calc(100vh - 24px),1000px);height:min(calc(100dvh - 24px),1000px)}.xmd>.xmb{flex:1 1 auto;min-height:0}}
+@media (min-width:701px){.xmd{height:min(calc(100vh - 24px),1000px);height:min(calc(100dvh - 24px),1000px);height:min(calc(100svh - 24px),1000px)}.xmd>.xmb{flex:1 1 auto;min-height:0}}
 /* header row: tabs, then the at-a-glance chips, so both views share one strip and the body starts higher */
 .xmh{flex-wrap:wrap;row-gap:10px}
 .xmh>div:first-child{flex:1 1 0;min-width:0}
@@ -840,7 +840,7 @@ body.xm-open{overflow:hidden}
 .xm{position:fixed;inset:0;z-index:80;display:flex;align-items:center;justify-content:center;padding:12px 2vw}
 .xm[hidden]{display:none}
 .xmback{position:absolute;inset:0;background:rgba(10,10,8,.55)}
-.xmd{position:relative;width:min(1480px,94vw);max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);display:flex;flex-direction:column;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:16px;box-shadow:0 24px 60px rgba(0,0,0,.35);overflow:hidden}
+.xmd{position:relative;width:min(1480px,94vw);max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);max-height:calc(100svh - 24px);display:flex;flex-direction:column;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:16px;box-shadow:0 24px 60px rgba(0,0,0,.35);overflow:hidden}
 @media (min-width:1880px){.xmd{width:min(1640px,88vw)}}
 .xmh{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding:18px 28px 14px;border-bottom:1px solid var(--line);position:relative;z-index:9;background:var(--panel)}
 .xmh h2{margin:0;font-family:"Source Serif 4",Georgia,serif;font-size:26px;font-weight:600}
@@ -1012,8 +1012,10 @@ tr.xecho>td{background:var(--accentBg);transition:background .2s}
 .xflip{flex:1 1 auto;min-height:0;display:flex;perspective:1400px}
 .xflipin{flex:1 1 auto;min-height:0;display:grid;transform-style:preserve-3d;transition:transform .55s cubic-bezier(.25,.7,.25,1)}
 .xflip.on .xflipin{transform:rotateY(180deg)}
-.xface{grid-area:1/1;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column;gap:11px;padding:16px;min-height:0;overflow:hidden}
-.xface.bk{transform:rotateY(180deg)}
+.xface{grid-area:1/1;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column;gap:11px;padding:16px;min-height:0;overflow:hidden;transition:visibility 0s linear .27s}
+.xface.bk{transform:rotateY(180deg);visibility:hidden}
+.xflip.on .xface.bk{visibility:visible}
+.xflip.on .xface.fr{visibility:hidden}
 .xface.fr .xchips{flex:2 1 0;grid-auto-rows:1fr}
 .xface.fr .xrisk{flex:1 1 0;grid-auto-rows:1fr}
 .xface.fr .xpc,.xface.fr .xrk{justify-content:center}
@@ -1036,7 +1038,7 @@ tr.xecho>td{background:var(--accentBg);transition:background .2s}
 .xftile i{font-style:normal;font-size:12.5px;font-weight:600}
 .xftip{position:absolute;z-index:5;background:var(--panel);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:6px 9px;font-size:12.5px;box-shadow:0 6px 18px rgba(0,0,0,.35);pointer-events:none;white-space:nowrap}
 .xbk-load{color:var(--muted);font-size:14px;margin:0}
-@media (prefers-reduced-motion:reduce){.xflipin{transition:none}}
+@media (prefers-reduced-motion:reduce){.xflipin{transition:none}.xface{transition:none}}
 @media (max-width:700px){.xmhr .cnt{display:none}}
 .xrl{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);font-weight:600;margin-bottom:-5px}
 .xrisk{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
