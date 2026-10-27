@@ -1021,7 +1021,8 @@ tr.xecho>td{background:var(--accentBg);transition:background .2s}
 .xface.fr .xpc,.xface.fr .xrk{justify-content:center}
 .xflipbtn{display:flex;align-items:center;gap:12px;width:100%;padding:10px 14px;border-radius:12px;border:1px solid color-mix(in srgb,var(--xo) 55%,transparent);background:linear-gradient(180deg,color-mix(in srgb,var(--xo) 26%,var(--panel2)),color-mix(in srgb,var(--xo) 14%,var(--panel2)));color:var(--ink);font:600 16px "IBM Plex Sans",sans-serif;cursor:pointer;margin-top:10px;text-align:left}
 .xflipbtn .xic{flex:none;width:38px;height:38px;border-radius:10px;background:color-mix(in srgb,var(--xo) 30%,var(--panel));display:flex;align-items:center;justify-content:center;color:var(--xo)}
-.xflipcard .xface .xadd{margin-top:10px}
+.xflipbtn .xfliparr{margin-left:auto;flex:none;width:34px;height:34px;border-radius:50%;border:1px solid color-mix(in srgb,var(--xo) 55%,transparent);display:flex;align-items:center;justify-content:center;color:var(--xo)}
+.xflipcard .xface .xadd{margin-top:10px;height:60px;border-radius:12px;font-size:16px}
 .xbk-body{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;gap:11px}
 .xbk-desc{font-size:14.5px;line-height:1.55;color:var(--ink);margin:0}
 .xbk-facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
@@ -2395,7 +2396,8 @@ function xCard(c,s,kind,flip){const col=XCOL[kind];const dr=c.r3-s.r3;const pct=
     ${xFlipBtn(0,c.t)}${add}</div><div class="xface bk">${xBackHTML(c)}</div></div></div></article>`}
 const XICONDESC='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h7l4 4v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v4h4"/><path d="M9.5 12h5M9.5 15.5h5"/></svg>';
 const XICONCHART='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4v15a1 1 0 0 0 1 1h15"/><path d="M7.5 15.5l3.5-4 2.5 2.5L18 8.5"/></svg>';
-function xFlipBtn(back,t){return `<button type="button" class="xflipbtn" data-xflip="1" aria-label="${back?'Back to returns and risk':'Show description and holdings'} for ${esc(t)}"><span class="xic">${back?XICONCHART:XICONDESC}</span><span>${back?'Returns &amp; risk':'Description &amp; holdings'}</span></button>`}
+const XICONFLIP='<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>';
+function xFlipBtn(back,t){return `<button type="button" class="xflipbtn" data-xflip="1" aria-label="${back?'Back to returns and risk':'Show description and holdings'} for ${esc(t)}"><span class="xic">${back?XICONCHART:XICONDESC}</span><span>${back?'Returns &amp; risk':'Description &amp; holdings'}</span><span class="xfliparr">${XICONFLIP}</span></button>`}
 function xBackHTML(c){return `<div class="xbk-body" data-er="${c.er!=null?c.er:''}"><p class="xbk-load">Loading the description and holdings…</p></div>${xFlipBtn(1,c.t)}<button type="button" class="xadd" data-xadd="${esc(c.t)}"></button>`}
 function xBackFill(card){const body=card.querySelector('.xbk-body');if(!body||body.dataset.done)return;body.dataset.done='1';const t=card.dataset.xc;
   xinLoad(t).then(d=>{const top=(d.top||[]).filter(c=>c.wt>0).sort((a,b)=>b.wt-a.wt),f=d.f||{};
@@ -2411,8 +2413,12 @@ function xBackFill(card){const body=card.querySelector('.xbk-body');if(!body||bo
 function xTmItems(d,mode){const top=(d.top||[]).filter(c=>c.wt>0);
   if(mode==='stk')return top.slice().sort((a,b)=>b.wt-a.wt).slice(0,10).map(c=>({t:c.t,n:c.n||c.hn||'',w:c.wt}));
   if(mode==='sec')return Object.entries(d.sec||{}).map(([k,v])=>({t:XSEC[k]||k,n:'',w:v})).filter(x=>x.w>0.002).sort((a,b)=>b.w-a.w);
-  const agg={};let other=0;top.forEach(c=>{if(c.ind)agg[c.ind]=(agg[c.ind]||0)+c.wt;else other+=c.wt});
-  const out=Object.entries(agg).map(([k,v])=>({t:k,n:'',w:v})).sort((a,b)=>b.w-a.w);if(other>0.005)out.push({t:'Other holdings',n:'',w:other});return out}
+  const agg={},un=[];top.forEach(c=>{if(c.ind)agg[c.ind]=(agg[c.ind]||0)+c.wt;else un.push(c)});
+  /* holdings with no industry label: the big ones get their own tile under their company name; only the small remainder is lumped as Other holdings */
+  un.sort((a,b)=>b.wt-a.wt);let other=0,shown=0;
+  const out=Object.entries(agg).map(([k,v])=>({t:k,n:'',w:v}));
+  un.forEach(c=>{if(c.wt>=0.02&&shown<6){out.push({t:c.hn||c.n||c.t,n:(c.hn||c.n)&&c.t?c.t:'',w:c.wt});shown++}else other+=c.wt});
+  out.sort((a,b)=>b.w-a.w);if(other>0.005)out.push({t:'Other holdings',n:'',w:other});return out}
 function xTmPaint(body,mode){const box=body.querySelector('.xftm');if(!box||!body._d)return;const W=box.clientWidth,H=box.clientHeight;if(!W||!H)return;
   const items=xTmItems(body._d,mode),tw=items.reduce((a,x)=>a+x.w,0)||1;
   const tiles=xSquarify(items.map(x=>({c:x,a:x.w/tw*W*H})),0,0,W,H);
@@ -2817,7 +2823,7 @@ function xFitChart(){if(ph0()||!XM.d)return;const dock=$('xCardDock'),fig=docume
   [d.self,...d.same,...(d.closest||[]),...d.div,...(d.mom||[]),...(d.own||[])].forEach(c=>{const q=xFind(c.t);if(!q)return;dock.innerHTML=q.k==='self'?xSelfCard(d.self):xCard(q,d.self,q.k);mx=Math.max(mx,dock.firstElementChild.offsetHeight)});
   dock.innerHTML=html;dock.hidden=was;dock.style.visibility='';if(!show)leg.classList.remove('showcard');
   /* the window has a fixed height, so the chart also grows into any room left below it */
-  const B=$('xmBody'),lc=B&&B.lastElementChild,spare=lc?Math.max(0,B.clientHeight-parseFloat(getComputedStyle(B).paddingBottom)-(lc.offsetTop+lc.offsetHeight-B.offsetTop)-2):0;mx=Math.max(mx,Math.min(fig.offsetHeight+spare,Math.round(fig.offsetWidth/1.35)));
+  const B=$('xmBody'),lc=B&&B.lastElementChild,spare=lc?Math.max(0,B.clientHeight-parseFloat(getComputedStyle(B).paddingBottom)-(lc.offsetTop+lc.offsetHeight-B.offsetTop)-2):0;const xCapH=560;mx=Math.max(mx,Math.min(fig.offsetHeight+spare,Math.round(fig.offsetWidth/1.35),xCapH));
   const svg=fig.querySelector('svg'),r={width:svg.clientWidth,height:svg.clientHeight},want=mx-(fig.offsetHeight-r.height);if(r.width&&Math.abs(want-r.height)>2){const vb=svg.viewBox.baseVal;XM.chH=Math.round(want*vb.width/r.width)-20;const nf=document.createElement('div');nf.innerHTML=xChart(d);fig.replaceWith(nf.firstElementChild);renderXMButtons()}}
 function xHowHTML(){const t=XM.t||'this ETF',d=XM.d;const st=(k,p)=>`<div class="xstep"><span class="k">${k}</span><p>${p}</p></div>`;
   return st('The pool',`${d?d.pool.toLocaleString():'About 1,800'} ETFs with at least 3 years of prices and $50M in assets. Left out: buffer, option-income and covered-call funds, trading funds, hedged, tactical and long/short strategies, ETNs, and anything charging more than 1% a year.`)
