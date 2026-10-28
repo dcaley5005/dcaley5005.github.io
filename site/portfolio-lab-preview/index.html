@@ -155,6 +155,7 @@ header.top{display:flex;justify-content:space-between;align-items:flex-end;gap:2
 
 /* table */
 .tablewrap{overflow-x:auto;max-width:100%;min-width:0;position:relative}
+.tablewrap:has(#ptable){max-width:1760px;margin-inline:auto;width:100%}
 .bstep,#bBody{min-width:0}
 table{width:100%;border-collapse:collapse;font-size:15px;min-width:900px}
 th{padding:8px 6px;border-bottom:1px solid var(--line);white-space:nowrap;font-weight:500;vertical-align:bottom}
@@ -1028,7 +1029,7 @@ tr.xecho>td{background:var(--accentBg);transition:background .2s}
 .xbk-body .xch{padding-right:104px}
 .xgoback{position:absolute;top:12px;right:12px;z-index:4;display:inline-flex;align-items:center;gap:5px;height:34px;padding:0 12px 0 8px;border-radius:99px;border:1px solid var(--inputLine);background:var(--panel);color:var(--ink);font:600 13.5px "IBM Plex Sans",sans-serif;cursor:pointer}
 .xgoback:hover{border-color:var(--accent);color:var(--accent)}
-.xpopdock .xgoback{top:54px}.xpopdock .xbk-body{margin-top:30px}
+.xpopdock .xgoback{top:12px;right:58px}.xpopdock .xbk-body .xch{padding-right:170px}
 .xpill{margin-left:auto;font-size:12.5px;font-weight:700;border-radius:99px;padding:4px 11px;white-space:nowrap}
 .xpill.up{color:var(--pos);background:color-mix(in srgb,var(--pos) 22%,var(--panel))}
 .xpill.dn{color:var(--xz);background:color-mix(in srgb,var(--xz) 22%,var(--panel))}
@@ -2289,8 +2290,8 @@ const XR=[['1M','1M',0],['3M','3M',1],['6M','6M',2],['YTD','YTD',3],['1Y','1Y',4
 const XRWORD={'1M':'over 1 month','3M':'over 3 months','6M':'over 6 months','YTD':'since Jan 1','1Y':'over 1 year','3Y':'over 3 years'};
 const ICON_X='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg>';
 const ICON_L='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/></svg>';
-const xBtn=t=>`<span class="xtools"><button type="button" class="xbtn" data-xopen="${esc(t)}" aria-label="Explore alternatives to ${esc(t)}" title="Explore alternatives">${ICON_X}</button><button type="button" class="xbtn" data-xopen="${esc(t)}" data-xtab="in" aria-label="Under the hood of ${esc(t)}" title="Under the hood: what's in it">${ICON_L}</button></span>`;
-const xMob=t=>`<div class="mi mact"><button type="button" class="btn sm mrm" data-xopen="${esc(t)}">${ICON_X}Explore alternatives</button><button type="button" class="btn sm mrm" data-xopen="${esc(t)}" data-xtab="in">${ICON_L}Under the hood</button></div>`;
+const xBtn=t=>`<span class="xtools"><button type="button" class="xbtn" data-xopen="${esc(t)}" data-xtab="in" aria-label="Under the hood of ${esc(t)}" title="Under the hood: what's in it">${ICON_L}</button><button type="button" class="xbtn" data-xopen="${esc(t)}" aria-label="Explore alternatives to ${esc(t)}" title="Explore alternatives">${ICON_X}</button></span>`;
+const xMob=t=>`<div class="mi mact"><button type="button" class="btn sm mrm" data-xopen="${esc(t)}" data-xtab="in">${ICON_L}Under the hood</button><button type="button" class="btn sm mrm" data-xopen="${esc(t)}">${ICON_X}Explore alternatives</button></div>`;
 const xp=(v,d=1)=>v==null?'—':(v>0?'+':v<0?'−':'')+Math.abs(v*100).toFixed(d)+'%';
 const xu=(v,d=1)=>v==null?'—':(v<0?'−':'')+Math.abs(v*100).toFixed(d)+'%';
 const xcls=v=>v==null?'':v>0.0005?'p':v<-0.0005?'n':'';
@@ -2832,7 +2833,7 @@ function xFitChart(){if(ph0()||!XM.d)return;const dock=$('xCardDock'),fig=docume
   const B=$('xmBody'),lc=B&&B.lastElementChild,spare=lc?Math.max(0,B.clientHeight-parseFloat(getComputedStyle(B).paddingBottom)-(lc.offsetTop+lc.offsetHeight-B.offsetTop)-10):0;const xCapH=560;mx=Math.max(mx,Math.min(fig.offsetHeight+spare,Math.round(fig.offsetWidth/1.35),xCapH));const tp=document.querySelector('#xmBody .xtop');if(tp&&B){const av=B.clientHeight-(tp.offsetTop-B.offsetTop)-parseFloat(getComputedStyle(B).paddingBottom)-14;if(av>200)mx=Math.min(mx,av)}
   const svg=fig.querySelector('svg'),r={width:svg.clientWidth,height:svg.clientHeight},want=mx-(fig.offsetHeight-r.height);if(r.width&&Math.abs(want-r.height)>2){const vb=svg.viewBox.baseVal;XM.chH=Math.round(want*vb.width/r.width)-20;const nf=document.createElement('div');nf.innerHTML=xChart(d);fig.replaceWith(nf.firstElementChild);renderXMButtons()}
   /* give back whatever height is still empty below the content, so the Alternatives window ends where its content ends instead of matching the taller Under the hood window */
-  if(XM.tab==='alt'){const lc2=B.lastElementChild;if(lc2){const sp2=B.clientHeight-parseFloat(getComputedStyle(B).paddingBottom)-(lc2.offsetTop+lc2.offsetHeight-B.offsetTop)-10;if(sp2>8){const md=$('xm').querySelector('.xmd');if(md){const nh=md.offsetHeight-sp2;md.style.height=nh+'px';md.style.minHeight=nh+'px'}}}}}
+  if(XM.tab==='alt'){const tp2=B.querySelector('.xtop');if(tp2&&tp2.offsetHeight>100){const sp2=B.clientHeight-parseFloat(getComputedStyle(B).paddingBottom)-(tp2.offsetTop+tp2.offsetHeight-B.offsetTop)-10;if(sp2>8&&sp2<500){const md=$('xm').querySelector('.xmd');if(md){const nh=md.offsetHeight-sp2;md.style.height=nh+'px';md.style.minHeight=nh+'px'}}}}}
 function dayFmt(k){return MON[+k.slice(5,7)-1]+' '+(+k.slice(8))+', '+k.slice(0,4)}
 document.addEventListener('click',e=>{{const q=e.target.closest('[data-xpf]');if(q){e.preventDefault();e.stopPropagation();openExplorePf(q.dataset.xpf,q,q.dataset.xtab);return}}const o=e.target.closest('[data-xopen]');if(o){e.preventDefault();openExplore(o.dataset.xopen,o,o.dataset.xtab);return}
   if($('xm').hidden)return;
