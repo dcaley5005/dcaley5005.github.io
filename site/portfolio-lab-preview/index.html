@@ -2406,7 +2406,7 @@ function xCard(c,s,kind,flip){const col=XCOL[kind];
 const XICONDESC='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h7l4 4v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v4h4"/><path d="M9.5 12h5M9.5 15.5h5"/></svg>';
 const XICONCHART='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4v15a1 1 0 0 0 1 1h15"/><path d="M7.5 15.5l3.5-4 2.5 2.5L18 8.5"/></svg>';
 const XICONFLIP='<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>';
-function xDoFlip(fl,card){if(fl._fx)return;fl._fx=1;const inner=fl.querySelector('.xflipin');if(!inner||XREDUCE.matches){fl.classList.toggle('on');fl._fx=0;if(fl.classList.contains('on'))requestAnimationFrame(()=>xBackFill(card));return}inner.style.transition='transform .15s ease-in';inner.style.transform='scaleX(0)';setTimeout(()=>{fl.classList.toggle('on');if(fl.classList.contains('on'))requestAnimationFrame(()=>xBackFill(card));inner.style.transition='transform .27s cubic-bezier(.25,.8,.3,1.12)';inner.style.transform='scaleX(1)';setTimeout(()=>{inner.style.transition='';inner.style.transform='';fl._fx=0},290)},158)}
+function xDoFlip(fl,card){if(fl._fx)return;fl._fx=1;const inner=fl.querySelector('.xflipin'),popx=fl.closest('#xCardPop')?fl.closest('#xCardPop').querySelector('.xpopx'):null;if(!inner||XREDUCE.matches){fl.classList.toggle('on');fl._fx=0;if(fl.classList.contains('on'))requestAnimationFrame(()=>xBackFill(card));return}inner.style.transition='transform .15s ease-in';inner.style.transform='scaleX(0)';if(popx){popx.style.transition='transform .15s ease-in';popx.style.transform='scaleX(0)'}setTimeout(()=>{fl.classList.toggle('on');if(fl.classList.contains('on'))requestAnimationFrame(()=>xBackFill(card));inner.style.transition='transform .27s cubic-bezier(.25,.8,.3,1.12)';inner.style.transform='scaleX(1)';if(popx){popx.style.transition='transform .27s cubic-bezier(.25,.8,.3,1.12)';popx.style.transform='scaleX(1)'}setTimeout(()=>{inner.style.transition='';inner.style.transform='';if(popx){popx.style.transition='';popx.style.transform=''}fl._fx=0},290)},158)}
 function xFlipBtn(back,t){return `<button type="button" class="xflipbtn" data-xflip="1" aria-label="${back?'Back to returns and risk':'Show holdings'} for ${esc(t)}"><span class="xic">${back?XICONCHART:XICONDESC}</span><span>${back?'Returns &amp; risk':'Holdings'}</span><span class="xfliparr">${XICONFLIP}</span></button>`}
 function xBackHTML(c){return `<button type="button" class="xgoback" data-xflip="1" aria-label="Back to returns and risk for ${esc(c.t)}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 5.5 8 12l6.5 6.5"/></svg><span>Go back</span></button><div class="xbk-body" data-er="${c.er!=null?c.er:''}"><p class="xbk-load">Loading the holdings…</p></div>`}
 function xBackFill(card){const body=card.querySelector('.xbk-body');if(!body||body.dataset.done)return;body.dataset.done='1';const t=card.dataset.xc;
@@ -2551,7 +2551,7 @@ function xSizeModal(){const md=$('xm').querySelector('.xmd'),h=$('xm').querySele
   const mw=innerWidth>=1880?Math.min(1640,innerWidth*.88):Math.min(1480,innerWidth*.94),lw=Math.max(330,Math.min(460,(mw-56)*.32)),fw=mw-56-lw-24;
   const ft=$('xmFoot');md.style.height=Math.round(Math.min(innerHeight-24,1000,h.offsetHeight+(ft?ft.offsetHeight:49)+124+Math.max(590,fw/1.35)))+'px'}
 function xSetGlance(gl){XM.hg=XHG();return gl}
-addEventListener('resize',()=>{if($('xm').hidden||!XM.d)return;xSizeModal();if(XHG()!==XM.hg)xRender()});
+addEventListener('resize',()=>{if($('xm').hidden||!XM.d)return;xSizeModal();if(XM.tab==='in'){xinFitRow();xinPaint()}if(XHG()!==XM.hg)xRender()});
 function renderXM(){const b=$('xmBody');renderXMFoot();XM.chH=null;xSizeModal();
   if(XM.err||!XM.d)xSetGlance('');
   if(XM.err){b.innerHTML=`<div class="xnote"><b>Nothing to show</b><span>${esc(XM.err)}</span></div>`;return}
@@ -2567,7 +2567,8 @@ function renderXM(){const b=$('xmBody');renderXMFoot();XM.chH=null;xSizeModal();
     <div class="xcdock" id="xCardDock" hidden></div><div class="xsteps"><b class="xsth">How to use this</b><ol><li><span>${matchMedia('(hover:none)').matches?'Tap':'Click'} any shape on the chart to open its card.</span></li><li><span>Compare its returns and risk with ${esc(t)}.</span></li><li><span>Like it? Hit <b>Add to Portfolio</b> to add it to your portfolio.</span></li></ol><span class="xstf">Picked from ${d.pool.toLocaleString()} ETFs.</span></div></div></div>
     <div class="xpop" id="xCardPop" hidden><div class="xpopwrap"><button type="button" class="xpopx" data-xpopx="1" aria-label="Close card"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button><div class="xpopdock" id="xPopDock"></div></div></div>
     `;
-  renderXMButtons();xgSync(true);xFitChart();if(document.fonts&&document.fonts.status!=='loaded')document.fonts.ready.then(()=>{if(XM.d&&!$('xm').hidden){xMatchH();xFitNow();if(XM.sel)xChartTip(XM.sel,true)}});if(XM.sel&&xFind(XM.sel))xChartTip(XM.sel,true)}
+  renderXMButtons();xgSync(true);xFitChart();
+  {const ts=new Set([d.self.t]);['same','div','mom','own'].forEach(k=>{(d[k]||[]).forEach(c=>{if(c.t)ts.add(c.t)})});ts.forEach(t=>{try{xinLoad(t).catch(()=>{})}catch(e){}})}if(document.fonts&&document.fonts.status!=='loaded')document.fonts.ready.then(()=>{if(XM.d&&!$('xm').hidden){xMatchH();xFitNow();if(XM.sel)xChartTip(XM.sel,true)}});if(XM.sel&&xFind(XM.sel))xChartTip(XM.sel,true)}
 
 /* ---------- what's inside: top holdings as a map sized by weight and colored by return ---------- */
 const XIN={},XINL={};
@@ -2615,8 +2616,8 @@ function renderXI(){const b=$('xmBody');renderXMFoot();xSizeModal();
   b.innerHTML=`${glb?`<div class="xgwrap" style="display:flex;flex-direction:column;gap:8px"><div class="xcap">${esc(t)} at a glance <span class="xcap2">· click a period to recolor the map and cards</span></div><div class="xglance">${glb}</div></div>`:''}
     <div class="xtop xin">${fig}<div class="xcdock xidock" id="xInDock">${xAboutCard(d)}</div></div>${xinSecHTML(d)}
     <p class="xdisc">${d.pf?"Each ETF's top holdings (up to 50), weighted by your percentages. A stock in one ETF's list but further down in another only counts the listed part, so overlaps are a floor. Sectors cover every holding. ":''}${xinSec(d)?`Holdings from ${esc(d.via||t)}'s reports to the SEC (Form N-PORT), which come out about two months after each quarter; shares since the latest report are moved with prices.`:'Holdings from Yahoo Finance.'} "Everything else" is worked out from the fund's own return, so treat it as an estimate. Past performance doesn't guarantee future results.</p>`;
-  $('xInDock').dataset.t='';xinFit();xinPaint();if(XM.sel&&xFind(XM.sel))xinTip(XM.sel,true);
-  if(document.fonts&&document.fonts.status!=='loaded')document.fonts.ready.then(()=>{if(XM.tab==='in'&&!$('xm').hidden){xinFit();xinPaint()}})}
+  $('xInDock').dataset.t='';xinFit();xinFitRow();xinPaint();if(XM.sel&&xFind(XM.sel))xinTip(XM.sel,true);
+  if(document.fonts&&document.fonts.status!=='loaded')document.fonts.ready.then(()=>{if(XM.tab==='in'&&!$('xm').hidden){xinFit();xinFitRow();xinPaint()}})}
 
 /* ---------- under the hood of a portfolio: every member's holdings and sectors, weighted by the portfolio's percentages ---------- */
 function openExplorePf(id,from,tab){const p=pf(id);if(!p)return;$('xm').querySelector('.xmd').style.minHeight='';const ws=weights(p);
@@ -2773,6 +2774,7 @@ function xinTip(t,on){const dock=$('xInDock'),d=XM.d;if(!dock||!d)return;const s
   const c=show?xFind(show):null,key=c?show+(XM.sel===show?'*':''):'';if(dock.dataset.t===key)return;
   dock.innerHTML=c?(c.k==='rest'?xRestCard(d):xHoldCard(c,d.self)):xAboutCard(d);dock.dataset.t=key;if(c&&XM.sel===show)dock.firstElementChild.classList.add('hl')}
 /* make the map as tall as the tallest card, so cards never get cut and the two columns end together */
+function xinFitRow(){const B=$('xmBody'),row=B&&B.querySelector('.xtop.xin'),dock=$('xInDock');if(!B||!row||!dock)return;if(getComputedStyle(row).flexDirection!=='row')return;const S=B.scrollTop,avail=Math.min(B.clientHeight-(row.getBoundingClientRect().top-B.getBoundingClientRect().top)-22-S,B.clientHeight-22);if(avail<=300)return;row.style.height=avail+'px';dock.style.minHeight='';dock.style.overflowY='auto'}
 function xinFit(){const dock=$('xInDock'),d=XM.d;if(!dock||!d)return;dock.style.minHeight='';if(ph0()||!$('xTm'))return;
   const html=dock.innerHTML,key=dock.dataset.t;let mx=0;
   const meas=h=>{dock.innerHTML=h;const el=dock.firstElementChild;el.style.flex='none';mx=Math.max(mx,el.offsetHeight)};
