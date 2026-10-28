@@ -755,6 +755,8 @@ header.top{display:none!important}
 .xmh{flex-wrap:wrap;row-gap:10px}
 .xmh>div:first-child{flex:1 1 0;min-width:0}
 .xmhr .xtabs{margin-top:0;flex:none}
+/* narrow screens: the tabs/close cluster no longer fits beside the title, so the header stacks: title on its own row, tabs and close on the row below */
+@media (max-width:1000px){.xmh{flex-direction:column;align-items:stretch}.xmh>div:first-child{flex:none}.xmhr{width:100%;justify-content:space-between}}
 /* sector legend: each label sits next to its number, so more fit on a row */
 .xsecp .xslg{display:flex;flex-wrap:wrap;gap:8px 28px}
 .xsecp .xslg>div{flex:0 0 auto}
@@ -980,7 +982,8 @@ button.xpc:hover{box-shadow:inset 0 0 0 1px var(--inputLine);filter:brightness(1
 @media (max-width:1000px){.xcards{grid-template-columns:repeat(2,minmax(0,1fr))}.xg{flex-basis:calc((100% - 32px)/5)}.xtop{flex-direction:column;align-items:stretch}.xfig{width:100%;flex:none}.xlegend{flex:none}}
 @media (max-width:700px){
   .xm{padding:0}.xmd{width:100vw;max-height:none;height:100%;border-radius:0;border:0}
-  .xmh{padding:16px}.xmh h2{font-size:22px}.xmb{padding:16px}.xmf{padding:10px 16px}.xmf .disc{display:none}
+  .xmh{padding:16px}.xmh h2{font-size:22px}.xmb{padding:16px;flex:1 1 auto;min-height:0}.xmf{padding:10px 16px}.xmf .disc{display:none}
+  .xmb>.xtop:not(.xin){flex:1 1 auto;min-height:0}.xmb>.xtop:not(.xin)>.xfig{flex:1 1 auto;min-height:0;display:flex;flex-direction:column}.xmb>.xtop:not(.xin)>.xfig svg{flex:1 1 auto;min-height:0}
   .xcards{grid-template-columns:minmax(0,1fr)}.xg{flex-basis:calc((100% - 16px)/3)}
 }
 .xchip.m{color:var(--xm);background:var(--xmBg)}
