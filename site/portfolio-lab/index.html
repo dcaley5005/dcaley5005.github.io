@@ -2385,8 +2385,9 @@ function xGrowRow(){if(ph0())return;const B=$('xmBody'),md=$('xm').querySelector
   if(!B||!md||!tp||!fig||!fr||!XM.d){xMatchH();xGrowModal();return}
   /* the card's natural height: its line chart at the base 60px, not stretched to the current row */
   const sv0=fr.querySelector('.xspark svg'),need=fr.scrollHeight+(c.offsetHeight-fr.clientHeight)-Math.max(0,(sv0?sv0.clientHeight:60)-60),pb=parseFloat(getComputedStyle(B).paddingBottom),chrome=md.offsetHeight-B.clientHeight;
-  const maxRow=Math.min(innerHeight-24,1000)-chrome-(tp.offsetTop-B.offsetTop)-pb-14,row=Math.min(need+120,maxRow),svg=fig.querySelector('svg');
-  if(svg&&svg.clientWidth&&row>fig.offsetHeight+2){const want=row-(fig.offsetHeight-svg.clientHeight),vb=svg.viewBox.baseVal;XM.chH=Math.round(want*vb.width/svg.clientWidth)-20;const nf=document.createElement('div');nf.innerHTML=xChart(XM.d);fig.replaceWith(nf.firstElementChild);renderXMButtons();document.querySelectorAll('#xmBody .xpt').forEach(g=>g.classList.toggle('on',g.dataset.xt===XM.sel))}
+  /* never taller than the window's own room, so the chart keeps one size while clicking between picks */
+  const maxRow=Math.min(Math.min(innerHeight-24,1000)-chrome,B.clientHeight)-(tp.offsetTop-B.offsetTop)-pb-14,row=Math.min(need+120,maxRow),svg=fig.querySelector('svg');
+  if(svg&&svg.clientWidth&&row>fig.offsetHeight+2)xFigTo(row);
   xMatchH();xGrowModal()}
 function xCard(c,s,kind,flip){const col=XCOL[kind];
   const head=`<div class="xch"><div><b>${esc(c.t)}</b><span class="nm">${esc(c.n||NAMES[c.t]||'')}</span></div></div>`;
@@ -2844,6 +2845,9 @@ function xinAssetsHTML(d){const L={stock:'Stocks',bond:'Bonds',cash:'Cash',prefe
     ${named.length?`<p>Largest listed: ${named.slice(0,5).map(c=>`${esc(c.hn||c.n||c.t)} (${xw(c.wt)})`).join(', ')}.</p>`:''}</div></figure>`}
 /* make the chart as tall as the tallest card, so a card never has to be cut down to fit beside it */
 function xFitNow(){if(ph0()||!XM.d||XM.tab==='in')return;const B=$('xmBody'),fig=document.querySelector('#xmBody .xfig'),tp=document.querySelector('#xmBody .xtop');if(!B||!fig||!tp)return;const av=B.clientHeight-(tp.offsetTop-B.offsetTop)-parseFloat(getComputedStyle(B).paddingBottom)-14;if(av<200||fig.offsetHeight<=av+2)return;const dk0=$('xCardDock'),cd0=dk0&&!dk0.hidden&&dk0.firstElementChild,fr0=cd0&&cd0.querySelector('.xface.fr');if(fr0&&fr0.scrollHeight+(cd0.offsetHeight-fr0.clientHeight)>av+2)return;const svg=fig.querySelector('svg');if(!svg||!svg.clientWidth||!svg.clientHeight)return;const over=fig.offsetHeight-av,vb=svg.viewBox.baseVal;XM.chH=Math.max(140,Math.round((svg.clientHeight-over)*vb.width/svg.clientWidth)-20);const nf=document.createElement('div');nf.innerHTML=xChart(XM.d);fig.replaceWith(nf.firstElementChild);renderXMButtons();document.querySelectorAll('#xmBody .xpt').forEach(g=>g.classList.toggle('on',g.dataset.xt===XM.sel));xMatchH();const dk=$('xCardDock'),card=dk&&dk.firstElementChild;if(card&&card.querySelector('.xflip.on')){const body=card.querySelector('.xbk-body');if(body&&body._d){const sel=body.querySelector('[data-xseg].sel');xTmPaint(body,sel?sel.dataset.xseg:'ind')}}}
+/* size the return-vs-risk chart so its panel is exactly h tall; the chart's own margins make one pass land short, so re-measure until it fits */
+function xFigTo(h){for(let i=0;i<4;i++){const fig=document.querySelector('#xmBody .xfig'),svg=fig&&fig.querySelector('svg');if(!svg||!svg.clientWidth)return;const want=h-(fig.offsetHeight-svg.clientHeight);if(Math.abs(fig.offsetHeight-h)<=2)return;
+  const vb=svg.viewBox.baseVal;XM.chH=Math.max(140,Math.round((XM.chH||vb.height)*want/svg.clientHeight));const nf=document.createElement('div');nf.innerHTML=xChart(XM.d);fig.replaceWith(nf.firstElementChild);renderXMButtons();document.querySelectorAll('#xmBody .xpt').forEach(g=>g.classList.toggle('on',g.dataset.xt===XM.sel))}}
 function xFitChart(){if(ph0()||!XM.d)return;const dock=$('xCardDock'),fig=document.querySelector('#xmBody .xfig'),leg=document.querySelector('#xmBody .xlegend');if(!dock||!fig||!leg)return;const d=XM.d;
   const was=dock.hidden,html=dock.innerHTML,show=leg.classList.contains('showcard');dock.style.visibility='hidden';dock.hidden=false;leg.classList.add('showcard');let mx=0;
   [d.self,...d.same,...(d.closest||[]),...d.div,...(d.mom||[]),...(d.own||[])].forEach(c=>{const q=xFind(c.t);if(!q)return;dock.innerHTML=q.k==='self'?xSelfCard(d.self):xCard(q,d.self,q.k);mx=Math.max(mx,dock.firstElementChild.offsetHeight)});
@@ -2852,7 +2856,7 @@ function xFitChart(){if(ph0()||!XM.d)return;const dock=$('xCardDock'),fig=docume
   const B=$('xmBody'),lc=B&&B.lastElementChild,spare=lc?Math.max(0,B.clientHeight-parseFloat(getComputedStyle(B).paddingBottom)-(lc.offsetTop+lc.offsetHeight-B.offsetTop)-10):0;const xCapH=innerWidth>=1880?780:560;mx=Math.max(mx,Math.min(fig.offsetHeight+spare,Math.round(fig.offsetWidth/1.35),xCapH));
   /* when the window has room, make both panels taller so the card's line chart gets about 120px more */
   mx=Math.max(mx,Math.min(cardH+120,fig.offsetHeight+spare));const tp=document.querySelector('#xmBody .xtop');if(tp&&B){const av=B.clientHeight-(tp.offsetTop-B.offsetTop)-parseFloat(getComputedStyle(B).paddingBottom)-14;if(av>200)mx=av}
-  const svg=fig.querySelector('svg'),r={width:svg.clientWidth,height:svg.clientHeight},want=mx-(fig.offsetHeight-r.height);if(r.width&&Math.abs(want-r.height)>2){const vb=svg.viewBox.baseVal;XM.chH=Math.round(want*vb.width/r.width)-20;const nf=document.createElement('div');nf.innerHTML=xChart(d);fig.replaceWith(nf.firstElementChild);renderXMButtons()}
+  xFigTo(mx);
   /* the window keeps its height and the chart row fills it, so nothing shifts once the data arrives */}
 function dayFmt(k){return MON[+k.slice(5,7)-1]+' '+(+k.slice(8))+', '+k.slice(0,4)}
 document.addEventListener('click',e=>{{const q=e.target.closest('[data-xpf]');if(q){e.preventDefault();e.stopPropagation();openExplorePf(q.dataset.xpf,q,q.dataset.xtab);return}}const o=e.target.closest('[data-xopen]');if(o){e.preventDefault();openExplore(o.dataset.xopen,o,o.dataset.xtab);return}
