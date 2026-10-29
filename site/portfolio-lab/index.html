@@ -155,6 +155,7 @@ header.top{display:flex;justify-content:space-between;align-items:flex-end;gap:2
 
 /* table */
 .tablewrap{overflow-x:auto;max-width:100%;min-width:0;position:relative}
+.tablewrap:has(#ptable){max-width:1760px;margin-inline:auto;width:100%}
 .bstep,#bBody{min-width:0}
 table{width:100%;border-collapse:collapse;font-size:15px;min-width:900px}
 th{padding:8px 6px;border-bottom:1px solid var(--line);white-space:nowrap;font-weight:500;vertical-align:bottom}
@@ -751,17 +752,12 @@ header.top{display:none!important}
 .xstf{font-size:12px;color:var(--faint)}
 /* one window size for both tabs: as tall as the screen allows, the body scrolls inside it */
 @media (min-width:701px){.xmd{height:min(calc(100vh - 24px),1000px);height:min(calc(100dvh - 24px),1000px);height:min(calc(100svh - 24px),1000px)}.xmd>.xmb{flex:1 1 auto;min-height:0}}
-/* header row: tabs, then the at-a-glance chips, so both views share one strip and the body starts higher */
+/* header row: title left; the tabs and the close button share the right cluster */
 .xmh{flex-wrap:wrap;row-gap:10px}
 .xmh>div:first-child{flex:1 1 0;min-width:0}
-.xmrow{flex:1 0 100%;display:flex;align-items:center;gap:14px;flex-wrap:wrap;min-width:0}
-.xmrow .xtabs{margin-top:0;flex:none}
-#xmGlance{flex:1 1 600px;display:flex;flex-wrap:nowrap;justify-content:flex-start;gap:6px;min-width:0}
-#xmGlance[hidden]{display:none}
-#xmGlance .xg{flex:1 1 0;min-width:0;padding:6px 10px;border-radius:8px;gap:1px;height:auto;will-change:auto}
-#xmGlance .xg span:first-child{font-size:10px;letter-spacing:.05em}
-#xmGlance .xg b{font-size:15px;transform:none;will-change:auto}
-@media (max-width:640px){#xmGlance{display:none}}
+.xmhr .xtabs{margin-top:0;flex:none}
+/* narrow screens: the tabs/close cluster no longer fits beside the title, so the header stacks: title on its own row, tabs and close on the row below */
+@media (max-width:1000px){.xmh{flex-direction:column;align-items:stretch}.xmh>div:first-child{flex:none}.xmhr{width:100%;justify-content:space-between}}
 /* sector legend: each label sits next to its number, so more fit on a row */
 .xsecp .xslg{display:flex;flex-wrap:wrap;gap:8px 28px}
 .xsecp .xslg>div{flex:0 0 auto}
@@ -848,8 +844,6 @@ body.xm-open{overflow:hidden}
 @media (min-width:1880px){.xmd{width:min(1640px,88vw)}}
 .xmh{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding:18px 28px 14px;border-bottom:1px solid var(--line);position:relative;z-index:9;background:var(--panel)}
 .xmh h2{margin:0;font-family:"Source Serif 4",Georgia,serif;font-size:26px;font-weight:600}
-.xmh .sub{font-size:13px;color:var(--muted);margin-top:4px}
-.xmh .sub .sshort{display:none}@media (max-width:700px){.xmh .sub .sfull{display:none}.xmh .sub .sshort{display:inline}}
 .xclose{width:44px;height:44px;flex:none;border-radius:10px;border:1px solid var(--inputLine);background:transparent;color:var(--ink);display:flex;align-items:center;justify-content:center;cursor:pointer}
 .xmb{overflow:auto;padding:16px 28px 22px;display:flex;flex-direction:column;gap:20px;overscroll-behavior:contain}
 .xmf{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:12px 28px;border-top:1px solid var(--line);background:var(--panel)}
@@ -989,7 +983,7 @@ button.xpc:hover{box-shadow:inset 0 0 0 1px var(--inputLine);filter:brightness(1
 @media (max-width:1000px){.xcards{grid-template-columns:repeat(2,minmax(0,1fr))}.xg{flex-basis:calc((100% - 32px)/5)}.xtop{flex-direction:column;align-items:stretch}.xfig{width:100%;flex:none}.xlegend{flex:none}}
 @media (max-width:700px){
   .xm{padding:0}.xmd{width:100vw;max-height:none;height:100%;border-radius:0;border:0}
-  .xmh{padding:16px}.xmh h2{font-size:22px}.xmb{padding:16px}.xmf{padding:10px 16px}.xmf .disc{display:none}
+  .xmh{padding:16px}.xmh h2{font-size:22px}.xmb{padding:16px;flex:1 1 auto;min-height:0}.xmf{padding:10px 16px}.xmf .disc{display:none}
   .xcards{grid-template-columns:minmax(0,1fr)}.xg{flex-basis:calc((100% - 16px)/3)}
 }
 .xchip.m{color:var(--xm);background:var(--xmBg)}
@@ -997,32 +991,23 @@ button.xpc:hover{box-shadow:inset 0 0 0 1px var(--inputLine);filter:brightness(1
 .xfigt{font-family:"Source Serif 4",Georgia,serif;font-size:16px;font-weight:600;color:var(--ink);padding:4px 6px 2px}
 tr.xecho>td{background:var(--accentBg);transition:background .2s}
 .xmhr{display:flex;gap:8px;align-items:center;flex:none}
-.xhowb{display:inline-flex;align-items:center;gap:7px;height:44px;padding:0 14px;border-radius:10px;border:1px solid var(--inputLine);background:var(--panel2);color:var(--ink);font:600 13.5px "IBM Plex Sans",sans-serif;cursor:pointer;white-space:nowrap}
-.xhowb:hover,.xhowb[aria-expanded="true"]{border-color:var(--accent);color:var(--accent)}
-.xdrawer{position:absolute;right:0;bottom:0;top:80px;width:min(400px,92%);z-index:10;background:var(--panel);border-left:1px solid var(--line);box-shadow:-14px 0 32px rgba(0,0,0,.2);display:flex;flex-direction:column;transform:translateX(calc(100% + 60px));visibility:hidden;transition:transform .26s cubic-bezier(.2,.8,.2,1),visibility 0s linear .26s}
-.xdrawer.open{transform:none;visibility:visible;transition:transform .26s cubic-bezier(.2,.8,.2,1)}
-.xdh{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 20px 8px}
-.xdh h3{margin:0;font-family:"Source Serif 4",Georgia,serif;font-size:19px;font-weight:600}
-.xdb{overflow:auto;padding:4px 20px 20px;display:flex;flex-direction:column;gap:10px}
-.xstep{background:var(--panel2);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:4px}
-.xstep .k{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
-.xstep p{margin:0;font-size:13.5px;line-height:1.5;color:var(--ink2)}
-.xstepn{margin:2px 0 0;font-size:12.5px;color:var(--muted);line-height:1.5}
-@media (max-width:700px){.xhowb{padding:0 12px}.xhowb .t{display:none}.xdrawer{width:100%}}
-@media (prefers-reduced-motion: reduce){.xdrawer{transition:none}}
 .xmhr .cnt{font-size:13px;color:var(--accent);font-weight:600;max-width:260px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .xdisc{margin:4px 0 0;font-size:12px;color:var(--faint)}
-.xflipcard{padding:0;overflow:hidden}
+.xflipcard{padding:0;overflow:visible;border:0;background:transparent;box-shadow:none}
 .xflip{flex:1 1 auto;min-height:0;display:flex;perspective:1400px}
-.xflipin{flex:1 1 auto;min-height:0;display:grid;will-change:transform}
+.xflipin{flex:1 1 auto;min-height:0;display:grid;will-change:transform;border:1px solid var(--line);border-radius:12px;background:var(--panel2);overflow:hidden;transition:box-shadow .12s,border-color .12s}
+.xflipcard.hl{box-shadow:none}
+.xflipcard.hl .xflipin{border-color:var(--xc);box-shadow:0 0 0 3px color-mix(in srgb,var(--xc) 22%,transparent)}
+.xcdock .xcard.xflipcard.hl{box-shadow:none}
+.xpopdock .xcard.xflipcard.hl{box-shadow:none}
 
-.xface{grid-area:1/1;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column;gap:11px;padding:16px;min-height:0;overflow:hidden;transition:none;transform:translateZ(0)}
+.xface{position:relative;grid-area:1/1;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column;gap:11px;padding:16px;min-height:0;overflow:hidden;transition:none;transform:translateZ(0)}
 .xface.bk{transform:none;visibility:hidden}
 .xflip.on .xface.bk{visibility:visible}
 .xflip.on .xface.fr{visibility:hidden}
-.xface.fr .xchips{flex:2 1 0;grid-auto-rows:1fr}
-.xface.fr .xrisk{flex:1 1 0;grid-auto-rows:1fr}
-.xface.fr .xpc,.xface.fr .xrk{justify-content:center}
+.xface.fr{overflow-y:auto}
+.xface.fr .xspark{flex:1 1 auto;min-height:63px;display:flex;flex-direction:column}
+.xface.fr .xspark svg{flex:1 1 auto;height:auto;min-height:44px}
 .xflipbtn{display:flex;align-items:center;gap:12px;width:100%;padding:10px 14px;border-radius:12px;border:1px solid color-mix(in srgb,var(--xo) 55%,transparent);background:linear-gradient(180deg,color-mix(in srgb,var(--xo) 26%,var(--panel2)),color-mix(in srgb,var(--xo) 14%,var(--panel2)));color:var(--ink);font:600 16px "IBM Plex Sans",sans-serif;cursor:pointer;margin-top:10px;text-align:left}
 .xflipbtn .xic{flex:none;width:38px;height:38px;border-radius:10px;background:color-mix(in srgb,var(--xo) 30%,var(--panel));display:flex;align-items:center;justify-content:center;color:var(--xo)}
 .xflipbtn .xfliparr{margin-left:auto;flex:none;width:34px;height:34px;border-radius:50%;border:1px solid color-mix(in srgb,var(--xo) 55%,transparent);display:flex;align-items:center;justify-content:center;color:var(--xo)}
@@ -1031,7 +1016,8 @@ tr.xecho>td{background:var(--accentBg);transition:background .2s}
 .xflipcard .xface .xadd .xadic{flex:none;width:38px;height:38px;border-radius:10px;background:color-mix(in srgb,#1faa59 34%,var(--panel));display:flex;align-items:center;justify-content:center;color:#7be2a8}
 .xflipcard .xface .xadd.on:hover{font-size:16px}.xflipcard .xface .xadd.on:hover::after{content:none}
 .xbk-body{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;gap:11px}
-.xbk-desc{font-size:14.5px;line-height:1.55;color:var(--ink);margin:0}
+.xfdesc{margin:0;font-size:14.5px;line-height:1.55;color:var(--ink);display:-webkit-box;-webkit-line-clamp:6;-webkit-box-orient:vertical;overflow:hidden;flex:none}
+.xfdesc[hidden]{display:none}
 .xbk-facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
 .xbk-facts div{background:var(--panel);border-radius:8px;padding:6px 9px;display:flex;flex-direction:column;min-width:0}
 .xbk-facts span{font-size:11px;letter-spacing:.04em;color:var(--muted);text-transform:uppercase}
@@ -1039,7 +1025,26 @@ tr.xecho>td{background:var(--accentBg);transition:background .2s}
 .xseg{display:flex;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:3px;gap:3px}
 .xseg button{flex:1;border:0;background:transparent;color:var(--ink2);font:600 13.5px "IBM Plex Sans",sans-serif;padding:7px 4px;border-radius:8px;cursor:pointer}
 .xseg button.sel{background:var(--panel2);color:var(--ink);box-shadow:0 1px 4px rgba(0,0,0,.25)}
-.xftm{position:relative;flex:1 1 auto;min-height:118px;margin-bottom:10px}
+.xftm{position:relative;flex:1 1 auto;min-height:118px;margin-bottom:0}
+.xbk-body .xch{padding-right:104px}
+.xgoback{position:absolute;top:12px;right:12px;z-index:4;display:inline-flex;align-items:center;gap:5px;height:34px;padding:0 12px 0 8px;border-radius:99px;border:1px solid var(--inputLine);background:var(--panel);color:var(--ink);font:600 13.5px "IBM Plex Sans",sans-serif;cursor:pointer}
+.xgoback:hover{border-color:var(--accent);color:var(--accent)}
+.xpopdock .xgoback{top:12px;right:58px}.xpopdock .xbk-body .xch{padding-right:170px}
+.xpill{margin-left:auto;font-size:12.5px;font-weight:700;border-radius:99px;padding:4px 11px;white-space:nowrap}
+.xpill.up{color:var(--pos);background:color-mix(in srgb,var(--pos) 22%,var(--panel))}
+.xpill.dn{color:var(--xz);background:color-mix(in srgb,var(--xz) 22%,var(--panel))}
+.xpill.base{color:var(--muted);background:var(--panel);border:1px solid var(--line);font-weight:600}
+.xrngseg{flex:none}
+.xrngseg button{font-size:12.5px;padding:6px 2px}
+.xpop{position:fixed;inset:0;z-index:95;background:rgba(10,10,8,.55);display:flex;align-items:center;justify-content:center;padding:14px}
+.xpop[hidden]{display:none}
+.xpopwrap{position:relative;width:100%;max-width:430px;height:min(680px,100%);display:flex}
+.xpopdock{flex:1 1 auto;display:flex;min-width:0}
+.xpopdock .xcard{flex:1 1 auto;height:100%;min-height:0}
+.xfacex{display:none;position:absolute;top:12px;right:12px;z-index:5;width:36px;height:36px;border-radius:50%;border:1px solid var(--inputLine);background:var(--panel);color:var(--ink);align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.3)}
+.xpopdock .xfacex{display:flex}
+.xpopdock .xface.fr .xch{padding-right:48px}
+@media (max-width:1000px){#xmBody .xlegend{display:none}}
 .xftile{position:absolute;border-radius:8px;padding:7px 9px;overflow:hidden;color:#14181d;display:flex;flex-direction:column;gap:1px}
 .xftile b{font-size:13.5px;line-height:1.25;display:block;overflow:hidden;padding-top:1px}.xftile b.one{white-space:nowrap;text-overflow:ellipsis}
 .xftile span{font-size:12px;opacity:.85;line-height:1.2;display:block;overflow:hidden;max-height:15px;white-space:nowrap;text-overflow:ellipsis}
@@ -1132,7 +1137,7 @@ tr.xecho>td{background:var(--accentBg);transition:background .2s}
 </div>
 <div class="pop" id="pop" role="tooltip" hidden></div>
 <div class="modal" id="ioModal" hidden><div class="mback" data-ioclose="1"></div><div class="mpanel" role="dialog" aria-modal="true" aria-labelledby="ioTitle"><div class="mhead"><h3 id="ioTitle">Import / Export</h3><button type="button" class="mclose" data-ioclose="1" aria-label="Close"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div><div id="ioBody"></div></div></div>
-<div class="xm" id="xm" hidden><div class="xmback" data-xclose></div><div class="xmd" role="dialog" aria-modal="true" aria-labelledby="xmTitle"><div class="xmh"><div><h2 id="xmTitle">Explore alternatives</h2><div class="sub" id="xmSub"></div></div><div class="xmhr"><span class="cnt" id="xmCount" aria-live="polite"></span><button type="button" class="xhowb" id="xmHow" aria-expanded="false" aria-controls="xmDrawer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 7.6v.01"/></svg><span class="t">How these are chosen</span></button><button type="button" class="xclose" id="xmClose" data-xclose aria-label="Close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div><div class="xmrow"><div class="xtabs" role="tablist" aria-label="Explore views"><button type="button" class="xtab" role="tab" data-xtab="alt" aria-selected="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg>Alternatives</button><button type="button" class="xtab" role="tab" data-xtab="in" aria-selected="false"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/></svg>Under the hood</button></div><div class="xglance" id="xmGlance" role="group" aria-label="Returns and risk at a glance; pick a period" hidden></div></div></div><div class="xmb" id="xmBody"></div><aside class="xdrawer" id="xmDrawer" aria-hidden="true" aria-label="How these are chosen"><div class="xdh"><h3>How these are chosen</h3><button type="button" class="xclose" data-xdclose aria-label="Close this panel" style="width:36px;height:36px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div><div class="xdb"></div></aside></div></div>
+<div class="xm" id="xm" hidden><div class="xmback" data-xclose></div><div class="xmd" role="dialog" aria-modal="true" aria-labelledby="xmTitle"><div class="xmh"><div><h2 id="xmTitle">Explore alternatives</h2></div><div class="xmhr"><span class="cnt" id="xmCount" aria-live="polite"></span><div class="xtabs" role="tablist" aria-label="Explore views"><button type="button" class="xtab" role="tab" data-xtab="in" aria-selected="false"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/></svg>Under the hood</button><button type="button" class="xtab" role="tab" data-xtab="alt" aria-selected="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg>Alternatives</button></div><button type="button" class="xclose" id="xmClose" data-xclose aria-label="Close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div></div><div class="xmb" id="xmBody"></div></div></div>
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 <div class="drophint" id="drophint" hidden>Drop CSV files to import prices</div>
 
@@ -2287,8 +2292,8 @@ const XR=[['1M','1M',0],['3M','3M',1],['6M','6M',2],['YTD','YTD',3],['1Y','1Y',4
 const XRWORD={'1M':'over 1 month','3M':'over 3 months','6M':'over 6 months','YTD':'since Jan 1','1Y':'over 1 year','3Y':'over 3 years'};
 const ICON_X='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg>';
 const ICON_L='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/></svg>';
-const xBtn=t=>`<span class="xtools"><button type="button" class="xbtn" data-xopen="${esc(t)}" aria-label="Explore alternatives to ${esc(t)}" title="Explore alternatives">${ICON_X}</button><button type="button" class="xbtn" data-xopen="${esc(t)}" data-xtab="in" aria-label="Under the hood of ${esc(t)}" title="Under the hood: what's in it">${ICON_L}</button></span>`;
-const xMob=t=>`<div class="mi mact"><button type="button" class="btn sm mrm" data-xopen="${esc(t)}">${ICON_X}Explore alternatives</button><button type="button" class="btn sm mrm" data-xopen="${esc(t)}" data-xtab="in">${ICON_L}Under the hood</button></div>`;
+const xBtn=t=>`<span class="xtools"><button type="button" class="xbtn" data-xopen="${esc(t)}" data-xtab="in" aria-label="Under the hood of ${esc(t)}" title="Under the hood: what's in it">${ICON_L}</button><button type="button" class="xbtn" data-xopen="${esc(t)}" aria-label="Explore alternatives to ${esc(t)}" title="Explore alternatives">${ICON_X}</button></span>`;
+const xMob=t=>`<div class="mi mact"><button type="button" class="btn sm mrm" data-xopen="${esc(t)}" data-xtab="in">${ICON_L}Under the hood</button><button type="button" class="btn sm mrm" data-xopen="${esc(t)}">${ICON_X}Explore alternatives</button></div>`;
 const xp=(v,d=1)=>v==null?'—':(v>0?'+':v<0?'−':'')+Math.abs(v*100).toFixed(d)+'%';
 const xu=(v,d=1)=>v==null?'—':(v<0?'−':'')+Math.abs(v*100).toFixed(d)+'%';
 const xcls=v=>v==null?'':v>0.0005?'p':v<-0.0005?'n':'';
@@ -2297,18 +2302,18 @@ function xCanPrice(t){return HAS(t)||(typeof UNI!=='undefined'&&!!UNI[t])}
 /* peers files are fetched on hover so the window opens with its content already in place */
 const XDATA={},XLOAD={};
 function xLoad(t){if(!XLOAD[t])XLOAD[t]=fetch('data/peers/'+encodeURIComponent(t)+'.json').then(r=>{if(!r.ok)throw new Error('none');return r.json()}).then(d=>XDATA[t]=d).catch(e=>{delete XLOAD[t];throw e});return XLOAD[t]}
-async function openExplore(t,from,tab){XM.pf=null;$('xm').querySelector('.xmd').style.minHeight='';XM.t=t;XM.tab=tab==='in'?'in':'alt';XM.alt=XDATA[t]||null;XM.ins=XIN[t]||null;XM.errA=XM.errI=null;XM.secMode=null;XM.rngSet=0;XM.rng=XM.tab==='in'?'1Y':'3Y';XM.added=[];XM.from=from||null;
+async function openExplore(t,from,tab){XM.pf=null;$('xm').querySelector('.xmd').style.minHeight='';XM.t=t;XM.tab=tab==='in'?'in':'alt';XM.anchorH=null;XM.openTab=XM.tab;XM.alt=XDATA[t]||null;XM.ins=XIN[t]||null;XM.errA=XM.errI=null;XM.secMode=null;XM.rngSet=0;XM.rng=XM.tab==='in'?'1Y':'3Y';XM.added=[];XM.from=from||null;
   {const q=$('qtip');if(q)q.hidden=true}XM.sel=null;
   if(t==='TPS'){XM.errA='TPS is the 12% Solution strategy, not a fund you can buy, so it has no alternatives to show.';XM.errI='TPS is the 12% Solution strategy, not a fund, so it has no holdings to show.'}
-  xUse();$('xm').hidden=false;document.body.classList.add('xm-open');xHead();$('xmSub').textContent=NAMES[t]||'';xDrawer(false);xRender();xOpenFx();setTimeout(()=>$('xmClose').focus({preventScroll:true}),0);
+  xUse();$('xm').hidden=false;document.body.classList.add('xm-open');xHead();xRender();xOpenFx();setTimeout(()=>$('xmClose').focus({preventScroll:true}),0);
   const done=k=>{if(XM.t!==t||$('xm').hidden)return;if(XM.tab===k){xUse();xRender();xCascade()}};
   if(XM.d)xCascade(true);
   if(!XM.alt&&!XM.errA)xLoad(t).then(d=>{XM.alt=d;done('alt')},()=>{XM.errA=`Alternatives aren't available for ${t} yet. It may have less than 3 years of prices, or it isn't in our ETF list.`;done('alt')});
   if(!XM.ins&&!XM.errI)xinLoad(t).then(d=>{XM.ins=d;done('in')},()=>{XM.errI=`Holdings aren't available for ${t} yet. They're added a slice at a time each night, so check back soon.`;done('in')})}
 function xUse(){XM.d=XM.tab==='in'?XM.ins:XM.alt;XM.err=XM.tab==='in'?XM.errI:XM.errA}
 function xRender(){XM.tab==='in'?renderXI():renderXM()}
-function xHead(){$('xmTitle').textContent=(XM.tab==='in'?'Under the hood of ':'Explore alternatives to ')+XM.t;document.querySelectorAll('#xm .xtab').forEach(b=>b.setAttribute('aria-selected',b.dataset.xtab===XM.tab));$('xmHow').hidden=XM.tab==='in';if(XM.tab==='in')xDrawer(false)}
-function xTab(k){if(XM.tab===k)return;{const md=$('xm').querySelector('.xmd');if(md&&!XPHONE())md.style.minHeight=Math.max(md.offsetHeight,parseFloat(md.style.minHeight)||0)+'px'}XM.tab=k;XM.sel=null;if(k==='in'&&XM.rng==='3Y'&&!XM.rngSet)XM.rng='1Y';xUse();xHead();$('xmSub').textContent=NAMES[XM.t]||'';xRender();$('xmBody').scrollTop=0;xCascade()}
+function xHead(){$('xmTitle').textContent=(XM.tab==='in'?'Under the hood of ':'Explore alternatives to ')+XM.t;document.querySelectorAll('#xm .xtab').forEach(b=>b.setAttribute('aria-selected',b.dataset.xtab===XM.tab))}
+function xTab(k){if(XM.tab===k)return;{const md=$('xm').querySelector('.xmd');if(md&&!XPHONE())md.style.minHeight=Math.max(md.offsetHeight,parseFloat(md.style.minHeight)||0)+'px'}XM.tab=k;XM.sel=null;if(k==='in'&&XM.rng==='3Y'&&!XM.rngSet)XM.rng='1Y';xUse();xHead();xRender();$('xmBody').scrollTop=0;xCascade()}
 /* motion: the window grows out of the compass, its contents settle in, and the row stays lit */
 const XREDUCE=matchMedia('(prefers-reduced-motion: reduce)');
 function xSrc(){const t=XM.t;let el=XM.from&&document.contains(XM.from)&&XM.from.offsetParent?XM.from:null;
@@ -2331,7 +2336,7 @@ function closeExplore(){if($('xm').hidden||XM.closing)return;const el=xSrc(),row
   bk.animate([{opacity:1},{opacity:0}],{duration:170,easing:'ease-in',fill:'forwards'});
   const a=md.animate([{opacity:1,transform:'none'},p?{opacity:0,transform:`translate(${p.dx}px,${p.dy}px) scale(.12)`}:{opacity:0,transform:'scale(.96)'}],{duration:200,easing:'cubic-bezier(.4,0,.8,.4)',fill:'forwards'});
   a.onfinish=()=>{finish();a.cancel();bk.getAnimations().forEach(x=>x.cancel())}}
-function xFinishClose(row){document.body.classList.remove('xm-open');const added=XM.added.slice();XM.t=null;xDrawer(false);
+function xFinishClose(row){document.body.classList.remove('xm-open');const added=XM.added.slice();XM.t=null;
   document.querySelectorAll('tr.xecho').forEach(r=>r.classList.remove('xecho'));if(row&&document.contains(row)){row.classList.remove('flash');void row.offsetWidth;row.classList.add('flash')}
   if(added.length){toast('Added '+(added.length===1?added[0]:added.slice(0,-1).join(', ')+' and '+added[added.length-1])+' to your portfolio');
     setTimeout(()=>added.forEach(t=>{const tr=document.querySelector(`#bTable tr[data-bt="${CSS.escape(t)}"]`);if(tr){tr.classList.remove('flash');void tr.offsetWidth;tr.classList.add('flash')}}),60)}
@@ -2377,43 +2382,41 @@ const XCOL={same:'var(--xs)',div:'var(--xd)',mom:'var(--xm)',own:'var(--xo)'};
 function xRetChips(c,s,live){return XR.map(([l,k,i])=>{const v=c.r[i],b=s.r[i],g=c===s||v==null||b==null?null:v-b;const inner=`<span>${l}</span><b>${xp(v)}</b>${c===s?'':`<i class="${g==null?'':g>=0?'pos':'neg'}">${g==null?'&nbsp;':xpts(g)+' vs '+esc(s.ts||s.t)}</i>`}`;
   return live?`<button type="button" class="xpc ${xcls(v)}${XM.rng===k?' sel':''}" data-xrng="${k}" aria-pressed="${XM.rng===k}" title="Show ${XRWORD[k]} on the line chart">${inner}</button>`:`<div class="xpc ${xcls(v)}">${inner}</div>`}).join('')}
 /* risk vs the clicked ETF: volatility, Sharpe, max drawdown, fee; green when better, amber when riskier */
-function xRiskTiles(c0,s0){const same=c0===s0;const c={...c0,...xRisk(c0)},s={...s0,...xRisk(s0)};const t=(l,v,d,good)=>`<div class="xrk"><span>${l}</span><b>${v}</b>${same?'':`<i class="${d==null?'':good?'pos':'warn'}">${d==null?'&nbsp;':d}</i>`}</div>`;
+function xRiskTiles(c0,s0,front){const same=c0===s0;const c={...c0,...xRisk(c0)},s={...s0,...xRisk(s0)};const t=(l,v,d,good)=>`<div class="xrk"><span>${l}</span><b>${v}</b>${same?'':`<i class="${d==null?'':good?'pos':'warn'}">${d==null?'&nbsp;':d}</i>`}</div>`;
   const f2=v=>(v>=0?'+':'−')+Math.abs(v).toFixed(2);
   const ok=(a,b)=>a!=null&&b!=null;
-  return t('Volatility',xu(c.vol),ok(c.vol,s.vol)?xpts(c.vol-s.vol):null,c.vol<=s.vol)+t('Sharpe',c.sh==null?'—':c.sh.toFixed(2),ok(c.sh,s.sh)?f2(c.sh-s.sh):null,c.sh>=s.sh)+t('Max DD',xu(c.dd),ok(c.dd,s.dd)?xpts(c.dd-s.dd):null,c.dd>=s.dd)
+  return t('Volatility',xu(c.vol),ok(c.vol,s.vol)?xpts(c.vol-s.vol):null,c.vol<=s.vol)+t('Sharpe',c.sh==null?'—':c.sh.toFixed(2),ok(c.sh,s.sh)?f2(c.sh-s.sh):null,c.sh>=s.sh)+(front?'':t('Max DD',xu(c.dd),ok(c.dd,s.dd)?xpts(c.dd-s.dd):null,c.dd>=s.dd))
    +('er' in c0?t('Fee',fmtER(c.er),c.er!=null&&s.er!=null?f2(c.er-s.er):null,c.er!=null&&s.er!=null&&c.er<=s.er):'')}
 function xHero(c,s,kind){const k=xRk();
-  if(kind==='mom'&&c.m3!=null)return `<div class="xhero"><b class="${c.m3>=0?'pos':'neg'}">${xp(c.m3)}</b><span class="u">last 3 months</span><span class="xchip up">${xpts(c.m3-s.m3)} pts vs ${esc(s.t)}</span></div>`;
   const v=c.r&&c.r[k]!=null?c.r[k]:c.r3,bv=s.r&&s.r[k]!=null?s.r[k]:s.r3,lab=k===5?'/ yr, 3Y':esc(XM.rng);
-  if(kind==='self')return `<div class="xhero"><b class="${v>=0?'pos':'neg'}">${xp(v)}</b><span class="u">${lab}</span><span class="xchip xbasechip">The base</span></div>`;
-  return `<div class="xhero"><b class="${v>=0?'pos':'neg'}">${xp(v)}</b><span class="u">${lab}</span><span class="xchip ${v-bv>=0?'up':'dn'}">${xpts(v-bv)} pts vs ${esc(s.t)}</span></div>`}
+  if(kind==='self')return `<div class="xhero"><b class="${v>=0?'pos':'neg'}">${xp(v)}</b><span class="u">${lab}</span><span class="xpill base">The base</span></div>`;
+  return `<div class="xhero"><b class="${v>=0?'pos':'neg'}">${xp(v)}</b><span class="u">${lab}</span><span class="xpill ${v-bv>=0?'up':'dn'}">${xpts(v-bv)} pts vs ${esc(s.t)}</span></div>`}
 function xCorrWord(v){return v>=.85?'Nearly identical':v>=.70?'Very similar':v>=.60?'Some diversification':'Strong diversification'}
-function xCard(c,s,kind,flip){const col=XCOL[kind];const dr=c.r3-s.r3;const pct=Math.round(c.c*100);
-  const chips=xRetChips(c,s,true);
-  const head=`<div class="xch"><div><b>${esc(c.t)}</b><span class="nm">${esc(c.n||NAMES[c.t]||'')}</span></div><span class="xchip ${kind==='same'?'s':kind==='mom'?'m':kind==='own'?'o':'d'}">${pct}% correlated · ${xCorrWord(c.c)}</span></div>`;
-  const main=`${xHero(c,s,kind)}
-    ${xSpark(c,s,col,c.t)}<div class="xrl">Returns vs ${esc(s.t)}</div><div class="xchips">${chips}</div>
-    <div class="xrl xrlr">Risk vs ${esc(s.t)} · ${xRngLbl()}</div><div class="xrisk">${xRiskTiles(c,s)}</div>`;
+function xToggle(){return `<div class="xseg xrngseg" role="group" aria-label="Chart period">${XR.map(([l,k])=>`<button type="button" data-xrng="${k}" class="${XM.rng===k?'sel':''}" aria-pressed="${XM.rng===k}">${l}</button>`).join('')}</div>`}
+function xDescFill(card){const el=card&&card.querySelector('[data-xdesc]');if(!el||el.dataset.done)return;el.dataset.done='1';const t=card.dataset.xc;xinLoad(t).then(d=>{const b=d.blurb||xAutoBlurb(d);if(b){el.textContent=b;el.hidden=false;xMatchH();xGrowModal()}else el.remove()}).catch(()=>el.remove())}
+function xCard(c,s,kind,flip){const col=XCOL[kind];
+  const head=`<div class="xch"><div><b>${esc(c.t)}</b><span class="nm">${esc(c.n||NAMES[c.t]||'')}</span></div></div>`;
+  const main=`<p class="xfdesc" data-xdesc hidden></p>${xToggle()}${xHero(c,s,kind)}
+    ${xSpark(c,s,col,c.t)}<div class="xrl xrlr">Risk vs ${esc(s.t)} · ${xRngLbl()}</div><div class="xrisk x3">${xRiskTiles(c,s,true)}</div>`;
   const add=`<button type="button" class="xadd" data-xadd="${esc(c.t)}"></button>`;
   if(!flip)return `<article class="xcard" data-xc="${esc(c.t)}" style="--xc:${col}">${head}
     ${main}
     <p class="xwhy">${xWhy(c,s,kind)}</p>${add}</article>`;
-  return `<article class="xcard xflipcard" data-xc="${esc(c.t)}" style="--xc:${col}"><div class="xflip"><div class="xflipin"><div class="xface fr">${head}
+  return `<article class="xcard xflipcard" data-xc="${esc(c.t)}" style="--xc:${col}"><div class="xflip"><div class="xflipin"><div class="xface fr">${xFaceX()}${head}
     ${main}
     ${xFlipBtn(0,c.t)}${add}</div><div class="xface bk">${xBackHTML(c)}</div></div></div></article>`}
 const XICONDESC='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h7l4 4v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v4h4"/><path d="M9.5 12h5M9.5 15.5h5"/></svg>';
 const XICONCHART='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4v15a1 1 0 0 0 1 1h15"/><path d="M7.5 15.5l3.5-4 2.5 2.5L18 8.5"/></svg>';
 const XICONFLIP='<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>';
 function xDoFlip(fl,card){if(fl._fx)return;fl._fx=1;const inner=fl.querySelector('.xflipin');if(!inner||XREDUCE.matches){fl.classList.toggle('on');fl._fx=0;if(fl.classList.contains('on'))requestAnimationFrame(()=>xBackFill(card));return}inner.style.transition='transform .15s ease-in';inner.style.transform='scaleX(0)';setTimeout(()=>{fl.classList.toggle('on');if(fl.classList.contains('on'))requestAnimationFrame(()=>xBackFill(card));inner.style.transition='transform .27s cubic-bezier(.25,.8,.3,1.12)';inner.style.transform='scaleX(1)';setTimeout(()=>{inner.style.transition='';inner.style.transform='';fl._fx=0},290)},158)}
-function xFlipBtn(back,t){return `<button type="button" class="xflipbtn" data-xflip="1" aria-label="${back?'Back to returns and risk':'Show description and holdings'} for ${esc(t)}"><span class="xic">${back?XICONCHART:XICONDESC}</span><span>${back?'Returns &amp; risk':'Description &amp; holdings'}</span><span class="xfliparr">${XICONFLIP}</span></button>`}
-function xBackHTML(c){return `<div class="xbk-body" data-er="${c.er!=null?c.er:''}"><p class="xbk-load">Loading the description and holdings…</p></div>${xFlipBtn(1,c.t)}<button type="button" class="xadd" data-xadd="${esc(c.t)}"></button>`}
+function xFlipBtn(back,t){return `<button type="button" class="xflipbtn" data-xflip="1" aria-label="${back?'Back to returns and risk':'Show holdings'} for ${esc(t)}"><span class="xic">${back?XICONCHART:XICONDESC}</span><span>${back?'Returns &amp; risk':'Holdings'}</span><span class="xfliparr">${XICONFLIP}</span></button>`}
+function xFaceX(){return `<button type="button" class="xfacex" data-xpopx="1" aria-label="Close card"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>`}
+function xBackHTML(c){return `${xFaceX()}<button type="button" class="xgoback" data-xflip="1" aria-label="Back to returns and risk for ${esc(c.t)}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 5.5 8 12l6.5 6.5"/></svg><span>Go back</span></button><div class="xbk-body" data-er="${c.er!=null?c.er:''}"><p class="xbk-load">Loading the holdings…</p></div>`}
 function xBackFill(card){const body=card.querySelector('.xbk-body');if(!body||body.dataset.done)return;body.dataset.done='1';const t=card.dataset.xc;
   xinLoad(t).then(d=>{const top=(d.top||[]).filter(c=>c.wt>0).sort((a,b)=>b.wt-a.wt),f=d.f||{};
     const fact=(k,v)=>v==null||v===''?'':`<div><span>${k}</span><b title="${esc(String(v))}">${esc(String(v))}</b></div>`;
     const ser=d.self&&d.self.er!=null?d.self.er:(body.dataset.er!==''?+body.dataset.er:null);
-    const b=d.blurb||xAutoBlurb(d);
     body.innerHTML=`<div class="xch"><div><b>${esc(d.t)}</b><span class="nm">${esc(d.n||NAMES[d.t]||'')}</span></div></div>
-    ${b?`<p class="xbk-desc">${esc(b)}</p>`:''}
     <div class="xbk-facts">${fact('Holdings',top.length?top.length+' stocks':null)}${fact('Fee',ser!=null?fmtER(ser):null)}${fact('Assets',f.aum?xMoney(f.aum):null)}${fact('Category',f.cat)}</div>
     <div class="xseg" role="group" aria-label="Map view"><button type="button" data-xseg="ind" class="sel">Industries</button><button type="button" data-xseg="sec">Sectors</button><button type="button" data-xseg="stk">Top 10 stocks</button></div>
     <div class="xftm"></div>`;
@@ -2445,8 +2448,8 @@ document.addEventListener('mouseout',e=>{if(!e.target.closest)return;const tl=e.
 function xSetRange(k){XM.rng=k;XM.rngSet=1;const d=XM.d;if(!d)return;
   /* redraw each line chart at the height it already has, so nothing jumps while periods are clicked through */
   document.querySelectorAll('#xmBody .xspark').forEach(box=>{const c=xFind(box.dataset.xsp);if(!c)return;const col=box.closest('.xcard').style.getPropertyValue('--xc'),sv=box.querySelector('svg'),h=sv&&sv.style.height;let html=xSpark(c,d.self,col,c.t);if(h)html=html.replace('<svg ','<svg style="height:'+h+'" ');box.outerHTML=html});
-  document.querySelectorAll('#xmBody [data-xrng],#xmGlance [data-xrng]').forEach(b=>{const on=b.dataset.xrng===k;b.classList.toggle('sel',on);b.setAttribute('aria-pressed',on)});{const w=document.querySelector('#xmBody .xgwrap');if(w&&w._h0&&!XGMINI())xgPaint(w,XG.cur);if(w&&XGMINI())setTimeout(()=>xgSync(true),0)}
-  document.querySelectorAll('#xmBody .xcard').forEach(card=>{const c=xFind(card.dataset.xc);const rk=card.querySelector('.xrisk'),lb=card.querySelector('.xrlr'),hr=card.querySelector('.xhero');if(c&&rk)rk.innerHTML=xRiskTiles(c,d.self);if(lb)lb.textContent=`Risk vs ${d.self.t} · ${xRngLbl()}`;if(c&&hr&&['self','same','div','mom','own'].includes(c.k))hr.outerHTML=xHero(c,d.self,c.k)});
+  document.querySelectorAll('#xmBody [data-xrng]').forEach(b=>{const on=b.dataset.xrng===k;b.classList.toggle('sel',on);b.setAttribute('aria-pressed',on)});{const w=document.querySelector('#xmBody .xgwrap');if(w&&w._h0&&!XGMINI())xgPaint(w,XG.cur);if(w&&XGMINI())setTimeout(()=>xgSync(true),0)}
+  document.querySelectorAll('#xmBody .xcard').forEach(card=>{const c=xFind(card.dataset.xc);const rk=card.querySelector('.xrisk'),lb=card.querySelector('.xrlr'),hr=card.querySelector('.xhero');if(c&&rk)rk.innerHTML=xRiskTiles(c,d.self,XM.tab==='alt');if(lb)lb.textContent=`Risk vs ${d.self.t} · ${xRngLbl()}`;if(c&&hr&&['self','same','div','mom','own'].includes(c.k))hr.outerHTML=xHero(c,d.self,c.k)});
   {const T=$('xCmp');if(T){T.innerHTML=xCmpTable();renderXMButtons()}}
   const rs=xRisk(d.self),gs=$('xgSh'),gd=$('xgDd');if(gs)gs.innerHTML=`<span>Sharpe</span><b>${rs.sh==null?'—':rs.sh.toFixed(2)}</b>`;if(gd)gd.innerHTML=`<span>Max DD</span><b>${xu(rs.dd)}</b>`;if(XM.tab!=='in'){xMatchH();xFitNow()}if(XM.tab==='in'){xinPaint();const dk=$('xInDock');if(dk){dk.dataset.t='~';xinTip(null,false)}const n=$('xtmNote');if(n)n.textContent=xinNote()}}
 /* return vs volatility dot chart */
@@ -2479,13 +2482,14 @@ function xChart(d){const s=d.self,seen=new Set();const pts=[{...s,k:'self'}].con
   return `<figure class="xfig"><div class="xfigt">Return vs. risk over the last 3 years</div><svg viewBox="0 0 ${W} ${H+20}" role="img" aria-label="Return versus risk over the last 3 years">${g}${zone}<g font-family="IBM Plex Sans,sans-serif" font-size="16" font-weight="700" fill="var(--ink)"><text x="${L}" y="${H+15}">Risk</text><text transform="translate(16 ${Bm}) rotate(-90)">Return</text></g><g stroke="var(--ink2)" stroke-width="1.6" fill="none" stroke-linecap="round" opacity=".75"><line x1="${L+46}" y1="${H+10}" x2="${R-2}" y2="${H+10}"/><path d="M${R-11} ${H+4}L${R-2} ${H+10}L${R-11} ${H+16}"/><line x1="10" y1="${Bm-66}" x2="10" y2="${T+2}"/><path d="M4 ${T+11}L10 ${T+2}L16 ${T+11}"/></g><g class="xdots">${dots}</g></svg><div class="xtip" id="xChartTip" hidden></div></figure>`}
 function xFind(t){const d=XM.d;if(!d||!d.self)return null;if(d.self.t===t)return {...d.self,k:'self'};if(t==='~rest'&&XM.tab==='in')return d.rest?{t,k:'rest',lbl:'Everything else',...xRestSeries(d)}:null;if(XM.tab==='in'){const c=(d.top||[]).find(x=>x.t&&x.t===t);return c?{...c,...(XSTK[t]||{}),k:'hold'}:null}for(const [arr,k] of [[d.same,'same'],[d.closest||[],'same'],[d.div,'div'],[d.mom||[],'mom'],[d.own||[],'own']]){const c=arr.find(x=>x.t===t);if(c)return {...c,k}}return null}
 function xChartTip(t,on){if(!on&&XM.sel){t=XM.sel;on=true}
-  const leg=document.querySelector('#xmBody .xlegend'),dock=$('xCardDock'),svg=document.querySelector('#xmBody .xfig svg');const p=on?xFind(t):null;
+  const leg=document.querySelector('#xmBody .xlegend'),wdock=$('xCardDock'),pop=$('xCardPop'),pdock=$('xPopDock'),mob=ph0()&&!!pdock,dock=mob?pdock:wdock,svg=document.querySelector('#xmBody .xfig svg');const p=on?xFind(t):null;
   if(svg)svg.querySelectorAll('.xpt').forEach(g=>g.classList.toggle('pinned',!!XM.sel&&g.dataset.xt===XM.sel));
-  if(!dock||!leg||!p){if(dock&&!dock.hidden){dock.hidden=true;dock.innerHTML='';dock.dataset.t=''}if(leg)leg.classList.remove('showcard');xMatchH();return xTipBase(t,on)}
+  if(!dock||!leg||!p){if(wdock&&!wdock.hidden){wdock.hidden=true;wdock.innerHTML='';wdock.dataset.t=''}if(pop&&!pop.hidden){pop.hidden=true;if(pdock){pdock.innerHTML='';pdock.dataset.t=''}}if(leg)leg.classList.remove('showcard');xMatchH();return xTipBase(t,on)}
   xTipBase(t,false);if(svg){svg.querySelector('.xdots').classList.add('xfade');svg.querySelectorAll('.xpt').forEach(g=>g.classList.toggle('on',g.dataset.xt===t))}
-  if(dock.dataset.t!==t){dock.innerHTML=p.k==='self'?xSelfCard(XM.d.self):xCard(p,XM.d.self,p.k,true);dock.dataset.t=t}dock.firstElementChild.classList.toggle('hl',XM.sel===t);dock.hidden=false;leg.classList.add('showcard');renderXMButtons();xMatchH()}
+  if(dock.dataset.t!==t){dock.innerHTML=p.k==='self'?xSelfCard(XM.d.self):xCard(p,XM.d.self,p.k,true);dock.dataset.t=t}dock.firstElementChild.classList.toggle('hl',XM.sel===t);if(mob)pop.hidden=false;else{wdock.hidden=false;leg.classList.add('showcard')}renderXMButtons();xDescFill(dock.firstElementChild);xMatchH();if(!mob&&XM.sel===t)xGrowModal()}
 /* the card and the chart box share one height */
-function xMatchH(){const fig=document.querySelector('#xmBody .xfig'),dock=$('xCardDock'),c=dock&&!dock.hidden&&dock.firstElementChild;if(!fig||!c||ph0())return;const sv=c.querySelector('.xspark svg');if(sv)sv.style.height='';c.style.height='';c.style.flex='none';const H=fig.offsetHeight,over=c.offsetHeight-H;c.style.flex='';if(sv&&over>0)sv.style.height=Math.max(24,sv.clientHeight-over)+'px';else if(sv&&over<-8)sv.style.height=Math.min(240,sv.clientHeight-over)+'px';c.style.height=H+'px'}
+function xMatchH(){const fig=document.querySelector('#xmBody .xfig'),dock=$('xCardDock'),c=dock&&!dock.hidden&&dock.firstElementChild;if(!fig||!c||ph0())return;const fr=c.querySelector('.xface.fr');let need=0;if(fr)need=fr.scrollHeight+(c.offsetHeight-fr.clientHeight);c.style.height=Math.max(fig.offsetHeight,need)+'px'}
+function xGrowModal(){if(ph0())return;const B=$('xmBody'),md=$('xm').querySelector('.xmd'),tp=B&&B.querySelector('.xtop');if(!B||!md||!tp)return;const need=tp.offsetHeight+(tp.offsetTop-B.offsetTop)+parseFloat(getComputedStyle(B).paddingBottom)+14;if(need>B.clientHeight){const nh=Math.min(innerHeight-24,md.offsetHeight+(need-B.clientHeight));if(nh>md.offsetHeight){md.style.height=nh+'px';md.style.minHeight=nh+'px';XM.anchorH=nh}}}
 function xTipBase(t,on){const tip=$('xChartTip'),svg=document.querySelector('#xmBody .xfig svg');if(!tip||!svg)return;const zone=svg.querySelector('.xzone');
   svg.querySelector('.xdots').classList.toggle('xfade',!!on&&t!==XM.d.self.t);svg.querySelectorAll('.xpt').forEach(g=>g.classList.toggle('on',on&&g.dataset.xt===t));
   document.querySelectorAll('#xmBody .xcard').forEach(c=>c.classList.toggle('hl',on&&c.dataset.xc===t));document.querySelectorAll('#xmBody .xcards').forEach(c=>c.classList.toggle('dim',!!on&&!!c.querySelector('.xcard.hl')));
@@ -2522,10 +2526,10 @@ function xSelfCard(s){if(XM.d&&XM.d.pf)return xSelfCard0(s,false).replace('>The 
 function xSelfCard0(s,flip){const n=XM.d.same.length,m=XM.d.div.length,mo=XM.d.mom?XM.d.mom.length:null,ow=(XM.d.own||[]).length;
   const sp=xSpark(s,s,'var(--ink)',s.t).replace(/<polyline[^>]*stroke-dasharray="4 3"[^>]*\/>/,'').replace(/<span>┅[^<]*<\/span>/,'');
   const head=`<div class="xch"><div><b>${esc(s.t)}</b><span class="nm">${esc(s.n&&s.n!==s.t?s.n:NAMES[s.t]||'')}</span></div><span class="xchip xbasechip">The ETF you clicked</span></div>`;
-  const main=`${xHero(s,s,'self')}${sp}<div class="xrl">Returns · the base</div><div class="xchips">${xRetChips(s,s,true).replace(/<\/b>/g,'</b><i class="xbase">base</i>')}</div><div class="xrl xrlr">Risk · ${xRngLbl()}</div><div class="xrisk">${xRiskTiles(s,s).replace(/<\/b><\/div>/g,'</b><i class="xbase">base</i></div>')}</div><p class="xwhy xsfnd">Found ${n} higher return, ${m} less risk${mo==null?'':`, ${mo} momentum`}, ${ow} moves on its own pick${n+m+(mo||0)+ow===1?'':'s'}.</p>`;
+  const main=`<p class="xfdesc" data-xdesc hidden></p>${xToggle()}${xHero(s,s,'self')}${sp}<div class="xrl xrlr">Risk · ${xRngLbl()}</div><div class="xrisk x3">${xRiskTiles(s,s,true).replace(/<\/b><\/div>/g,'</b><i class="xbase">base</i></div>')}</div><p class="xwhy xsfnd">Found ${n} higher return, ${m} less risk${mo==null?'':`, ${mo} momentum`}, ${ow} moves on its own pick${n+m+(mo||0)+ow===1?'':'s'}.</p>`;
   const add=`<button type="button" class="xadd" data-xadd="${esc(s.t)}"></button>`;
   if(!flip)return `<article class="xcard" data-xc="${esc(s.t)}" style="--xc:var(--ink)">${head}${main}${add}</article>`;
-  return `<article class="xcard xflipcard" data-xc="${esc(s.t)}" style="--xc:var(--ink)"><div class="xflip"><div class="xflipin"><div class="xface fr">${head}${main}${xFlipBtn(0,s.t)}${add}</div><div class="xface bk">${xBackHTML(s)}</div></div></div></article>`}
+  return `<article class="xcard xflipcard" data-xc="${esc(s.t)}" style="--xc:var(--ink)"><div class="xflip"><div class="xflipin"><div class="xface fr">${xFaceX()}${head}${main}${xFlipBtn(0,s.t)}${add}</div><div class="xface bk">${xBackHTML(s)}</div></div></div></article>`}
 function xMini(c,s,col){const R=xRange(c,s),n=R.a.length;if(n<2)return '';const self=c===s;const all=self?R.a:R.a.concat(R.b);const lo=Math.min(0,...all),hi=Math.max(0,...all),rg=(hi-lo)||1;const X=i=>1+i*94/(n-1),Y=v=>2+(hi-v)/rg*24;
   const path=a=>a.map((v,i)=>(i?'L':'M')+X(i).toFixed(1)+' '+Y(v).toFixed(1)).join('');
   return `<svg class="xmini" viewBox="0 0 96 28" width="96" height="28" aria-hidden="true"><line x1="0" x2="96" y1="${Y(0).toFixed(1)}" y2="${Y(0).toFixed(1)}" stroke="var(--grid)"/>${self?'':`<path d="${path(R.b)}" fill="none" stroke="var(--faint)" stroke-width="1" stroke-dasharray="2 2"/>`}<path d="${path(R.a)}" fill="none" stroke="${col}" stroke-width="1.6"/></svg>`}
@@ -2547,27 +2551,28 @@ function xCmpTable(){const d=XM.d,s=d.self,t=s.t,rs=xRisk(s);const mk=k=>`<svg w
 const XHG=()=>innerWidth>640;
 /* one window height for both tabs, sized to what the Alternatives chart needs at a 3:2 shape, so neither tab has dead space or jumps */
 function xSizeModal(){const md=$('xm').querySelector('.xmd'),h=$('xm').querySelector('.xmh');if(!md||!h)return;if(ph0()){md.style.height='';return}
+  if(XM.anchorH){md.style.height=Math.min(XM.anchorH,innerHeight-24)+'px';return}
   const mw=innerWidth>=1880?Math.min(1640,innerWidth*.88):Math.min(1480,innerWidth*.94),lw=Math.max(330,Math.min(460,(mw-56)*.32)),fw=mw-56-lw-24;
-  const gl=$('xmGlance'),ft=$('xmFoot');md.style.height=Math.round(Math.min(innerHeight-24,1000,h.offsetHeight+(ft?ft.offsetHeight:49)+124+Math.max(590,fw/1.35)+(gl&&!gl.hidden?gl.offsetHeight:0)))+'px'}
-function xSetGlance(gl){const g=$('xmGlance');if(!g)return '';XM.hg=XHG();if(XM.hg&&gl){g.innerHTML=gl;g.hidden=false;return ''}g.innerHTML='';g.hidden=true;return gl}
-addEventListener('resize',()=>{if($('xm').hidden||!XM.d)return;xSizeModal();if(XHG()!==XM.hg)xRender()});
+  const ft=$('xmFoot');md.style.height=Math.round(Math.min(innerHeight-24,1000,h.offsetHeight+(ft?ft.offsetHeight:49)+124+Math.max(590,fw/1.35)))+'px'}
+function xSetGlance(gl){XM.hg=XHG();return gl}
+addEventListener('resize',()=>{if($('xm').hidden||!XM.d)return;xSizeModal();if(XM.tab==='in'){xinFitRow();xinPaint()}if(XHG()!==XM.hg)xRender()});
 function renderXM(){const b=$('xmBody');renderXMFoot();XM.chH=null;xSizeModal();
   if(XM.err||!XM.d)xSetGlance('');
   if(XM.err){b.innerHTML=`<div class="xnote"><b>Nothing to show</b><span>${esc(XM.err)}</span></div>`;return}
   const d=XM.d;if(!d){b.innerHTML='<div class="xskel" style="height:70px"></div><div class="xskel" style="height:300px"></div><div class="xskel" style="height:260px"></div>';return}
-  const s=d.self,t=s.t;$('xmSub').innerHTML='<span class="sfull">'+esc((s.n||NAMES[t]||'')+' · alternatives are picked on the last 3 years ('+dayFmt(d.from)+' to '+dayFmt(d.to)+')')+'</span><span class="sshort">Alternatives are picked with a 3-year lookback</span>';
-  const gl=XR.map(([l,k,i])=>`<button type="button" class="xg ${xcls(s.r[i])}${XM.rng===k?' sel':''}" data-xrng="${k}" aria-pressed="${XM.rng===k}" title="Show ${XRWORD[k]} on the line charts"><span>${l}</span><b>${xp(s.r[i])}</b></button>`).join('')+`<div class="xg" id="xgSh"><span>Sharpe</span><b>${xRisk(s).sh.toFixed(2)}</b></div><div class="xg n" id="xgDd"><span>Max DD</span><b>${xu(xRisk(s).dd)}</b></div><div class="xg"><span>Fee</span><b>${fmtER(s.er)}</b></div>`;
+  const s=d.self,t=s.t;
   const same=d.same.length?`<div class="xcards">${d.same.map(c=>xCard(c,s,'same')).join('')}</div>`
     :`<div class="xahead"><div class="top"><span class="ck"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l4.8 4.8L19.5 7"/></svg></span><div><b style="font-size:16px">Nothing similar beat ${esc(t)} without much more risk</b><div class="mut" style="font-size:14px">No ETF that moves 70%+ in step with ${esc(t)} earned more over 3 years with a Sharpe at least 90% of ${esc(t)}'s.${(d.closest||[]).length?' Here are the closest ones for reference.':''}</div></div></div>${(d.closest||[]).length?`<div class="xtblw"><table class="xtbl"><thead><tr><th>ETF</th><th>1M</th><th>3M</th><th>6M</th><th>YTD</th><th>1Y</th><th>3Y</th><th>Sharpe</th><th>Max DD</th><th>Fee</th><th></th></tr></thead><tbody>${d.closest.map(c=>`<tr data-xc="${esc(c.t)}"><td><b>${esc(c.t)}</b> <span style="color:var(--xs);font-size:12px">tracks ${Math.round(c.c*100)}%</span></td>${c.r.map(v=>`<td class="${v==null?'mut':v>=0?'pos':'neg'}">${xp(v)}</td>`).join('')}<td>${c.sh.toFixed(2)}</td><td class="neg">${xu(c.dd)}</td><td>${fmtER(c.er)}</td><td><button type="button" class="xadd" style="height:32px;padding:0 10px;font-size:12px" data-xadd="${esc(c.t)}"></button></td></tr>`).join('')}</tbody></table></div>`:''}</div>`;
   const dv=d.div.length?`<div class="xcards">${d.div.map(c=>xCard(c,s,'div')).join('')}${d.div.length<3?`<div class="xnote"><b>Only ${d.div.length} found</b><span>Nothing else that moves 70%+ in step with ${esc(t)} had 15%+ less volatility and a Sharpe at least 90% of ${esc(t)}'s.</span></div>`:''}</div>`
     :`<div class="xnote"><b>No less risky fund kept up with ${esc(t)}</b><span>No ETF that moves 70%+ in step with ${esc(t)} had 15%+ less volatility and a Sharpe at least 90% of ${esc(t)}'s.</span></div>`;
   const mo=!d.mom?'':`<section class="xsec"><h3>Momentum <small>Moves like ${esc(t)} and is ahead of it over the last 3 months</small></h3>${d.mom.length?`<div class="xcards">${d.mom.map(c=>xCard(c,s,'mom')).join('')}${d.mom.length<3?`<div class="xnote"><b>Only ${d.mom.length} ahead lately</b><span>${esc(t)} is ${xp(s.m3)} over the last 3 months, so few similar funds have kept ahead of it.</span></div>`:''}</div>`:`<div class="xnote"><b>Nothing similar is ahead of ${esc(t)} lately</b><span>No fund that moves 70%+ in step with ${esc(t)} is ahead of it over the last 3 months with a Sharpe at least 90% of ${esc(t)}'s. ${esc(t)} itself is ${xp(s.m3)}.</span></div>`}</section>`;
-  const glb=xSetGlance(gl);xSizeModal();
-  b.innerHTML=`${glb?`<div class="xgwrap" style="display:flex;flex-direction:column;gap:8px"><div class="xcap">${esc(t)} at a glance <span class="xcap2">· click a period to change the line charts</span></div><div class="xglance">${glb}</div></div>`:''}
-    <div class="xtop">${xChart(d)}<div class="xlegend"><div class="li"><svg width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="6" fill="var(--ink)"/></svg><span>${esc(t)}, ${d.pf?'your portfolio':'the ETF you clicked'}</span></div><div class="li" data-xk="same"><svg width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="6" fill="var(--xs)"/></svg><span>Highly correlated w/ higher returns</span></div><div class="li" data-xk="div"><svg width="14" height="14" aria-hidden="true"><rect x="1" y="1" width="12" height="12" fill="var(--xd)"/></svg><span>Highly correlated w/ less volatility</span></div>${d.mom?`<div class="li" data-xk="mom"><svg width="14" height="14" aria-hidden="true"><path d="M7 1L13 12H1Z" fill="var(--xm)"/></svg><span>Highly correlated w/ more momentum</span></div>`:''}<div class="li" data-xk="own"><svg width="14" height="14" aria-hidden="true"><path d="M7 1L13 7L7 13L1 7Z" fill="var(--xo)"/></svg><span>Barely correlated w/ higher Sharpe</span></div>
+  xSetGlance('');xSizeModal();
+  b.innerHTML=`<div class="xtop">${xChart(d)}<div class="xlegend"><div class="li"><svg width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="6" fill="var(--ink)"/></svg><span>${esc(t)}, ${d.pf?'your portfolio':'the ETF you clicked'}</span></div><div class="li" data-xk="same"><svg width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="6" fill="var(--xs)"/></svg><span>Highly correlated w/ higher returns</span></div><div class="li" data-xk="div"><svg width="14" height="14" aria-hidden="true"><rect x="1" y="1" width="12" height="12" fill="var(--xd)"/></svg><span>Highly correlated w/ less volatility</span></div>${d.mom?`<div class="li" data-xk="mom"><svg width="14" height="14" aria-hidden="true"><path d="M7 1L13 12H1Z" fill="var(--xm)"/></svg><span>Highly correlated w/ more momentum</span></div>`:''}<div class="li" data-xk="own"><svg width="14" height="14" aria-hidden="true"><path d="M7 1L13 7L7 13L1 7Z" fill="var(--xo)"/></svg><span>Barely correlated w/ higher Sharpe</span></div>
     <div class="xcdock" id="xCardDock" hidden></div><div class="xsteps"><b class="xsth">How to use this</b><ol><li><span>${matchMedia('(hover:none)').matches?'Tap':'Click'} any shape on the chart to open its card.</span></li><li><span>Compare its returns and risk with ${esc(t)}.</span></li><li><span>Like it? Hit <b>Add to Portfolio</b> to add it to your portfolio.</span></li></ol><span class="xstf">Picked from ${d.pool.toLocaleString()} ETFs.</span></div></div></div>
+    <div class="xpop" id="xCardPop" hidden><div class="xpopwrap"><div class="xpopdock" id="xPopDock"></div></div></div>
     `;
-  renderXMButtons();xgSync(true);xFitChart();if(document.fonts&&document.fonts.status!=='loaded')document.fonts.ready.then(()=>{if(XM.d&&!$('xm').hidden){xMatchH();xFitNow();if(XM.sel)xChartTip(XM.sel,true)}});if(XM.sel&&xFind(XM.sel))xChartTip(XM.sel,true)}
+  renderXMButtons();xgSync(true);xFitChart();
+  {const ts=new Set([d.self.t]);['same','div','mom','own'].forEach(k=>{(d[k]||[]).forEach(c=>{if(c.t)ts.add(c.t)})});ts.forEach(t=>{try{xinLoad(t).catch(()=>{})}catch(e){}})}if(document.fonts&&document.fonts.status!=='loaded')document.fonts.ready.then(()=>{if(XM.d&&!$('xm').hidden){xMatchH();xFitNow();if(XM.sel)xChartTip(XM.sel,true)}});if(XM.sel&&xFind(XM.sel))xChartTip(XM.sel,true)}
 
 /* ---------- what's inside: top holdings as a map sized by weight and colored by return ---------- */
 const XIN={},XINL={};
@@ -2607,7 +2612,6 @@ function renderXI(){const b=$('xmBody');renderXMFoot();xSizeModal();
   if(XM.err){b.innerHTML=`<div class="xnote"><b>Nothing to show</b><span>${esc(XM.err)}</span></div>`;return}
   const d=XM.d;if(!d){b.innerHTML='<div class="xskel" style="height:70px"></div><div class="xskel" style="height:440px"></div>';return}
   const s=d.self||{t:d.t},t=d.t;
-  $('xmSub').innerHTML=`<span class="sfull">${esc((d.n||NAMES[t]||'')+(d.hasof?' · holdings as of '+dayFmt(d.hasof)+(xinSec(d)?(d.via?` (SEC report, via ${d.via})`:' (SEC report)'):''):''))}</span><span class="sshort">Top holdings and what they returned</span>`;
   const rs=s.r?xRisk(s):null;
   const gl=s.r?XR.map(([l,k,i])=>`<button type="button" class="xg ${xcls(s.r[i])}${XM.rng===k?' sel':''}" data-xrng="${k}" aria-pressed="${XM.rng===k}" title="Show ${XRWORD[k]}"><span>${l}</span><b>${xp(s.r[i])}</b></button>`).join('')+`<div class="xg" id="xgSh"><span>Sharpe</span><b>${rs.sh==null?'—':rs.sh.toFixed(2)}</b></div><div class="xg n" id="xgDd"><span>Max DD</span><b>${xu(rs.dd)}</b></div><div class="xg"><span>Fee</span><b>${fmtER(s.er)}</b></div>`:'';
   const tw=d.top.reduce((a,c)=>a+c.wt,0);
@@ -2616,14 +2620,14 @@ function renderXI(){const b=$('xmBody');renderXMFoot();xSizeModal();
   b.innerHTML=`${glb?`<div class="xgwrap" style="display:flex;flex-direction:column;gap:8px"><div class="xcap">${esc(t)} at a glance <span class="xcap2">· click a period to recolor the map and cards</span></div><div class="xglance">${glb}</div></div>`:''}
     <div class="xtop xin">${fig}<div class="xcdock xidock" id="xInDock">${xAboutCard(d)}</div></div>${xinSecHTML(d)}
     <p class="xdisc">${d.pf?"Each ETF's top holdings (up to 50), weighted by your percentages. A stock in one ETF's list but further down in another only counts the listed part, so overlaps are a floor. Sectors cover every holding. ":''}${xinSec(d)?`Holdings from ${esc(d.via||t)}'s reports to the SEC (Form N-PORT), which come out about two months after each quarter; shares since the latest report are moved with prices.`:'Holdings from Yahoo Finance.'} "Everything else" is worked out from the fund's own return, so treat it as an estimate. Past performance doesn't guarantee future results.</p>`;
-  $('xInDock').dataset.t='';xinFit();xinPaint();if(XM.sel&&xFind(XM.sel))xinTip(XM.sel,true);
-  if(document.fonts&&document.fonts.status!=='loaded')document.fonts.ready.then(()=>{if(XM.tab==='in'&&!$('xm').hidden){xinFit();xinPaint()}})}
+  $('xInDock').dataset.t='';xinFit();xinFitRow();xinPaint();if(XM.sel&&xFind(XM.sel))xinTip(XM.sel,true);
+  if(document.fonts&&document.fonts.status!=='loaded')document.fonts.ready.then(()=>{if(XM.tab==='in'&&!$('xm').hidden){xinFit();xinFitRow();xinPaint()}})}
 
 /* ---------- under the hood of a portfolio: every member's holdings and sectors, weighted by the portfolio's percentages ---------- */
 function openExplorePf(id,from,tab){const p=pf(id);if(!p)return;$('xm').querySelector('.xmd').style.minHeight='';const ws=weights(p);
-  XM.pf=id;XM.t=p.name;XM.tab=tab==='alt'?'alt':'in';XM.alt=null;XM.ins=null;XM.errA=XM.errI=ws.length?null:'Give the ETFs in this portfolio some percentages first.';XM.secMode=null;XM.rngSet=0;XM.rng=XM.tab==='in'?'1Y':'3Y';XM.added=[];XM.from=from||null;
+  XM.pf=id;XM.t=p.name;XM.tab=tab==='alt'?'alt':'in';XM.anchorH=null;XM.openTab=XM.tab;XM.alt=null;XM.ins=null;XM.errA=XM.errI=ws.length?null:'Give the ETFs in this portfolio some percentages first.';XM.secMode=null;XM.rngSet=0;XM.rng=XM.tab==='in'?'1Y':'3Y';XM.added=[];XM.from=from||null;
   {const q=$('qtip');if(q)q.hidden=true}XM.sel=null;
-  xUse();$('xm').hidden=false;document.body.classList.add('xm-open');xHead();$('xmSub').textContent=ws.map(x=>x.t+' '+xw(x.w)).join(' · ');xDrawer(false);xRender();xOpenFx();setTimeout(()=>$('xmClose').focus({preventScroll:true}),0);
+  xUse();$('xm').hidden=false;document.body.classList.add('xm-open');xHead();xRender();xOpenFx();setTimeout(()=>$('xmClose').focus({preventScroll:true}),0);
   if(!ws.length)return;const key=JSON.stringify(ws);XM.pfKey=key;
   xPfAlt(p).then(d=>{if(XM.pf!==id||XM.pfKey!==key||$('xm').hidden)return;XM.alt=d;if(XM.tab==='alt'){xUse();xRender();xCascade()}},e=>{if(XM.pf!==id||XM.pfKey!==key)return;XM.errA=e&&e.user?e.message:"Alternatives for portfolios aren't available yet. They need a file that the nightly update makes, so check back tomorrow.";if(XM.tab==='alt'){xUse();xRender()}});
   Promise.allSettled(ws.map(x=>x.t==='TPS'?Promise.reject(new Error('strategy')):xinLoad(x.t))).then(()=>{if(XM.pf!==id||XM.pfKey!==key||$('xm').hidden)return;
@@ -2774,6 +2778,7 @@ function xinTip(t,on){const dock=$('xInDock'),d=XM.d;if(!dock||!d)return;const s
   const c=show?xFind(show):null,key=c?show+(XM.sel===show?'*':''):'';if(dock.dataset.t===key)return;
   dock.innerHTML=c?(c.k==='rest'?xRestCard(d):xHoldCard(c,d.self)):xAboutCard(d);dock.dataset.t=key;if(c&&XM.sel===show)dock.firstElementChild.classList.add('hl')}
 /* make the map as tall as the tallest card, so cards never get cut and the two columns end together */
+function xinFitRow(){const B=$('xmBody'),row=B&&B.querySelector('.xtop.xin'),dock=$('xInDock');if(!B||!row||!dock)return;if(getComputedStyle(row).flexDirection!=='row')return;const S=B.scrollTop,avail=Math.min(B.clientHeight-(row.getBoundingClientRect().top-B.getBoundingClientRect().top)-22-S,B.clientHeight-22);if(avail<=300)return;row.style.height=avail+'px';dock.style.minHeight='';dock.style.overflowY='auto'}
 function xinFit(){const dock=$('xInDock'),d=XM.d;if(!dock||!d)return;dock.style.minHeight='';if(ph0()||!$('xTm'))return;
   const html=dock.innerHTML,key=dock.dataset.t;let mx=0;
   const meas=h=>{dock.innerHTML=h;const el=dock.firstElementChild;el.style.flex='none';mx=Math.max(mx,el.offsetHeight)};
@@ -2832,17 +2837,10 @@ function xFitChart(){if(ph0()||!XM.d)return;const dock=$('xCardDock'),fig=docume
   [d.self,...d.same,...(d.closest||[]),...d.div,...(d.mom||[]),...(d.own||[])].forEach(c=>{const q=xFind(c.t);if(!q)return;dock.innerHTML=q.k==='self'?xSelfCard(d.self):xCard(q,d.self,q.k);mx=Math.max(mx,dock.firstElementChild.offsetHeight)});
   dock.innerHTML=html;dock.hidden=was;dock.style.visibility='';if(!show)leg.classList.remove('showcard');
   /* the window has a fixed height, so the chart also grows into any room left below it */
-  const B=$('xmBody'),lc=B&&B.lastElementChild,spare=lc?Math.max(0,B.clientHeight-parseFloat(getComputedStyle(B).paddingBottom)-(lc.offsetTop+lc.offsetHeight-B.offsetTop)-10):0;const xCapH=560;mx=Math.max(mx,Math.min(fig.offsetHeight+spare,Math.round(fig.offsetWidth/1.35),xCapH));const tp=document.querySelector('#xmBody .xtop');if(tp&&B){const av=B.clientHeight-(tp.offsetTop-B.offsetTop)-parseFloat(getComputedStyle(B).paddingBottom)-14;if(av>200)mx=Math.min(mx,av)}
-  const svg=fig.querySelector('svg'),r={width:svg.clientWidth,height:svg.clientHeight},want=mx-(fig.offsetHeight-r.height);if(r.width&&Math.abs(want-r.height)>2){const vb=svg.viewBox.baseVal;XM.chH=Math.round(want*vb.width/r.width)-20;const nf=document.createElement('div');nf.innerHTML=xChart(d);fig.replaceWith(nf.firstElementChild);renderXMButtons()}}
-function xHowHTML(){const t=XM.t||'this ETF',d=XM.d;const st=(k,p)=>`<div class="xstep"><span class="k">${k}</span><p>${p}</p></div>`;
-  return st('The pool',`${d?d.pool.toLocaleString():'About 1,800'} ETFs with at least 3 years of prices and $50M in assets. Left out: buffer, option-income and covered-call funds, trading funds, hedged, tactical and long/short strategies, ETNs, and anything charging more than 1% a year.`)
-   +st('Higher return, similar risk',`Moves more than 70% in step with ${t} and earned more than it over 3 years, with a Sharpe at least 90% of ${t}'s. Best Sharpe first.`)
-   +st('Less risk',`Moves more than 70% in step with ${t}, with at least 15% less volatility over 3 years, a Sharpe at least 90% of ${t}'s, and at least 90% of its return. Best Sharpe first.`)
-   +st('Momentum',`Moves more than 70% in step with ${t} and is ahead of it over the last 3 months, using the average of the last 10 days so one week can't flip it, with a Sharpe at least 90% of ${t}'s. Strongest 3 months first.`)
-   +st('Moves on its own',`Moves less than 60% in step with ${t}, so it tends to zig when ${t} zags, with a higher Sharpe than ${t} and at least 90% of its 3-year return, which keeps near-cash funds and much weaker funds out. Best Sharpe first.`)
-   +(XM.pf?`<p class="xstepn">For a portfolio, "moves in step" is measured on weekly returns over the last 3 years, and the portfolio is bought at your percentages 3 years ago and held. Its own ETFs are left out of the picks.</p>`:'')
-   +`<p class="xstepn">Return and volatility are measured over the last 3 years, and everything refreshes every morning. Sharpe is return per unit of volatility. These are ideas to research, not advice.</p>`}
-function xDrawer(on){const dr=$('xmDrawer'),b=$('xmHow');if(on){dr.querySelector('.xdb').innerHTML=xHowHTML();dr.style.top=document.querySelector('#xm .xmh').offsetHeight+'px'}dr.classList.toggle('open',!!on);dr.setAttribute('aria-hidden',!on);b.setAttribute('aria-expanded',!!on)}
+  const B=$('xmBody'),lc=B&&B.lastElementChild,spare=lc?Math.max(0,B.clientHeight-parseFloat(getComputedStyle(B).paddingBottom)-(lc.offsetTop+lc.offsetHeight-B.offsetTop)-10):0;const xCapH=innerWidth>=1880?780:560;mx=Math.max(mx,Math.min(fig.offsetHeight+spare,Math.round(fig.offsetWidth/1.35),xCapH));const tp=document.querySelector('#xmBody .xtop');if(tp&&B){const av=B.clientHeight-(tp.offsetTop-B.offsetTop)-parseFloat(getComputedStyle(B).paddingBottom)-14;if(av>200)mx=Math.min(mx,av)}
+  const svg=fig.querySelector('svg'),r={width:svg.clientWidth,height:svg.clientHeight},want=mx-(fig.offsetHeight-r.height);if(r.width&&Math.abs(want-r.height)>2){const vb=svg.viewBox.baseVal;XM.chH=Math.round(want*vb.width/r.width)-20;const nf=document.createElement('div');nf.innerHTML=xChart(d);fig.replaceWith(nf.firstElementChild);renderXMButtons()}
+  /* give back whatever height is still empty below the content, so the Alternatives window ends where its content ends instead of matching the taller Under the hood window */
+  if(XM.tab==='alt'&&XM.openTab!=='in'){const tp2=B.querySelector('.xtop');if(tp2&&tp2.offsetHeight>100){const sp2=B.clientHeight-parseFloat(getComputedStyle(B).paddingBottom)-(tp2.offsetTop+tp2.offsetHeight-B.offsetTop)-10;if(sp2>8&&sp2<500){const md=$('xm').querySelector('.xmd');if(md){const nh=md.offsetHeight-sp2;md.style.height=nh+'px';md.style.minHeight=nh+'px';XM.anchorH=nh}}}}}
 function dayFmt(k){return MON[+k.slice(5,7)-1]+' '+(+k.slice(8))+', '+k.slice(0,4)}
 document.addEventListener('click',e=>{{const q=e.target.closest('[data-xpf]');if(q){e.preventDefault();e.stopPropagation();openExplorePf(q.dataset.xpf,q,q.dataset.xtab);return}}const o=e.target.closest('[data-xopen]');if(o){e.preventDefault();openExplore(o.dataset.xopen,o,o.dataset.xtab);return}
   if($('xm').hidden)return;
@@ -2851,14 +2849,13 @@ document.addEventListener('click',e=>{{const q=e.target.closest('[data-xpf]');if
   {const tt=e.target.closest('#xmBody .xtile[data-ht]');if(tt){const t=tt.dataset.ht;XM.sel=XM.sel===t?null:t;$('xInDock').dataset.t='~';xinTip(t,!!XM.sel);
     if(XM.sel&&ph0()){const dk=$('xInDock'),B=$('xmBody');if(dk&&B){const r=dk.getBoundingClientRect(),b=B.getBoundingClientRect();if(r.top>b.bottom-120)B.scrollTo({top:B.scrollTop+(r.top-b.top)-80,behavior:XREDUCE.matches?'auto':'smooth'})}}return}}
   if(e.target.closest('[data-xclose]')){closeExplore();return}
-  if(e.target.closest('#xmHow')){xDrawer(!$('xmDrawer').classList.contains('open'));return}
-  if(e.target.closest('[data-xdclose]')){xDrawer(false);$('xmHow').focus();return}
+  {const pp=$('xCardPop');if(pp&&!pp.hidden&&(e.target===pp||e.target.closest('[data-xpopx]'))){const t=XM.sel;XM.sel=null;xChartTip(t,false);return}}
   const a=e.target.closest('[data-xadd]');if(a&&!a.disabled){xToggleAdd(a.dataset.xadd);return}
-  const g=e.target.closest('#xmBody [data-xrng],#xgMini [data-xrng],#xmGlance [data-xrng]');if(g){xSetRange(g.dataset.xrng);return}
+  const g=e.target.closest('#xmBody [data-xrng],#xgMini [data-xrng]');if(g){xSetRange(g.dataset.xrng);return}
   const p=e.target.closest('#xmBody .xpt');if(p){XM.sel=p.dataset.xt;xChartTip(p.dataset.xt,true);
-    /* when the card sits under the chart (narrow screens), bring it into view */const lg=document.querySelector('#xmBody .xlegend'),B=$('xmBody'),svg=p.closest('svg');if(XM.sel&&lg&&B&&svg&&lg.getBoundingClientRect().top>svg.getBoundingClientRect().bottom-4){const r=lg.getBoundingClientRect(),b=B.getBoundingClientRect(),m=$('xgMini'),off=(XGMINI()&&m?m.offsetHeight:70)+10;if(r.top>b.bottom-120||r.top<b.top+off)B.scrollTo({top:B.scrollTop+(r.top-b.top)-off,behavior:XREDUCE.matches?'auto':'smooth'})}xFitNow();return}
+    /* when the card sits under the chart (narrow screens), bring it into view */const lg=document.querySelector('#xmBody .xlegend'),B=$('xmBody'),svg=p.closest('svg');if(!ph0()&&XM.sel&&lg&&B&&svg&&lg.getBoundingClientRect().top>svg.getBoundingClientRect().bottom-4){const r=lg.getBoundingClientRect(),b=B.getBoundingClientRect(),m=$('xgMini'),off=(XGMINI()&&m?m.offsetHeight:70)+10;if(r.top>b.bottom-120||r.top<b.top+off)B.scrollTo({top:B.scrollTop+(r.top-b.top)-off,behavior:XREDUCE.matches?'auto':'smooth'})}xFitNow();return}
   const rw=e.target.closest('#xCmp tr[data-xrow]');if(rw){const t=rw.dataset.xrow;XM.sel=t;xChartTip(t,true);const tp=document.querySelector('#xmBody .xtop'),B=$('xmBody');if(tp&&B){const r=tp.getBoundingClientRect(),bb=B.getBoundingClientRect();if(r.top<bb.top+60)B.scrollTo({top:B.scrollTop+(r.top-bb.top)-80,behavior:XREDUCE.matches?'auto':'smooth'})}xFitNow();return}
-  if(XM.sel&&!e.target.closest('#xCardDock,#xInDock,[data-xrng],#xgMini,.xmh,#xmDrawer,#xmFoot,.xmf')){const t=XM.sel;XM.sel=null;XM.tab==='in'?xinTip(t,false):xChartTip(t,false)}});
+  if(XM.sel&&!e.target.closest('#xCardDock,#xCardPop,#xInDock,[data-xrng],#xgMini,.xmh,#xmFoot,.xmf')){const t=XM.sel;XM.sel=null;XM.tab==='in'?xinTip(t,false):xChartTip(t,false)}});
 /* touch screens send pretend mouse events with every tap; hover behavior ignores them, so a tap does only what it says */
 let xTouchAt=0;document.addEventListener('touchstart',()=>{xTouchAt=Date.now()},{passive:true,capture:true});
 const xFakeHover=()=>Date.now()-xTouchAt<1000;
@@ -2866,7 +2863,7 @@ document.addEventListener('mouseover',e=>{if($('xm').hidden||XM.tab!=='in'||xFak
 document.addEventListener('mouseout',e=>{if($('xm').hidden||XM.tab!=='in'||xFakeHover())return;const tt=e.target.closest&&e.target.closest('#xmBody .xtile[data-ht]');if(tt&&!(e.relatedTarget&&e.relatedTarget.closest&&e.relatedTarget.closest('#xmBody .xtile[data-ht]')))xinTip(tt.dataset.ht,false)});
 addEventListener('resize',()=>{if($('xm').hidden||XM.tab!=='in')return;cancelAnimationFrame(XM.rz);XM.rz=requestAnimationFrame(()=>{xinFit();xinPaint()})});
 document.addEventListener('pointerover',e=>{if(!e.target.closest)return;const tr=e.target.closest('tr');const o=e.target.closest('[data-xopen]')||(tr&&tr.querySelector('[data-xopen]'));if(o&&o.dataset.xopen!=='TPS'&&!XDATA[o.dataset.xopen])xLoad(o.dataset.xopen).catch(()=>{});if(e.target.closest('[data-xpf][data-xtab="alt"]')&&!XPOOL)xPoolLoad().catch(()=>{});const L=e.target.closest('[data-xopen][data-xtab="in"]');if(L&&L.dataset.xopen!=='TPS'&&!XIN[L.dataset.xopen])xinLoad(L.dataset.xopen).catch(()=>{})});
-document.addEventListener('keydown',e=>{if($('xm').hidden)return;if(e.key==='Escape'){e.stopPropagation();if($('xmDrawer').classList.contains('open')){xDrawer(false);$('xmHow').focus()}else closeExplore()}
+document.addEventListener('keydown',e=>{if($('xm').hidden)return;if(e.key==='Escape'){e.stopPropagation();const pp=$('xCardPop');if(pp&&!pp.hidden){const t=XM.sel;XM.sel=null;xChartTip(t,false)}else closeExplore()}
   if(e.key==='Tab'){const f=[...$('xm').querySelectorAll('button:not(:disabled),[tabindex="0"]')].filter(x=>x.offsetParent);if(!f.length)return;const i=f.indexOf(document.activeElement);if(e.shiftKey&&i<=0){e.preventDefault();f[f.length-1].focus()}else if(!e.shiftKey&&i===f.length-1){e.preventDefault();f[0].focus()}}},true);
 document.addEventListener('mouseover',e=>{if($('xm').hidden||xFakeHover())return;const p=e.target.closest('#xmBody .xpt');if(p){xChartTip(p.dataset.xt,true);return}
   const lk=e.target.closest('#xmBody .xlegend .li[data-xk]');if(lk){const svg=document.querySelector('#xmBody .xfig svg');if(svg){svg.querySelector('.xdots').classList.add('xfade');svg.querySelectorAll('.xpt').forEach(g=>g.classList.toggle('on',g.dataset.xk===lk.dataset.xk))}return}
