@@ -2449,7 +2449,7 @@ function xSetRange(k){XM.rng=k;XM.rngSet=1;const d=XM.d;if(!d)return;
   document.querySelectorAll('#xmBody [data-xrng]').forEach(b=>{const on=b.dataset.xrng===k;b.classList.toggle('sel',on);b.setAttribute('aria-pressed',on)});{const w=document.querySelector('#xmBody .xgwrap');if(w&&w._h0&&!XGMINI())xgPaint(w,XG.cur);if(w&&XGMINI())setTimeout(()=>xgSync(true),0)}
   document.querySelectorAll('#xmBody .xcard').forEach(card=>{const c=xFind(card.dataset.xc);const rk=card.querySelector('.xrisk'),lb=card.querySelector('.xrlr'),hr=card.querySelector('.xhero');if(c&&rk)rk.innerHTML=xRiskTiles(c,d.self,XM.tab==='alt');if(lb)lb.textContent=`Risk vs ${d.self.t} · ${xRngLbl()}`;if(c&&hr&&['self','same','div','mom','own'].includes(c.k))hr.outerHTML=xHero(c,d.self,c.k)});
   {const T=$('xCmp');if(T){T.innerHTML=xCmpTable();renderXMButtons()}}
-  const rs=xRisk(d.self),gs=$('xgSh'),gd=$('xgDd');if(gs)gs.innerHTML=`<span>Sharpe</span><b>${rs.sh==null?'—':rs.sh.toFixed(2)}</b>`;if(gd)gd.innerHTML=`<span>Max DD</span><b>${xu(rs.dd)}</b>`;if(XM.tab!=='in'){xMatchH();xFitNow()}if(XM.tab==='in'){xinPaint();const dk=$('xInDock');if(dk){dk.dataset.t='~';xinTip(null,false)}const n=$('xtmNote');if(n)n.textContent=xinNote()}}
+  const rs=xRisk(d.self),gs=$('xgSh'),gd=$('xgDd');if(gs)gs.innerHTML=`<span>Sharpe</span><b>${rs.sh==null?'—':rs.sh.toFixed(2)}</b>`;if(gd)gd.innerHTML=`<span>Max DD</span><b>${xu(rs.dd)}</b>`;if(XM.tab!=='in'){xMatchH();xFitNow()}if(XM.tab==='in'){xinPaint();const dk=$('xInDock');if(dk){dk.dataset.t='~';xinTip(null,false)}const ti=$('xtmTitle');if(ti)ti.title=xinNote()}}
 /* return vs volatility dot chart */
 function ph0(){return innerWidth<=1000}
 function xChart(d){const s=d.self,seen=new Set();const pts=[{...s,k:'self'}].concat(d.same.map(c=>({...c,k:'same'})),(d.closest||[]).map(c=>({...c,k:'same'})),d.div.map(c=>({...c,k:'div'})),(d.mom||[]).map(c=>({...c,k:'mom'})),(d.own||[]).map(c=>({...c,k:'own'}))).filter(p=>!seen.has(p.t)&&seen.add(p.t));
@@ -2614,10 +2614,9 @@ function renderXI(){const b=$('xmBody');renderXMFoot();xSizeModal();
   const d=XM.d;if(!d){b.innerHTML='<div class="xskel" style="height:440px"></div>';return}
   const s=d.self||{t:d.t},t=d.t;
   if(!xinEq(d)||!['stk','ind','sec'].includes(XM.tmMode))XM.tmMode='stk';
-  const fig=xinEq(d)?`<figure class="xtmfig"><div class="xtmh"><div class="xtmhr"><b id="xtmTitle">${xinTitle()}</b>${xTmToggle()}</div><span id="xtmNote">${xinNote()}</span></div><div class="xtm" id="xTm"></div></figure>`:xinAssetsHTML(d);
+  const fig=xinEq(d)?`<figure class="xtmfig"><div class="xtmh"><div class="xtmhr"><b id="xtmTitle" title="${esc(xinNote())}">${xinTitle()}</b>${xTmToggle()}</div></div><div class="xtm" id="xTm"></div></figure>`:xinAssetsHTML(d);
   xSetGlance('');xSizeModal();
-  b.innerHTML=`<div class="xtop xin">${fig}<div class="xcdock xidock" id="xInDock">${xAboutCard(d)}</div></div>
-    <p class="xdisc">${d.pf?"Each ETF's top holdings (up to 50), weighted by your percentages. A stock in one ETF's list but further down in another only counts the listed part, so overlaps are a floor. Sectors cover every holding. ":''}${xinSec(d)?`Holdings from ${esc(d.via||t)}'s reports to the SEC (Form N-PORT), which come out about two months after each quarter; shares since the latest report are moved with prices.`:'Holdings from Yahoo Finance.'} "Everything else" is worked out from the fund's own return, so treat it as an estimate. Past performance doesn't guarantee future results.</p>`;
+  b.innerHTML=`<div class="xtop xin">${fig}<div class="xcdock xidock" id="xInDock">${xAboutCard(d)}</div></div>`;
   $('xInDock').dataset.t='';xinFit();xinFitRow();xinPaint();if(XM.sel&&xFind(XM.sel))xinTip(XM.sel,true);
   if(document.fonts&&document.fonts.status!=='loaded')document.fonts.ready.then(()=>{if(XM.tab==='in'&&!$('xm').hidden){xinFit();xinFitRow();xinPaint()}})}
 
@@ -2739,7 +2738,7 @@ function xHoldCard(c,s,noload){const k=xRk(),nm=c.n||c.hn||'';if(c.t&&!c.d&&XSTK
   const add=xinAdded(c,k),wd=k===5?XRWORD['1Y']:XRWORD[XM.rng];
   const via=XM.d&&XM.d.pf&&c.src?`Held through ${xList(c.src.map(([t,w])=>`${esc(t)} (${xw(w)})`))}.`:'';
   const then=xinShare(c,k),was=Math.abs(then-c.wt)>=0.0005?`Was about ${xw(then)} of ${esc(s.t)} ${XAGO[XM.rng]}.`:'';
-  const why=[via,was,add==null?'':`Added <b class="${add>=0?'pos':'neg'}">${xpts(add)} pts</b> to ${esc(s.t)}'s return ${wd}.`].filter(Boolean).join(' ');
+  const why=via;
   /* Yahoo's description when we have it, else its industry and sector */
   const ds=c.ds||[c.ind,c.sec].filter(Boolean).join(' · ');
   return `<article class="xcard" data-xc="${esc(c.t)}" style="--xc:var(--xs)"><div class="xch"><div><b>${esc(c.t)}</b><span class="nm">${esc(nm)}</span></div><span class="xchip s">${c.wt>0?`${xw(c.wt)} of ${esc(s.t)}`:`Not in the top ${xinN(XM.d)} now`}</span></div>
@@ -2852,15 +2851,14 @@ function xFitChart(){if(ph0()||!XM.d)return;const dock=$('xCardDock'),fig=docume
   /* the window has a fixed height, so the chart also grows into any room left below it */
   const B=$('xmBody'),lc=B&&B.lastElementChild,spare=lc?Math.max(0,B.clientHeight-parseFloat(getComputedStyle(B).paddingBottom)-(lc.offsetTop+lc.offsetHeight-B.offsetTop)-10):0;const xCapH=innerWidth>=1880?780:560;mx=Math.max(mx,Math.min(fig.offsetHeight+spare,Math.round(fig.offsetWidth/1.35),xCapH));
   /* when the window has room, make both panels taller so the card's line chart gets about 120px more */
-  mx=Math.max(mx,Math.min(cardH+120,fig.offsetHeight+spare));const tp=document.querySelector('#xmBody .xtop');if(tp&&B){const av=B.clientHeight-(tp.offsetTop-B.offsetTop)-parseFloat(getComputedStyle(B).paddingBottom)-14;if(av>200)mx=Math.min(mx,av)}
+  mx=Math.max(mx,Math.min(cardH+120,fig.offsetHeight+spare));const tp=document.querySelector('#xmBody .xtop');if(tp&&B){const av=B.clientHeight-(tp.offsetTop-B.offsetTop)-parseFloat(getComputedStyle(B).paddingBottom)-14;if(av>200)mx=av}
   const svg=fig.querySelector('svg'),r={width:svg.clientWidth,height:svg.clientHeight},want=mx-(fig.offsetHeight-r.height);if(r.width&&Math.abs(want-r.height)>2){const vb=svg.viewBox.baseVal;XM.chH=Math.round(want*vb.width/r.width)-20;const nf=document.createElement('div');nf.innerHTML=xChart(d);fig.replaceWith(nf.firstElementChild);renderXMButtons()}
-  /* give back whatever height is still empty below the content, so the Alternatives window ends where its content ends instead of matching the taller Under the hood window */
-  if(XM.tab==='alt'&&XM.openTab!=='in'){const tp2=B.querySelector('.xtop');if(tp2&&tp2.offsetHeight>100){const sp2=B.clientHeight-parseFloat(getComputedStyle(B).paddingBottom)-(tp2.offsetTop+tp2.offsetHeight-B.offsetTop)-10;if(sp2>8&&sp2<500){const md=$('xm').querySelector('.xmd');if(md){const nh=md.offsetHeight-sp2;md.style.height=nh+'px';md.style.minHeight=nh+'px';XM.anchorH=nh}}}}}
+  /* the window keeps its height and the chart row fills it, so nothing shifts once the data arrives */}
 function dayFmt(k){return MON[+k.slice(5,7)-1]+' '+(+k.slice(8))+', '+k.slice(0,4)}
 document.addEventListener('click',e=>{{const q=e.target.closest('[data-xpf]');if(q){e.preventDefault();e.stopPropagation();openExplorePf(q.dataset.xpf,q,q.dataset.xtab);return}}const o=e.target.closest('[data-xopen]');if(o){e.preventDefault();openExplore(o.dataset.xopen,o,o.dataset.xtab);return}
   if($('xm').hidden)return;
   {const b=e.target.closest('#xm .xtab');if(b){xTab(b.dataset.xtab);return}}
-  {const v=e.target.closest('#xmBody [data-xtmm]');if(v){XM.tmMode=v.dataset.xtmm;document.querySelectorAll('#xmBody [data-xtmm]').forEach(b=>{const on=b===v;b.classList.toggle('sel',on);b.setAttribute('aria-pressed',on)});const ti=$('xtmTitle'),n=$('xtmNote');if(ti)ti.innerHTML=xinTitle();if(n)n.textContent=xinNote();if(XM.tmMode!=='stk'&&XM.sel){XM.sel=null;const dk=$('xInDock');if(dk)dk.dataset.t='~';xinTip(null,false)}xinPaint();return}}
+  {const v=e.target.closest('#xmBody [data-xtmm]');if(v){XM.tmMode=v.dataset.xtmm;document.querySelectorAll('#xmBody [data-xtmm]').forEach(b=>{const on=b===v;b.classList.toggle('sel',on);b.setAttribute('aria-pressed',on)});const ti=$('xtmTitle');if(ti){ti.innerHTML=xinTitle();ti.title=xinNote()}if(XM.tmMode!=='stk'&&XM.sel){XM.sel=null;const dk=$('xInDock');if(dk)dk.dataset.t='~';xinTip(null,false)}xinPaint();return}}
   {const g=e.target.closest('#xmBody [data-xgo]');if(g){xTab(g.dataset.xgo);return}}
   {const m=e.target.closest('#xmBody [data-xsm]');if(m){XM.secMode=m.dataset.xsm;const el=$('xinSec');if(el)el.outerHTML=xinSecHTML(XM.d);return}}
   {const tt=e.target.closest('#xmBody .xtile[data-ht]');if(tt){const t=tt.dataset.ht;XM.sel=XM.sel===t?null:t;$('xInDock').dataset.t='~';xinTip(t,!!XM.sel);
