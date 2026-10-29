@@ -2,8 +2,12 @@ name: Refresh prices and deploy
 
 on:
   schedule:
-    # 12:17 UTC = 5:17am Pacific (4:17am in winter), Tuesday to Saturday,
-    # so each run picks up the prior trading day's close.
+    # GitHub starts scheduled runs 3 to 7 hours late (every day since Oct 1), so the main run
+    # is set right after the market closes: 23:17 UTC = 4:17pm Pacific (3:17pm in winter),
+    # Monday to Friday, about 2 hours after the close. Even a late start lands by evening.
+    - cron: "17 23 * * 1-5"
+    # Backup the next morning, which also picks up any overnight corrections to the close.
+    # Runs queue in the "pages" group below, so the two never overlap.
     - cron: "17 12 * * 2-6"
   workflow_dispatch:
     inputs:
