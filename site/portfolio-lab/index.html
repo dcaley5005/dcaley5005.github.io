@@ -2552,7 +2552,8 @@ const XHG=()=>innerWidth>640;
 function xSizeModal(){const md=$('xm').querySelector('.xmd'),h=$('xm').querySelector('.xmh');if(!md||!h)return;if(ph0()){md.style.height='';return}
   if(XM.anchorH){md.style.height=Math.min(XM.anchorH,innerHeight-24)+'px';return}
   const mw=innerWidth>=1880?Math.min(1640,innerWidth*.88):Math.min(1480,innerWidth*.94),lw=Math.max(330,Math.min(460,(mw-56)*.32)),fw=mw-56-lw-24;
-  const ft=$('xmFoot');md.style.height=Math.round(Math.min(innerHeight-24,1000,h.offsetHeight+(ft?ft.offsetHeight:49)+124+Math.max(590,fw/1.35)))+'px'}
+  /* open at the full height the screen allows, so the chart and card have room from the start and nothing grows later */
+  md.style.height=Math.round(Math.min(innerHeight-24,1000))+'px'}
 function xSetGlance(gl){XM.hg=XHG();return gl}
 addEventListener('resize',()=>{if($('xm').hidden||!XM.d)return;xSizeModal();if(XM.tab==='in'){xinFitRow();xinPaint()}if(XHG()!==XM.hg)xRender()});
 function renderXM(){const b=$('xmBody');renderXMFoot();XM.chH=null;xSizeModal();
