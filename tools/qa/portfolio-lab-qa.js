@@ -133,6 +133,9 @@ async function run() {
         await pg.evaluate(t => openExplore(t, null, 'in'), T); await sleep(2000);
         const u0 = await geo(pg);
         check(S, `Under the hood ${T}`, 'No at-a-glance strip', !(await pg.$('.xglance')), '');
+        /* funds that don't list stock holdings (most bond funds) show their asset split instead of a stock map */
+        if (!(await pg.$('#xTm'))) { check(S, `Under the hood ${T}`, 'Shows the asset split (no stock list for this fund)', !!(await pg.$('.xassets')), '');
+          shots.push(await pg.screenshot()); await pg.evaluate(() => { const c = document.getElementById('xmClose'); if (c && !document.getElementById('xm').hidden) c.click() }); await sleep(400); continue; }
         check(S, `Under the hood ${T}`, 'Stocks / Industries / Sectors toggle', !!(await pg.$('[data-xtmm="ind"]')), '');
         if (w > 1000 && u0.map) check(S, `Under the hood ${T}`, 'Map fills the window', u0.map >= u0.mdH * 0.5, `${u0.map}px of a ${u0.mdH}px window`);
         const tiles = await pg.$$eval('#xTm .xtile[data-ht]:not(.rest)', ts => ts.slice(0, 3).map(t => t.dataset.ht));
