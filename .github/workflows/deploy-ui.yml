@@ -60,12 +60,19 @@ jobs:
           # Fail (do not deploy) if no fresh artifact exists.
           if_no_artifact_found: fail
 
-      # Swap in exactly the two files this push changed. Everything else in
-      # _site is the morning refresh's output, untouched.
+      # Swap in the page files this push changed. Everything else in
+      # _site is the morning refresh's output, untouched. The preview copy
+      # is conditional: the preview file was removed from the repo, so a
+      # page-only push must not fail on it, and a stale preview page must
+      # not linger in the deployed site.
       - name: Swap in the new page files
         run: |
           cp site/portfolio-lab/index.html _site/portfolio-lab/index.html
-          cp site/portfolio-lab-preview/index.html _site/portfolio-lab-preview/index.html
+          if [ -f site/portfolio-lab-preview/index.html ]; then
+            cp site/portfolio-lab-preview/index.html _site/portfolio-lab-preview/index.html
+          else
+            rm -f _site/portfolio-lab-preview/index.html
+          fi
 
       - uses: actions/configure-pages@v5
 
