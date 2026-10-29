@@ -2764,8 +2764,7 @@ function xRestSeries(d){const s=d.self||{},k=xRk(),to=new Date(d.to+'T00:00:00Z'
 function xRestCard(d){const s=d.self||{},R=d.rest||{},k=xRk(),n=xinN(d),named=d.top.filter(c=>c.wt>0||c.pw);
   const left=i=>Math.max(0,1-named.reduce((a,c)=>a+xinShare(c,i),0)),rv=R.r?R.r[k]:null,fb=s.r?s.r[k]:null;
   const ka=k===5?4:k,ra=R.r?R.r[ka]:null,add=ra==null?null:left(ka)*ra;
-  const why=[`Was about ${xw(left(k))} of ${esc(s.t)} ${XAGO[XM.rng]}.`,add==null?'':`Added <b class="${add>=0?'pos':'neg'}">${xpts(add)} pts</b> to ${esc(s.t)}'s return ${k===5?XRWORD['1Y']:XRWORD[XM.rng]}.`,
-    R.cash>0.003?`Includes about ${xw(R.cash)} in cash and cash-like funds.`:''].filter(Boolean).join(' ');
+  const why=R.cash>0.003?`Includes about ${xw(R.cash)} in cash and cash-like funds.`:'';
   const need=(d.top||[]).filter(c=>c.t&&XSTK[c.t]===undefined);
   if(need.length)Promise.all(need.map(c=>xStkLoad(c.t))).then(()=>{const dk=$('xInDock');if(dk&&dk.firstElementChild&&dk.firstElementChild.dataset.xc==='~rest'){dk.dataset.t='~';xinTip(XM.sel||'~rest',true)}});
   const rc=need.length?null:xFind('~rest'),line=rc&&rc.d&&rc.w&&s.d&&s.w;
@@ -2773,7 +2772,7 @@ function xRestCard(d){const s=d.self||{},R=d.rest||{},k=xRk(),n=xinN(d),named=d.
     <p class="xfdesc">Everything ${esc(s.t)} holds outside its top ${n}. Its return is ${esc(s.t)}'s own return minus what the top ${n} added, so treat it as an estimate.</p>${xToggle()}
     ${rv==null?'':`<div class="xhero"><b class="${rv>=0?'pos':'neg'}">≈ ${xp(rv)}</b><span class="u">${k===5?'/ yr, 3Y':esc(XM.rng)}</span>${fb==null?'':`<span class="xpill ${rv-fb>=0?'up':'dn'}">${xpts(rv-fb)} pts vs ${esc(s.t)}</span>`}</div>`}
     ${line?xSpark(rc,s,'var(--xs)','~rest'):need.length?`<div class="xspark xwait"><svg viewBox="0 0 300 60" preserveAspectRatio="none" aria-hidden="true"><line x1="0" x2="300" y1="30" y2="30" stroke="var(--line)" vector-effect="non-scaling-stroke"/></svg><div class="lg"><span>&nbsp;</span></div></div>`:'<div class="xnoline">Not enough price history for a line chart</div>'}
-    <p class="xwhy">${why}</p></article>`}
+    ${why?`<p class="xwhy">${why}</p>`:''}</article>`}
 /* swap the card on the right: the hovered or locked holding, else the fund's About card */
 function xinTip(t,on){const dock=$('xInDock'),d=XM.d;if(!dock||!d)return;const show=on?t:XM.sel;
   const tm=$('xTm');if(tm){tm.classList.toggle('fade',!!show);tm.querySelectorAll('.xtile[data-ht]').forEach(x=>x.classList.toggle('on',x.dataset.ht===show))}
