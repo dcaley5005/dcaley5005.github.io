@@ -1006,7 +1006,7 @@ tr.xecho>td{background:var(--accentBg);transition:background .2s}
 .xflip.on .xface.bk{visibility:visible}
 .xflip.on .xface.fr{visibility:hidden}
 .xface.fr{overflow-y:auto}
-.xface.fr .xspark{flex:1 1 auto;min-height:0;display:flex;flex-direction:column}
+.xface.fr .xspark{flex:1 1 auto;min-height:63px;display:flex;flex-direction:column}
 .xface.fr .xspark svg{flex:1 1 auto;height:auto;min-height:44px}
 .xflipbtn{display:flex;align-items:center;gap:12px;width:100%;padding:10px 14px;border-radius:12px;border:1px solid color-mix(in srgb,var(--xo) 55%,transparent);background:linear-gradient(180deg,color-mix(in srgb,var(--xo) 26%,var(--panel2)),color-mix(in srgb,var(--xo) 14%,var(--panel2)));color:var(--ink);font:600 16px "IBM Plex Sans",sans-serif;cursor:pointer;margin-top:10px;text-align:left}
 .xflipbtn .xic{flex:none;width:38px;height:38px;border-radius:10px;background:color-mix(in srgb,var(--xo) 30%,var(--panel));display:flex;align-items:center;justify-content:center;color:var(--xo)}
@@ -2393,7 +2393,7 @@ function xHero(c,s,kind){const k=xRk();
   return `<div class="xhero"><b class="${v>=0?'pos':'neg'}">${xp(v)}</b><span class="u">${lab}</span><span class="xpill ${v-bv>=0?'up':'dn'}">${xpts(v-bv)} pts vs ${esc(s.t)}</span></div>`}
 function xCorrWord(v){return v>=.85?'Nearly identical':v>=.70?'Very similar':v>=.60?'Some diversification':'Strong diversification'}
 function xToggle(){return `<div class="xseg xrngseg" role="group" aria-label="Chart period">${XR.map(([l,k])=>`<button type="button" data-xrng="${k}" class="${XM.rng===k?'sel':''}" aria-pressed="${XM.rng===k}">${l}</button>`).join('')}</div>`}
-function xDescFill(card){const el=card&&card.querySelector('[data-xdesc]');if(!el||el.dataset.done)return;el.dataset.done='1';const t=card.dataset.xc;xinLoad(t).then(d=>{const b=d.blurb||xAutoBlurb(d);if(b){el.textContent=b;el.hidden=false}else el.remove()}).catch(()=>el.remove())}
+function xDescFill(card){const el=card&&card.querySelector('[data-xdesc]');if(!el||el.dataset.done)return;el.dataset.done='1';const t=card.dataset.xc;xinLoad(t).then(d=>{const b=d.blurb||xAutoBlurb(d);if(b){el.textContent=b;el.hidden=false;xMatchH();xGrowModal()}else el.remove()}).catch(()=>el.remove())}
 function xCard(c,s,kind,flip){const col=XCOL[kind];
   const head=`<div class="xch"><div><b>${esc(c.t)}</b><span class="nm">${esc(c.n||NAMES[c.t]||'')}</span></div></div>`;
   const main=`<p class="xfdesc" data-xdesc hidden></p>${xToggle()}${xHero(c,s,kind)}
@@ -2486,9 +2486,10 @@ function xChartTip(t,on){if(!on&&XM.sel){t=XM.sel;on=true}
   if(svg)svg.querySelectorAll('.xpt').forEach(g=>g.classList.toggle('pinned',!!XM.sel&&g.dataset.xt===XM.sel));
   if(!dock||!leg||!p){if(wdock&&!wdock.hidden){wdock.hidden=true;wdock.innerHTML='';wdock.dataset.t=''}if(pop&&!pop.hidden){pop.hidden=true;if(pdock){pdock.innerHTML='';pdock.dataset.t=''}}if(leg)leg.classList.remove('showcard');xMatchH();return xTipBase(t,on)}
   xTipBase(t,false);if(svg){svg.querySelector('.xdots').classList.add('xfade');svg.querySelectorAll('.xpt').forEach(g=>g.classList.toggle('on',g.dataset.xt===t))}
-  if(dock.dataset.t!==t){dock.innerHTML=p.k==='self'?xSelfCard(XM.d.self):xCard(p,XM.d.self,p.k,true);dock.dataset.t=t}dock.firstElementChild.classList.toggle('hl',XM.sel===t);if(mob)pop.hidden=false;else{wdock.hidden=false;leg.classList.add('showcard')}renderXMButtons();xDescFill(dock.firstElementChild);xMatchH()}
+  if(dock.dataset.t!==t){dock.innerHTML=p.k==='self'?xSelfCard(XM.d.self):xCard(p,XM.d.self,p.k,true);dock.dataset.t=t}dock.firstElementChild.classList.toggle('hl',XM.sel===t);if(mob)pop.hidden=false;else{wdock.hidden=false;leg.classList.add('showcard')}renderXMButtons();xDescFill(dock.firstElementChild);xMatchH();if(!mob&&XM.sel===t)xGrowModal()}
 /* the card and the chart box share one height */
-function xMatchH(){const fig=document.querySelector('#xmBody .xfig'),dock=$('xCardDock'),c=dock&&!dock.hidden&&dock.firstElementChild;if(!fig||!c||ph0())return;c.style.height=fig.offsetHeight+'px'}
+function xMatchH(){const fig=document.querySelector('#xmBody .xfig'),dock=$('xCardDock'),c=dock&&!dock.hidden&&dock.firstElementChild;if(!fig||!c||ph0())return;const fr=c.querySelector('.xface.fr');let need=0;if(fr)need=fr.scrollHeight+(c.offsetHeight-fr.clientHeight);c.style.height=Math.max(fig.offsetHeight,need)+'px'}
+function xGrowModal(){if(ph0())return;const B=$('xmBody'),md=$('xm').querySelector('.xmd'),tp=B&&B.querySelector('.xtop');if(!B||!md||!tp)return;const need=tp.offsetHeight+(tp.offsetTop-B.offsetTop)+parseFloat(getComputedStyle(B).paddingBottom)+14;if(need>B.clientHeight){const nh=Math.min(innerHeight-24,md.offsetHeight+(need-B.clientHeight));if(nh>md.offsetHeight){md.style.height=nh+'px';md.style.minHeight=nh+'px';XM.anchorH=nh}}}
 function xTipBase(t,on){const tip=$('xChartTip'),svg=document.querySelector('#xmBody .xfig svg');if(!tip||!svg)return;const zone=svg.querySelector('.xzone');
   svg.querySelector('.xdots').classList.toggle('xfade',!!on&&t!==XM.d.self.t);svg.querySelectorAll('.xpt').forEach(g=>g.classList.toggle('on',on&&g.dataset.xt===t));
   document.querySelectorAll('#xmBody .xcard').forEach(c=>c.classList.toggle('hl',on&&c.dataset.xc===t));document.querySelectorAll('#xmBody .xcards').forEach(c=>c.classList.toggle('dim',!!on&&!!c.querySelector('.xcard.hl')));
