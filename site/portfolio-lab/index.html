@@ -1033,7 +1033,7 @@ tr.xecho>td{background:var(--accentBg);transition:background .2s}
 .xrngseg button{font-size:12.5px;padding:6px 2px}
 .xpop{position:fixed;inset:0;z-index:95;background:rgba(10,10,8,.55);display:flex;align-items:center;justify-content:center;padding:14px}
 .xpop[hidden]{display:none}
-.xpopwrap{position:relative;width:100%;max-width:430px;height:min(680px,100%);display:flex}
+.xpopwrap{position:relative;width:100%;max-width:430px;height:min(740px,100%);display:flex}
 .xpopdock{flex:1 1 auto;display:flex;min-width:0}
 .xpopdock .xcard{flex:1 1 auto;height:100%;min-height:0}
 .xfacex{display:none;position:absolute;top:12px;right:12px;z-index:5;width:36px;height:36px;border-radius:50%;border:1px solid var(--inputLine);background:var(--panel);color:var(--ink);align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.3)}
@@ -2370,7 +2370,15 @@ function xHero(c,s,kind){const k=xRk();
   return `<div class="xhero"><b class="${v>=0?'pos':'neg'}">${xp(v)}</b><span class="u">${lab}</span><span class="xpill ${v-bv>=0?'up':'dn'}">${xpts(v-bv)} pts vs ${esc(s.t)}</span></div>`}
 function xCorrWord(v){return v>=.85?'Nearly identical':v>=.70?'Very similar':v>=.60?'Some diversification':'Strong diversification'}
 function xToggle(){return `<div class="xseg xrngseg" role="group" aria-label="Chart period">${XR.map(([l,k])=>`<button type="button" data-xrng="${k}" class="${XM.rng===k?'sel':''}" aria-pressed="${XM.rng===k}">${l}</button>`).join('')}</div>`}
-function xDescFill(card){const el=card&&card.querySelector('[data-xdesc]');if(!el||el.dataset.done)return;el.dataset.done='1';const t=card.dataset.xc;xinLoad(t).then(d=>{const b=d.blurb||xAutoBlurb(d);if(b){el.textContent=b;el.hidden=false;xMatchH();xGrowModal()}else el.remove()}).catch(()=>el.remove())}
+function xDescFill(card){const el=card&&card.querySelector('[data-xdesc]');if(!el||el.dataset.done)return;el.dataset.done='1';const t=card.dataset.xc;xinLoad(t).then(d=>{const b=d.blurb||xAutoBlurb(d);if(b){el.textContent=b;el.hidden=false}else el.remove();xGrowRow()}).catch(()=>{el.remove();xGrowRow()})}
+/* once the card's description is in, make the chart row tall enough for the card plus about 120px of room for its line chart, as far as the window allows */
+function xGrowRow(){if(ph0())return;const B=$('xmBody'),md=$('xm').querySelector('.xmd'),tp=B&&B.querySelector('.xtop'),fig=B&&B.querySelector('.xfig'),dk=$('xCardDock'),c=dk&&!dk.hidden&&dk.firstElementChild,fr=c&&c.querySelector('.xface.fr');
+  if(!B||!md||!tp||!fig||!fr||!XM.d){xMatchH();xGrowModal();return}
+  /* the card's natural height: its line chart at the base 60px, not stretched to the current row */
+  const sv0=fr.querySelector('.xspark svg'),need=fr.scrollHeight+(c.offsetHeight-fr.clientHeight)-Math.max(0,(sv0?sv0.clientHeight:60)-60),pb=parseFloat(getComputedStyle(B).paddingBottom),chrome=md.offsetHeight-B.clientHeight;
+  const maxRow=Math.min(innerHeight-24,1000)-chrome-(tp.offsetTop-B.offsetTop)-pb-14,row=Math.min(need+120,maxRow),svg=fig.querySelector('svg');
+  if(svg&&svg.clientWidth&&row>fig.offsetHeight+2){const want=row-(fig.offsetHeight-svg.clientHeight),vb=svg.viewBox.baseVal;XM.chH=Math.round(want*vb.width/svg.clientWidth)-20;const nf=document.createElement('div');nf.innerHTML=xChart(XM.d);fig.replaceWith(nf.firstElementChild);renderXMButtons();document.querySelectorAll('#xmBody .xpt').forEach(g=>g.classList.toggle('on',g.dataset.xt===XM.sel))}
+  xMatchH();xGrowModal()}
 function xCard(c,s,kind,flip){const col=XCOL[kind];
   const head=`<div class="xch"><div><b>${esc(c.t)}</b><span class="nm">${esc(c.n||NAMES[c.t]||'')}</span></div></div>`;
   const main=`<p class="xfdesc" data-xdesc hidden></p>${xToggle()}${xHero(c,s,kind)}
@@ -2816,9 +2824,11 @@ function xFitNow(){if(ph0()||!XM.d||XM.tab==='in')return;const B=$('xmBody'),fig
 function xFitChart(){if(ph0()||!XM.d)return;const dock=$('xCardDock'),fig=document.querySelector('#xmBody .xfig'),leg=document.querySelector('#xmBody .xlegend');if(!dock||!fig||!leg)return;const d=XM.d;
   const was=dock.hidden,html=dock.innerHTML,show=leg.classList.contains('showcard');dock.style.visibility='hidden';dock.hidden=false;leg.classList.add('showcard');let mx=0;
   [d.self,...d.same,...(d.closest||[]),...d.div,...(d.mom||[]),...(d.own||[])].forEach(c=>{const q=xFind(c.t);if(!q)return;dock.innerHTML=q.k==='self'?xSelfCard(d.self):xCard(q,d.self,q.k);mx=Math.max(mx,dock.firstElementChild.offsetHeight)});
-  dock.innerHTML=html;dock.hidden=was;dock.style.visibility='';if(!show)leg.classList.remove('showcard');
+  dock.innerHTML=html;dock.hidden=was;dock.style.visibility='';if(!show)leg.classList.remove('showcard');const cardH=mx;
   /* the window has a fixed height, so the chart also grows into any room left below it */
-  const B=$('xmBody'),lc=B&&B.lastElementChild,spare=lc?Math.max(0,B.clientHeight-parseFloat(getComputedStyle(B).paddingBottom)-(lc.offsetTop+lc.offsetHeight-B.offsetTop)-10):0;const xCapH=innerWidth>=1880?780:560;mx=Math.max(mx,Math.min(fig.offsetHeight+spare,Math.round(fig.offsetWidth/1.35),xCapH));const tp=document.querySelector('#xmBody .xtop');if(tp&&B){const av=B.clientHeight-(tp.offsetTop-B.offsetTop)-parseFloat(getComputedStyle(B).paddingBottom)-14;if(av>200)mx=Math.min(mx,av)}
+  const B=$('xmBody'),lc=B&&B.lastElementChild,spare=lc?Math.max(0,B.clientHeight-parseFloat(getComputedStyle(B).paddingBottom)-(lc.offsetTop+lc.offsetHeight-B.offsetTop)-10):0;const xCapH=innerWidth>=1880?780:560;mx=Math.max(mx,Math.min(fig.offsetHeight+spare,Math.round(fig.offsetWidth/1.35),xCapH));
+  /* when the window has room, make both panels taller so the card's line chart gets about 120px more */
+  mx=Math.max(mx,Math.min(cardH+120,fig.offsetHeight+spare));const tp=document.querySelector('#xmBody .xtop');if(tp&&B){const av=B.clientHeight-(tp.offsetTop-B.offsetTop)-parseFloat(getComputedStyle(B).paddingBottom)-14;if(av>200)mx=Math.min(mx,av)}
   const svg=fig.querySelector('svg'),r={width:svg.clientWidth,height:svg.clientHeight},want=mx-(fig.offsetHeight-r.height);if(r.width&&Math.abs(want-r.height)>2){const vb=svg.viewBox.baseVal;XM.chH=Math.round(want*vb.width/r.width)-20;const nf=document.createElement('div');nf.innerHTML=xChart(d);fig.replaceWith(nf.firstElementChild);renderXMButtons()}
   /* give back whatever height is still empty below the content, so the Alternatives window ends where its content ends instead of matching the taller Under the hood window */
   if(XM.tab==='alt'&&XM.openTab!=='in'){const tp2=B.querySelector('.xtop');if(tp2&&tp2.offsetHeight>100){const sp2=B.clientHeight-parseFloat(getComputedStyle(B).paddingBottom)-(tp2.offsetTop+tp2.offsetHeight-B.offsetTop)-10;if(sp2>8&&sp2<500){const md=$('xm').querySelector('.xmd');if(md){const nh=md.offsetHeight-sp2;md.style.height=nh+'px';md.style.minHeight=nh+'px';XM.anchorH=nh}}}}}
