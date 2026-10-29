@@ -2,7 +2,9 @@
  * and measure the things that kept breaking (see .claude/skills/portfolio-lab-qa/SKILL.md).
  *
  *   node tools/qa/portfolio-lab-qa.js --root <folder with portfolio-lab/ and its data/> [--out <dir>] [--only phone,ipadL] [--tickers SPY,QQQ]
- *   node tools/qa/portfolio-lab-qa.js --base https://danielcaley.com/portfolio-lab-preview/ [...]
+ *   node tools/qa/portfolio-lab-qa.js --live https://danielcaley.com/ [--page portfolio-lab-preview] [...]
+ *     tests the real site: files are fetched with curl (which goes through the session's proxy and certificates)
+ *     and served to the browser locally, so the page runs on live data. --page picks the preview or portfolio-lab.
  *
  * Writes report.md, results.json and one screenshot sheet per size to --out. Exit code 1 if anything failed.
  */
@@ -10,8 +12,8 @@ const { chromium } = require('playwright');
 const http = require('http'), fs = require('fs'), path = require('path');
 
 const arg = (k, d) => { const i = process.argv.indexOf('--' + k); return i > 0 ? process.argv[i + 1] : d; };
-const LAT = +arg('latency', '300'), ROOT = arg('root'), BASE0 = arg('base'), OUT = arg('out', 'qa-out'), ONLY = arg('only'), TICKERS = (arg('tickers', 'SPY,QQQ')).split(',');
-if (!ROOT && !BASE0) { console.error('Give --root <site folder> or --base <url>'); process.exit(2); }
+const LIVE = arg('live'), PAGE = arg('page', 'portfolio-lab-preview'), LAT = +arg('latency', '300'), ROOT = arg('root'), BASE0 = arg('base'), OUT = arg('out', 'qa-out'), ONLY = arg('only'), TICKERS = (arg('tickers', 'SPY,QQQ')).split(',');
+if (!ROOT && !BASE0 && !LIVE) { console.error('Give --root <site folder>, --live <site url> or --base <url>'); process.exit(2); }
 fs.mkdirSync(OUT, { recursive: true });
 
 /* every size we've had a bug at; touch = tap like a finger, mouse = hover exists */
@@ -23,6 +25,15 @@ const SIZES = [
 
 let srv, BASE = BASE0;
 const miss = [];
+if (LIVE) {   /* the page under test from --page, its data from the live portfolio-lab/data/, each file fetched once */
+  const { execFile } = require('child_process'), cache = new Map(), site = LIVE.replace(/\/?$/, '/');
+  const remote = u => u.startsWith('/portfolio-lab/data/') ? site + u.slice(1) : u.startsWith('/portfolio-lab/') ? site + PAGE + '/' + u.slice('/portfolio-lab/'.length) : site + u.slice(1);
+  const get = u => { if (!cache.has(u)) cache.set(u, new Promise(res => execFile('curl', ['-sS', '--compressed', '-w', '\n%{http_code}', remote(u)], { encoding: 'buffer', maxBuffer: 64 << 20 }, (e, out) => {
+    if (e || !out) return res(null); const i = out.lastIndexOf(10), code = +out.slice(i + 1).toString(); res(code === 200 ? out.slice(0, i) : null) }))); return cache.get(u) };
+  srv = http.createServer(async (q, r) => { let u = decodeURIComponent(q.url.split('?')[0]); if (u.endsWith('/')) u += 'index.html'; if (u.endsWith('/index.html')) u = u.slice(0, -10);
+    const b = await get(u); if (!b) { miss.push(q.url); r.writeHead(404); r.end() } else { r.writeHead(200, { 'Content-Type': /\.json$/.test(u) ? 'application/json' : /\.csv$/.test(u) ? 'text/csv' : 'text/html' }); r.end(b) } }).listen(8799);
+  BASE = 'http://localhost:8799/portfolio-lab/';
+}
 if (ROOT) {
   srv = http.createServer((q, r) => { let p = path.join(ROOT, decodeURIComponent(q.url.split('?')[0])); if (p.endsWith('/')) p += 'index.html';
     /* per-fund files arrive a little late, like on a real connection; instant answers hide layout jumps */
@@ -154,7 +165,7 @@ async function run() {
   await br.close(); if (srv) srv.close();
   /* a missing page-wide file is a real problem; a missing per-fund file usually means the local data copy is partial */
   const nf = miss.filter(u => !/favicon/.test(u)), core = nf.filter(u => !/\/data\/(inside|peers|stock|t)\//.test(u)), fund = nf.length - core.length;
-  if (ROOT) { check('all', 'Data', 'No missing page-wide files', core.length === 0, core.slice(0, 5).join(', '));
+  if (ROOT || LIVE) { check('all', 'Data', 'No missing page-wide files', core.length === 0, core.slice(0, 5).join(', '));
     if (fund) check('all', 'Data', 'Per-fund files', null, `${fund} not in this data copy, so cards for those funds ran without their details`); }
   const fail = results.filter(r => r.ok === false), un = results.filter(r => r.ok === null);
   let md = `# Portfolio Lab QA\n\n${results.length} checks: ${results.length - fail.length - un.length} passed, ${fail.length} failed, ${un.length} unchecked.\n\nSizes: ${SIZES.map(s => `${s[0]} ${s[1]}x${s[2]} (${s[3]})`).join(', ')}. Light mode everywhere, dark on phone and laptop. Engine: Chromium only (iPhone and iPad Chrome use Safari's engine, so check animations on a real device).\n\n`;

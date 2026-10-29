@@ -17,13 +17,13 @@ test never reached. This skill exists so those get caught before Dan sees them.
 
 ## How
 
-1. Get a copy of the site with real data:
-   - Best: the live preview, once `danielcaley.com` is reachable from the session:
-     `node tools/qa/portfolio-lab-qa.js --base https://danielcaley.com/portfolio-lab-preview/ --out <dir>`
-   - Otherwise a local folder holding `portfolio-lab/index.html` (the page under test) and `portfolio-lab/data/`
-     from a real build: `node tools/qa/portfolio-lab-qa.js --root <folder> --out <dir>`.
-     Say which data it is and how old. Never add made-up data files to make a test pass. If a check
-     needs data the copy doesn't have, it stays unchecked and the report says so.
+1. Test the real site with live data (the session can reach danielcaley.com):
+   `node tools/qa/portfolio-lab-qa.js --live https://danielcaley.com/ --page portfolio-lab-preview --out <dir>`
+   tests the open pull request's preview; `--page portfolio-lab` tests the live page after a merge.
+   Files come through curl (the session's proxy and certificates) and are served to the browser locally.
+   If the site isn't reachable, use a local folder holding `portfolio-lab/index.html` and real
+   `portfolio-lab/data/`: `--root <folder>`. Say which data it is and how old. Never add made-up data
+   files to make a test pass; missing per-fund files are reported as unchecked.
 2. Use `--tickers SPY,QQQ` by default. Add a fund that's mostly bonds or one with thin data when the
    change touches empty states. Add `--only phone,ipadL` to rerun one size while fixing.
 3. Read `report.md`. Every FAIL gets fixed or explained before Dan sees the change.
