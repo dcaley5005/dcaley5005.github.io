@@ -4,7 +4,7 @@ on:
   schedule:
     # 12:17 UTC = 5:17am Pacific (4:17am in winter), Tuesday to Saturday,
     # so each run picks up the prior trading day's close.
-    - cron: "0 17 29 10 *"
+    - cron: "15 16 29 10 *"
   workflow_dispatch:
     inputs:
       rebuild_universe:
