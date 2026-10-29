@@ -2724,12 +2724,10 @@ function xAutoBlurb(d){const f=d.f||{},cat=f.cat,fam=f.fam,names=d.top.filter(c=
 function xAboutCard(d){if(d.pf)return xPfCard(d);const s=d.self||{t:d.t},k=xRk(),top=d.top.filter(c=>c.wt>0),tw=top.reduce((a,c)=>a+c.wt,0),t3=top.slice(0,3).reduce((a,c)=>a+c.wt,0);
   const b=d.blurb||xAutoBlurb(d),eq=xinEq(d),v=s.r?s.r[k]:null;
   const sp=s.d&&s.w?xSpark(s,s,'var(--ink)',s.t).replace(/<polyline[^>]*stroke-dasharray="4 3"[^>]*\/>/,'').replace(/<span>┅[^<]*<\/span>/,''):'';
-  const conc=eq&&tw>.02?`The top ${xinN(d)} holdings are <b>${xw(tw)}</b> of the fund${top.length>=3?`, and the top 3 alone are <b>${xw(t3)}</b>`:''}. ${FINE?'Hover or click':'Tap'} a tile to see that holding.`:'';
   return `<article class="xcard xabout" data-xc="${esc(s.t)}" style="--xc:var(--ink)"><div class="xch"><div><b>${esc(d.t)}</b><span class="nm">${esc(d.n||NAMES[d.t]||'')}</span></div><span class="xchip xbasechip">About this ETF</span></div>
     ${b?`<p class="xfdesc"${d.desc?` title="${esc("From the fund's prospectus: "+d.desc)}"`:''}>${esc(b)}</p>`:''}${s.r?xToggle():''}
     ${v==null?'':`<div class="xhero"><b class="${v>=0?'pos':'neg'}">${xp(v)}</b><span class="u">${k===5?'/ yr, 3Y':esc(XM.rng)}</span></div>`}${sp}
     ${s.vol!=null?`<div class="xrl xrlr">Risk · ${xRngLbl()}</div><div class="xrisk x3">${xRiskTiles(s,s,true)}</div>`:''}
-    ${conc?`<p class="xwhy">${conc}</p>`:''}
     <button type="button" class="xflipbtn xgoalt" data-xgo="alt"><span class="xic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg></span><span>See alternatives</span><span class="xfliparr"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button></article>`}
 function xHoldCard(c,s,noload){const k=xRk(),nm=c.n||c.hn||'';if(c.t&&!c.d&&XSTK[c.t])c={...c,...XSTK[c.t]};
   const line=c.w&&c.d&&!c.w.includes(null)&&!c.d.includes(null)&&s.w;
