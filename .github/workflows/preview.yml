@@ -1,0 +1,65 @@
+name: Preview
+
+# A push to a claude/ branch that changes the Portfolio Lab page publishes that version at
+# https://danielcaley.com/portfolio-lab-preview/ in a minute or two, next to the untouched live page.
+# It reuses the latest built site (from the refresh workflow on main) instead of rebuilding data.
+# The live page always comes from main. Main's own deploys keep the preview of the newest open
+# pull request and drop it once the pull request is merged or closed.
+on:
+  push:
+    branches: ["claude/**"]
+    paths:
+      - "site/portfolio-lab/index.html"
+      - "scripts/make_preview.py"
+      - "scripts/add_preview.sh"
+      - ".github/workflows/preview.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+  actions: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch the latest built site
+        uses: dawidd6/action-download-artifact@v6
+        with:
+          workflow: refresh.yml
+          branch: main
+          workflow_conclusion: success
+          name: pages-site
+          path: _site
+          if_no_artifact_found: fail
+
+      - name: Live page from main, preview page from this branch
+        run: |
+          git fetch -q --depth=1 origin main
+          git show FETCH_HEAD:site/portfolio-lab/index.html > _site/portfolio-lab/index.html
+          scripts/add_preview.sh "${GITHUB_REF_NAME}"
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

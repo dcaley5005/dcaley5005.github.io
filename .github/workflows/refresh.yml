@@ -19,15 +19,15 @@ on:
     branches: [main]
     paths:
       - "site/**"
-      # A push touching ONLY these two files is handled by deploy-ui.yml;
-      # the negative patterns must come after the positive match.
+      # A push touching ONLY the page is handled by deploy-ui.yml;
+      # the negative pattern must come after the positive match.
       - "!site/portfolio-lab/index.html"
-      - "!site/portfolio-lab-preview/index.html"
 
 permissions:
   contents: write
   pages: write
   id-token: write
+  pull-requests: read
 
 concurrency:
   group: pages
@@ -82,6 +82,13 @@ jobs:
           name: pages-site
           path: _site
           retention-days: 2
+
+      # Keep the preview of the newest open pull request (or remove it if there is none).
+      # Added after the pages-site upload above, so the saved built site never carries a preview.
+      - name: Keep the open pull request's preview
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: scripts/add_preview.sh
 
       - uses: actions/configure-pages@v5
 
