@@ -780,6 +780,15 @@ header.top{display:none!important}
 .xtmh{display:flex;flex-direction:column;gap:2px;padding:2px 4px 0}
 .xtmh b{font-size:16px;font-weight:600}
 .xtmh span{font-size:12.5px;color:var(--muted)}
+/* Under the hood: map title with the Stocks / Industries / Sectors toggle beside it */
+.xtmhr{display:flex;align-items:center;justify-content:space-between;gap:10px 16px;flex-wrap:wrap}
+.xtmhr .xtmseg{flex:0 1 300px;min-width:240px}
+.xtm .xinftm{position:absolute;inset:0;min-height:0}
+/* Under the hood cards: same layout as the Alternatives card, line chart takes the spare height */
+.xidock .xcard .xspark{flex:1 1 auto;min-height:63px;display:flex;flex-direction:column}
+.xidock .xcard .xspark svg{flex:1 1 auto;height:auto;min-height:44px}
+.xidock .xcard .xnoline{flex:1 1 auto}
+@media (max-width:1000px){.xidock .xcard .xspark svg{min-height:130px}.xtmhr .xtmseg{flex:1 1 100%}}
 .xtm{position:relative;flex:1 1 auto;min-height:320px}
 .xtile{position:absolute;box-sizing:border-box;border:0;margin:0;border-radius:6px;padding:7px 8px;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:1px;overflow:hidden;text-align:left;cursor:pointer;font-family:"IBM Plex Mono",monospace;transition:opacity .12s,box-shadow .12s}
 .xtile.l{padding:10px 12px}
@@ -2279,7 +2288,7 @@ function xCanPrice(t){return HAS(t)||(typeof UNI!=='undefined'&&!!UNI[t])}
 /* peers files are fetched on hover so the window opens with its content already in place */
 const XDATA={},XLOAD={};
 function xLoad(t){if(!XLOAD[t])XLOAD[t]=fetch('data/peers/'+encodeURIComponent(t)+'.json').then(r=>{if(!r.ok)throw new Error('none');return r.json()}).then(d=>XDATA[t]=d).catch(e=>{delete XLOAD[t];throw e});return XLOAD[t]}
-async function openExplore(t,from,tab){XM.pf=null;$('xm').querySelector('.xmd').style.minHeight='';XM.t=t;XM.tab=tab==='in'?'in':'alt';XM.anchorH=null;XM.openTab=XM.tab;XM.alt=XDATA[t]||null;XM.ins=XIN[t]||null;XM.errA=XM.errI=null;XM.secMode=null;XM.rngSet=0;XM.rng=XM.tab==='in'?'1Y':'3Y';XM.added=[];XM.from=from||null;
+async function openExplore(t,from,tab){XM.pf=null;XM.tmMode='stk';$('xm').querySelector('.xmd').style.minHeight='';XM.t=t;XM.tab=tab==='in'?'in':'alt';XM.anchorH=null;XM.openTab=XM.tab;XM.alt=XDATA[t]||null;XM.ins=XIN[t]||null;XM.errA=XM.errI=null;XM.secMode=null;XM.rngSet=0;XM.rng=XM.tab==='in'?'1Y':'3Y';XM.added=[];XM.from=from||null;
   {const q=$('qtip');if(q)q.hidden=true}XM.sel=null;
   if(t==='TPS'){XM.errA='TPS is the 12% Solution strategy, not a fund you can buy, so it has no alternatives to show.';XM.errI='TPS is the 12% Solution strategy, not a fund, so it has no holdings to show.'}
   xUse();$('xm').hidden=false;document.body.classList.add('xm-open');xHead();xRender();xOpenFx();setTimeout(()=>$('xmClose').focus({preventScroll:true}),0);
@@ -2415,8 +2424,8 @@ function xTmItems(d,mode){const top=(d.top||[]).filter(c=>c.wt>0);
   const out=Object.entries(agg).map(([k,v])=>({t:k,n:'',w:v}));
   un.forEach(c=>{if(c.wt>=0.02&&shown<6){out.push({t:c.hn||c.n||c.t,n:(c.hn||c.n)&&c.t?c.t:'',w:c.wt});shown++}else other+=c.wt});
   out.sort((a,b)=>b.w-a.w);if(other>0.005)out.push({t:'Other holdings',n:'',w:other});return out}
-function xTmPaint(body,mode){const box=body.querySelector('.xftm');if(!box||!body._d)return;const W=box.clientWidth,H=box.clientHeight;if(!W||!H)return;
-  const items=xTmItems(body._d,mode),tw=items.reduce((a,x)=>a+x.w,0)||1;
+function xTmPaint(body,mode){const box=body.querySelector('.xftm');if(!box||!body._d)return;xTmPaintItems(box,xTmItems(body._d,mode))}
+function xTmPaintItems(box,items){const W=box.clientWidth,H=box.clientHeight;if(!W||!H)return;const tw=items.reduce((a,x)=>a+x.w,0)||1;
   const tiles=xSquarify(items.map(x=>({c:x,a:x.w/tw*W*H})),0,0,W,H);
   box.innerHTML=tiles.map(({c,x,y,w,h},i)=>{const pc=c.w*100,p1=pc.toFixed(1)+'%',lab=`${c.t}${c.n?' · '+c.n:''} · ${p1}`;
     const lw=c.t.split(' ').reduce((a,x)=>Math.max(a,x.length),0),bfs=Math.max(9,Math.min(13,(w-22)/(lw*0.68),(w-22)*2/(c.t.length*0.62))),bfs1=Math.min(13,(w-22)/(c.t.length*0.6));const inner=w>=110&&h>=54?`<b style="font-size:${bfs.toFixed(1)}px">${esc(c.t)}</b><i>${p1}</i>${c.n?`<span>${esc(c.n)}</span>`:''}`:w>=54&&h>=54&&bfs1>=9?`<b class="one" style="font-size:${bfs1.toFixed(1)}px">${esc(c.t)}</b><i>${p1}</i>`:w>=36&&h>=22?`<i style="font-size:${Math.max(10,Math.min(12.5,w/3.8)).toFixed(1)}px">${pc<10?p1:Math.round(pc)+'%'}</i>`:'';
@@ -2591,29 +2600,29 @@ const XAGO={'1M':'a month ago','3M':'3 months ago','6M':'6 months ago','YTD':'on
 const xinSec=d=>!!(d&&d.src==='sec'&&!d.pf);
 const xinN=d=>d.top.filter(c=>c.wt>0).length;
 function xinShare(c,k){if(c.pw)return c.pw[k]||0;const d=XM.d,R0=d&&d.self&&d.self.r?d.self.r[k]:null,r0=c.r?c.r[k]:null;if(R0==null||r0==null)return c.wt;const f=k===5?x=>Math.pow(1+x,3)-1:x=>x;return c.wt*(1+f(R0))/(1+f(r0))}
-function xinNote(){const d=XM.d;if(xinSec(d)&&d.pb){const b=d.pb[xRk()],late=b&&Date.parse(b)>xinStart(XM.rng);
-    return `Tile size is each holding's share of ${esc(d.t)} ${XAGO[XM.rng]}: ${late?`its first report to the SEC, for ${dayFmt(b)}, moved back with prices`:`its holdings as reported to the SEC for ${dayFmt(b)}, moved to then with prices`}. Color is its return ${XRWORD[XM.rng]}; click a period above to change it.${d.via?` ${esc(d.t)} doesn't file these reports, so its holdings come from ${esc(d.via)}, which tracks the same index.`:''}`}
+function xinTitle(){const d=XM.d,t=d.t,m=XM.tmMode||'stk';if(m==='ind')return d.pf?'Your portfolio by industry':`${esc(t)} by industry`;if(m==='sec')return d.pf?'Your portfolio by sector':`${esc(t)} by sector`;
+  const tw=d.top.reduce((a,c)=>a+c.wt,0);return d.pf?`The ${xinN(d)} biggest holdings across your ETFs are ${xw(tw)} of the portfolio`:`Top ${xinN(d)} holdings are ${xw(tw)} of ${esc(t)}`}
+function xTmToggle(){const m=XM.tmMode||'stk';return `<div class="xseg xtmseg" role="group" aria-label="Map view">${[['stk','Stocks'],['ind','Industries'],['sec','Sectors']].map(([k,l])=>`<button type="button" data-xtmm="${k}" class="${m===k?'sel':''}" aria-pressed="${m===k}">${l}</button>`).join('')}</div>`}
+function xinNote(){const m=XM.tmMode||'stk',wh=XM.d&&XM.d.pf?'your portfolio':esc(XM.d.t);if(m==='ind')return `Each tile is an industry's share of ${wh}. It covers the whole ${XM.d.pf?'portfolio':'fund'}.`;if(m==='sec')return `Each tile is a sector's share of ${wh}. It covers the whole ${XM.d.pf?'portfolio':'fund'}.`;const d=XM.d;if(xinSec(d)&&d.pb){const b=d.pb[xRk()],late=b&&Date.parse(b)>xinStart(XM.rng);
+    return `Tile size is each holding's share of ${esc(d.t)} ${XAGO[XM.rng]}: ${late?`its first report to the SEC, for ${dayFmt(b)}, moved back with prices`:`its holdings as reported to the SEC for ${dayFmt(b)}, moved to then with prices`}. Color is its return ${XRWORD[XM.rng]}; pick a period on the card to change it.${d.via?` ${esc(d.t)} doesn't file these reports, so its holdings come from ${esc(d.via)}, which tracks the same index.`:''}`}
   if(d&&d.pf&&d.pf.sec&&d.pf.sec.length){const no=d.pf.ws.map(x=>x[0]).filter(t=>!d.pf.sec.includes(t));
-    return `Tile size is each holding's share of the portfolio ${XAGO[XM.rng]}: each ETF's holdings as reported to the SEC at the last quarter-end before then, moved to then with prices${no.length?` (for ${esc(xList(no))}, which ${no.length===1?"doesn't":"don't"} file them, today's holdings moved back)`:''}. Color is its return ${XRWORD[XM.rng]}; click a period above to change it.`}
-  return `Tile size is each holding's share of the ${XM.d&&XM.d.pf?'portfolio':'fund'} ${XAGO[XM.rng]}, worked out from today's holdings. Color is its return ${XRWORD[XM.rng]}; click a period above to change it.`}
+    return `Tile size is each holding's share of the portfolio ${XAGO[XM.rng]}: each ETF's holdings as reported to the SEC at the last quarter-end before then, moved to then with prices${no.length?` (for ${esc(xList(no))}, which ${no.length===1?"doesn't":"don't"} file them, today's holdings moved back)`:''}. Color is its return ${XRWORD[XM.rng]}; pick a period on the card to change it.`}
+  return `Tile size is each holding's share of the ${XM.d&&XM.d.pf?'portfolio':'fund'} ${XAGO[XM.rng]}, worked out from today's holdings. Color is its return ${XRWORD[XM.rng]}; pick a period on the card to change it.`}
 function renderXI(){const b=$('xmBody');renderXMFoot();xSizeModal();
   if(XM.err||!XM.d)xSetGlance('');
   if(XM.err){b.innerHTML=`<div class="xnote"><b>Nothing to show</b><span>${esc(XM.err)}</span></div>`;return}
-  const d=XM.d;if(!d){b.innerHTML='<div class="xskel" style="height:70px"></div><div class="xskel" style="height:440px"></div>';return}
+  const d=XM.d;if(!d){b.innerHTML='<div class="xskel" style="height:440px"></div>';return}
   const s=d.self||{t:d.t},t=d.t;
-  const rs=s.r?xRisk(s):null;
-  const gl=s.r?XR.map(([l,k,i])=>`<button type="button" class="xg ${xcls(s.r[i])}${XM.rng===k?' sel':''}" data-xrng="${k}" aria-pressed="${XM.rng===k}" title="Show ${XRWORD[k]}"><span>${l}</span><b>${xp(s.r[i])}</b></button>`).join('')+`<div class="xg" id="xgSh"><span>Sharpe</span><b>${rs.sh==null?'—':rs.sh.toFixed(2)}</b></div><div class="xg n" id="xgDd"><span>Max DD</span><b>${xu(rs.dd)}</b></div><div class="xg"><span>Fee</span><b>${fmtER(s.er)}</b></div>`:'';
-  const tw=d.top.reduce((a,c)=>a+c.wt,0);
-  const fig=xinEq(d)?`<figure class="xtmfig"><div class="xtmh"><b>${d.pf?`The ${xinN(d)} biggest holdings across your ETFs are ${xw(tw)} of the portfolio`:`Top ${xinN(d)} holdings are ${xw(tw)} of ${esc(t)}`}</b><span id="xtmNote">${xinNote()}</span></div><div class="xtm" id="xTm"></div></figure>`:xinAssetsHTML(d);
-  const glb=xSetGlance(gl);xSizeModal();
-  b.innerHTML=`${glb?`<div class="xgwrap" style="display:flex;flex-direction:column;gap:8px"><div class="xcap">${esc(t)} at a glance <span class="xcap2">· click a period to recolor the map and cards</span></div><div class="xglance">${glb}</div></div>`:''}
-    <div class="xtop xin">${fig}<div class="xcdock xidock" id="xInDock">${xAboutCard(d)}</div></div>${xinSecHTML(d)}
+  if(!xinEq(d)||!['stk','ind','sec'].includes(XM.tmMode))XM.tmMode='stk';
+  const fig=xinEq(d)?`<figure class="xtmfig"><div class="xtmh"><div class="xtmhr"><b id="xtmTitle">${xinTitle()}</b>${xTmToggle()}</div><span id="xtmNote">${xinNote()}</span></div><div class="xtm" id="xTm"></div></figure>`:xinAssetsHTML(d);
+  xSetGlance('');xSizeModal();
+  b.innerHTML=`<div class="xtop xin">${fig}<div class="xcdock xidock" id="xInDock">${xAboutCard(d)}</div></div>
     <p class="xdisc">${d.pf?"Each ETF's top holdings (up to 50), weighted by your percentages. A stock in one ETF's list but further down in another only counts the listed part, so overlaps are a floor. Sectors cover every holding. ":''}${xinSec(d)?`Holdings from ${esc(d.via||t)}'s reports to the SEC (Form N-PORT), which come out about two months after each quarter; shares since the latest report are moved with prices.`:'Holdings from Yahoo Finance.'} "Everything else" is worked out from the fund's own return, so treat it as an estimate. Past performance doesn't guarantee future results.</p>`;
   $('xInDock').dataset.t='';xinFit();xinFitRow();xinPaint();if(XM.sel&&xFind(XM.sel))xinTip(XM.sel,true);
   if(document.fonts&&document.fonts.status!=='loaded')document.fonts.ready.then(()=>{if(XM.tab==='in'&&!$('xm').hidden){xinFit();xinFitRow();xinPaint()}})}
 
 /* ---------- under the hood of a portfolio: every member's holdings and sectors, weighted by the portfolio's percentages ---------- */
-function openExplorePf(id,from,tab){const p=pf(id);if(!p)return;$('xm').querySelector('.xmd').style.minHeight='';const ws=weights(p);
+function openExplorePf(id,from,tab){XM.tmMode='stk';const p=pf(id);if(!p)return;$('xm').querySelector('.xmd').style.minHeight='';const ws=weights(p);
   XM.pf=id;XM.t=p.name;XM.tab=tab==='alt'?'alt':'in';XM.anchorH=null;XM.openTab=XM.tab;XM.alt=null;XM.ins=null;XM.errA=XM.errI=ws.length?null:'Give the ETFs in this portfolio some percentages first.';XM.secMode=null;XM.rngSet=0;XM.rng=XM.tab==='in'?'1Y':'3Y';XM.added=[];XM.from=from||null;
   {const q=$('qtip');if(q)q.hidden=true}XM.sel=null;
   xUse();$('xm').hidden=false;document.body.classList.add('xm-open');xHead();xRender();xOpenFx();setTimeout(()=>$('xmClose').focus({preventScroll:true}),0);
@@ -2711,14 +2720,16 @@ function xPfCard(d){const P=d.pf,p=pf(P.id),top=d.top,tw=top.reduce((a,c)=>a+c.w
 function xAutoBlurb(d){const f=d.f||{},cat=f.cat,fam=f.fam,names=d.top.filter(c=>c.wt>0).slice(0,3).map(c=>(c.n||c.hn||c.t||'').replace(/\s+(Inc|Corp|Corporation|Ltd|PLC|plc|Co|Company|Holdings?|Group|SA|AG|NV)\.?$/i,'').replace(/,$/,'')).filter(Boolean);
   const a=cat?`${/^[AEIOU]/i.test(cat)?'An':'A'} ${cat.toLowerCase().replace(/^us /,'US ')} fund${fam?' from '+fam:''}.`:fam?`A fund from ${fam}.`:'';
   return (a+(names.length>=2?` Its biggest holdings are ${xList(names)}.`:'')).trim()||d.desc||''}
-function xAboutCard(d){if(d.pf)return xPfCard(d);const s=d.self||{},f=d.f||{},top=d.top.filter(c=>c.wt>0),tw=top.reduce((a,c)=>a+c.wt,0),t3=top.slice(0,3).reduce((a,c)=>a+c.wt,0);
-  const fact=(k,v)=>v==null||v===''?'':`<div><span>${k}</span><b title="${esc(String(v))}">${esc(String(v))}</b></div>`;
-  const eq=xinEq(d);
-  return `<article class="xcard xabout" style="--xc:var(--ink)"><div class="xch"><div><b>${esc(d.t)}</b><span class="nm">${esc(d.n||NAMES[d.t]||'')}</span></div><span class="xchip xbasechip">About this ETF</span></div>
-    ${(()=>{const b=d.blurb||xAutoBlurb(d);return b?`<p class="xadesc"${d.desc?` title="${esc("From the fund's prospectus: "+d.desc)}"`:''}>${esc(b)}</p>`:''})()}
-    <div class="xafacts">${fact('Fund size',f.aum?xMoney(f.aum):null)}${fact('Fee',s.er!=null?fmtER(s.er):null)}${fact('Category',f.cat)}${fact('Issuer',f.fam)}${fact('Since',f.inc?dayFmt(f.inc):null)}${fact('Holdings as of',d.hasof?dayFmt(d.hasof)+(xinSec(d)?(d.via?` (via ${d.via})`:' (SEC)'):''):null)}</div>
-    ${eq&&tw>.02?`<div class="xrl">How concentrated</div><p class="xconc">The top ${xinN(d)} holdings are <b>${xw(tw)}</b> of the fund${top.length>=3?`, and the top 3 alone are <b>${xw(t3)}</b>`:''}.</p>`:''}
-    ${eq?`<p class="xwhy">Hover a tile to see that holding's card. Click it to keep the card here.</p>`:''}</article>`}
+function xAboutCard(d){if(d.pf)return xPfCard(d);const s=d.self||{t:d.t},k=xRk(),top=d.top.filter(c=>c.wt>0),tw=top.reduce((a,c)=>a+c.wt,0),t3=top.slice(0,3).reduce((a,c)=>a+c.wt,0);
+  const b=d.blurb||xAutoBlurb(d),eq=xinEq(d),v=s.r?s.r[k]:null;
+  const sp=s.d&&s.w?xSpark(s,s,'var(--ink)',s.t).replace(/<polyline[^>]*stroke-dasharray="4 3"[^>]*\/>/,'').replace(/<span>┅[^<]*<\/span>/,''):'';
+  const conc=eq&&tw>.02?`The top ${xinN(d)} holdings are <b>${xw(tw)}</b> of the fund${top.length>=3?`, and the top 3 alone are <b>${xw(t3)}</b>`:''}. ${FINE?'Hover or click':'Tap'} a tile to see that holding.`:'';
+  return `<article class="xcard xabout" data-xc="${esc(s.t)}" style="--xc:var(--ink)"><div class="xch"><div><b>${esc(d.t)}</b><span class="nm">${esc(d.n||NAMES[d.t]||'')}</span></div><span class="xchip xbasechip">About this ETF</span></div>
+    ${b?`<p class="xfdesc"${d.desc?` title="${esc("From the fund's prospectus: "+d.desc)}"`:''}>${esc(b)}</p>`:''}${s.r?xToggle():''}
+    ${v==null?'':`<div class="xhero"><b class="${v>=0?'pos':'neg'}">${xp(v)}</b><span class="u">${k===5?'/ yr, 3Y':esc(XM.rng)}</span></div>`}${sp}
+    ${s.vol!=null?`<div class="xrl xrlr">Risk · ${xRngLbl()}</div><div class="xrisk x3">${xRiskTiles(s,s,true)}</div>`:''}
+    ${conc?`<p class="xwhy">${conc}</p>`:''}
+    <button type="button" class="xflipbtn xgoalt" data-xgo="alt"><span class="xic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg></span><span>See alternatives</span><span class="xfliparr"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button></article>`}
 function xHoldCard(c,s,noload){const k=xRk(),nm=c.n||c.hn||'';if(c.t&&!c.d&&XSTK[c.t])c={...c,...XSTK[c.t]};
   const line=c.w&&c.d&&!c.w.includes(null)&&!c.d.includes(null)&&s.w;
   /* not fetched yet: an empty chart of the same size, filled in when the file arrives */
@@ -2728,11 +2739,13 @@ function xHoldCard(c,s,noload){const k=xRk(),nm=c.n||c.hn||'';if(c.t&&!c.d&&XSTK
   const add=xinAdded(c,k),wd=k===5?XRWORD['1Y']:XRWORD[XM.rng];
   const via=XM.d&&XM.d.pf&&c.src?`Held through ${xList(c.src.map(([t,w])=>`${esc(t)} (${xw(w)})`))}.`:'';
   const then=xinShare(c,k),was=Math.abs(then-c.wt)>=0.0005?`Was about ${xw(then)} of ${esc(s.t)} ${XAGO[XM.rng]}.`:'';
-  const why=[c.ind?esc(c.ind)+'.':'',via,was,add==null?'':`Added <b class="${add>=0?'pos':'neg'}">${xpts(add)} pts</b> to ${esc(s.t)}'s return ${wd}.`].filter(Boolean).join(' ');
+  const why=[via,was,add==null?'':`Added <b class="${add>=0?'pos':'neg'}">${xpts(add)} pts</b> to ${esc(s.t)}'s return ${wd}.`].filter(Boolean).join(' ');
+  /* Yahoo's description when we have it, else its industry and sector */
+  const ds=c.ds||[c.ind,c.sec].filter(Boolean).join(' · ');
   return `<article class="xcard" data-xc="${esc(c.t)}" style="--xc:var(--xs)"><div class="xch"><div><b>${esc(c.t)}</b><span class="nm">${esc(nm)}</span></div><span class="xchip s">${c.wt>0?`${xw(c.wt)} of ${esc(s.t)}`:`Not in the top ${xinN(XM.d)} now`}</span></div>
-    ${hv==null?'':`<div class="xhero"><b class="${hv>=0?'pos':'neg'}">${xp(hv)}</b><span class="u">${hlab}</span>${dr==null?'':`<span class="xchip ${dr>=0?'up':'dn'}">${xpts(dr)} pts vs ${esc(s.t)}</span>`}</div>`}
+    ${ds?`<p class="xfdesc">${esc(ds)}</p>`:''}${xToggle()}
+    ${hv==null?'':`<div class="xhero"><b class="${hv>=0?'pos':'neg'}">${xp(hv)}</b><span class="u">${hlab}</span>${dr==null?'':`<span class="xpill ${dr>=0?'up':'dn'}">${xpts(dr)} pts vs ${esc(s.t)}</span>`}</div>`}
     ${line?xSpark(c,s,'var(--xs)',c.t):wait?`<div class="xspark xwait"><svg viewBox="0 0 300 60" preserveAspectRatio="none" aria-hidden="true"><line x1="0" x2="300" y1="30" y2="30" stroke="var(--line)" vector-effect="non-scaling-stroke"/></svg><div class="lg"><span>&nbsp;</span></div></div>`:'<div class="xnoline">Not enough price history for a line chart</div>'}
-    ${c.r&&s.r?`<div class="xrl">Returns vs ${esc(s.t)}</div><div class="xchips">${xRetChips(c,s,true)}</div>`:''}
     ${c.vol!=null?`<div class="xrl xrlr">Risk vs ${esc(s.t)} · ${xRngLbl()}</div><div class="xrisk x3">${xRiskTiles(c,s)}</div>`:''}
     ${why?`<p class="xwhy">${why}</p>`:''}</article>`}
 /* a line for "Everything else": the fund's growth minus what its named holdings added, from the start of the range picked */
@@ -2752,14 +2765,14 @@ function xRestCard(d){const s=d.self||{},R=d.rest||{},k=xRk(),n=xinN(d),named=d.
   const left=i=>Math.max(0,1-named.reduce((a,c)=>a+xinShare(c,i),0)),rv=R.r?R.r[k]:null,fb=s.r?s.r[k]:null;
   const ka=k===5?4:k,ra=R.r?R.r[ka]:null,add=ra==null?null:left(ka)*ra;
   const why=[`Was about ${xw(left(k))} of ${esc(s.t)} ${XAGO[XM.rng]}.`,add==null?'':`Added <b class="${add>=0?'pos':'neg'}">${xpts(add)} pts</b> to ${esc(s.t)}'s return ${k===5?XRWORD['1Y']:XRWORD[XM.rng]}.`,
-    R.cash>0.003?`Includes about ${xw(R.cash)} in cash and cash-like funds.`:'',`Its return is ${esc(s.t)}'s own return minus what the top ${n} added, so treat it as an estimate.`].filter(Boolean).join(' ');
+    R.cash>0.003?`Includes about ${xw(R.cash)} in cash and cash-like funds.`:''].filter(Boolean).join(' ');
   const need=(d.top||[]).filter(c=>c.t&&XSTK[c.t]===undefined);
   if(need.length)Promise.all(need.map(c=>xStkLoad(c.t))).then(()=>{const dk=$('xInDock');if(dk&&dk.firstElementChild&&dk.firstElementChild.dataset.xc==='~rest'){dk.dataset.t='~';xinTip(XM.sel||'~rest',true)}});
   const rc=need.length?null:xFind('~rest'),line=rc&&rc.d&&rc.w&&s.d&&s.w;
   return `<article class="xcard" data-xc="~rest" style="--xc:var(--xs)"><div class="xch"><div><b>Everything else</b><span class="nm">${d.pf?'Holdings outside the top '+n+' across your ETFs':'The holdings outside the top '+n}</span></div><span class="xchip s">${xw(R.wt)} of ${esc(s.t)}</span></div>
-    ${rv==null?'':`<div class="xhero"><b class="${rv>=0?'pos':'neg'}">≈ ${xp(rv)}</b><span class="u">${k===5?'/ yr, 3Y':esc(XM.rng)}</span>${fb==null?'':`<span class="xchip ${rv-fb>=0?'up':'dn'}">${xpts(rv-fb)} pts vs ${esc(s.t)}</span>`}</div>`}
+    <p class="xfdesc">Everything ${esc(s.t)} holds outside its top ${n}. Its return is ${esc(s.t)}'s own return minus what the top ${n} added, so treat it as an estimate.</p>${xToggle()}
+    ${rv==null?'':`<div class="xhero"><b class="${rv>=0?'pos':'neg'}">≈ ${xp(rv)}</b><span class="u">${k===5?'/ yr, 3Y':esc(XM.rng)}</span>${fb==null?'':`<span class="xpill ${rv-fb>=0?'up':'dn'}">${xpts(rv-fb)} pts vs ${esc(s.t)}</span>`}</div>`}
     ${line?xSpark(rc,s,'var(--xs)','~rest'):need.length?`<div class="xspark xwait"><svg viewBox="0 0 300 60" preserveAspectRatio="none" aria-hidden="true"><line x1="0" x2="300" y1="30" y2="30" stroke="var(--line)" vector-effect="non-scaling-stroke"/></svg><div class="lg"><span>&nbsp;</span></div></div>`:'<div class="xnoline">Not enough price history for a line chart</div>'}
-    ${R.r&&s.r?`<div class="xrl">Returns vs ${esc(s.t)}</div><div class="xchips">${xRetChips({t:'~rest',r:R.r},s,true)}</div>`:''}
     <p class="xwhy">${why}</p></article>`}
 /* swap the card on the right: the hovered or locked holding, else the fund's About card */
 function xinTip(t,on){const dock=$('xInDock'),d=XM.d;if(!dock||!d)return;const show=on?t:XM.sel;
@@ -2780,6 +2793,7 @@ function xSquarify(items,x,y,w,h){const out=[];let R={x,y,w,h},row=[],rest=items
   while(rest.length){const len=Math.min(R.w,R.h),it=rest[0];if(!row.length||worst(row.concat([it]),len)<=worst(row,len)){row.push(it);rest.shift()}else{lay(row);row=[]}}
   if(row.length)lay(row);return out}
 function xinPaint(){const el=$('xTm'),d=XM.d;if(!el||!d)return;const W=el.clientWidth,H=el.clientHeight;if(!W||!H)return;
+  if((XM.tmMode||'stk')!=='stk'){el.innerHTML='<div class="xftm xinftm"></div>';xTmPaintItems(el.firstElementChild,xinSecItems(d,XM.tmMode));return}
   const k=xRk(),top=d.top.filter(c=>c.wt>0||c.pw).map(c=>({...c,sw:xinShare(c,k)})).filter(c=>c.sw>0).sort((a,b)=>b.sw-a.sw),tw=top.reduce((a,c)=>a+c.sw,0),rest0=d.rest&&d.rest.wt>0.003?d.rest:null,rest=rest0?{...rest0,sw:Math.max(0.003,1-tw)}:null;
   const rw=rest?Math.max(64,Math.round(W*rest.sw)):0,aw=W-rw,g=1.5;
   const tiles=xSquarify(top.map(c=>({c,a:c.sw/tw*aw*H})),0,0,aw,H);
@@ -2794,6 +2808,16 @@ function xinPaint(){const el=$('xTm'),d=XM.d;if(!el||!d)return;const W=el.client
   if(rest){const r=rest.r?rest.r[k]:null,wide=rw>=130,big=rw>=200;
     h+=`<button type="button" class="xtile rest b-${xBucket(r)}${big&&H>=110?' l':''}${XM.sel==='~rest'?' on':''}" data-ht="~rest" style="${box(aw,0,rw,H)}" aria-label="${esc(`Everything outside the top ${top.length}: ${xw(rest.sw)} of ${d.t} ${XAGO[XM.rng]}, ${r==null?'return unknown':'about '+xp(r)} ${XRWORD[XM.rng]}`)}"><span class="xtk">${wide?'Everything else':'Rest'}</span>${wide?`<span class="xtn">the other holdings</span>`:''}<span class="xtv">${xw(rest.sw)}</span><span class="xtv">${r==null?'—':'≈ '+xp(r)}</span></button>`}
   el.innerHTML=h;el.classList.toggle('fade',!!XM.sel)}
+function xinSecItems(d,mode){const sec=Object.entries(d.sec||{}).filter(([,v])=>v>0.0005).sort((a,b)=>b[1]-a[1]);
+  const im={};d.top.forEach(c=>{if(c.ind&&c.wt>0)im[c.ind]=(im[c.ind]||0)+c.wt});const ind=Object.entries(im).sort((a,b)=>b[1]-a[1]);
+  if(mode==='ind'&&!ind.length)mode='sec';
+  let items=mode==='sec'?sec.map(([k,v])=>[XSEC[k]||k,v]):ind.slice();
+  if(mode==='ind'&&sec.length){const used={};d.top.forEach(c=>{const k=c.wt>0&&c.ind?XYSEC[c.sec]:null;if(k)used[k]=(used[k]||0)+c.wt});
+    sec.forEach(([k,v])=>{const r=v-(used[k]||0);if(r>0.003)items.push(['Other '+(XSEC[k]||k).toLowerCase(),r])});items.sort((a,b)=>b[1]-a[1])}
+  const tot=items.reduce((a,x)=>a+x[1],0);
+  if(mode==='sec'&&d.pf&&tot<0.98){let left=1-tot;const bd=Math.min(left,(d.ac&&d.ac.bond)||0);if(bd>0.005){items.push(['Bonds',bd]);left-=bd}if(left>0.005)items.push(['Other and cash',left])}
+  else if(tot<(mode==='sec'?0.98:0.995))items.push([mode==='sec'||sec.length?'Other and cash':`Outside the top ${xinN(d)}`,1-tot]);
+  return items.filter(x=>x[1]>0.0005).map(([t,w])=>({t,n:'',w}))}
 function xinSecHTML(d){const sec=Object.entries(d.sec||{}).filter(([,v])=>v>0.0005).sort((a,b)=>b[1]-a[1]);
   const im={};d.top.forEach(c=>{if(c.ind&&c.wt>0)im[c.ind]=(im[c.ind]||0)+c.wt});const ind=Object.entries(im).sort((a,b)=>b[1]-a[1]);
   if(!sec.length&&!ind.length)return '';
@@ -2836,6 +2860,8 @@ function dayFmt(k){return MON[+k.slice(5,7)-1]+' '+(+k.slice(8))+', '+k.slice(0,
 document.addEventListener('click',e=>{{const q=e.target.closest('[data-xpf]');if(q){e.preventDefault();e.stopPropagation();openExplorePf(q.dataset.xpf,q,q.dataset.xtab);return}}const o=e.target.closest('[data-xopen]');if(o){e.preventDefault();openExplore(o.dataset.xopen,o,o.dataset.xtab);return}
   if($('xm').hidden)return;
   {const b=e.target.closest('#xm .xtab');if(b){xTab(b.dataset.xtab);return}}
+  {const v=e.target.closest('#xmBody [data-xtmm]');if(v){XM.tmMode=v.dataset.xtmm;document.querySelectorAll('#xmBody [data-xtmm]').forEach(b=>{const on=b===v;b.classList.toggle('sel',on);b.setAttribute('aria-pressed',on)});const ti=$('xtmTitle'),n=$('xtmNote');if(ti)ti.innerHTML=xinTitle();if(n)n.textContent=xinNote();if(XM.tmMode!=='stk'&&XM.sel){XM.sel=null;const dk=$('xInDock');if(dk)dk.dataset.t='~';xinTip(null,false)}xinPaint();return}}
+  {const g=e.target.closest('#xmBody [data-xgo]');if(g){xTab(g.dataset.xgo);return}}
   {const m=e.target.closest('#xmBody [data-xsm]');if(m){XM.secMode=m.dataset.xsm;const el=$('xinSec');if(el)el.outerHTML=xinSecHTML(XM.d);return}}
   {const tt=e.target.closest('#xmBody .xtile[data-ht]');if(tt){const t=tt.dataset.ht;XM.sel=XM.sel===t?null:t;$('xInDock').dataset.t='~';xinTip(t,!!XM.sel);
     if(XM.sel&&ph0()){const dk=$('xInDock'),B=$('xmBody');if(dk&&B){const r=dk.getBoundingClientRect(),b=B.getBoundingClientRect();if(r.top>b.bottom-120)B.scrollTo({top:B.scrollTop+(r.top-b.top)-80,behavior:XREDUCE.matches?'auto':'smooth'})}}return}}

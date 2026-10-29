@@ -104,12 +104,36 @@ def fetch_holdings(t):
     return {"desc": desc, "top": rows, "sec": sec, "ac": ac, "asof": today()}
 
 
+_ABBR = re.compile(r"(?:\b(?:Inc|Corp|Co|Ltd|Plc|S\.A|N\.V|L\.P|Bros|St|Mr|Ms|Dr|No|vs|etc|approx)|\b[A-Z]|\bU\.S)\.$")
+
+
+def short_desc(text, most=320):
+    """The first two sentences of Yahoo's company summary (one if two run long), for the stock's card."""
+    text = re.sub(r"\s+", " ", (text or "").strip())
+    if not text:
+        return ""
+    out, start = [], 0
+    for m in re.finditer(r"[.!?](?=\s+[A-Z(\"])", text):
+        piece = text[start:m.end()].strip()
+        if _ABBR.search(piece):              # "Apple Inc." or "U.S." is not the end of a sentence
+            continue
+        out.append(piece)
+        start = m.end()
+        if len(out) == 2:
+            break
+    if len(out) < 2 and start < len(text):
+        out.append(text[start:].strip())
+    first, both = out[0], " ".join(out[:2])
+    return both if len(both) <= most else first if len(first) <= most + 80 else first[:most].rsplit(" ", 1)[0] + "…"
+
+
 def fetch_stock(sym):
     info = yf.Ticker(sym).get_info() or {}
     if not info:
         raise ValueError("empty response")
     return {"n": info.get("shortName") or info.get("longName") or "", "sec": info.get("sector"),
-            "ind": info.get("industry"), "qt": info.get("quoteType"), "asof": today()}
+            "ind": info.get("industry"), "qt": info.get("quoteType"),
+            "ds": short_desc(info.get("longBusinessSummary")), "asof": today()}
 
 
 def _refresh(old, keys, fetch, max_age, minutes, label):
@@ -175,6 +199,10 @@ def update_holdings(tickers, path=HOLD_FILE, minutes=HOLD_MINUTES):
 def update_stocks(syms, path=STOCK_FILE, minutes=STOCK_MINUTES, refresh=None):
     """Names and sectors for `syms`; only the symbols in `refresh` (in that order) are looked up."""
     old = _load(path)
+    # entries saved before descriptions were collected count as due, so they fill in over the next few runs
+    for v in old.values():
+        if "ds" not in v:
+            v["asof"] = None
     old = _refresh(old, list(syms if refresh is None else refresh), fetch_stock, STOCK_MAX_AGE_DAYS, minutes, "Holding details")
     keep = {s: old[s] for s in sorted(syms) if s in old}
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -522,9 +550,12 @@ def build_inside(out_dir, etf_series, hold, stocks, stock_series, names, fund=No
     sdir.mkdir(parents=True, exist_ok=True)
     lines = 0
     for sym, c in cards.items():
+        ds = (stocks.get(sym) or {}).get("ds") or ""
         if c.get("d") and c.get("w"):
-            (sdir / f"{sym}.json").write_text(json.dumps({"d": c["d"], "w": c["w"]}, separators=(",", ":")))
+            (sdir / f"{sym}.json").write_text(json.dumps({"d": c["d"], "w": c["w"], **({"ds": ds} if ds else {})}, separators=(",", ":")))
             lines += 1
+        elif ds:     # no line chart, but the card still gets its description
+            (sdir / f"{sym}.json").write_text(json.dumps({"ds": ds}, separators=(",", ":")))
     log(f"What's inside: wrote {written} ETFs ({sec_n} from SEC reports), {len(cards)} holding cards, {lines} line charts")
     return written
 
