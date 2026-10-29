@@ -1,0 +1,85 @@
+name: Deploy UI-only changes fast
+
+# DRAFT ONLY. Not pushed to the repo. Needs Dan's approval before it touches main.
+#
+# Purpose: a push that only changes the Portfolio Lab page (or its preview copy)
+# deploys in minutes instead of ~30-45, by reusing the morning refresh's built
+# site instead of re-running scripts/build_data.py.
+#
+# Companion change to refresh.yml (same PR, also draft):
+#   1. Push trigger gains negative path patterns for the two UI files below
+#      (paths and paths-ignore cannot be combined for one event, per GitHub
+#      docs, so the exclusion uses "!" patterns after the positive match),
+#      so a UI-only push does not start the full refresh at all.
+#   2. Add after the build step: upload _site as a workflow artifact named
+#      pages-site (retention 2 days), so this workflow can pick it up.
+#
+# Safety rules baked in:
+#   - Trigger paths cover ONLY the two HTML files. Any push touching data,
+#     scripts, or anything else still runs the full refresh.yml as today.
+#   - The artifact must come from a successful refresh run within the last
+#     24 hours. Missing or stale artifact = this job FAILS loudly; it never
+#     deploys an old site silently. Fallback is to run refresh.yml manually.
+#   - Same concurrency group (pages) as refresh.yml, cancel-in-progress false,
+#     so a fast deploy can never race the morning refresh.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "site/portfolio-lab/index.html"
+      - "site/portfolio-lab-preview/index.html"
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+  actions: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy-ui:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      # Newest successful refresh run in the last 24h. The refresh workflow's
+      # name is "Refresh prices and deploy"; its build job uploads _site as
+      # artifact "pages-site" (see companion change).
+      - name: Fetch the latest built site
+        uses: dawidd6/action-download-artifact@v6
+        with:
+          workflow: refresh.yml
+          workflow_conclusion: success
+          name: pages-site
+          path: _site
+          # Fail (do not deploy) if no fresh artifact exists.
+          if_no_artifact_found: fail
+
+      # Swap in exactly the two files this push changed. Everything else in
+      # _site is the morning refresh's output, untouched.
+      - name: Swap in the new page files
+        run: |
+          cp site/portfolio-lab/index.html _site/portfolio-lab/index.html
+          cp site/portfolio-lab-preview/index.html _site/portfolio-lab-preview/index.html
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: deploy-ui
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
