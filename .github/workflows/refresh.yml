@@ -13,7 +13,12 @@ on:
         default: false
   push:
     branches: [main]
-    paths: ["site/**"]
+    paths:
+      - "site/**"
+      # A push touching ONLY these two files is handled by deploy-ui.yml;
+      # the negative patterns must come after the positive match.
+      - "!site/portfolio-lab/index.html"
+      - "!site/portfolio-lab-preview/index.html"
 
 permissions:
   contents: write
@@ -66,6 +71,13 @@ jobs:
           [ -f data/stocks.json ] && git add data/stocks.json
           # main may have moved while this ran (a site push or the SEC update), so catch up before pushing
           git diff --cached --quiet || (git commit -m "Update ETF list and fund details" && git pull --rebase origin main && git push)
+
+      - name: Save the built site for UI-only deploys
+        uses: actions/upload-artifact@v4
+        with:
+          name: pages-site
+          path: _site
+          retention-days: 2
 
       - uses: actions/configure-pages@v5
 
