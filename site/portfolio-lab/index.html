@@ -691,14 +691,7 @@ footer .src{font-family:"IBM Plex Mono",monospace;font-size:12px;padding:3px 8px
 
 .dform{display:contents}
 .duo{display:contents}
-/* side by side only when both full tables fit (about 27in / 2560px screens and up); narrower screens stack */
-@media (min-width:2480px){
-  .wrap{max-width:2800px}
-  .duo{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:stretch}
-  /* no saved portfolios yet: the builder takes the full width instead of leaving the right half empty */
-  .duo:has(>#portfolios[hidden]){grid-template-columns:minmax(0,1fr)}
-}
-@media (min-width:2480px){.momwrap svg{width:56px}.momwrap{gap:6px}.ptable th,.ptable td,.btable th,.btable td{padding-left:3px;padding-right:3px}.ptable .badge{display:none}}
+
 @media (min-width:701px){.bcgrid .prail{max-height:none;overflow:visible}}
 /* both headers use the same control sizes */
 @media (min-width:701px){
@@ -721,7 +714,7 @@ tr.addbar td{border:0!important;padding:10px 0 2px!important;background:transpar
 #bSave.notready{opacity:.6}
 tr.flash>td{animation:pflash 1.6s ease-out}
 @keyframes pflash{0%,30%{background:color-mix(in srgb,var(--accent) 22%,transparent)}100%{background:transparent}}
-@media (min-width:2480px){#builder .bchev{display:none}#builder .bhead{cursor:default}}
+
 
 .mrm,.pclr{display:inline-flex;align-items:center;gap:7px}
 .pclr.armed,#bClear.armed{background:var(--neg);border-color:var(--neg);color:var(--panel)}
@@ -1113,24 +1106,6 @@ tr.xecho>td{background:var(--accentBg);transition:background .2s}
     </div>
   </section>
 
-  <section class="panel" aria-labelledby="listTitle" id="portfolios" hidden>
-    <div class="phead ptop">
-      <h2 id="listTitle">Your portfolios</h2><span class="sub" id="listSub" hidden></span>
-      <div class="pctrls"><button type="button" class="iob" data-iomodal="p" aria-haspopup="dialog" title="Import or export"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4v13"/><path d="m3 13 4 4 4-4"/><path d="M17 20V7"/><path d="m21 11-4-4-4 4"/></svg><span class="iol">Import / Export</span></button><div class="picker"><div class="seg" role="group" aria-label="Time period" id="pPeriod"></div><form class="dform" action="javascript:void 0" onsubmit="return false"><label class="daysbox" for="pDays"><span>Last</span><input class="field" id="pDays" data-days="p" inputmode="numeric" enterkeyhint="done" autocomplete="off" placeholder="#" maxlength="4"><span>days</span></label></form><button type="button" class="info vinfo" data-info="period" aria-label="How the time period works"></button></div><button type="button" class="btn sm pclr" id="pClear">Clear</button></div>
-    </div>
-    <div class="pgrid">
-      <div class="pleft">
-        <span class="cap" id="chartTitle" hidden>Cumulative %</span><span class="sub" id="chartSub"></span>
-        <div class="chartbox" id="chartbox"><svg id="chart" role="img" aria-label="Portfolio chart"></svg><div class="tip" id="tip" hidden></div></div>
-      </div>
-      <aside class="prail" aria-label="Chart lines">
-        <span class="cap" id="pListCap" title="Click a row to hide or show its line">Momentum now</span>
-        <div id="pList" class="plist"></div>
-      </aside>
-    </div>
-    <div class="tablewrap"><table id="ptable" class="ptable"></table></div>
-    <span class="sub" id="tableFoot"></span>
-  </section>
   </div>
 
   <footer id="impFoot" hidden>
@@ -1650,7 +1625,7 @@ function twPanel(){
 /* ---------- render: chart ---------- */
 let CH=null,fitH=null,fitPass=false;
 /* chart heights: the builder chart grows so its list never scrolls; side by side, both charts share one height */
-const CHH={b:null,p:null};const DUO=()=>!!(window.matchMedia&&matchMedia('(min-width:2480px)').matches);let SZ=false;
+const CHH={b:null,p:null};const DUO=()=>false;/* the side-by-side portfolios panel was removed */let SZ=false;
 function alignHeads(){const bw=document.querySelector('#builder .bheadwrap'),pt=document.querySelector('#portfolios .ptop'),ba=$('bActs');if(!bw||!pt||!ba)return;
   const bh=bw.querySelector('.bhead');ba.style.paddingBottom='';pt.style.paddingBottom='';if(bh)bh.style.minHeight='';if(!DUO()||!S.b.open)return;
   const d=bw.getBoundingClientRect().bottom-pt.getBoundingClientRect().bottom;
@@ -1670,7 +1645,7 @@ function sizeCharts(){if(SZ||!D)return;alignHeads();SZ=true;try{const bb=$('bCha
   if(hp!==CHH.p){CHH.p=hp;renderChart()}}finally{SZ=false}}
 let railClick=null;
 function chartSeries(){return SERIES.concat(SPYS?[SPYS]:[]).filter(r=>!S.hidden[r.id])}
-function renderChart(){
+function renderChart(){if(!$('chartbox'))return;
   const last=D.last,st0=selStart(S.sel);renderPicker('p');
   const all=SERIES.concat(SPYS?[SPYS]:[]);
   const rv=r=>r.ret;
@@ -1718,7 +1693,7 @@ function showHover(i){
   const bw=$('chartbox').clientWidth,px_=x/CH.W*bw,tw=tip.offsetWidth;
   tip.style.left=Math.max(0,Math.min(bw-tw,px_+16+tw>bw?px_-tw-16:px_+16))+'px';
 }
-function hideHover(){S.hover=null;$('tip').hidden=true;const xh=$('xh');if(xh)xh.setAttribute('visibility','hidden');const hd=$('hdots');if(hd)hd.innerHTML=''}
+function hideHover(){S.hover=null;const tp=$('tip');if(tp)tp.hidden=true;const xh=$('xh');if(xh)xh.setAttribute('visibility','hidden');const hd=$('hdots');if(hd)hd.innerHTML=''}
 function hoverFromEvent(e){if(!CH)return;const r=$('chart').getBoundingClientRect();const sx=(e.clientX-r.left)/r.width*CH.W;
   const f=(sx-CH.m.l)/(CH.W-CH.m.l-CH.m.r);if(f<-0.02||f>1.02){hideHover();return}showHover(CH.st0+Math.round(f*(CH.last-CH.st0)))}
 
@@ -1778,7 +1753,7 @@ function holdRows(r,L,best){const st0=selStart(S.sel);const ed=!r.locked&&!r.ref
     <span class="htot ${Math.abs(tot-100)<0.05?'pos':'neg'}">${Math.abs(tot-100)>=0.05&&tot>0?`<button type="button" class="linkbtn" data-pscale="${pid}">Scale to 100%</button> `:''}Total ${tot}%</span>
     <button type="button" class="linkbtn" data-pedit="${pid}">Open in builder</button></span></td></tr>`;
   return rows+add}
-function renderPortfolios(){
+function renderPortfolios(){if(!$('ptable'))return;
   const L=S.sel;const rows=SERIES.concat(SPYS?[SPYS]:[]);const isBench=r=>r.locked||r.ref;
   $('listSub').textContent='';$('listSub').hidden=true;
   const best={};PCOLS.forEach(([k])=>{const vs=rows.map(r=>colVal(r,k)).filter(v=>v!=null);if(vs.length>1)best[k]=Math.max(...vs)});
@@ -1841,7 +1816,7 @@ function dupPf(id){const p=pf(id);if(!p)return;if(S.pfs.length>=MAXP){toast(MAXP
   persist();render();toast('Made '+n+'. Change its percentages below.');
   setTimeout(()=>{const el=$('pw-'+np.id+'-0');if(!el)return;el.scrollIntoView({block:'center',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});if(FINE)el.focus({preventScroll:true})},60)}
 function freeColor(){const used=S.pfs.map(p=>p.color);for(let k=0;k<MAXP;k++)if(!used.includes(k))return k;return 0}
-function toast(m,link){const t=$('toast');t.textContent=m;if(link&&typeof link==='object'){const b=document.createElement('button');b.type='button';b.className='tlink';b.textContent=link.label;b.onclick=()=>{t.hidden=true;link.fn()};t.append(' ',b);t.hidden=false;clearTimeout(toast._t);toast._t=setTimeout(()=>t.hidden=true,6000);return}if(link){const b=document.createElement('button');b.type='button';b.className='tlink';b.textContent='See it';b.onclick=()=>{t.hidden=true;$('portfolios').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'})};t.append(' ',b)}t.hidden=false;clearTimeout(toast._t);toast._t=setTimeout(()=>t.hidden=true,link?5000:2800)}
+function toast(m,link){const t=$('toast');t.textContent=m;if(link&&typeof link==='object'){const b=document.createElement('button');b.type='button';b.className='tlink';b.textContent=link.label;b.onclick=()=>{t.hidden=true;link.fn()};t.append(' ',b);t.hidden=false;clearTimeout(toast._t);toast._t=setTimeout(()=>t.hidden=true,6000);return}if(link){const b=document.createElement('button');b.type='button';b.className='tlink';b.textContent='See it';b.onclick=()=>{t.hidden=true;$('builder').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'})};t.append(' ',b)}t.hidden=false;clearTimeout(toast._t);toast._t=setTimeout(()=>t.hidden=true,link?5000:2800)}
 /* ticker suggestions: already-added ETFs are grayed out */
 let sugIdx=-1;
 function sugItems(q){q=String(q||'').trim().toUpperCase();const added=new Set(S.b.rows.map(r=>r.t));
@@ -2113,7 +2088,7 @@ function wireChart(box,show,hide){
   box.addEventListener('touchend',e=>{if(t0&&!scrub){const t=e.changedTouches[0];if(Math.abs(t.clientX-t0.x)<8&&Math.abs(t.clientY-t0.y)<8){if(t0.on)hide();else show(t)}}t0=null;scrub=false});
   document.addEventListener('touchstart',e=>{if(!box.contains(e.target))hide()},{passive:true});
   window.addEventListener('scroll',()=>{if(!scrub)hide()},{passive:true})}
-const cb=$('chartbox'),bcb=$('bChartbox');wireChart(cb,hoverFromEvent,hideHover);wireChart(bcb,bHoverFromEvent,bHideHover);
+const cb=$('chartbox'),bcb=$('bChartbox');if(cb)wireChart(cb,hoverFromEvent,hideHover);wireChart(bcb,bHoverFromEvent,bHideHover);
 let rz=null;window.addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(()=>{fitBHead();renderChart();if(S.b.open)renderBChart()},150)});
 let dragDepth=0;
 document.addEventListener('dragenter',e=>{if([...(e.dataTransfer?.types||[])].includes('Files')){dragDepth++;$('drophint').hidden=false}});
@@ -2445,7 +2420,11 @@ document.addEventListener('click',e=>{if(!e.target.closest)return;
   const sg=e.target.closest('[data-xseg]');if(sg){const body=sg.closest('.xbk-body');if(body){body.querySelectorAll('[data-xseg]').forEach(b=>b.classList.toggle('sel',b===sg));xTmPaint(body,sg.dataset.xseg)}return}
   const tl=e.target.closest('.xftile');if(tl){const tip=tl.parentElement.querySelector('.xftip');xTmTip(tl,tip&&tip.hidden);return}
   if(!e.target.closest('.xftm'))document.querySelectorAll('.xftip').forEach(tp=>tp.hidden=true)});
-document.addEventListener('mouseover',e=>{if(!e.target.closest)return;const tl=e.target.closest('.xftile');if(tl)xTmTip(tl,true)});
+/* after the card flips, the holdings map appears under a mouse that hasn't moved; wait for a real move before showing a tile's label */
+let XTMSTILL=false;
+document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('[data-xflip]'))XTMSTILL=true},true);
+document.addEventListener('mousemove',e=>{if(!XTMSTILL)return;XTMSTILL=false;const tl=e.target.closest&&e.target.closest('.xftile');if(tl)xTmTip(tl,true)});
+document.addEventListener('mouseover',e=>{if(!e.target.closest||XTMSTILL)return;const tl=e.target.closest('.xftile');if(tl)xTmTip(tl,true)});
 document.addEventListener('mouseout',e=>{if(!e.target.closest)return;const tl=e.target.closest('.xftile');if(tl&&!(e.relatedTarget&&e.relatedTarget.closest&&e.relatedTarget.closest('.xftile')===tl))xTmTip(tl,false)});
 function xSetRange(k){XM.rng=k;XM.rngSet=1;const d=XM.d;if(!d)return;
   /* redraw each line chart at the height it already has, so nothing jumps while periods are clicked through */
