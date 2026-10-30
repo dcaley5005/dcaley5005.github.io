@@ -399,7 +399,8 @@ def build_whats_inside(series, names, fund):
     prices, missing = H.download_cached(syms, start, pri)
     log(f"Holding prices: {len(prices)} of {len(syms)}")
     # names and sectors only for symbols Yahoo has prices for, biggest holdings first
-    order = sorted((x for x in syms if x in prices), key=lambda x: x not in pri)
+    # (by how much of the funds they make up, so NVIDIA and Apple come before small names)
+    order = sorted((x for x in syms if x in prices), key=lambda x: (x not in pri, -pri.get(x, 0), x))
     stocks = H.update_stocks(syms, refresh=order)
     H.build_inside(OUT / "inside", series, hold, stocks, prices, names, fund, nport)
 

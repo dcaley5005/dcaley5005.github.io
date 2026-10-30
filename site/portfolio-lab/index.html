@@ -1042,7 +1042,7 @@ tr.xecho>td{background:var(--accentBg);transition:background .2s}
 .xrngseg button{font-size:12.5px;padding:6px 2px}
 .xpop{position:fixed;inset:0;z-index:95;background:rgba(10,10,8,.55);display:flex;align-items:center;justify-content:center;padding:14px}
 .xpop[hidden]{display:none}
-.xpopwrap{position:relative;width:100%;max-width:430px;height:min(740px,100%);display:flex}
+.xpopwrap{position:relative;width:100%;max-width:430px;height:min(800px,100%);display:flex}
 .xpopdock{flex:1 1 auto;display:flex;min-width:0}
 .xpopdock .xcard{flex:1 1 auto;height:100%;min-height:0}
 .xfacex{display:none;position:absolute;top:12px;right:12px;z-index:5;width:36px;height:36px;border-radius:50%;border:1px solid var(--inputLine);background:var(--panel);color:var(--ink);align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.3)}
@@ -2098,7 +2098,7 @@ function wireChart(box,show,hide){
   document.addEventListener('touchstart',e=>{if(!box.contains(e.target))hide()},{passive:true});
   window.addEventListener('scroll',()=>{if(!scrub)hide()},{passive:true})}
 const cb=$('chartbox'),bcb=$('bChartbox');if(cb)wireChart(cb,hoverFromEvent,hideHover);wireChart(bcb,bHoverFromEvent,bHideHover);
-let rz=null;window.addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(()=>{fitBHead();renderChart();if(S.b.open)renderBChart()},150)});
+let rz=null;window.addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(()=>{if(!D)return;/* prices not loaded yet: nothing to redraw */fitBHead();renderChart();if(S.b.open)renderBChart()},150)});
 let dragDepth=0;
 document.addEventListener('dragenter',e=>{if([...(e.dataTransfer?.types||[])].includes('Files')){dragDepth++;$('drophint').hidden=false}});
 document.addEventListener('dragleave',()=>{dragDepth=Math.max(0,dragDepth-1);if(!dragDepth)$('drophint').hidden=true});
