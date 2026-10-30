@@ -129,7 +129,8 @@ def short_desc(text, most=320):
 
 def fetch_stock(sym):
     info = yf.Ticker(sym).get_info() or {}
-    if not info:
+    # when Yahoo is throttling it answers with a near-empty dict; count that as a refusal, not as "no data"
+    if not (info.get("shortName") or info.get("longName") or info.get("quoteType")):
         raise ValueError("empty response")
     return {"n": info.get("shortName") or info.get("longName") or "", "sec": info.get("sector"),
             "ind": info.get("industry"), "qt": info.get("quoteType"),
@@ -161,7 +162,10 @@ def _refresh(old, keys, fetch, max_age, minutes, label):
             for fut in as_completed(futs):
                 k = futs[fut]
                 try:
-                    old[k] = fut.result()
+                    new = fut.result()
+                    # never let a blank answer wipe a name, sector or description we already have
+                    prev = old.get(k) or {}
+                    old[k] = {**new, **{f: prev[f] for f in ("n", "sec", "ind", "qt", "ds") if prev.get(f) and not new.get(f)}}
                     done += 1
                 except Exception as e:
                     errs.append((k, str(e)[:80]))
