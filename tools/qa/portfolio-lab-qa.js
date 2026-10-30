@@ -37,7 +37,7 @@ if (LIVE) {   /* the page under test from --page, its data from the live portfol
 if (ROOT) {
   srv = http.createServer((q, r) => { let p = path.join(ROOT, decodeURIComponent(q.url.split('?')[0])); if (p.endsWith('/')) p += 'index.html';
     /* per-fund files arrive a little late, like on a real connection; instant answers hide layout jumps */
-    setTimeout(() => fs.readFile(p, (e, b) => { if (e) { miss.push(q.url); r.writeHead(404); r.end(); } else { r.writeHead(200); r.end(b); } }), /\/data\/(inside|peers)\//.test(q.url) ? LAT : 0); }).listen(8799);
+    setTimeout(() => fs.readFile(p, (e, b) => { if (e) { miss.push(q.url); r.writeHead(404); r.end(); } else { r.writeHead(200); r.end(b); } }), /\/data\/(inside|peers|grp)\//.test(q.url) ? LAT : 0); }).listen(8799);
   BASE = 'http://localhost:8799/portfolio-lab/';
 }
 
@@ -151,8 +151,16 @@ async function run() {
         }
         if (w > 1000) check(S, `Under the hood ${T}`, 'Card does not grow when picking tiles', Math.max(...heights) - Math.min(...heights) <= 4, heights.join(' / ') + 'px');
         for (const m of ['ind', 'sec']) { await press(pg, await pg.$(`[data-xtmm="${m}"]`), touch); await sleep(500);
-          const sum = await pg.$$eval('#xTm .xftile', ts => ts.reduce((a, t) => a + parseFloat((t.dataset.tip.match(/([\d.]+)%$/) || [0, 0])[1]), 0));
-          check(S, `Under the hood ${T}`, `${m === 'ind' ? 'Industries' : 'Sectors'} cover the whole fund`, sum >= 97 && sum <= 103, sum.toFixed(1) + '%'); }
+          const sum = await pg.$$eval('#xTm .xtile', ts => ts.reduce((a, t) => a + parseFloat(((t.getAttribute('aria-label') || t.title || '').match(/: ([\d.]+)% of /) || [0, 0])[1]), 0));
+          const nm = m === 'ind' ? 'Industries' : 'Sectors';
+          check(S, `Under the hood ${T}`, `${nm} cover the whole fund`, sum >= 97 && sum <= 103, sum.toFixed(1) + '%');
+          /* the biggest group's card: its description, return, line chart and risk */
+          if (await press(pg, '#xTm .xtile[data-ht]', touch)) { await sleep(1800); const gc = await geo(pg);
+            const has = await pg.evaluate(() => { const c = document.querySelector('#xInDock .xcard'); return c ? [!!c.querySelector('.xfdesc'), !!c.querySelector('.xhero'), !!c.querySelector('.xspark svg polyline'), c.querySelectorAll('.xrk').length] : null });
+            check(S, `Under the hood ${T}`, `${nm}: tile opens a card with description, return, line and risk`, has && has[0] && has[1] && has[2] && has[3] === 3, JSON.stringify(has));
+            check(S, `Under the hood ${T}`, `${nm}: nothing sticks out of the card`, gc.over === 0, gc.over + ' items');
+            if (gc.line != null) check(S, `Under the hood ${T}`, `${nm}: card line chart has room`, gc.line >= (w <= 1000 ? 100 : 120), gc.line + 'px');
+            await press(pg, '#xTm .xtile[data-ht]', touch); await sleep(300); } }
         shots.push(await pg.screenshot());
         await press(pg, await pg.$('[data-xtmm="stk"]'), touch); await sleep(300);
         const go = await pg.$('#xInDock [data-xgo]'); if (go) { await press(pg, go, touch); await sleep(900); check(S, `Under the hood ${T}`, 'See alternatives opens Alternatives', (await pg.evaluate(() => XM.tab)) === 'alt', '') }
@@ -167,7 +175,7 @@ async function run() {
   }
   await br.close(); if (srv) srv.close();
   /* a missing page-wide file is a real problem; a missing per-fund file usually means the local data copy is partial */
-  const nf = miss.filter(u => !/favicon/.test(u)), core = nf.filter(u => !/\/data\/(inside|peers|stock|t)\//.test(u)), fund = nf.length - core.length;
+  const nf = miss.filter(u => !/favicon/.test(u)), core = nf.filter(u => !/\/data\/(inside|peers|stock|t|grp)\//.test(u)), fund = nf.length - core.length;
   if (ROOT || LIVE) { check('all', 'Data', 'No missing page-wide files', core.length === 0, core.slice(0, 5).join(', '));
     if (fund) check('all', 'Data', 'Per-fund files', null, `${fund} not in this data copy, so cards for those funds ran without their details`); }
   const fail = results.filter(r => r.ok === false), un = results.filter(r => r.ok === null);

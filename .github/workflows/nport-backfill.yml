@@ -71,9 +71,19 @@ jobs:
         if: ${{ !inputs.reparse }}
         env:
           GH_TOKEN: ${{ github.token }}
+          QS: ${{ needs.plan.outputs.quarters }}
         run: |
           mkdir -p /tmp/nport/quarters
-          if gh release download nport-data -p "${{ matrix.q }}.json.gz" -D /tmp/nport/quarters 2>/dev/null; then echo "hit=true" >> "$GITHUB_OUTPUT"; fi
+          f=/tmp/nport/quarters/${{ matrix.q }}.json.gz
+          if gh release download nport-data -p "${{ matrix.q }}.json.gz" -D /tmp/nport/quarters 2>/dev/null; then
+            # the newest quarters must carry every stock each fund holds ("all"); files parsed before that are parsed again
+            recent=$(python -c "import json,os;print(' '.join(sorted(json.loads(os.environ['QS']))[-3:]))")
+            if [[ " $recent " == *" ${{ matrix.q }} "* ]] && ! python -c "import gzip,json,sys;d=json.load(gzip.open('$f','rt'));sys.exit(0 if any('all' in r for rs in d['reports'].values() for r in rs) else 1)"; then
+              echo "${{ matrix.q }} has no full lists yet; parsing it again"; rm -f "$f"
+            else
+              echo "hit=true" >> "$GITHUB_OUTPUT"
+            fi
+          fi
       - if: steps.reuse.outputs.hit != 'true'
         run: python scripts/nport.py quarter ${{ matrix.q }} --out /tmp/nport/quarters
       - uses: actions/upload-artifact@v4

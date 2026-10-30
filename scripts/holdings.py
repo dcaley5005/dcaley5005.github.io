@@ -13,6 +13,7 @@ Run directly for a trial on a few ETFs (prints what came back, writes nothing to
   python scripts/holdings.py XLK SPY AGG
 """
 import json
+from collections import defaultdict
 import math
 import re
 import warnings
@@ -49,6 +50,20 @@ def _norm_name(n):
     n = unicodedata.normalize("NFKD", n or "").encode("ascii", "ignore").decode()
     n = re.sub(r"[^A-Z0-9 ]", " ", n.upper())
     return " ".join(t for t in n.split() if t not in _MAP_SUFFIX)
+
+
+_INDUSTRIES = None
+
+
+def _industries():
+    """The standard list: each industry and the sector it belongs to (Yahoo's names)."""
+    global _INDUSTRIES
+    if _INDUSTRIES is None:
+        try:
+            _INDUSTRIES = _load(ROOT / "data" / "industries.json") or {}
+        except Exception:
+            _INDUSTRIES = {}
+    return _INDUSTRIES
 
 
 def _holding_map():
@@ -351,6 +366,7 @@ def nport_symbols(nport, end):
     for d in nport.values():
         for i in set(nport_bases(d, starts, end)):
             syms.update(d["sec"][j][0] for j, _ in d["hist"][i][2] if d["sec"][j][0])
+        syms.update(s for s, _ in (d.get("full") or {}).get("h", []))
     return syms
 
 
@@ -398,6 +414,68 @@ def nport_weights(doc, etf_s, stock_series, end):
 
 
 # ---------- building the site files ----------
+GRP_LINE_MIN = 0.002     # industries smaller than this get a return but no line chart, to keep the files small
+
+
+_REL = {}     # symbol -> its prices on the build's dates, relative to today (shared by every fund that holds it)
+
+
+def group_doc(full, etf_s, stock_series, stocks, idx, nd, wk, end):
+    """Industry and sector totals from every stock in the fund's latest SEC report: each group's share of the
+    fund today, its return over each period and its line. The line is today's holdings priced back in time,
+    which is the same as holding the group from the start of any period."""
+    import numpy as np
+    ind_sec = _industries()
+    asof = pd.Timestamp(full["asof"])
+    f0, f1 = _at(etf_s, asof), _at(etf_s, end)
+    fm = (f1 / f0) if f0 and f1 else 1.0
+    members = defaultdict(list)       # ("ind"|"sec", name) -> [(weight today, relative prices)]
+    for sym, p in full["h"]:
+        st = stocks.get(sym) or {}
+        ind = st.get("ind") if st.get("ind") in ind_sec else None
+        sec = ind_sec[ind] if ind else (st.get("sec") if st.get("sec") in set(ind_sec.values()) else None)
+        ss = stock_series.get(sym)
+        if not sec or ss is None or not len(ss) or ss.index[-1] < end - pd.Timedelta(days=7):
+            continue
+        p0, p1 = _at(ss, asof), _at(ss, end)
+        w = p * (p1 / p0) / fm if p0 and p1 else p
+        rel = _REL.get(sym)
+        if rel is None:
+            px = ss.reindex(ss.index.union(idx)).ffill().reindex(idx)
+            rel = _REL[sym] = (px / px.iloc[-1]).to_numpy(dtype=float)      # NaN before a stock's first price
+        if not np.isfinite(rel[-1]):
+            continue
+        members[("sec", sec)].append((w, rel))
+        if ind:
+            members[("ind", ind)].append((w, rel))
+    out = {"asof": full["asof"], "eq": full.get("eq"), "ind": {}, "sec": {}}
+    for (kind, name), ms in members.items():
+        W = sum(w for w, _ in ms)
+        if W <= 0:
+            continue
+        # each day's move is the value-weighted move of the stocks trading on both days, so a stock that
+        # listed partway through only counts from its first price
+        R = np.array([r for _, r in ms])
+        V = np.array([w for w, _ in ms])[:, None] * R
+        step = R[:, 1:] / R[:, :-1]
+        ok = np.isfinite(step) & np.isfinite(V[:, :-1])
+        den = np.where(ok, V[:, :-1], 0).sum(0)
+        num = np.where(ok, V[:, :-1] * np.where(ok, step, 0), 0).sum(0)
+        g_step = np.where(den > 0, num / np.where(den > 0, den, 1), 1.0)
+        line = np.concatenate([[1.0], np.cumprod(g_step)])
+        line = line / line[-1]
+        s = pd.Series(line, index=idx)
+        g = {"w": round(W, 5), "n": len(ms), "r": period_returns(s, end)}
+        if kind == "ind":
+            g["s"] = ind_sec[name]
+        if kind == "sec" or W >= GRP_LINE_MIN:
+            rel = np.round(line * 10000)
+            g["d"] = [int(v) for v in rel[-nd:]]
+            g["wk"] = [int(rel[i]) for i in wk]
+        out[kind][name] = g
+    return out
+
+
 def period_returns(s, last):
     """1M 3M 6M YTD 1Y return, then 3Y per year; None where history is too short."""
     out = []
@@ -470,7 +548,8 @@ def build_inside(out_dir, etf_series, hold, stocks, stock_series, names, fund=No
     out.mkdir(parents=True, exist_ok=True)
     nport = nport or {}
     blurbs = _load(BLURB_FILE)
-    written = sec_n = 0
+    written = sec_n = grp_n = 0
+    gdir = out.parent / "grp"
     for t in sorted(set(hold) | set(nport)):
         h = hold.get(t) or {}
         s = etf_series.get(t)
@@ -508,6 +587,20 @@ def build_inside(out_dir, etf_series, hold, stocks, stock_series, names, fund=No
                     c["ind"] = m.get("ind")
                     if not c.get("sec"):
                         c["sec"] = m.get("sec")
+        # keep every holding on the standard list, so the industry and sector maps never get a one-off tile
+        ind_sec = _industries()
+        if ind_sec:
+            secs = set(ind_sec.values())
+            for c in top:
+                i = c.get("ind")
+                if i and i not in ind_sec:
+                    log(f"  {t}: unknown industry {i!r} for {c.get('t') or c.get('hn')}; left under its sector")
+                    c["ind"] = None
+                elif i:
+                    c["sec"] = ind_sec[i]
+                if c.get("sec") and c["sec"] not in secs:
+                    log(f"  {t}: unknown sector {c['sec']!r} for {c.get('t') or c.get('hn')}")
+                    c["sec"] = None
         tw = sum(c["wt"] for c in top)
         rest = None
         if extra and top:
@@ -549,6 +642,11 @@ def build_inside(out_dir, etf_series, hold, stocks, stock_series, names, fund=No
                    f={k: (fund or {}).get(t, {}).get(k) for k in ("aum", "cat", "fam", "inc")}, **extra)
         (out / f"{t}.json").write_text(json.dumps(doc, separators=(",", ":")))
         written += 1
+        full = (nport.get(t) or {}).get("full")
+        if full and s is not None and len(s):
+            gdir.mkdir(parents=True, exist_ok=True)
+            (gdir / f"{t}.json").write_text(json.dumps(group_doc(full, s, stock_series, stocks, idx, nd, wk, end), separators=(",", ":")))
+            grp_n += 1
     # one small file per holding with its line chart, shared by every fund that holds it
     sdir = out.parent / "stock"
     sdir.mkdir(parents=True, exist_ok=True)
@@ -560,7 +658,7 @@ def build_inside(out_dir, etf_series, hold, stocks, stock_series, names, fund=No
             lines += 1
         elif ds:     # no line chart, but the card still gets its description
             (sdir / f"{sym}.json").write_text(json.dumps({"ds": ds}, separators=(",", ":")))
-    log(f"What's inside: wrote {written} ETFs ({sec_n} from SEC reports), {len(cards)} holding cards, {lines} line charts")
+    log(f"What's inside: wrote {written} ETFs ({sec_n} from SEC reports, {grp_n} with industry totals), {len(cards)} holding cards, {lines} line charts")
     return written
 
 
