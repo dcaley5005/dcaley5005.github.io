@@ -2819,8 +2819,8 @@ function xinGroups(d,mode){const top=d.top.filter(c=>c.wt>0),sec=Object.entries(
       sec.forEach(([k,v])=>{const r=v-(used[k]||0);if(r>0.003)out.push({id:'~g:oth:'+k,lbl:'Other '+(XSEC[k]||k).toLowerCase(),w:r,m:[]})})}}
   else out=sec.map(([k,v])=>({id:'~g:sec:'+k,lbl:XSEC[k]||k,w:v,m:top.filter(c=>XYSEC[c.sec]===k)}));
   out.sort((a,b)=>b.w-a.w);const tot=out.reduce((a,x)=>a+x.w,0);
-  if(mode==='sec'&&d.pf&&tot<0.98){let left=1-tot;const bd=Math.min(left,(d.ac&&d.ac.bond)||0);if(bd>0.005){out.push({lbl:'Bonds',w:bd});left-=bd}if(left>0.005)out.push({lbl:'Other and cash',w:left})}
-  else if(tot<(mode==='sec'?0.98:0.995))out.push({lbl:mode==='sec'||sec.length?'Other and cash':`Outside the top ${xinN(d)}`,w:1-tot});
+  if(mode==='sec'&&d.pf&&tot<0.98){let left=1-tot;const bd=Math.min(left,(d.ac&&d.ac.bond)||0);if(bd>0.005){out.push({id:'~g:misc:bonds',lbl:'Bonds',w:bd,m:[]});left-=bd}if(left>0.005)out.push({id:'~g:misc:cash',lbl:'Other and cash',w:left,m:[]})}
+  else if(tot<(mode==='sec'?0.98:0.995))out.push(mode==='sec'||sec.length?{id:'~g:misc:cash',lbl:'Other and cash',w:1-tot,m:[]}:{id:'~g:misc:out',lbl:`Outside the top ${xinN(d)}`,w:1-tot,m:[]});
   return out.filter(x=>x.w>0.0005)}
 /* a holding's weight inside its group at the start of a period; one that joined the top list since then is rolled back from today's share */
 function xGrpW(c,k){return c.pw&&c.pw[k]>0?c.pw[k]:xinShare({...c,pw:null},k)}
@@ -2838,7 +2838,7 @@ function xGrpSeries(d,m){const s=d.self||{},k=xRk(),to=new Date(d.to+'T00:00:00Z
     if(!sw)return {};
     out[ka]=V.map((v,i)=>{if(i<i0)return 1;let x=0;for(const [w,P] of kn)x+=w*P[i]/P[i0];return x/sw})}
   return out}
-function xGroup(d,id){if(id.startsWith('~g:oth:')){const g=xinGroups(d,'ind').find(x=>x.id===id);return g?{t:id,k:'grp',mode:'oth',lbl:g.lbl,gw:g.w,m:[],r:[null,null,null,null,null,null]}:null}
+function xGroup(d,id){if(id.startsWith('~g:oth:')||id.startsWith('~g:misc:')){const g=xinGroups(d,'ind').concat(xinGroups(d,'sec')).find(x=>x.id===id);return g?{t:id,k:'grp',mode:id.startsWith('~g:oth:')?'oth':'misc',lbl:g.lbl,gw:g.w,m:[],r:[null,null,null,null,null,null]}:null}
   for(const mode of ['ind','sec']){const g=xinGroups(d,mode).find(x=>x.id===id);if(!g)continue;
   const r=[0,1,2,3,4,5].map(k=>xGrpR(g.m,k)),ser=g.m.some(c=>c.t&&XSTK[c.t]===undefined)?{}:xGrpSeries(d,g.m),q={t:id,k:'grp',mode,lbl:g.lbl,gw:g.w,m:g.m,r,...ser};
   return q.d&&q.w?{...q,...xRisk(q,true)}:q}return null}
@@ -2846,9 +2846,9 @@ function xGroup(d,id){if(id.startsWith('~g:oth:')){const g=xinGroups(d,'ind').fi
 function xGrpCard(g,d,noload){const s=d.self||{},k=xRk(),key=g.t.slice(g.t.indexOf(':',3)+1),ds=XGDESC[key]||'';
   const need=g.m.filter(c=>c.t&&XSTK[c.t]===undefined);
   if(need.length&&!noload)Promise.all(need.map(c=>xStkLoad(c.t))).then(()=>{const dk=$('xInDock');if(dk&&dk.firstElementChild&&dk.firstElementChild.dataset.xc===g.t){dk.dataset.t='~';xinTip(XM.sel||g.t,true)}});
-  const hv=g.r[k],hb=s.r?s.r[k]:null,line=g.d&&g.w&&s.d&&s.w,sub=g.mode==='oth'?`Sector · outside the top ${xinN(d)}`:g.mode==='ind'?'Industry'+(g.m[0]&&g.m[0].sec?' · '+(XSEC[XYSEC[g.m[0].sec]]||g.m[0].sec):''):'Sector';
+  const hv=g.r[k],hb=s.r?s.r[k]:null,line=g.d&&g.w&&s.d&&s.w,sub=g.mode==='misc'?'Not in a sector':g.mode==='oth'?`Sector · outside the top ${xinN(d)}`:g.mode==='ind'?'Industry'+(g.m[0]&&g.m[0].sec?' · '+(XSEC[XYSEC[g.m[0].sec]]||g.m[0].sec):''):'Sector';
   const cov=g.m.reduce((a,c)=>a+c.wt,0),n=g.m.length,N=xinN(d);
-  const why=g.mode==='oth'?`These are ${esc(s.t)}'s ${esc(XSEC[key]||key).toLowerCase()} holdings outside its top ${N}. Returns are tracked only for the top ${N}, so there's no return to show.`:!n?`None of ${esc(s.t)}'s top ${N} holdings are in this sector, so there's no return to show.`:g.mode==='sec'&&cov<g.gw-0.005?`Based on its ${n===1?'one holding':n+' holdings'} in the top ${N} (${xw(cov)} of ${xw(g.gw)}).`:'';
+  const why=g.mode==='misc'?(key==='bonds'?`The bonds ${esc(s.t)} holds. Bonds don't belong to a stock sector, so there's no return to show here.`:key==='out'?`Everything ${esc(s.t)} holds outside its top ${N}. Industries are known only for the top ${N}.`:`Cash, and holdings that don't belong to a stock sector, like bonds, futures or other funds. There's no return to show here.`):g.mode==='oth'?`These are ${esc(s.t)}'s ${esc(XSEC[key]||key).toLowerCase()} holdings outside its top ${N}. Returns are tracked only for the top ${N}, so there's no return to show.`:!n?`None of ${esc(s.t)}'s top ${N} holdings are in this sector, so there's no return to show.`:g.mode==='sec'&&cov<g.gw-0.005?`Based on its ${n===1?'one holding':n+' holdings'} in the top ${N} (${xw(cov)} of ${xw(g.gw)}).`:'';
   return `<article class="xcard" data-xc="${esc(g.t)}" style="--xc:var(--xs)"><div class="xch"><div><b>${esc(g.lbl)}</b><span class="nm">${sub}</span></div><span class="xchip s">${xw(g.gw)} of ${esc(s.t)}</span></div>
     ${ds?`<p class="xfdesc">${esc(ds)}</p>`:''}${n?xToggle():''}
     ${hv==null?'':`<div class="xhero"><b class="${hv>=0?'pos':'neg'}">${xp(hv)}</b><span class="u">${k===5?'/ yr, 3Y':esc(XM.rng)}</span>${hb==null?'':`<span class="xpill ${hv-hb>=0?'up':'dn'}">${xpts(hv-hb)} pts vs ${esc(s.t)}</span>`}</div>`}
