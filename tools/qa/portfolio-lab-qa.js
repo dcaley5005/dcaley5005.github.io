@@ -37,7 +37,7 @@ if (LIVE) {   /* the page under test from --page, its data from the live portfol
 if (ROOT) {
   srv = http.createServer((q, r) => { let p = path.join(ROOT, decodeURIComponent(q.url.split('?')[0])); if (p.endsWith('/')) p += 'index.html';
     /* per-fund files arrive a little late, like on a real connection; instant answers hide layout jumps */
-    setTimeout(() => fs.readFile(p, (e, b) => { if (e) { miss.push(q.url); r.writeHead(404); r.end(); } else { r.writeHead(200); r.end(b); } }), /\/data\/(inside|peers)\//.test(q.url) ? LAT : 0); }).listen(8799);
+    setTimeout(() => fs.readFile(p, (e, b) => { if (e) { miss.push(q.url); r.writeHead(404); r.end(); } else { r.writeHead(200); r.end(b); } }), /\/data\/(inside|peers|grp)\//.test(q.url) ? LAT : 0); }).listen(8799);
   BASE = 'http://localhost:8799/portfolio-lab/';
 }
 
@@ -175,7 +175,7 @@ async function run() {
   }
   await br.close(); if (srv) srv.close();
   /* a missing page-wide file is a real problem; a missing per-fund file usually means the local data copy is partial */
-  const nf = miss.filter(u => !/favicon/.test(u)), core = nf.filter(u => !/\/data\/(inside|peers|stock|t)\//.test(u)), fund = nf.length - core.length;
+  const nf = miss.filter(u => !/favicon/.test(u)), core = nf.filter(u => !/\/data\/(inside|peers|stock|t|grp)\//.test(u)), fund = nf.length - core.length;
   if (ROOT || LIVE) { check('all', 'Data', 'No missing page-wide files', core.length === 0, core.slice(0, 5).join(', '));
     if (fund) check('all', 'Data', 'Per-fund files', null, `${fund} not in this data copy, so cards for those funds ran without their details`); }
   const fail = results.filter(r => r.ok === false), un = results.filter(r => r.ok === null);
