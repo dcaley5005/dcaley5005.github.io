@@ -236,9 +236,15 @@ def load_quarter(zpath, want_series):
         top = [[k, round(float(p) / 100, 6)] for k, p in w.head(TOP_N).items()]
         for k, _ in top:
             sec.setdefault(k, None)
+        # every other stock the fund holds, so industries and sectors can be built from the whole fund
+        topk = {k for k, _ in top}
+        eq = g[g["cat"].isin(("EC", "EP"))].groupby("key")["pct"].sum().sort_values(ascending=False)
+        rest_eq = [[k, round(float(p) / 100, 7)] for k, p in eq.items() if k not in topk and p > 0]
+        for k, _ in rest_eq:
+            sec.setdefault(k, None)
         reports[i["sid"]].append({"asof": i["asof"], "filed": clean(i.get("filed")), "name": clean(i["name"]),
                                   "net": clean(i["net"]), "n": int(len(w)), "cash": round(float(cash) / 100, 6),
-                                  "top": top})
+                                  "top": top, "all": rest_eq})
     first = hold.drop_duplicates("key").set_index("key")
     for k in sec:
         r = first.loc[k]
@@ -466,6 +472,11 @@ def cmd_combine(a):
             for k, p in r["top"]:
                 w[canon[k]] += p
             r["top"] = [[k, round(p, 6)] for k, p in w.most_common()]
+            if r.get("all") is not None:
+                w = Counter()
+                for k, p in r["all"]:
+                    w[canon[k]] += p
+                r["all"] = [[k, round(p, 7)] for k, p in w.most_common()]
 
     names, us_titles = company_names()
     stock_info = json.loads(STOCKS_FILE.read_text()) if STOCKS_FILE.exists() else {}
@@ -507,6 +518,7 @@ def cmd_combine(a):
     w_all = w_sym = w_known = 0.0
     e_all = e_sym = e_known = 0.0
     unresolved = Counter()
+    full_n, fw_all, fw_sym, full_syms = 0, 0.0, 0.0, set()
     for t in etfs:
         sid = smap.get(t)
         if not sid:
@@ -529,6 +541,22 @@ def cmd_combine(a):
                 top.append([idx[k], p])
             hist.append([r["asof"], r["net"], r["n"], r["cash"], top])
         last = rs[-1]
+        # the rest of the latest report's stocks (older reports keep only their top holdings)
+        rest_all = None
+        if last.get("all") is not None:
+            rest_all = []
+            for k, p in last["all"]:
+                if k not in idx:
+                    s = sec[k]
+                    idx[k] = len(table)
+                    table.append([s["sym"], s["name"], s["cusip"], s["isin"], s["cat"], s["country"]])
+                rest_all.append([idx[k], p])
+            full_n += 1
+            for k, p in last["all"]:
+                fw_all += p
+                if sec[k]["sym"]:
+                    fw_sym += p
+                    full_syms.add(sec[k]["sym"])
         for k, p in last["top"]:
             s = sec[k]
             w_all += p
@@ -544,7 +572,7 @@ def cmd_combine(a):
                     unresolved[f'{s["name"]} ({s["country"]})'] += p
         doc = {"t": t, "sid": sid, "name": last["name"],
                "cols": {"sec": ["sym", "name", "cusip", "isin", "cat", "country"], "hist": ["asof", "net", "n", "cash", "top"]},
-               "sec": table, "hist": hist}
+               "sec": table, "hist": hist, **({"all": rest_all} if rest_all is not None else {})}
         (out / "etf" / f"{t}.json").write_text(json.dumps(doc, separators=(",", ":")))
 
     rep = {
@@ -557,6 +585,9 @@ def cmd_combine(a):
         "latest_top50_weight_with_symbol_in_stocks_json": round(w_known / max(w_all, 1e-9), 3),
         "latest_top50_stock_weight_with_symbol": round(e_sym / max(e_all, 1e-9), 3),
         "latest_top50_stock_weight_with_symbol_in_stocks_json": round(e_known / max(e_all, 1e-9), 3),
+        "full_lists": full_n, "full_extra_symbols": len(full_syms),
+        "full_extra_symbols_not_in_stocks_json": len(full_syms - set(stock_info)),
+        "full_extra_weight_with_symbol": round(fw_sym / max(fw_all, 1e-9), 3),
         "top_unresolved_stocks_by_weight": [[n, round(w, 3)] for n, w in unresolved.most_common(40)],
     }
     cmp = {}
@@ -592,8 +623,20 @@ def site_doc(d):
         idx[i] = len(sec)
         # only stocks keep a symbol: the "tickers" some funds give bonds aren't real listings
         sec.append([s[0] if s[4] in ("EC", "EP") else "", s[1], s[5]])
-    return {"t": d["t"], "asof": d["hist"][-1][0], "sec": sec,
-            "hist": [[h[0], h[3], [[idx[i], p] for i, p in h[4]]] for h in d["hist"]]}
+    out = {"t": d["t"], "asof": d["hist"][-1][0], "sec": sec,
+           "hist": [[h[0], h[3], [[idx[i], p] for i, p in h[4]]] for h in d["hist"]]}
+    if d.get("all") is not None:
+        # every stock in the latest report, by symbol, for the industry and sector totals; "eq" is the
+        # fund's whole stock share, including stocks without a symbol
+        w, eq = Counter(), 0.0
+        for i, p in d["hist"][-1][4] + d["all"]:
+            s = d["sec"][i]
+            if s[4] in ("EC", "EP"):
+                eq += p
+                if s[0]:
+                    w[s[0]] += p
+        out["full"] = {"asof": d["hist"][-1][0], "eq": round(eq, 5), "h": [[k, round(p, 7)] for k, p in w.most_common()]}
+    return out
 
 
 def cmd_site(a):

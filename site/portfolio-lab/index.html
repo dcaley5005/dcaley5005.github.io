@@ -2579,6 +2579,9 @@ function renderXM(){const b=$('xmBody');renderXMFoot();XM.chH=null;xSizeModal();
 const XIN={},XINL={};
 /* each holding's line chart is its own small file, fetched the first time its card shows and kept */
 const XSTK={},XSTKL={};
+/* industry and sector totals built from every stock in the fund's latest SEC report (null when the fund has none) */
+const XGRP={},XGRPL={};
+function xGrpLoad(t){if(!XGRPL[t])XGRPL[t]=fetch('data/grp/'+encodeURIComponent(t)+'.json').then(r=>r.ok?r.json():null).catch(()=>null).then(j=>{XGRP[t]=j;return j});return XGRPL[t]}
 function xStkLoad(t){if(!XSTKL[t])XSTKL[t]=fetch('data/stock/'+encodeURIComponent(t)+'.json').then(r=>r.ok?r.json():null).catch(()=>null).then(j=>{XSTK[t]=j;return j});return XSTKL[t]}
 function xinLoad(t){if(!XINL[t])XINL[t]=fetch('data/inside/'+encodeURIComponent(t)+'.json').then(r=>{if(!r.ok)throw new Error('none');return r.json()}).then(d=>{d.same=[];d.div=[];d.mom=null;d.closest=[];d.own=[];d.pool=0;d.top=d.top||[];XIN[t]=d;return d}).catch(e=>{delete XINL[t];throw e});return XINL[t]}
 const XSEC={technology:'Technology',financial_services:'Financials',healthcare:'Health care',consumer_cyclical:'Consumer discretionary',consumer_defensive:'Consumer staples',industrials:'Industrials',communication_services:'Communication',energy:'Energy',utilities:'Utilities',realestate:'Real estate',basic_materials:'Materials'};
@@ -2608,7 +2611,7 @@ function xinShare(c,k){if(c.pw)return c.pw[k]||0;const d=XM.d,R0=d&&d.self&&d.se
 function xinTitle(){const d=XM.d,t=d.t,m=XM.tmMode||'stk';if(m==='ind')return d.pf?'Your portfolio by industry':`${esc(t)} by industry`;if(m==='sec')return d.pf?'Your portfolio by sector':`${esc(t)} by sector`;
   const tw=d.top.reduce((a,c)=>a+c.wt,0);return d.pf?`The ${xinN(d)} biggest holdings across your ETFs are ${xw(tw)} of the portfolio`:`Top ${xinN(d)} holdings are ${xw(tw)} of ${esc(t)}`}
 function xTmToggle(){const m=XM.tmMode||'stk';return `<div class="xseg xtmseg" role="group" aria-label="Map view">${[['stk','Stocks'],['ind','Industries'],['sec','Sectors']].map(([k,l])=>`<button type="button" data-xtmm="${k}" class="${m===k?'sel':''}" aria-pressed="${m===k}">${l}</button>`).join('')}</div>`}
-function xinNote(){const m=XM.tmMode||'stk',wh=XM.d&&XM.d.pf?'your portfolio':esc(XM.d.t);if(m==='ind'||m==='sec'){const N=xinN(XM.d);return m==='ind'?`Each tile is an industry's share of ${wh}, from its top ${N} holdings. Color is their return ${XRWORD[XM.rng]}.`:`Each tile is a sector's share of ${wh}. Color is the return ${XRWORD[XM.rng]} of its holdings in the top ${N}.`}const d=XM.d;if(xinSec(d)&&d.pb){const b=d.pb[xRk()],late=b&&Date.parse(b)>xinStart(XM.rng);
+function xinNote(){const m=XM.tmMode||'stk',wh=XM.d&&XM.d.pf?'your portfolio':esc(XM.d.t);if((m==='ind'||m==='sec')&&!XM.d.pf&&XGRP[XM.d.t])return `Each tile is ${m==='ind'?'an industry':'a sector'}'s share of ${wh}, from every stock in its latest SEC report. Color is its return ${XRWORD[XM.rng]}.`;if(m==='ind'||m==='sec'){const N=xinN(XM.d);return m==='ind'?`Each tile is an industry's share of ${wh}, from its top ${N} holdings. Color is their return ${XRWORD[XM.rng]}.`:`Each tile is a sector's share of ${wh}. Color is the return ${XRWORD[XM.rng]} of its holdings in the top ${N}.`}const d=XM.d;if(xinSec(d)&&d.pb){const b=d.pb[xRk()],late=b&&Date.parse(b)>xinStart(XM.rng);
     return `Tile size is each holding's share of ${esc(d.t)} ${XAGO[XM.rng]}: ${late?`its first report to the SEC, for ${dayFmt(b)}, moved back with prices`:`its holdings as reported to the SEC for ${dayFmt(b)}, moved to then with prices`}. Color is its return ${XRWORD[XM.rng]}; pick a period on the card to change it.${d.via?` ${esc(d.t)} doesn't file these reports, so its holdings come from ${esc(d.via)}, which tracks the same index.`:''}`}
   if(d&&d.pf&&d.pf.sec&&d.pf.sec.length){const no=d.pf.ws.map(x=>x[0]).filter(t=>!d.pf.sec.includes(t));
     return `Tile size is each holding's share of the portfolio ${XAGO[XM.rng]}: each ETF's holdings as reported to the SEC at the last quarter-end before then, moved to then with prices${no.length?` (for ${esc(xList(no))}, which ${no.length===1?"doesn't":"don't"} file them, today's holdings moved back)`:''}. Color is its return ${XRWORD[XM.rng]}; pick a period on the card to change it.`}
@@ -2622,6 +2625,7 @@ function renderXI(){const b=$('xmBody');renderXMFoot();xSizeModal();
   const fig=xinEq(d)?`<figure class="xtmfig"><div class="xtmh"><div class="xtmhr"><b id="xtmTitle" title="${esc(xinNote())}">${xinTitle()}</b>${xTmToggle()}</div></div><div class="xtm" id="xTm"></div></figure>`:xinAssetsHTML(d);
   xSetGlance('');xSizeModal();
   b.innerHTML=`<div class="xtop xin">${fig}<div class="xcdock xidock" id="xInDock">${xAboutCard(d)}</div></div>`;
+  if(!d.pf&&xinEq(d)&&XGRP[t]===undefined)xGrpLoad(t).then(()=>{if(XM.d===d&&XM.tab==='in'&&!$('xm').hidden)xinFit()});
   $('xInDock').dataset.t='';xinFit();xinFitRow();xinPaint();if(XM.sel&&xFind(XM.sel))xinTip(XM.sel,true);
   if(document.fonts&&document.fonts.status!=='loaded')document.fonts.ready.then(()=>{if(XM.tab==='in'&&!$('xm').hidden){xinFit();xinFitRow();xinPaint()}})}
 
@@ -2794,7 +2798,7 @@ function xSquarify(items,x,y,w,h){const out=[];let R={x,y,w,h},row=[],rest=items
   while(rest.length){const len=Math.min(R.w,R.h),it=rest[0];if(!row.length||worst(row.concat([it]),len)<=worst(row,len)){row.push(it);rest.shift()}else{lay(row);row=[]}}
   if(row.length)lay(row);return out}
 function xinPaint(){const el=$('xTm'),d=XM.d;if(!el||!d)return;const W=el.clientWidth,H=el.clientHeight;if(!W||!H)return;
-  if((XM.tmMode||'stk')!=='stk'){xinGrpPaint(el,d,XM.tmMode);return}
+  if((XM.tmMode||'stk')!=='stk'){if(!d.pf&&XGRP[d.t]===undefined){el.innerHTML='';xGrpLoad(d.t).then(()=>{if(XM.d===d&&XM.tab==='in'&&(XM.tmMode||'stk')!=='stk')xinPaint()});return}xinGrpPaint(el,d,XM.tmMode);return}
   const k=xRk(),top=d.top.filter(c=>c.wt>0||c.pw).map(c=>({...c,sw:xinShare(c,k)})).filter(c=>c.sw>0).sort((a,b)=>b.sw-a.sw),tw=top.reduce((a,c)=>a+c.sw,0),rest0=d.rest&&d.rest.wt>0.003?d.rest:null,rest=rest0?{...rest0,sw:Math.max(0.003,1-tw)}:null;
   const rw=rest?Math.max(64,Math.round(W*rest.sw)):0,aw=W-rw,g=1.5;
   const tiles=xSquarify(top.map(c=>({c,a:c.sw/tw*aw*H})),0,0,aw,H);
@@ -2810,7 +2814,11 @@ function xinPaint(){const el=$('xTm'),d=XM.d;if(!el||!d)return;const W=el.client
     h+=`<button type="button" class="xtile rest b-${xBucket(r)}${big&&H>=110?' l':''}${XM.sel==='~rest'?' on':''}" data-ht="~rest" style="${box(aw,0,rw,H)}" aria-label="${esc(`Everything outside the top ${top.length}: ${xw(rest.sw)} of ${d.t} ${XAGO[XM.rng]}, ${r==null?'return unknown':'about '+xp(r)} ${XRWORD[XM.rng]}`)}"><span class="xtk">${wide?'Everything else':'Rest'}</span>${wide?`<span class="xtn">the other holdings</span>`:''}<span class="xtv">${xw(rest.sw)}</span><span class="xtv">${r==null?'—':'≈ '+xp(r)}</span></button>`}
   el.innerHTML=h;el.classList.toggle('fade',!!XM.sel)}
 /* the industry or sector tiles: each one's share of the whole fund, plus the named holdings in it (they give the return and line chart) */
-function xinGroups(d,mode){const top=d.top.filter(c=>c.wt>0),sec=Object.entries(d.sec||{}).filter(([,v])=>v>0.0005).sort((a,b)=>b[1]-a[1]);
+function xinGroups(d,mode){const G=!d.pf&&XGRP[d.t];
+  if(G){const m2=mode==='ind'&&Object.keys(G.ind).length?'ind':'sec',src=G[m2];
+    const out=Object.entries(src).map(([k,g])=>({id:'~g:'+m2+':'+(m2==='sec'?(XYSEC[k]||k):k),lbl:m2==='sec'?(XSEC[XYSEC[k]]||k):k,w:g.w,m:[],G:g})).sort((a,b)=>b.w-a.w);
+    const tot=out.reduce((a,x)=>a+x.w,0);if(1-tot>0.003)out.push({id:'~g:misc:cash',lbl:'Other and cash',w:1-tot,m:[]});return out.filter(x=>x.w>0.0005)}
+  const top=d.top.filter(c=>c.wt>0),sec=Object.entries(d.sec||{}).filter(([,v])=>v>0.0005).sort((a,b)=>b[1]-a[1]);
   const im={};top.forEach(c=>{if(c.ind)(im[c.ind]=im[c.ind]||[]).push(c)});
   if(mode==='ind'&&!Object.keys(im).length)mode='sec';
   let out=[];
@@ -2840,15 +2848,16 @@ function xGrpSeries(d,m){const s=d.self||{},k=xRk(),to=new Date(d.to+'T00:00:00Z
   return out}
 function xGroup(d,id){if(id.startsWith('~g:oth:')||id.startsWith('~g:misc:')){const g=xinGroups(d,'ind').concat(xinGroups(d,'sec')).find(x=>x.id===id);return g?{t:id,k:'grp',mode:id.startsWith('~g:oth:')?'oth':'misc',lbl:g.lbl,gw:g.w,m:[],r:[null,null,null,null,null,null]}:null}
   for(const mode of ['ind','sec']){const g=xinGroups(d,mode).find(x=>x.id===id);if(!g)continue;
+  if(g.G){const q={t:id,k:'grp',mode:id.split(':')[1],lbl:g.lbl,gw:g.w,m:[],full:g.G.n,sec:g.G.s,r:g.G.r,...(g.G.d&&g.G.wk?{d:g.G.d,w:g.G.wk}:{})};return q.d&&q.w?{...q,...xRisk(q,true)}:q}
   const r=[0,1,2,3,4,5].map(k=>xGrpR(g.m,k)),ser=g.m.some(c=>c.t&&XSTK[c.t]===undefined)?{}:xGrpSeries(d,g.m),q={t:id,k:'grp',mode,lbl:g.lbl,gw:g.w,m:g.m,r,...ser};
   return q.d&&q.w?{...q,...xRisk(q,true)}:q}return null}
 /* the card for an industry or sector tile: what it is, its return, its line against the fund, and its risk */
 function xGrpCard(g,d,noload){const s=d.self||{},k=xRk(),key=g.t.slice(g.t.indexOf(':',3)+1),ds=XGDESC[key]||'';
   const need=g.m.filter(c=>c.t&&XSTK[c.t]===undefined);
   if(need.length&&!noload)Promise.all(need.map(c=>xStkLoad(c.t))).then(()=>{const dk=$('xInDock');if(dk&&dk.firstElementChild&&dk.firstElementChild.dataset.xc===g.t){dk.dataset.t='~';xinTip(XM.sel||g.t,true)}});
-  const hv=g.r[k],hb=s.r?s.r[k]:null,line=g.d&&g.w&&s.d&&s.w,sub=g.mode==='misc'?'Not in a sector':g.mode==='oth'?`Sector · outside the top ${xinN(d)}`:g.mode==='ind'?'Industry'+(g.m[0]&&g.m[0].sec?' · '+(XSEC[XYSEC[g.m[0].sec]]||g.m[0].sec):''):'Sector';
-  const cov=g.m.reduce((a,c)=>a+c.wt,0),n=g.m.length,N=xinN(d);
-  const why=g.mode==='misc'?(key==='bonds'?`The bonds ${esc(s.t)} holds. Bonds don't belong to a stock sector, so there's no return to show here.`:key==='out'?`Everything ${esc(s.t)} holds outside its top ${N}. Industries are known only for the top ${N}.`:`Cash, and holdings that don't belong to a stock sector, like bonds, futures or other funds. There's no return to show here.`):g.mode==='oth'?`These are ${esc(s.t)}'s ${esc(XSEC[key]||key).toLowerCase()} holdings outside its top ${N}. Returns are tracked only for the top ${N}, so there's no return to show.`:!n?`None of ${esc(s.t)}'s top ${N} holdings are in this sector, so there's no return to show.`:g.mode==='sec'&&cov<g.gw-0.005?`Based on its ${n===1?'one holding':n+' holdings'} in the top ${N} (${xw(cov)} of ${xw(g.gw)}).`:'';
+  const hv=g.r[k],hb=s.r?s.r[k]:null,line=g.d&&g.w&&s.d&&s.w,isec=g.sec||(g.m[0]&&g.m[0].sec),sub=g.mode==='misc'?'Not in a sector':g.mode==='oth'?`Sector · outside the top ${xinN(d)}`:g.mode==='ind'?'Industry'+(isec?' · '+(XSEC[XYSEC[isec]]||isec):''):'Sector';
+  const cov=g.m.reduce((a,c)=>a+c.wt,0),n=g.full||g.m.length,N=xinN(d);
+  const why=g.full?`Based on ${g.full===1?'its one stock':'all '+g.full+' of its stocks'} here, from ${esc(s.t)}'s latest SEC report.`:g.mode==='misc'?(key==='bonds'?`The bonds ${esc(s.t)} holds. Bonds don't belong to a stock sector, so there's no return to show here.`:key==='out'?`Everything ${esc(s.t)} holds outside its top ${N}. Industries are known only for the top ${N}.`:`Cash, and holdings without a stock sector, like bonds, futures or other funds${XGRP[d.t]?', plus any stocks we don\'t have prices or an industry for yet':''}. There's no return to show here.`):g.mode==='oth'?`These are ${esc(s.t)}'s ${esc(XSEC[key]||key).toLowerCase()} holdings outside its top ${N}. Returns are tracked only for the top ${N}, so there's no return to show.`:!n?`None of ${esc(s.t)}'s top ${N} holdings are in this sector, so there's no return to show.`:g.mode==='sec'&&cov<g.gw-0.005?`Based on its ${n===1?'one holding':n+' holdings'} in the top ${N} (${xw(cov)} of ${xw(g.gw)}).`:'';
   return `<article class="xcard" data-xc="${esc(g.t)}" style="--xc:var(--xs)"><div class="xch"><div><b>${esc(g.lbl)}</b><span class="nm">${sub}</span></div><span class="xchip s">${xw(g.gw)} of ${esc(s.t)}</span></div>
     ${ds?`<p class="xfdesc">${esc(ds)}</p>`:''}${n?xToggle():''}
     ${hv==null?'':`<div class="xhero"><b class="${hv>=0?'pos':'neg'}">${xp(hv)}</b><span class="u">${k===5?'/ yr, 3Y':esc(XM.rng)}</span>${hb==null?'':`<span class="xpill ${hv-hb>=0?'up':'dn'}">${xpts(hv-hb)} pts vs ${esc(s.t)}</span>`}</div>`}
@@ -2859,7 +2868,7 @@ function xGrpCard(g,d,noload){const s=d.self||{},k=xRk(),key=g.t.slice(g.t.index
 function xinGrpPaint(el,d,mode){const W=el.clientWidth,H=el.clientHeight,k=xRk(),items=xinGroups(d,mode),tw=items.reduce((a,x)=>a+x.w,0)||1,g=1.5;
   const tiles=xSquarify(items.map(x=>({c:x,a:x.w/tw*W*H})),0,0,W,H);
   const box=(x,y,w,h)=>`left:${(x+g).toFixed(1)}px;top:${(y+g).toFixed(1)}px;width:${Math.max(0,w-2*g).toFixed(1)}px;height:${Math.max(0,h-2*g).toFixed(1)}px`;
-  let h='';tiles.forEach(({c,x,y,w,h:hh})=>{const r=c.m&&c.m.length?xGrpR(c.m,k):null,L=w>=150&&hh>=100,M=w>=70&&hh>=62;
+  let h='';tiles.forEach(({c,x,y,w,h:hh})=>{const r=c.G?c.G.r[k]:c.m&&c.m.length?xGrpR(c.m,k):null,L=w>=150&&hh>=100,M=w>=70&&hh>=62;
     /* the name wraps onto lines; it shows only when its longest word fits */
     const lw=c.lbl.split(' ').reduce((a,s)=>Math.max(a,s.length),0),fs=Math.min(L?15:12.5,(w-(L?24:16))/(lw*0.6)),showN=fs>=9.5&&hh>=(M?44:26);
     const inner=`${showN?`<span class="xtk xtg" style="font-size:${fs.toFixed(1)}px">${esc(c.lbl)}</span>`:''}${M?`<span class="xtv">${xw(c.w)}</span>${c.id?`<span class="xtv">${xp(r)}</span>`:''}`:''}`;
