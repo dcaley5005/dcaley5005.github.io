@@ -417,6 +417,9 @@ def nport_weights(doc, etf_s, stock_series, end):
 GRP_LINE_MIN = 0.002     # industries smaller than this get a return but no line chart, to keep the files small
 
 
+_REL = {}     # symbol -> its prices on the build's dates, relative to today (shared by every fund that holds it)
+
+
 def group_doc(full, etf_s, stock_series, stocks, idx, nd, wk, end):
     """Industry and sector totals from every stock in the fund's latest SEC report: each group's share of the
     fund today, its return over each period and its line. The line is today's holdings priced back in time,
@@ -436,8 +439,10 @@ def group_doc(full, etf_s, stock_series, stocks, idx, nd, wk, end):
             continue
         p0, p1 = _at(ss, asof), _at(ss, end)
         w = p * (p1 / p0) / fm if p0 and p1 else p
-        px = ss.reindex(ss.index.union(idx)).ffill().reindex(idx)
-        rel = (px / px.iloc[-1]).to_numpy(dtype=float)      # NaN before a stock's first price
+        rel = _REL.get(sym)
+        if rel is None:
+            px = ss.reindex(ss.index.union(idx)).ffill().reindex(idx)
+            rel = _REL[sym] = (px / px.iloc[-1]).to_numpy(dtype=float)      # NaN before a stock's first price
         if not np.isfinite(rel[-1]):
             continue
         members[("sec", sec)].append((w, rel))
