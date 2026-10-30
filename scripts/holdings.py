@@ -51,6 +51,20 @@ def _norm_name(n):
     return " ".join(t for t in n.split() if t not in _MAP_SUFFIX)
 
 
+_INDUSTRIES = None
+
+
+def _industries():
+    """The standard list: each industry and the sector it belongs to (Yahoo's names)."""
+    global _INDUSTRIES
+    if _INDUSTRIES is None:
+        try:
+            _INDUSTRIES = _load(ROOT / "data" / "industries.json") or {}
+        except Exception:
+            _INDUSTRIES = {}
+    return _INDUSTRIES
+
+
 def _holding_map():
     global _HOLDING_MAP
     if _HOLDING_MAP is None:
@@ -508,6 +522,20 @@ def build_inside(out_dir, etf_series, hold, stocks, stock_series, names, fund=No
                     c["ind"] = m.get("ind")
                     if not c.get("sec"):
                         c["sec"] = m.get("sec")
+        # keep every holding on the standard list, so the industry and sector maps never get a one-off tile
+        ind_sec = _industries()
+        if ind_sec:
+            secs = set(ind_sec.values())
+            for c in top:
+                i = c.get("ind")
+                if i and i not in ind_sec:
+                    log(f"  {t}: unknown industry {i!r} for {c.get('t') or c.get('hn')}; left under its sector")
+                    c["ind"] = None
+                elif i:
+                    c["sec"] = ind_sec[i]
+                if c.get("sec") and c["sec"] not in secs:
+                    log(f"  {t}: unknown sector {c['sec']!r} for {c.get('t') or c.get('hn')}")
+                    c["sec"] = None
         tw = sum(c["wt"] for c in top)
         rest = None
         if extra and top:
