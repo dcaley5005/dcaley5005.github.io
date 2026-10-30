@@ -2845,7 +2845,7 @@ function xGrpCard(g,d,noload){const s=d.self||{},k=xRk(),key=g.t.slice(7),ds=XGD
   if(need.length&&!noload)Promise.all(need.map(c=>xStkLoad(c.t))).then(()=>{const dk=$('xInDock');if(dk&&dk.firstElementChild&&dk.firstElementChild.dataset.xc===g.t){dk.dataset.t='~';xinTip(XM.sel||g.t,true)}});
   const hv=g.r[k],hb=s.r?s.r[k]:null,line=g.d&&g.w&&s.d&&s.w,sub=g.mode==='ind'?'Industry'+(g.m[0]&&g.m[0].sec?' · '+(XSEC[XYSEC[g.m[0].sec]]||g.m[0].sec):''):'Sector';
   const cov=g.m.reduce((a,c)=>a+c.wt,0),n=g.m.length,N=xinN(d);
-  const why=!n?`None of ${esc(s.t)}'s top ${N} holdings are in this sector, so there's no return to show.`:g.mode==='sec'&&cov<g.gw-0.005?`Return and chart come from the ${n===1?'one holding':n+' holdings'} here in ${esc(s.t)}'s top ${N}, ${xw(cov)} of its ${xw(g.gw)} in this sector.`:'';
+  const why=!n?`None of ${esc(s.t)}'s top ${N} holdings are in this sector, so there's no return to show.`:g.mode==='sec'&&cov<g.gw-0.005?`Based on its ${n===1?'one holding':n+' holdings'} in the top ${N} (${xw(cov)} of ${xw(g.gw)}).`:'';
   return `<article class="xcard" data-xc="${esc(g.t)}" style="--xc:var(--xs)"><div class="xch"><div><b>${esc(g.lbl)}</b><span class="nm">${sub}</span></div><span class="xchip s">${xw(g.gw)} of ${esc(s.t)}</span></div>
     ${ds?`<p class="xfdesc">${esc(ds)}</p>`:''}${n?xToggle():''}
     ${hv==null?'':`<div class="xhero"><b class="${hv>=0?'pos':'neg'}">${xp(hv)}</b><span class="u">${k===5?'/ yr, 3Y':esc(XM.rng)}</span>${hb==null?'':`<span class="xpill ${hv-hb>=0?'up':'dn'}">${xpts(hv-hb)} pts vs ${esc(s.t)}</span>`}</div>`}
