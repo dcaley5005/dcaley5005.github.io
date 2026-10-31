@@ -38,7 +38,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4
 
@@ -65,7 +65,8 @@ jobs:
           # refreshing them from Yahoo, so it deploys in minutes; scheduled and manual runs refresh as usual.
           FUND_INFO_MINUTES: ${{ github.event_name == 'push' && '0' || '30' }}
           HOLDINGS_MINUTES: ${{ github.event_name == 'push' && '0' || '15' }}
-          STOCK_INFO_MINUTES: ${{ github.event_name == 'push' && '0' || '10' }}
+          # scheduled and manual runs take their pace from data/pull_status.json, which adjusts itself
+          STOCK_INFO_MINUTES: ${{ github.event_name == 'push' && '0' || 'auto' }}
 
       - name: Save the ETF list, fund details and holdings if they changed
         run: |
@@ -75,6 +76,7 @@ jobs:
           [ -f data/fund_info.json ] && git add data/fund_info.json
           [ -f data/holdings.json ] && git add data/holdings.json
           [ -f data/stocks.json ] && git add data/stocks.json
+          [ -f data/pull_status.json ] && git add data/pull_status.json
           # main may have moved while this ran (a site push or the SEC update), so catch up before pushing
           git diff --cached --quiet || (git commit -m "Update ETF list and fund details" && git pull --rebase origin main && git push)
 
