@@ -77,7 +77,40 @@ def _holding_map():
 HOLD_MAX_AGE_DAYS = 14
 STOCK_MAX_AGE_DAYS = 120
 HOLD_MINUTES = float(os.environ.get("HOLDINGS_MINUTES", "15"))
-STOCK_MINUTES = float(os.environ.get("STOCK_INFO_MINUTES", "10"))
+# How much each run pulls is set by data/pull_status.json, which steps itself up while Yahoo answers and
+# backs off when it refuses (see pull_limits and save_pull_status). STOCK_INFO_MINUTES=0 turns lookups off.
+PULL_FILE = ROOT / "data" / "pull_status.json"
+PULL_START = {"new_prices": 1500, "lookup_minutes": 20}
+PULL_MAX = {"new_prices": 2500, "lookup_minutes": 30}
+PULL_MIN = {"new_prices": 600, "lookup_minutes": 10}
+STATS = {"price_refusals": 0, "lookup_pauses": 0, "new_wanted": 0, "new_got": 0, "lookups_done": 0, "lookups_left": 0}
+
+
+def pull_limits():
+    try:
+        s = json.loads(PULL_FILE.read_text())
+    except Exception:
+        s = {}
+    return {k: s.get(k, v) for k, v in PULL_START.items()}
+
+
+def save_pull_status():
+    """After a run: step up if Yahoo never refused, back off if it did, and keep a short record."""
+    lim = pull_limits()
+    refused = STATS["price_refusals"] + STATS["lookup_pauses"]
+    if not refused and not (STATS["new_wanted"] or STATS["lookups_done"]):
+        return      # nothing was pulled (a site-only run), so nothing to learn from
+    nxt = {}
+    for k in lim:
+        step = 500 if k == "new_prices" else 5
+        nxt[k] = min(PULL_MAX[k], lim[k] + step) if not refused else max(PULL_MIN[k], round(lim[k] * 0.6))
+    rec = {**nxt, "last_run": {"at": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"), "limits": lim, **STATS}}
+    PULL_FILE.write_text(json.dumps(rec, indent=1))
+    log(f"Pull summary: {json.dumps(rec['last_run'])}; next run {nxt}")
+
+
+_env_min = os.environ.get("STOCK_INFO_MINUTES", "auto")
+STOCK_MINUTES = float(_env_min) if _env_min not in ("", "auto") else pull_limits()["lookup_minutes"]
 
 
 def log(*a):
@@ -194,6 +227,9 @@ def _refresh(old, keys, fetch, max_age, minutes, label):
             for k, e in errs[:3]:
                 log(f"  {k}: {e}")
     log(f"{label}: refreshed {done}, failed {failed}, left {len(queue)}")
+    STATS["lookup_pauses"] += pauses
+    STATS["lookups_done"] += done
+    STATS["lookups_left"] += len(queue)
     return old
 
 
@@ -264,6 +300,7 @@ def download(syms, start):
                         failed.append(s)
             except Exception as e:
                 log(f"  chunk failed ({e})")
+                STATS["price_refusals"] += 1
                 failed.extend(chunk)
                 time.sleep(10)
             time.sleep(2.5)   # gentler on Yahoo, which starts refusing after a few thousand quick requests
@@ -277,7 +314,7 @@ def download(syms, start):
 # ---------- holding prices, cached between runs ----------
 PRICE_CACHE = ROOT / ".cache" / "holding_prices.pkl"   # kept by actions/cache, not in git
 PRICE_SLICES = 6          # holdings outside the priority set refresh one slice per run
-NEW_PER_RUN = int(os.environ.get("NEW_HOLDING_PRICES", "600"))   # first downloads per run, to stay under Yahoo's limit
+NEW_PER_RUN = int(os.environ.get("NEW_HOLDING_PRICES") or pull_limits()["new_prices"])   # first downloads per run
 
 
 def download_cached(syms, start, priority):
@@ -305,6 +342,13 @@ def download_cached(syms, start, priority):
     log(f"Holding prices: {len(syms)} symbols, {len(cache)} cached; downloading {len(todo)} "
         f"({len(pri)} priority, {len(due)} due, {len(new)} new)")
     got, missing = download(todo, start)
+    STATS["new_wanted"] += len(new)
+    STATS["new_got"] += sum(1 for x in new if x in got)
+    # Yahoo often refuses quietly, with empty answers: the big holdings, which normally always answer, show it
+    pri_miss = sum(1 for x in pri if x not in got)
+    if pri and pri_miss > 0.05 * len(pri):
+        log(f"  {pri_miss} of {len(pri)} priority symbols came back empty; counting it as Yahoo refusing")
+        STATS["price_refusals"] += 1
     cut = pd.Timestamp(start)
     for x, ser in got.items():
         cache[x] = ser[ser.index >= cut]

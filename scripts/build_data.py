@@ -402,6 +402,7 @@ def build_whats_inside(series, names, fund):
     # (by how much of the funds they make up, so NVIDIA and Apple come before small names)
     order = sorted((x for x in syms if x in prices), key=lambda x: (x not in pri, -pri.get(x, 0), x))
     stocks = H.update_stocks(syms, refresh=order)
+    H.save_pull_status()
     H.build_inside(OUT / "inside", series, hold, stocks, prices, names, fund, nport)
 
 
