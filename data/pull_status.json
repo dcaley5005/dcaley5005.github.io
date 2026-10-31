@@ -1,17 +1,17 @@
 {
- "new_prices": 900,
- "lookup_minutes": 12,
+ "new_prices": 600,
+ "lookup_minutes": 10,
  "last_run": {
-  "at": "2026-10-31 10:58 UTC",
+  "at": "2026-10-31 14:23 UTC",
   "limits": {
-   "new_prices": 1500,
-   "lookup_minutes": 20
+   "new_prices": 900,
+   "lookup_minutes": 12
   },
   "price_refusals": 1,
-  "lookup_pauses": 10,
-  "new_wanted": 1500,
-  "new_got": 1176,
-  "lookups_done": 1320,
-  "lookups_left": 1673
+  "lookup_pauses": 9,
+  "new_wanted": 900,
+  "new_got": 773,
+  "lookups_done": 2306,
+  "lookups_left": 140
  }
 }
