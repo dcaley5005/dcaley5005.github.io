@@ -1,0 +1,17 @@
+{
+ "new_prices": 900,
+ "lookup_minutes": 12,
+ "last_run": {
+  "at": "2026-10-31 10:58 UTC",
+  "limits": {
+   "new_prices": 1500,
+   "lookup_minutes": 20
+  },
+  "price_refusals": 1,
+  "lookup_pauses": 10,
+  "new_wanted": 1500,
+  "new_got": 1176,
+  "lookups_done": 1320,
+  "lookups_left": 1673
+ }
+}
