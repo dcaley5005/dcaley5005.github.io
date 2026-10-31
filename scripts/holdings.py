@@ -233,6 +233,15 @@ def holding_symbols(hold):
     return sorted({r[0] for h in hold.values() for r in h.get("top", []) if r[0]})
 
 
+def drop_open_day(s):
+    """While the US market is open, today's bar is a price so far, not a close: leave it out."""
+    from zoneinfo import ZoneInfo
+    now = datetime.now(ZoneInfo("America/New_York"))
+    if now.weekday() < 5 and (9, 30) <= (now.hour, now.minute) < (16, 30) and len(s):
+        return s[s.index.date < now.date()]
+    return s
+
+
 def download(syms, start):
     """Daily adjusted closes for the holdings, from `start`: {symbol: pd.Series}."""
     got, todo = {}, list(syms)
@@ -250,7 +259,7 @@ def download(syms, start):
                     x = close[s].dropna() if s in close else pd.Series(dtype=float)
                     x = x[x > 0]
                     if len(x):
-                        got[s] = x
+                        got[s] = drop_open_day(x)
                     else:
                         failed.append(s)
             except Exception as e:
