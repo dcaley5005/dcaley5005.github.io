@@ -398,6 +398,15 @@ def build_whats_inside(series, names, fund):
     pri = {**{x: 0.0 for x in ysyms}, **H.nport_priority(nport)}
     prices, missing = H.download_cached(syms, start, pri)
     log(f"Holding prices: {len(prices)} of {len(syms)}")
+    # symbols Yahoo didn't know: try the other exchange code, the country's code, or today's US ticker
+    full_syms = {s for d in nport.values() for s, _ in (d.get("full") or {}).get("h", [])}
+    found = H.resolve_symbols(nport, sorted((full_syms - set(prices)) & H.FAILED_NOW), start)
+    if found:
+        H.apply_alias(nport, {a: b for a, (b, _) in found.items()})
+        for a, (b, ser) in found.items():
+            prices[b] = ser
+        syms = sorted((set(syms) - set(found)) | {b for b, _ in found.values()})
+        H.STATS["renamed"] = len(found)
     # names and sectors only for symbols Yahoo has prices for, biggest holdings first
     # (by how much of the funds they make up, so NVIDIA and Apple come before small names)
     order = sorted((x for x in syms if x in prices), key=lambda x: (x not in pri, -pri.get(x, 0), x))
