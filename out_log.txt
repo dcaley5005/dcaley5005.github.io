@@ -1,0 +1,270 @@
+Combining 28 quarter files: ['2019q4.json.gz', '2020q1.json.gz', '2020q2.json.gz', '2020q3.json.gz', '2020q4.json.gz', '2021q1.json.gz', '2021q2.json.gz', '2021q3.json.gz', '2021q4.json.gz', '2022q1.json.gz', '2022q2.json.gz', '2022q3.json.gz', '2022q4.json.gz', '2023q1.json.gz', '2023q2.json.gz', '2023q3.json.gz', '2023q4.json.gz', '2024q1.json.gz', '2024q2.json.gz', '2024q3.json.gz', '2024q4.json.gz', '2025q1.json.gz', '2025q2.json.gz', '2025q3.json.gz', '2025q4.json.gz', '2026q1.json.gz', '2026q2.json.gz', '2026q3.json.gz']
+Distinct holdings: 129,102 keys -> 117,158 securities after joining CUSIP and ISIN
+Symbols for 117,158 distinct holdings: {'vote': 43702, 'none': 69027, 'yahoo-name': 2014, 'isin': 1984, 'name': 431}
+SEC ticker list: 28613 fund tickers with a series id
+{
+ "quarter_files": [
+  "2019q4.json.gz",
+  "2020q1.json.gz",
+  "2020q2.json.gz",
+  "2020q3.json.gz",
+  "2020q4.json.gz",
+  "2021q1.json.gz",
+  "2021q2.json.gz",
+  "2021q3.json.gz",
+  "2021q4.json.gz",
+  "2022q1.json.gz",
+  "2022q2.json.gz",
+  "2022q3.json.gz",
+  "2022q4.json.gz",
+  "2023q1.json.gz",
+  "2023q2.json.gz",
+  "2023q3.json.gz",
+  "2023q4.json.gz",
+  "2024q1.json.gz",
+  "2024q2.json.gz",
+  "2024q3.json.gz",
+  "2024q4.json.gz",
+  "2025q1.json.gz",
+  "2025q2.json.gz",
+  "2025q3.json.gz",
+  "2025q4.json.gz",
+  "2026q1.json.gz",
+  "2026q2.json.gz",
+  "2026q3.json.gz"
+ ],
+ "universe": 4944,
+ "mapped_to_series": 4066,
+ "with_history": 3826,
+ "reports_per_etf": {
+  "1": 148,
+  "2": 147,
+  "3": 165,
+  "4": 182,
+  "5": 145,
+  "6": 155,
+  "7": 172,
+  "8": 99,
+  "9": 115,
+  "10": 92,
+  "11": 102,
+  "12": 131,
+  "13": 72,
+  "14": 49,
+  "15": 78,
+  "16": 53,
+  "17": 58,
+  "18": 57,
+  "19": 65,
+  "20": 57,
+  "21": 57,
+  "22": 49,
+  "23": 54,
+  "24": 43,
+  "25": 57,
+  "26": 98,
+  "27": 392,
+  "28": 919,
+  "29": 15
+ },
+ "first_report_year": {
+  "2019": 1321,
+  "2020": 239,
+  "2021": 226,
+  "2022": 231,
+  "2023": 360,
+  "2024": 438,
+  "2025": 683,
+  "2026": 328
+ },
+ "symbol_sources": {
+  "vote": 43702,
+  "none": 69027,
+  "yahoo-name": 2014,
+  "isin": 1984,
+  "name": 431
+ },
+ "latest_top50_weight_with_symbol": 0.84,
+ "latest_top50_weight_with_symbol_in_stocks_json": 0.768,
+ "latest_top50_stock_weight_with_symbol": 0.972,
+ "latest_top50_stock_weight_with_symbol_in_stocks_json": 0.936,
+ "full_lists": 3823,
+ "full_extra_symbols": 11268,
+ "full_extra_symbols_not_in_stocks_json": 4943,
+ "full_extra_weight_with_symbol": 0.947,
+ "top_unresolved_stocks_by_weight": [
+  [
+   "Global X Russell 2000 ETF (US)",
+   2.014
+  ],
+  [
+   "Global X 1-3 Month T-Bill ETF (US)",
+   1.415
+  ],
+  [
+   "KraneShares Sustainable Ultra Shrt Drtn Ind ETF (US)",
+   1.342
+  ],
+  [
+   "21Shares AG (CH)",
+   1.237
+  ],
+  [
+   "TRP US EQUITY RESEARCH ETF (US)",
+   1.078
+  ],
+  [
+   "Fidelity Covington Trust (US)",
+   0.999
+  ],
+  [
+   "EXCHANGE LISTED FUNDS TRUST (US)",
+   0.995
+  ],
+  [
+   "Coinshares Jersey Ltd (JE)",
+   0.827
+  ],
+  [
+   "XRP (US)",
+   0.813
+  ],
+  [
+   "Calamos Tax-Aware Collateral ETF (US)",
+   0.793
+  ],
+  [
+   "Contemporary Amperex Technology Co Ltd (HK)",
+   0.757
+  ],
+  [
+   "National Grid PLC (GB)",
+   0.713
+  ],
+  [
+   "Global X Blockchain ETF (US)",
+   0.685
+  ],
+  [
+   "DOGE (US)",
+   0.587
+  ],
+  [
+   "BP PLC (GB)",
+   0.579
+  ],
+  [
+   "TCW Flexible Income ETF (US)",
+   0.496
+  ],
+  [
+   "INDUSTRIAS PENOLES, S.A.B. DE C.V. (MX)",
+   0.457
+  ],
+  [
+   "Canton Coin (US)",
+   0.444
+  ],
+  [
+   "UNITED UTILITIES GROUP PLC (GB)",
+   0.426
+  ],
+  [
+   "Global X Long-Term Treasury Ladder ETF (US)",
+   0.41
+  ],
+  [
+   "BONDBLOXX-B RATED USD HY CB (US)",
+   0.401
+  ],
+  [
+   "Nordex SE (DE)",
+   0.296
+  ],
+  [
+   "Samsung Electronics Co Ltd (KR)",
+   0.263
+  ],
+  [
+   "SPDR INDEX SHARES FUNDS (US)",
+   0.26
+  ],
+  [
+   "DCVFMVN Diamond ETF (VN)",
+   0.24
+  ],
+  [
+   "Capital Group Core Plus Income ETF (US)",
+   0.233
+  ],
+  [
+   "BITCOIN (US)",
+   0.23
+  ],
+  [
+   "SEI Select International Equity ETF (US)",
+   0.23
+  ],
+  [
+   "ETHEREUM (US)",
+   0.226
+  ],
+  [
+   "OTP BANK NYRT (HU)",
+   0.222
+  ],
+  [
+   "Liontown Ltd (AU)",
+   0.218
+  ],
+  [
+   "American Beacon AHL Trend ETF (US)",
+   0.211
+  ],
+  [
+   "Global X Hydrogen ETF (US)",
+   0.21
+  ],
+  [
+   "Global X SuperDividend REIT ETF (US)",
+   0.207
+  ],
+  [
+   "Global X Emerging Markets Bond ETF (US)",
+   0.199
+  ],
+  [
+   "LONDONMETRIC PROPERTY PLC (GB)",
+   0.198
+  ],
+  [
+   "MFS Active Core Plus Bond ETF (US)",
+   0.194
+  ],
+  [
+   "Global X Data Center & Digital Infrastructure (US)",
+   0.191
+  ],
+  [
+   "SEI Select Emerging Markets Equity ETF (US)",
+   0.19
+  ],
+  [
+   "Taiwan Semiconductor Manufacturing Co Ltd (TW)",
+   0.188
+  ]
+ ]
+}
+SPY "no SEC report found"
+QQQ {"reports": 3, "first": "2025-12-31", "latest": "2026-06-30", "holdings": 103, "cash": 0.003535, "sec_top10": [["NVDA", 0.075968], ["AAPL", 0.066676], ["MU", 0.05638], ["MSFT", 0.043473], ["AMD", 0.041026], ["AMZN", 0.040224], ["TSLA", 0.032963], ["GOOGL", 0.032653], ["INTC", 0.030395], ["GOOG", 0.030244]], "yahoo_top10": [["NVDA", 0.08327], ["AAPL", 0.07353], ["MSFT", 0.05762], ["MU", 0.05024], ["AMD", 0.04171], ["AMZN", 0.04066], ["META", 0.03263], ["GOOGL", 0.03055], ["GOOG", 0.02849], ["TSLA", 0.0282]]}
+XLK {"reports": 28, "first": "2019-09-30", "latest": "2026-06-30", "holdings": 75, "cash": 0.001923, "sec_top10": [["NVDA", 0.146503], ["AAPL", 0.128476], ["MSFT", 0.083766], ["MU", 0.054188], ["AVGO", 0.054067], ["AMD", 0.052773], ["INTC", 0.036753], ["AMAT", 0.031967], ["LRCX", 0.030192], ["CSCO", 0.025848]], "yahoo_top10": [["NVDA", 0.15466], ["AAPL", 0.136], ["MSFT", 0.10658], ["AMD", 0.05059], ["AVGO", 0.04676], ["MU", 0.04466], ["INTC", 0.03385], ["PLTR", 0.02438], ["CSCO", 0.02404], ["LRCX", 0.02329]]}
+IWM {"reports": 28, "first": "2019-09-30", "latest": "2026-06-30", "holdings": 2015, "cash": 0.17022, "sec_top10": [["MOG-A", 0.003757], ["HUT", 0.003691], ["VSAT", 0.00353], ["BTSG", 0.003522], ["CYTK", 0.003486], ["MXL", 0.003432], ["AGX", 0.003396], ["UMBF", 0.003264], ["FROG", 0.00307], ["RIOT", 0.003025]], "yahoo_top10": [["XTSLA", 0.00478], ["TWST", 0.00429], ["MOG-A", 0.00367], ["FROG", 0.00356], ["TXG", 0.00355], ["UMBF", 0.00325], ["BTSG", 0.00321], ["GKOS", 0.00318], ["VSAT", 0.00305], ["HUT", 0.00299]]}
+SCHD {"reports": 27, "first": "2019-11-30", "latest": "2026-05-31", "holdings": 101, "cash": 0.000436, "sec_top10": [["QCOM", 0.067377], ["TXN", 0.059047], ["UNH", 0.050926], ["KO", 0.039551], ["MRK", 0.038588], ["CVX", 0.038345], ["VZ", 0.036507], ["PG", 0.035455], ["COP", 0.035129], ["AMGN", 0.034716]], "yahoo_top10": [["TXN", 0.04657], ["QCOM", 0.04563], ["PG", 0.04232], ["MRK", 0.04147], ["KO", 0.04145], ["CVX", 0.04065], ["AMGN", 0.0403], ["UNH", 0.03952], ["PEP", 0.03858], ["VZ", 0.03857]]}
+IEUR {"reports": 28, "first": "2019-10-31", "latest": "2026-07-31", "holdings": 1018, "cash": 0.011205, "sec_top10": [["ASML.AS", 0.039977], ["HSBA.L", 0.022859], ["ROP.SW", 0.019165], ["NOVN.SW", 0.017883], ["NESN.SW", 0.016102], ["AZN.L", 0.016058], ["SHEL.L", 0.016032], ["SIE.DE", 0.015224], ["SAN.MC", 0.012696], ["SAP.DE", 0.01196]], "yahoo_top10": [["ASML.AS", 0.04599], ["HSBA.L", 0.02233], ["ROP.SW", 0.01918], ["SHEL.L", 0.01791], ["NOVN.SW", 0.01718], ["AZN.L", 0.01609], ["NESN.SW", 0.01533], ["SIE.DE", 0.01481], ["SAP.DE", 0.01397], ["SAN.MC", 0.01305]]}
+VWO {"reports": 28, "first": "2019-10-31", "latest": "2026-07-31", "holdings": 5022, "cash": 0.041432, "sec_top10": [["2330.TW", 0.155648], ["0700.HK", 0.033112], ["9988.HK", 0.024149], ["2454.TW", 0.013567], ["0939.HK", 0.008955], ["2308.TW", 0.008211], ["2317.TW", 0.008076], ["RELIANCE.NS", 0.007983], ["HDFCBANK.NS", 0.007753], ["ICICIBANK.NS", 0.006925]], "yahoo_top10": [["2330.TW", 0.15745], ["0700.HK", 0.02817], ["9988.HK", 0.02112], ["2454.TW", 0.01875], ["2308.TW", 0.00946], ["0939.HK", 0.0091], ["2317.TW", 0.00794], ["HDFCBANK.NS", 0.00697], ["RELIANCE.NS", 0.00688], ["1398.HK", 0.00648]]}
+ARKK {"reports": 26, "first": "2020-04-30", "latest": "2026-07-31", "holdings": 46, "cash": 0.001623, "sec_top10": [["TSLA", 0.097374], ["TEM", 0.048878], ["SPCX", 0.048739], ["CRSP", 0.04734], ["SHOP", 0.043557], ["COIN", 0.041675], ["AMD", 0.039838], ["CRCL", 0.03903], ["HOOD", 0.036356], ["TWST", 0.033094]], "yahoo_top10": [["TSLA", 0.0908], ["SPCX", 0.06185], ["TEM", 0.05905], ["CRCL", 0.04573], ["CRSP", 0.04455], ["COIN", 0.04404], ["TWST", 0.04378], ["HOOD", 0.03864], ["TXG", 0.03487], ["SHOP", 0.03238]]}
+EWJ {"reports": 27, "first": "2019-11-30", "latest": "2026-05-31", "holdings": 180, "cash": 0.00099, "sec_top10": [["8306.T", 0.040523], ["7203.T", 0.034288], ["9984.T", 0.033403], ["8035.T", 0.028737], ["6501.T", 0.028365], ["8316.T", 0.02556], ["6758.T", 0.025371], ["6857.T", 0.023933], ["8411.T", 0.021406], ["6981.T", 0.020104]], "yahoo_top10": [["8306.T", 0.04662], ["7203.T", 0.03268], ["8035.T", 0.03099], ["8316.T", 0.02978], ["6857.T", 0.02958], ["6501.T", 0.02864], ["9984.T", 0.02816], ["6098.T", 0.02625], ["6758.T", 0.02579], ["285A.T", 0.02456]]}
+EWY {"reports": 27, "first": "2019-11-30", "latest": "2026-05-31", "holdings": 83, "cash": 0.049224, "sec_top10": [["000660.KQ", 0.308546], ["005930.KQ", 0.238754], ["009150.KQ", 0.034247], ["402340.KQ", 0.030793], ["005380.KQ", 0.024337], ["105560.KQ", 0.013951], ["012330.KQ", 0.012161], ["034020.KQ", 0.012085], ["006400.KQ", 0.011391], ["055550.KQ", 0.010332]], "yahoo_top10": [["000660.KQ", 0.2372], ["005930.KQ", 0.22776], ["402340.KQ", 0.03113], ["009150.KQ", 0.02732], ["105560.KQ", 0.01921], ["055550.KQ", 0.01559], ["005380.KQ", 0.01461], ["086790.KQ", 0.01299], ["034020.KQ", 0.0126], ["012450.KQ", 0.01187]]}
+INDA {"reports": 27, "first": "2019-11-30", "latest": "2026-05-31", "holdings": 170, "cash": 0.026726, "sec_top10": [["RELIANCE.NS", 0.062269], ["HDFCBANK.NS", 0.061501], ["ICICIBANK.NS", 0.04682], ["BHARTI.NS", 0.036313], ["INFY.NS", 0.029213], ["AXISBANK.NS", 0.022296], ["MM.NS", 0.021978], ["LT.NS", 0.021286], ["BAJFINANCE.NS", 0.019218], ["KOTAKBANK.NS", 0.015873]], "yahoo_top10": [["HDFCBANK.NS", 0.06407], ["ICICIBANK.NS", 0.05567], ["RELIANCE.NS", 0.05403], ["BHARTIARTL.NS", 0.03906], ["INFY.NS", 0.02391], ["AXISBANK.BO", 0.02247], ["M&M.NS", 0.02029], ["LT.NS", 0.02003], ["500034", 0.01888], ["XTSLA", 0.01863]]}
+MCHI {"reports": 27, "first": "2019-11-30", "latest": "2026-05-31", "holdings": 582, "cash": 0.025607, "sec_top10": [["0700.HK", 0.132086], ["9988.HK", 0.101435], ["0939.HK", 0.03966], ["1810.HK", 0.023492], ["PDD", 0.022808], ["1398.HK", 0.020965], ["2318.HK", 0.019594], ["3690.HK", 0.018398], ["3988.HK", 0.017966], ["9999.HK", 0.016315]], "yahoo_top10": [["0700.HK", 0.1379], ["9988.HK", 0.09331], ["0939.HK", 0.04307], ["1398.HK", 0.02615], ["1810.HK", 0.02245], ["3988.HK", 0.0212], ["3690.HK", 0.01878], ["9999.HK", 0.0177], ["2318.HK", 0.01699], ["PDD", 0.0164]]}
+Wrote 3826 ETF files; archive 37.4 MB
