@@ -313,6 +313,7 @@ def download(syms, start):
 
 # ---------- holding prices, cached between runs ----------
 PRICE_CACHE = ROOT / ".cache" / "holding_prices.pkl"   # kept by actions/cache, not in git
+FAILED_NOW = set()        # symbols Yahoo returned nothing for, this run or recently (for resolve_symbols)
 PRICE_SLICES = 6          # holdings outside the priority set refresh one slice per run
 NEW_PER_RUN = int(os.environ.get("NEW_HOLDING_PRICES") or pull_limits()["new_prices"])   # first downloads per run
 
@@ -330,7 +331,8 @@ def download_cached(syms, start, priority):
         except Exception as e:
             log(f"  price cache unreadable ({e}); starting over")
     day = datetime.now(timezone.utc).toordinal()
-    failed = cache.pop("__failed__", {})   # symbol -> day it last failed; skipped for 30 days
+    cache.pop("__failed__", None)          # the old list blamed symbols for Yahoo's refusals; start over
+    failed = cache.pop("__failed2__", {})  # symbol -> day it last failed; skipped for 30 days
     failed = {x: d for x, d in failed.items() if day - d < 30}
     syms = sorted(set(syms))
     rank = priority if isinstance(priority, dict) else {x: 0 for x in priority}
@@ -352,9 +354,15 @@ def download_cached(syms, start, priority):
     cut = pd.Timestamp(start)
     for x, ser in got.items():
         cache[x] = ser[ser.index >= cut]
-    failed.update({x: day for x in missing if x not in cache})
+    if STATS["price_refusals"]:
+        log("  Yahoo was refusing, so this run's misses get another try next run")
+    else:
+        failed.update({x: day for x in missing if x not in cache})
     PRICE_CACHE.parent.mkdir(parents=True, exist_ok=True)
-    PRICE_CACHE.write_bytes(pickle.dumps({**cache, "__failed__": failed}))
+    PRICE_CACHE.write_bytes(pickle.dumps({**cache, "__failed2__": failed}))
+    STATS["skipped_failed"] = len(failed)
+    global FAILED_NOW
+    FAILED_NOW = set(failed) | set(missing)
     return {x: cache[x] for x in syms if x in cache}, missing
 
 
@@ -380,7 +388,132 @@ def load_nport(tickers):
             d = json.loads(fp.read_text())
             if d.get("hist") and d["asof"] >= cut:
                 out[t] = dict(d, via=via) if via else d
+    apply_alias(out)
     return out
+
+
+# ---------- tickers Yahoo didn't know, and the symbols that work instead ----------
+ALIAS_FILE = ROOT / "data" / "sym_alias.json"   # {"map": {symbol from the SEC data: Yahoo symbol}, "tried": {symbol: day}}
+ALIAS_RETRY_DAYS = 14
+ALIAS_PER_RUN = 3000          # candidate symbols tried per run (they go 50 to a request)
+# the same company under the other exchange code: KOSDAQ vs KOSPI, Taiwan's OTC market vs the main board,
+# Shenzhen vs Shanghai, Bombay vs the National exchange, TSX Venture and other Canadian boards
+SWAP = {"KS": ["KQ"], "KQ": ["KS"], "TW": ["TWO"], "TWO": ["TW"], "SS": ["SZ"], "SZ": ["SS"], "NS": ["BO"],
+        "BO": ["NS"], "TO": ["V", "NE", "CN"], "V": ["TO"], "T": ["F"]}
+# exchange codes for countries the SEC data leaves without one
+COUNTRY = {"GR": [".AT"], "KW": [".KW"], "AE": [".AE", ".AD"], "QA": [".QA"], "SA": [".SR"], "PH": [".PS"],
+           "CO": [".CL"], "CL": [".SN"], "PE": [".LM"], "TR": [".IS"], "EG": [".CA"], "HU": [".BD"], "CZ": [".PR"],
+           "PL": [".WA"], "MY": [".KL"], "TH": [".BK"], "ID": [".JK"], "VN": [".VN"], "CN": [".SS", ".SZ", ".HK"],
+           "KR": [".KS", ".KQ"], "TW": [".TW", ".TWO"], "IN": [".NS", ".BO"], "BR": [".SA"], "MX": [".MX"],
+           "ZA": [".JO"], "JP": [".T"], "HK": [".HK"], "SG": [".SI"], "GB": [".L"], "DE": [".DE"], "FR": [".PA"],
+           "CH": [".SW"], "NL": [".AS"], "ES": [".MC"], "IT": [".MI"], "SE": [".ST"], "DK": [".CO"], "FI": [".HE"],
+           "NO": [".OL"], "BE": [".BR"], "IE": [".IR"], "AT": [".VI"], "PT": [".LS"], "CA": [".TO", ".V"],
+           "AU": [".AX"], "NZ": [".NZ"], "IL": [".TA"], "AR": [".BA"]}
+
+
+def _alias_doc():
+    try:
+        a = json.loads(ALIAS_FILE.read_text())
+        return {"map": a.get("map", {}), "tried": a.get("tried", {})}
+    except Exception:
+        return {"map": {}, "tried": {}}
+
+
+def apply_alias(nport, amap=None):
+    """Swap symbols Yahoo didn't know for the ones that worked, in the SEC files as loaded."""
+    amap = _alias_doc()["map"] if amap is None else amap
+    if not amap:
+        return
+    for d in nport.values():
+        for r in d.get("sec", []):
+            if r[0] in amap:
+                r[0] = amap[r[0]]
+        f = d.get("full")
+        if f:
+            w = {}
+            for s, p in f["h"]:
+                s = amap.get(s, s)
+                w[s] = w.get(s, 0) + p
+            f["h"] = sorted(([s, p] for s, p in w.items()), key=lambda x: -x[1])
+
+
+def resolve_symbols(nport, stuck, start):
+    """Try other spellings for symbols Yahoo returned nothing for: the other exchange code, the code for the
+    stock's country, or, for US companies, the ticker the SEC lists for that company name today (old tickers like
+    SQ for Block). Returns {old symbol: (new symbol, prices)} and remembers the answers in ALIAS_FILE."""
+    if not stuck:
+        return {}
+    doc = _alias_doc()
+    today_s = today()
+    now = datetime.now(timezone.utc).date()
+    info, weight = {}, {}
+    for d in nport.values():
+        for r in d.get("sec", []):
+            if r[0]:
+                info.setdefault(r[0], (r[1], r[2] if len(r) > 2 else ""))
+        for s, p in (d.get("full") or {}).get("h", []):
+            weight[s] = weight.get(s, 0) + p
+    def due(s):
+        a = doc["tried"].get(s)
+        return not a or (now - datetime.strptime(a, "%Y-%m-%d").date()).days >= ALIAS_RETRY_DAYS
+    todo = sorted((s for s in stuck if s not in doc["map"] and due(s)), key=lambda s: -weight.get(s, 0))
+    if not todo:
+        return {}
+    sec_names = {}
+    if any("." not in s for s in todo):
+        try:
+            import nport as NP
+            sec_names, _ = NP.company_names()
+        except Exception as e:
+            log(f"  SEC company list unavailable ({e})")
+    cands, n = {}, 0
+    for s in todo:
+        name, ctry = info.get(s, ("", ""))
+        c = []
+        if "." in s:
+            base, suf = s.rsplit(".", 1)
+            c += [f"{base}.{x}" for x in SWAP.get(suf, [])]
+        else:
+            if ctry and ctry != "US":
+                c += [s + x for x in COUNTRY.get(ctry, [])]
+            if name:
+                try:
+                    import nport as NP
+                    cur = sec_names.get(NP.name_key(name))
+                except Exception:
+                    cur = None
+                if cur and cur != s:
+                    c.append(cur)
+        c = [x for x in dict.fromkeys(c) if x != s]
+        if c:
+            cands[s] = c
+            n += len(c)
+        doc["tried"][s] = today_s
+        if n >= ALIAS_PER_RUN:
+            break
+    flat = sorted({x for c in cands.values() for x in c})
+    log(f"Other spellings: {len(cands)} stuck symbols, {len(flat)} candidates to try")
+    got, _ = download(flat, start) if flat else ({}, [])
+    found = {}
+    for s, c in cands.items():
+        hit = next((x for x in c if x in got), None)
+        if hit:
+            found[s] = (hit, got[hit])
+            doc["map"][s] = hit
+    log(f"Other spellings: found {len(found)}" + (": " + ", ".join(f"{a}->{b}" for a, (b, _) in list(found.items())[:15]) if found else ""))
+    ALIAS_FILE.write_text(json.dumps(doc, indent=0, sort_keys=True))
+    if found:
+        # into the price cache, so the next runs refresh them like any other holding
+        import pickle
+        try:
+            cache = pickle.loads(PRICE_CACHE.read_bytes()) if PRICE_CACHE.exists() else {}
+            cut = pd.Timestamp(start)
+            for s, (alt, ser) in found.items():
+                cache[alt] = ser[ser.index >= cut]
+            PRICE_CACHE.write_bytes(pickle.dumps(cache))
+        except Exception as e:
+            log(f"  couldn't add them to the price cache ({e})")
+    return found
 
 
 def period_starts(end):

@@ -77,6 +77,7 @@ jobs:
           [ -f data/holdings.json ] && git add data/holdings.json
           [ -f data/stocks.json ] && git add data/stocks.json
           [ -f data/pull_status.json ] && git add data/pull_status.json
+          [ -f data/sym_alias.json ] && git add data/sym_alias.json
           # main may have moved while this ran (a site push or the SEC update), so catch up before pushing
           git diff --cached --quiet || (git commit -m "Update ETF list and fund details" && git pull --rebase origin main && git push)
 
