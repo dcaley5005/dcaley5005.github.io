@@ -434,6 +434,15 @@ def fmt(v):
     return f"{v:.6g}"
 
 
+def drop_open_day(s):
+    """While the US market is open, today's bar is a price so far, not a close: leave it out."""
+    from zoneinfo import ZoneInfo
+    now = datetime.now(ZoneInfo("America/New_York"))
+    if now.weekday() < 5 and (9, 30) <= (now.hour, now.minute) < (16, 30) and len(s):
+        return s[s.index.date < now.date()]
+    return s
+
+
 def download_closes(tickers, adjust=True):
     """Daily closes since START: {ticker: pd.Series}. adjust=False leaves dividends out (splits are still applied)."""
     got = {}
@@ -453,7 +462,7 @@ def download_closes(tickers, adjust=True):
                     close = close.to_frame(ysym(chunk[0]))
                 for t in chunk:
                     s = close[ysym(t)].dropna() if ysym(t) in close else pd.Series(dtype=float)
-                    s = s[s > 0]
+                    s = drop_open_day(s[s > 0])
                     if len(s):
                         got[t] = s
                     else:
