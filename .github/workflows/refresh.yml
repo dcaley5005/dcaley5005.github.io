@@ -6,11 +6,11 @@ on:
     # is set right after the market closes: 23:17 UTC = 4:17pm Pacific (3:17pm in winter),
     # Monday to Friday, about 2 hours after the close. Even a late start lands by evening.
     - cron: "17 23 * * *"
-    # TEMPORARY, while the new holdings are pulled in (about 600 new stocks a run): three more runs a
-    # day, every day. Go back to one backup at "17 12 * * 2-6" once the pull is done. A run that lands
+    # TEMPORARY, while the new holdings are pulled in (about 600 new stocks a run): five more runs a
+    # day, every day, about 4 hours apart. Go back to one backup at "17 12 * * 2-6" once the pull is done. A run that lands
     # while the market is open leaves out today's part-day price (drop_open_day in the scripts).
     # Runs queue in the "pages" group below, so they never overlap.
-    - cron: "17 5,11,17 * * *"
+    - cron: "17 3,7,11,15,19 * * *"
   workflow_dispatch:
     inputs:
       rebuild_universe:

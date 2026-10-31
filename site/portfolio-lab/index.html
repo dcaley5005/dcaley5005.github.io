@@ -935,7 +935,9 @@ button.xg{cursor:pointer}button.xg:hover{box-shadow:inset 0 0 0 1px var(--inputL
 .xcard.hl{border-color:var(--xc);box-shadow:0 0 0 3px color-mix(in srgb,var(--xc) 22%,transparent)}
 .xcards.dim .xcard:not(.hl){opacity:.55}
 .xch{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap}.xch>div{display:contents}
-.xch b{font-family:"IBM Plex Mono",monospace;font-size:19px}
+.xch b{font-family:"IBM Plex Mono",monospace;font-size:19px;flex:1 1 0;min-width:0}
+/* the chip stays top right; a long name wraps under itself instead of pushing the chip down */
+.xch>.xchip{flex:none;margin-left:auto}
 .xch .nm{font-size:12px;color:var(--muted);display:block;flex:1 1 100%;order:3;max-width:100%}
 .xchip{font-size:12px;font-weight:600;border-radius:99px;padding:3px 9px;white-space:nowrap}
 .xchip.s{color:var(--xs);background:var(--xsBg)}.xchip.d{color:var(--xd);background:var(--xdBg)}.xchip.o{color:var(--xo);background:var(--xoBg)}
