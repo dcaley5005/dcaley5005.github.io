@@ -337,7 +337,10 @@ def download_cached(syms, start, priority):
     syms = sorted(set(syms))
     rank = priority if isinstance(priority, dict) else {x: 0 for x in priority}
     pri = set(rank) & set(syms)
-    new = [x for x in syms if x not in cache and x not in pri and x not in failed][:NEW_PER_RUN]
+    tries = cache.pop("__tries__", {})      # symbol -> how many runs it came back empty
+    # stocks never tried go first, so a few that never answer can't take every run's slots
+    new = sorted((x for x in syms if x not in cache and x not in pri and x not in failed),
+                 key=lambda x: (tries.get(x, 0), x))[:NEW_PER_RUN]
     due = [x for x in syms if x in cache and x not in pri and (zlib.crc32(x.encode()) + day) % PRICE_SLICES == 0]
     # most important first, so if Yahoo starts refusing it's the small holdings that wait (they keep their cached prices)
     todo = sorted(pri, key=lambda x: -rank[x]) + sorted(due) + new
@@ -354,12 +357,14 @@ def download_cached(syms, start, priority):
     cut = pd.Timestamp(start)
     for x, ser in got.items():
         cache[x] = ser[ser.index >= cut]
-    if STATS["price_refusals"]:
-        log("  Yahoo was refusing, so this run's misses get another try next run")
-    else:
-        failed.update({x: day for x in missing if x not in cache})
+    # a miss while Yahoo was refusing gets one more try; a second miss goes on the skip list either way
+    for x in missing:
+        if x not in cache:
+            tries[x] = tries.get(x, 0) + 1
+            if not STATS["price_refusals"] or tries[x] >= 2:
+                failed[x] = day
     PRICE_CACHE.parent.mkdir(parents=True, exist_ok=True)
-    PRICE_CACHE.write_bytes(pickle.dumps({**cache, "__failed2__": failed}))
+    PRICE_CACHE.write_bytes(pickle.dumps({**cache, "__failed2__": failed, "__tries__": tries}))
     STATS["skipped_failed"] = len(failed)
     global FAILED_NOW
     FAILED_NOW = set(failed) | set(missing)
@@ -659,6 +664,14 @@ def group_doc(full, etf_s, stock_series, stocks, idx, nd, wk, end):
             g["d"] = [int(v) for v in rel[-nd:]]
             g["wk"] = [int(rel[i]) for i in wk]
         out[kind][name] = g
+    # stocks that beat the fund (which also holds cash and pays fees) can roll forward to a bit more than
+    # the fund's stock share; scale them back so the tiles never add up to more than the whole
+    cap = min(1.0, full.get("eq") or 1.0)
+    for kind in ("ind", "sec"):
+        tot = sum(g["w"] for g in out[kind].values())
+        if tot > cap:
+            for g in out[kind].values():
+                g["w"] = round(g["w"] * cap / tot, 5)
     return out
 
 
