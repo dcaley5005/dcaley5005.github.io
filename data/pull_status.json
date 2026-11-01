@@ -2,7 +2,7 @@
  "new_prices": 600,
  "lookup_minutes": 10,
  "last_run": {
-  "at": "2026-11-01 17:51 UTC",
+  "at": "2026-11-01 23:29 UTC",
   "limits": {
    "new_prices": 600,
    "lookup_minutes": 10
@@ -10,10 +10,10 @@
   "price_refusals": 1,
   "lookup_pauses": 7,
   "new_wanted": 600,
-  "new_got": 180,
-  "lookups_done": 207,
+  "new_got": 132,
+  "lookups_done": 134,
   "lookups_left": 140,
   "skipped_failed": 0,
-  "renamed": 29
+  "renamed": 2
  }
 }
