@@ -334,6 +334,8 @@ tr.dim td{opacity:.5}
 
 .pctl{display:flex;flex-wrap:wrap;gap:12px 18px;align-items:flex-end;padding:4px 0 2px}
 .bcgrid .prail{padding:10px 12px;gap:2px;max-height:344px;overflow:auto;overscroll-behavior:contain}
+/* the ETF chart takes the full width: the table's colored dashes are its legend, and hovering the chart shows each line's value */
+.pgrid.bcgrid{grid-template-columns:minmax(0,1fr)}.pgrid.bcgrid>.prail{display:none}
 .bcgrid .plrow{min-height:24px}
 .bcgrid .plrow.bench{min-height:34px}
 .pgrid{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:24px;align-items:start}
