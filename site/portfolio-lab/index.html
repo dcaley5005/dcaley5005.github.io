@@ -179,6 +179,15 @@ td.best{font-weight:700}
 #bTable tr[data-bt] :is(td.bm-dd,td.bm-worst,td.bm-vol,td.ercol).neg:not(.best),#bTable tr[data-bt] :is(td.bm-dd,td.bm-worst,td.bm-vol,td.bm-sharpe,td.ercol):not(.best){color:var(--ink2)}
 @media (max-width:1000px){#bTable tr.bgrp{display:none}}
 #bTable:not(.more) td.xcell{width:1%}
+#bPeriod button:is([data-psel="3M"],[data-psel="6M"],[data-psel="10Y"]),#bActs .picker>.dform,#bActs .picker>.vinfo,#bActs>.iob,#bActs>#bClear{display:none}
+.bmenus{position:relative;display:inline-flex;gap:8px;align-items:center}
+.bmenus .btn.on{border-color:var(--ink2);color:var(--ink)}
+.pmenu{position:absolute;right:0;top:calc(100% + 6px);z-index:30;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:6px;min-width:220px;box-shadow:0 10px 30px rgba(0,0,0,.22);display:flex;flex-direction:column;gap:6px}
+.pmenu[hidden]{display:none}
+.pmenu>button{border:0;background:transparent;text-align:left;padding:8px 10px;border-radius:6px;font:500 13px "IBM Plex Sans",sans-serif;color:var(--ink2);cursor:pointer}.pmenu>button:hover{background:var(--panel2);color:var(--ink)}
+.pmrow{display:flex;gap:4px}.pmrow button{flex:1;border:1px solid var(--line);background:transparent;border-radius:6px;padding:6px 8px;font:500 13px "IBM Plex Mono",monospace;color:var(--ink2);cursor:pointer}
+.pmrow button[aria-pressed="true"]{background:var(--panel2);color:var(--ink);border-color:var(--ink2)}
+.pmdays{display:flex;align-items:center;gap:6px}
 .bstrip{display:flex;flex-wrap:wrap;gap:6px 24px;justify-content:space-between;align-items:baseline;padding:4px 4px 10px;font-size:13px;color:var(--muted)}
 .bnudge{border:0;background:transparent;padding:0;text-align:left;cursor:pointer;color:var(--ink2);font:inherit}.bnudge b{color:var(--ink)}.bnudge span{color:var(--pos);font-weight:600}
 .bnudge:hover span{text-decoration:underline;text-underline-offset:3px}
@@ -1129,7 +1138,7 @@ tr.xecho>td{background:var(--accentBg);transition:background .2s}
             <span style="display:flex;flex-direction:column;gap:2px;min-width:0;flex:1"><h2 id="bTitle">Build a portfolio</h2><span class="sub" id="bSub"></span></span>
       <span class="bchev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
     </button>
-    <div class="bacts" id="bActs"><button type="button" class="iob" data-iomodal="b" aria-haspopup="dialog" title="Import or export"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4v13"/><path d="m3 13 4 4 4-4"/><path d="M17 20V7"/><path d="m21 11-4-4-4 4"/></svg><span class="iol">Import / Export</span></button><div class="picker"><div class="seg" role="group" aria-label="Comparison period" id="bPeriod"></div><form class="dform" action="javascript:void 0" onsubmit="return false"><label class="daysbox" for="bDays"><span>Last</span><input class="field" id="bDays" data-days="b" inputmode="numeric" enterkeyhint="done" autocomplete="off" placeholder="#" maxlength="4"><span>days</span></label></form><button type="button" class="info vinfo" data-info="period" aria-label="How the time period works"></button></div><button type="button" class="btn sm" id="bClear">Clear</button><button type="button" class="btn sm primary" id="bSave">Add to my portfolios</button></div></div>
+    <div class="bacts" id="bActs"><button type="button" class="iob" data-iomodal="b" aria-haspopup="dialog" title="Import or export"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4v13"/><path d="m3 13 4 4 4-4"/><path d="M17 20V7"/><path d="m21 11-4-4-4 4"/></svg><span class="iol">Import / Export</span></button><div class="picker"><div class="seg" role="group" aria-label="Comparison period" id="bPeriod"></div><form class="dform" action="javascript:void 0" onsubmit="return false"><label class="daysbox" for="bDays"><span>Last</span><input class="field" id="bDays" data-days="b" inputmode="numeric" enterkeyhint="done" autocomplete="off" placeholder="#" maxlength="4"><span>days</span></label></form><button type="button" class="info vinfo" data-info="period" aria-label="How the time period works"></button></div><button type="button" class="btn sm" id="bClear">Clear</button><span class="bmenus"><button type="button" class="btn sm" id="bMoreR" aria-haspopup="true" aria-expanded="false">More ▾</button><div class="pmenu" id="bMoreM" hidden><div class="pmrow" id="bMoreP"></div></div><button type="button" class="btn sm" id="bDots" aria-haspopup="true" aria-expanded="false" aria-label="More actions">⋯</button><div class="pmenu" id="bDotsM" hidden><button type="button" data-pmact="io">Import or export a list</button><button type="button" data-pmact="clear">Clear the list</button></div></span><button type="button" class="btn sm primary" id="bSave">Add to my portfolios</button></div></div>
     <div id="bBody" hidden>
       <div class="bgrid">
         <div class="bleft">
@@ -1507,7 +1516,18 @@ const LASTD={b:null,p:null};
 document.addEventListener('click',e=>{const sp=e.target.closest('.daysbox>span');if(!sp)return;const inp=sp.parentElement.querySelector('input[data-days]');if(!inp)return;const sc=inp.dataset.days,n=parseInt(inp.value,10);if(n&&selOf(sc).d!==n)setSel(sc,{d:Math.min(n,maxDays())});else inp.focus()});
 function renderPicker(sc){const sel=selOf(sc);if(sel.d)LASTD[sc]=sel.d;const seg=$(sc+'Period');if(!seg)return;
   seg.innerHTML=PRESETS.map(([p])=>`<button type="button" data-psel="${p}" data-scope="${sc}" aria-pressed="${sel.p===p}">${p}</button>`).join('');
+  if(sc==='b'){const mp=$('bMoreP'),mb=$('bMoreR');if(mp)mp.innerHTML=BXTRA.map(p=>`<button type="button" data-psel="${p}" data-scope="b" aria-pressed="${sel.p===p}">${p}</button>`).join('');
+    if(mb)mb.textContent=sel.d?`Last ${sel.d} days ▾`:BXTRA.includes(sel.p)?`${sel.p} ▾`:'More ▾';mb&&mb.classList.toggle('on',!!sel.d||BXTRA.includes(sel.p))}
   const inp=$(sc+'Days');if(inp&&document.activeElement!==inp)inp.value=sel.d?String(sel.d):(LASTD[sc]?String(LASTD[sc]):'');inp&&inp.closest('.daysbox').classList.toggle('on',!!sel.d)}
+/* the less-used periods and the custom days box live under More; Import, Export and Clear under the ⋯ menu */
+const BXTRA=['3M','6M','10Y'];
+function bMenusInit(){const m=$('bMoreM'),f=document.querySelector('#bActs .picker>.dform'),i=document.querySelector('#bActs .picker>.vinfo');if(m&&f){const w=document.createElement('div');w.className='pmdays';w.appendChild(f);if(i)w.appendChild(i);m.appendChild(w)}}
+document.addEventListener('click',e=>{if(!e.target.closest)return;const pairs=[['bMoreR','bMoreM'],['bDots','bDotsM']];
+  for(const [b,m] of pairs){if(e.target.closest('#'+b)){const mm=$(m),open=mm.hidden;pairs.forEach(([b2,m2])=>{$(m2).hidden=true;$(b2).setAttribute('aria-expanded','false')});mm.hidden=!open;$(b).setAttribute('aria-expanded',String(open));return}}
+  const a=e.target.closest('[data-pmact]');if(a){$('bDotsM').hidden=true;if(a.dataset.pmact==='io')document.querySelector('#bActs .iob').click();else $('bClear').click();return}
+  if(e.target.closest('#bMoreM [data-psel]')){setTimeout(()=>{$('bMoreM').hidden=true},0);return}
+  if(!e.target.closest('.pmenu'))pairs.forEach(([b,m])=>{const mm=$(m);if(mm&&!mm.hidden){mm.hidden=true;$(b).setAttribute('aria-expanded','false')}})});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')['bMoreM','bDotsM'].forEach(id=>{const m=$(id);if(m)m.hidden=true})});
 function maxDays(){return Math.round((D.ms[D.last]-D.ms[0])/864e5)}
 function setSel(sc,sel){if(sc==='b')S.b.sel=sel;else S.sel=sel;persist();
   if(sc==='b'){bHideHover();renderPicker('b');renderBChart();renderBTable()}else{hideHover();buildSeries();renderPicker('p');renderChart();renderPortfolios()}}
@@ -2302,6 +2322,7 @@ function needTickers(){const s=new Set();S.pfs.forEach(p=>p.rows.forEach(r=>s.ad
 async function ensureData(){const ts=needTickers();if(!ts.length)return;ts.forEach(t=>LOADING.add(t));const got={};
   await Promise.all(ts.map(async t=>{try{const r=await fetch('data/t/'+encodeURIComponent(t)+'.csv');if(!r.ok)throw new Error(r.status);Object.assign(got,readFile(await r.text(),t+'.csv'))}catch(e){NODATA.add(t)}}));
   ts.forEach(t=>LOADING.delete(t));Object.assign(BUILTIN,got);buildDataset();computeTW();render();const bad=ts.filter(t=>NODATA.has(t));if(bad.length)toast(`Couldn’t load prices for ${bad.join(', ')}.`)}
+try{bMenusInit()}catch(e){}
 (async function boot(){
   try{
     const [c,u]=await Promise.all([fetch('data/core.csv'),fetch('data/universe.json')]);
