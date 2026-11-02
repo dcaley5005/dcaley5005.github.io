@@ -14,7 +14,7 @@
   --ink:#1C1B18;--ink2:#3D3A34;--muted:#5E5A52;--faint:#8A8478;--input:#FFFFFF;--inputLine:#CFC7B6;
   --accent:#1D6B4C;--accentBg:#E6F0E9;--pos:#1D6B4C;--neg:#A8401C;--posBar:#3F9A70;--negBar:#C9724C;
   --btn:#1C1B18;--btnInk:#FFFDF8;--warnBg:#F4DDB0;--warnFg:#5A3A08;--grid:#E8E2D5;--lockBg:#ECE8DE;
-  --p1:#2a78d6;--p2:#eb6834;--p3:#1baf7a;--p4:#eda100;--p5:#e87ba4;--p6:#4a3aa7;--tw:#1C1B18;--spy:#8A8478;
+  --chip:#E3EAF7;--chipfg:#1F4C9A;--p1:#2a78d6;--p2:#eb6834;--p3:#1baf7a;--p4:#eda100;--p5:#e87ba4;--p6:#4a3aa7;--tw:#1C1B18;--spy:#8A8478;
   --focus:#2a78d6;--segOn:#1C1B18;--segOnFg:#FFFDF8;--segOnLine:#1C1B18;--tyEq:#2E8A63;--tyEqBg:#E3EFE7;--tyEqFg:#1D5A40;--tyBd:#4A6FA5;--tyBdBg:#E6EAF3;--tyBdFg:#2F4F80;--tyCa:#C98A12;--tyCaBg:#FBF0D6;--tyCaFg:#6B4608;--tyCaLine:#E2B654;--tyOt:#8A5CB8;--tyOtBg:#EFE7F6;--tyOtFg:#5A3D78;--shadow:0 10px 30px rgba(28,27,24,.16);
   color-scheme:light;
 }
@@ -23,7 +23,7 @@
   --ink:#EDE8DC;--ink2:#CFC9BB;--muted:#A39D90;--faint:#7E786C;--input:#121210;--inputLine:#45423B;
   --accent:#6CC39A;--accentBg:#1C2E25;--pos:#6CC39A;--neg:#EE9A74;--posBar:#4FAE82;--negBar:#D07A55;
   --btn:#EDE8DC;--btnInk:#141412;--warnBg:#2E2618;--warnFg:#D9AE6A;--grid:#2A2925;--lockBg:#2A2925;
-  --p1:#3987e5;--p2:#d95926;--p3:#199e70;--p4:#c98500;--p5:#d55181;--p6:#9085e9;--tw:#B8B0A0;--spy:#8F897D;
+  --chip:#24324A;--chipfg:#A9C4F2;--p1:#3987e5;--p2:#d95926;--p3:#199e70;--p4:#c98500;--p5:#d55181;--p6:#9085e9;--tw:#B8B0A0;--spy:#8F897D;
   --focus:#3987e5;--segOn:#3A3833;--segOnFg:#F3F0E8;--segOnLine:#8A8478;--tyEq:#4FAE82;--tyEqBg:#1C2E25;--tyEqFg:#8FD3B0;--tyBd:#7E9FD6;--tyBdBg:#1F2838;--tyBdFg:#A9BEE6;--tyCa:#E0A93A;--tyCaBg:#3A2E14;--tyCaFg:#F4C27A;--tyCaLine:#8A6A24;--tyOt:#B08BDA;--tyOtBg:#2C2238;--tyOtFg:#CDB2EA;--shadow:0 10px 30px rgba(0,0,0,.5);
   color-scheme:dark;
 }}
@@ -32,7 +32,7 @@
   --ink:#EDE8DC;--ink2:#CFC9BB;--muted:#A39D90;--faint:#7E786C;--input:#121210;--inputLine:#45423B;
   --accent:#6CC39A;--accentBg:#1C2E25;--pos:#6CC39A;--neg:#EE9A74;--posBar:#4FAE82;--negBar:#D07A55;
   --btn:#EDE8DC;--btnInk:#141412;--warnBg:#2E2618;--warnFg:#D9AE6A;--grid:#2A2925;--lockBg:#2A2925;
-  --p1:#3987e5;--p2:#d95926;--p3:#199e70;--p4:#c98500;--p5:#d55181;--p6:#9085e9;--tw:#B8B0A0;--spy:#8F897D;
+  --chip:#24324A;--chipfg:#A9C4F2;--p1:#3987e5;--p2:#d95926;--p3:#199e70;--p4:#c98500;--p5:#d55181;--p6:#9085e9;--tw:#B8B0A0;--spy:#8F897D;
   --focus:#3987e5;--segOn:#3A3833;--segOnFg:#F3F0E8;--segOnLine:#8A8478;--tyEq:#4FAE82;--tyEqBg:#1C2E25;--tyEqFg:#8FD3B0;--tyBd:#7E9FD6;--tyBdBg:#1F2838;--tyBdFg:#A9BEE6;--tyCa:#E0A93A;--tyCaBg:#3A2E14;--tyCaFg:#F4C27A;--tyCaLine:#8A6A24;--tyOt:#B08BDA;--tyOtBg:#2C2238;--tyOtFg:#CDB2EA;--shadow:0 10px 30px rgba(0,0,0,.5);
   color-scheme:dark;
 }
@@ -166,6 +166,32 @@ th .sort[aria-pressed="true"]{color:var(--ink)}
 td{padding:10px 6px;border-bottom:1px solid var(--line2);white-space:nowrap}
 td.num{text-align:right;font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums}
 td.best{font-weight:700}
+/* the ETF table shows what people decide on; "More columns" brings back the rest (1M 3M 6M YTD 5Y, volatility, worst year) */
+#bTable:not(.more) tr:not(.bgrp)>:is(:nth-child(3),:nth-child(4),:nth-child(5),:nth-child(6),:nth-child(9),:nth-child(11),:nth-child(13)){display:none}
+#bTable tr.bgrp th{padding:6px 10px 2px;font:600 10.5px "IBM Plex Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:center}
+#bTable tr.bgrp th.lab{border-bottom:1px solid var(--line)}#bTable tr.bgrp th.lft{text-align:left}
+#bTable th.bmfirst,#bTable td.bmfirst,#bTable th.ercol,#bTable td.ercol{padding-left:26px}
+.bmore{border:0;background:transparent;color:var(--muted);font:500 12.5px "IBM Plex Sans",sans-serif;cursor:pointer;text-decoration:underline;text-underline-offset:3px;padding:2px 0}
+.bmore:hover{color:var(--ink)}
+/* one rule: bold green is the best value in a column; risk and fee numbers stay neutral so they don't read as warnings */
+#bTable tr[data-bt] td.num:not(.best){font-weight:400}
+#bTable td.best,#bTable td.best .v{color:var(--pos)}
+#bTable tr[data-bt] :is(td.bm-dd,td.bm-worst,td.bm-vol,td.ercol).neg:not(.best),#bTable tr[data-bt] :is(td.bm-dd,td.bm-worst,td.bm-vol,td.bm-sharpe,td.ercol):not(.best){color:var(--ink2)}
+@media (max-width:1000px){#bTable tr.bgrp{display:none}}
+#bTable:not(.more) td.xcell{width:1%}
+#bPeriod button:is([data-psel="3M"],[data-psel="6M"],[data-psel="10Y"]),#bActs .picker>.dform,#bActs .picker>.vinfo,#bActs>.iob,#bActs>#bClear{display:none}
+.bmenus{position:relative;display:inline-flex;gap:8px;align-items:center}
+.bmenus .btn.on{border-color:var(--ink2);color:var(--ink)}
+.pmenu{position:absolute;right:0;top:calc(100% + 6px);z-index:30;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:6px;min-width:220px;box-shadow:0 10px 30px rgba(0,0,0,.22);display:flex;flex-direction:column;gap:6px}
+.pmenu[hidden]{display:none}
+.pmenu>button{border:0;background:transparent;text-align:left;padding:8px 10px;border-radius:6px;font:500 13px "IBM Plex Sans",sans-serif;color:var(--ink2);cursor:pointer}.pmenu>button:hover{background:var(--panel2);color:var(--ink)}
+.pmrow{display:flex;gap:4px}.pmrow button{flex:1;border:1px solid var(--line);background:transparent;border-radius:6px;padding:6px 8px;font:500 13px "IBM Plex Mono",monospace;color:var(--ink2);cursor:pointer}
+.pmrow button[aria-pressed="true"]{background:var(--panel2);color:var(--ink);border-color:var(--ink2)}
+.pmdays{display:flex;align-items:center;gap:6px}
+.bstrip{display:flex;flex-wrap:wrap;gap:6px 24px;justify-content:space-between;align-items:baseline;padding:4px 4px 10px;font-size:13px;color:var(--muted)}
+.bnudge{border:0;background:transparent;padding:0;text-align:left;cursor:pointer;color:var(--ink2);font:inherit}.bnudge b{color:var(--ink)}.bnudge span{color:var(--pos);font-weight:600}
+.bnudge:hover span{text-decoration:underline;text-underline-offset:3px}
+.pvacts .btn.quiet{border-color:transparent;background:transparent;color:var(--neg);margin-left:auto}#bTable:not(.more) td.num,#bTable:not(.more) th.r{padding-left:22px;padding-right:22px}
 .pn{display:flex;align-items:center;gap:8px;font-weight:600}
 
 /* builder */
@@ -321,6 +347,8 @@ tr.dim td{opacity:.5}
 
 .pctl{display:flex;flex-wrap:wrap;gap:12px 18px;align-items:flex-end;padding:4px 0 2px}
 .bcgrid .prail{padding:10px 12px;gap:2px;max-height:344px;overflow:auto;overscroll-behavior:contain}
+/* the ETF chart takes the full width: the table's colored dashes are its legend, and hovering the chart shows each line's value */
+.pgrid.bcgrid{grid-template-columns:minmax(0,1fr)}.pgrid.bcgrid>.prail{display:none}
 .bcgrid .plrow{min-height:24px}
 .bcgrid .plrow.bench{min-height:34px}
 .pgrid{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:24px;align-items:start}
@@ -637,7 +665,11 @@ html.grabbing,html.grabbing *{cursor:grabbing!important;user-select:none}
 .tkchk.sp{display:inline-block;cursor:default}
 .chsp{display:inline-block;width:24px;flex:none;margin-left:-1px}
 
-.spkbtn{border:0;background:transparent;padding:0;margin:0;cursor:pointer;display:inline-flex;border-radius:4px}
+.spkbtn{border:0;background:transparent;padding:6px 4px;margin:0;cursor:pointer;display:inline-flex;align-items:center;border-radius:4px}
+/* the ticker is a button that opens the ETF: filled, so it reads as tappable and not as a box to type in */
+.tkchip{border:0;background:var(--chip);color:var(--chipfg);font:600 14px "IBM Plex Mono",monospace;padding:5px 10px;border-radius:6px;cursor:pointer;line-height:1.2;white-space:nowrap}
+.tkchip:hover{filter:brightness(1.06);text-decoration:underline;text-underline-offset:3px}.tkchip:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.tkchip.sm{font-size:13px;padding:3px 8px}
 .spkbtn:hover{background:var(--panel2)}
 tr.dim .spkbtn{opacity:.5}
 .btable tr.ticked>td{background:var(--accentBg)}
@@ -1106,13 +1138,13 @@ tr.xecho>td{background:var(--accentBg);transition:background .2s}
             <span style="display:flex;flex-direction:column;gap:2px;min-width:0;flex:1"><h2 id="bTitle">Build a portfolio</h2><span class="sub" id="bSub"></span></span>
       <span class="bchev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
     </button>
-    <div class="bacts" id="bActs"><button type="button" class="iob" data-iomodal="b" aria-haspopup="dialog" title="Import or export"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4v13"/><path d="m3 13 4 4 4-4"/><path d="M17 20V7"/><path d="m21 11-4-4-4 4"/></svg><span class="iol">Import / Export</span></button><div class="picker"><div class="seg" role="group" aria-label="Comparison period" id="bPeriod"></div><form class="dform" action="javascript:void 0" onsubmit="return false"><label class="daysbox" for="bDays"><span>Last</span><input class="field" id="bDays" data-days="b" inputmode="numeric" enterkeyhint="done" autocomplete="off" placeholder="#" maxlength="4"><span>days</span></label></form><button type="button" class="info vinfo" data-info="period" aria-label="How the time period works"></button></div><button type="button" class="btn sm" id="bClear">Clear</button><button type="button" class="btn sm primary" id="bSave">Add to my portfolios</button></div></div>
+    <div class="bacts" id="bActs"><button type="button" class="iob" data-iomodal="b" aria-haspopup="dialog" title="Import or export"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4v13"/><path d="m3 13 4 4 4-4"/><path d="M17 20V7"/><path d="m21 11-4-4-4 4"/></svg><span class="iol">Import / Export</span></button><div class="picker"><div class="seg" role="group" aria-label="Comparison period" id="bPeriod"></div><form class="dform" action="javascript:void 0" onsubmit="return false"><label class="daysbox" for="bDays"><span>Last</span><input class="field" id="bDays" data-days="b" inputmode="numeric" enterkeyhint="done" autocomplete="off" placeholder="#" maxlength="4"><span>days</span></label></form><button type="button" class="info vinfo" data-info="period" aria-label="How the time period works"></button></div><button type="button" class="btn sm" id="bClear">Clear</button><span class="bmenus"><button type="button" class="btn sm" id="bMoreR" aria-haspopup="true" aria-expanded="false">More ▾</button><div class="pmenu" id="bMoreM" hidden><div class="pmrow" id="bMoreP"></div></div><button type="button" class="btn sm" id="bDots" aria-haspopup="true" aria-expanded="false" aria-label="More actions">⋯</button><div class="pmenu" id="bDotsM" hidden><button type="button" data-pmact="io">Import or export a list</button><button type="button" data-pmact="clear">Clear the list</button></div></span><button type="button" class="btn sm primary" id="bSave">Add to my portfolios</button></div></div>
     <div id="bBody" hidden>
       <div class="bgrid">
         <div class="bleft">
           
           <div class="pgrid bcgrid"><div class="chartbox" id="bChartbox"><svg id="bChart" role="img" aria-label="ETF comparison"></svg><div class="tip" id="bTip" hidden></div></div><aside class="prail" aria-label="Chart lines"><span class="cap" id="bListCap"></span><span class="sub" id="bChartCap" style="font-size:12px;margin:-2px 0 4px"></span><div id="bList" class="plist"></div></aside></div>
-          <div class="tablewrap"><table id="bTable" class="btable"></table></div>
+          <div class="bstrip" id="bStrip"></div><div class="tablewrap"><table id="bTable" class="btable"></table></div>
         </div>
       </div>
     </div>
@@ -1410,6 +1442,17 @@ function sortValT(t,w,k){const B=S.b;if(k==='t')return t;if(k==='w')return Numbe
 function sortValP(p,k){const B=S.b;if(k==='t')return p.name;if(k==='w')return pTot(p);if(k==='er')return pfER(p)??null;if(!weights(p).length)return null;
   if(k==='ret'){const st0=selStart(B.sel),fc=dFirstAny(p.rows.map(r=>r.t)),s0=Math.max(st0,fc??st0);return bhdRet(p,s0)}
   const tp=TPER.find(x=>x[0]===k);if(tp)return periodRetD(s=>bhdRet(p,s),tp[1]);const o=pStats(p,B.sel);return o&&o.st?o.st[k]:null}
+/* one line above the ETF table: the fund that beat the most of the list with less risk over 3 years, and how to combine */
+function bStrip(){const el=$('bStrip');if(!el)return;const ts=S.b.rows.map(r=>r.t).filter(t=>HAS(t)&&t!=='TPS');
+  const need=ts.filter(t=>XDATA[t]===undefined&&!XNONE[t]);if(need.length){Promise.all(need.map(t=>xLoad(t).catch(()=>{XNONE[t]=1}))).then(()=>bStrip());}
+  const beat={};ts.forEach(t=>{const d=XDATA[t];if(!d||!d.self)return;const s=d.self,seen=new Set();
+    ['same','closest','div','mom','own'].forEach(k=>(d[k]||[]).forEach(c=>{if(seen.has(c.t)||ts.includes(c.t))return;seen.add(c.t);if(c.r3!=null&&s.r3!=null&&c.r3>s.r3+0.03&&c.vol<s.vol)(beat[c.t]=beat[c.t]||[]).push(t)}))});
+  const top=Object.entries(beat).sort((a,b)=>b[1].length-a[1].length)[0];
+  const nudge=top&&top[1].length>=2?`<button type="button" class="bnudge" data-xopen="${esc(top[1][0])}" data-xtab="alt"><b>${esc(top[0])}</b> beat ${top[1].length} of your ETFs with less risk over 3 years. <span>See alternatives →</span></button>`:'<span></span>';
+  const hint=S.b.rows.length+S.pfs.length>=2?'<span class="bhint">Tick two or more to combine them into a portfolio.</span>':'';
+  el.innerHTML=nudge+hint;el.hidden=!(top&&top[1].length>=2)&&!hint}
+const XNONE={};
+function bMoreCols(){return !!load('moreCols',false)}
 function sortedTop(){const B=S.b,k=BSORT.k,it=topOrder();it.forEach((x,i)=>{x.i=i;x.v=x.t==='p'?sortValP(x.p,k):sortValT(B.rows[x.j].t,B.rows[x.j].w,k)});
   return it.sort((a,b)=>{if(a.v==null&&b.v==null)return a.i-b.i;if(a.v==null)return 1;if(b.v==null)return -1;const c=typeof a.v==='string'?a.v.localeCompare(b.v):a.v-b.v;return (c*BSORT.dir)||a.i-b.i})}
 function memOrder(p){const ix=p.rows.map((r,k)=>k);if(!BSORT.k||!BSORT.dir)return ix;const v=ix.map(k=>sortValT(p.rows[k].t,p.rows[k].w,BSORT.k));
@@ -1419,7 +1462,7 @@ function pfRowsHTML(NC,stripAfter,list){const B=S.b,st0=selStart(B.sel),hp=B.sel
   let h=`<tr class="pfrow${hid?' dim':''}${p.k?' ticked':''}" data-pid="${esc(p.id)}"><td>${S.pfs.length+B.rows.length>=2?gripBtn(p.name,'data-gk="top"'):''}<span class="tkcell"><label class="sr" for="pk-${esc(p.id)}">Tick ${esc(p.name)}</label><input type="checkbox" class="tkchk" id="pk-${esc(p.id)}" data-ptick="${esc(p.id)}" data-tip="Tick to group or add to another portfolio" ${p.k?'checked':''}><button type="button" class="pfchev" data-popen="${esc(p.id)}" aria-expanded="${open}" aria-label="${open?'Hide':'Show'} the ETFs in ${esc(p.name)}" data-tip="${open?'Hide':'Show'} the ETFs inside">${pico('chev',14)}</button><span style="display:flex;flex-direction:column"><span style="display:flex;gap:6px;align-items:center"><label class="sr" for="pn-${esc(p.id)}">Portfolio name</label><input class="field pfname" id="pn-${esc(p.id)}" data-pname="${esc(p.id)}" autocomplete="off" value="${esc(p.name)}">${ok?`<span class="xtools"><button type="button" class="xbtn" data-xpf="${esc(p.id)}" data-xtab="alt" aria-label="Explore alternatives to ${esc(p.name)}" title="Explore alternatives to this mix">${ICON_X}</button><button type="button" class="xbtn" data-xpf="${esc(p.id)}" data-xtab="in" aria-label="Under the hood of ${esc(p.name)}" title="Under the hood: every holding across these ETFs">${ICON_L}</button></span>`:''}</span><span class="pfbar" aria-hidden="true">${weights(p).map(x=>`<span style="width:${x.w*100}%;background:${memCol(p,p.rows.findIndex(q=>q.t===x.t))}"></span>`).join('')}</span></span></span></td>
     <td class="num momcell" style="font-weight:700"><span class="momwrap"><button type="button" class="spkbtn" data-phide="${esc(p.id)}" aria-pressed="${!hid}" aria-label="${hid?'Show':'Hide'} ${esc(p.name)} on the chart" data-tip="${hid?'Show':'Hide'} on chart">${V?sparkPath(i=>V[i],s0,col,p.name+' path over the period'):''}</button><span class="v ${cls(v)}">${sg(v)}</span></span></td>${dsk(TPER.map(([p2,m])=>{const r=ok?periodRetD(s=>bhdRet(p,s),m):null;return `<td class="num ${cls(r)}${p2===hp?' hl':''}" style="font-weight:700">${sg(r)}</td>`}).join('')+BM.map(([k])=>bmCell(o,k,null,true)).join('')+`<td class="num ercol" style="font-weight:700">${fmtER(pfER(p))}</td>`)}<td class="num wcell"><span style="display:inline-flex;align-items:center;gap:2px"><button type="button" class="pfico" data-pdup2="${esc(p.id)}" aria-label="Duplicate ${esc(p.name)}" data-tip="Duplicate to try other weights">${pico('dup')}</button><button type="button" class="pfico" data-pung="${esc(p.id)}" aria-label="Ungroup ${esc(p.name)}" data-tip="Ungroup back into single ETFs">${pico('ung')}</button><span class="${good?'':'neg'}" style="font-size:13px;margin-left:4px">${good?'100%':tot+'%'}</span></span></td><td class="mob"></td><td class="xcell dsk"><button type="button" class="delbtn bdel" data-pdel2="${esc(p.id)}" aria-label="Delete ${esc(p.name)}" data-tip="Delete ${esc(p.name)}">${pico('trash')}</button></td></tr>`;
   if(open){memOrder(p).forEach(k=>{const r=p.rows[k];const ES=HAS(r.t)?pStats({rows:[{t:r.t,w:100}]},B.sel):null,wr=HAS(r.t)?wRetT(r.t,st0):null;
-      h+=`<tr class="pfkid" data-pk="${esc(p.id)}" data-k="${k}"><td>${p.rows.length>=2?gripBtn(r.t,'data-gk="kid"'):''}<span class="tkcell"><span class="pfkidt" title="${esc(NAMES[r.t]||'')}">${esc(r.t)}</span>${xBtn(r.t)}</span></td><td class="num momcell"><span class="momwrap">${HAS(r.t)?sparkT(r.t,st0,memCol(p,k)):''}<span class="v ${cls(wr)}">${sg(wr)}</span></span></td>${dsk(TPER.map(([p2,m])=>{const x=periodRet(r.t,m);return `<td class="num ${cls(x)}${p2===hp?' hl':''}">${sg(x)}</td>`}).join('')+BM.map(([kk])=>bmCell(ES,kk,null)).join('')+`<td class="num ercol">${fmtER(ER[r.t])}</td>`)}<td class="wcell"><span class="wbox"><label class="sr" for="pw-${esc(p.id)}-${k}">${esc(r.t)} percent of ${esc(p.name)}</label><input class="field" id="pw-${esc(p.id)}-${k}" data-pw2="${esc(p.id)}" data-k="${k}" inputmode="decimal" autocomplete="off" value="${esc(r.w)}">%</span></td><td class="mob"></td><td class="xcell dsk"><button type="button" class="delbtn bdel" data-prm2="${esc(p.id)}" data-k="${k}" aria-label="Take ${esc(r.t)} out of ${esc(p.name)}" data-tip="Take ${esc(r.t)} out of ${esc(p.name)}">${pico('trash')}</button></td></tr>`});
+      h+=`<tr class="pfkid" data-pk="${esc(p.id)}" data-k="${k}"><td>${p.rows.length>=2?gripBtn(r.t,'data-gk="kid"'):''}<span class="tkcell"><button type="button" class="tkchip sm" data-xopen="${esc(r.t)}" data-xtab="in" title="${esc((NAMES[r.t]?NAMES[r.t]+': ':'')+'what\'s inside, and alternatives')}">${esc(r.t)}</button></span></td><td class="num momcell"><span class="momwrap">${HAS(r.t)?sparkT(r.t,st0,memCol(p,k)):''}<span class="v ${cls(wr)}">${sg(wr)}</span></span></td>${dsk(TPER.map(([p2,m])=>{const x=periodRet(r.t,m);return `<td class="num ${cls(x)}${p2===hp?' hl':''}">${sg(x)}</td>`}).join('')+BM.map(([kk])=>bmCell(ES,kk,null)).join('')+`<td class="num ercol">${fmtER(ER[r.t])}</td>`)}<td class="wcell"><span class="wbox"><label class="sr" for="pw-${esc(p.id)}-${k}">${esc(r.t)} percent of ${esc(p.name)}</label><input class="field" id="pw-${esc(p.id)}-${k}" data-pw2="${esc(p.id)}" data-k="${k}" inputmode="decimal" autocomplete="off" value="${esc(r.w)}">%</span></td><td class="mob"></td><td class="xcell dsk"><button type="button" class="delbtn bdel" data-prm2="${esc(p.id)}" data-k="${k}" aria-label="Take ${esc(r.t)} out of ${esc(p.name)}" data-tip="Take ${esc(r.t)} out of ${esc(p.name)}">${pico('trash')}</button></td></tr>`});
     h+=`<tr class="pfkid"><td colspan="${NC}"><span class="pfadd"><label class="sr" for="pa2-${esc(p.id)}">Add an ETF to ${esc(p.name)}</label><input class="field tkin" id="pa2-${esc(p.id)}" data-pa2="${esc(p.id)}" placeholder="Ticker" autocomplete="off" spellcheck="false" list="tickers" value="${esc(S.paDraft[p.id]||'')}"><button type="button" class="btn sm" data-padd2="${esc(p.id)}">Add to ${esc(p.name)}</button><button type="button" class="btn sm ghost" data-peven="${esc(p.id)}">Equal split</button>${good?'':`<span class="neg" style="font-size:13px">Percentages add to ${tot}%</span>`}</span></td></tr>`}
   if(stripAfter===p.id)h+=pvStripHTML(NC);
   return h}).join('')}
@@ -1429,7 +1472,7 @@ function pvStripHTML(NC){const fresh=!PVON;if(fresh)PVAT=Date.now();PVON=true;co
   const tg=S.pfs.filter(p=>!p.k);
   const pick=tg.length===1?`<button type="button" class="btn" data-baddto="${esc(tg[0].id)}"><span class="pvsw" style="background:${pfCol(tg[0])}"></span>Add to ${esc(tg[0].name)}</button>`
     :tg.length>1?`<label class="sr" for="bAddToSel">Add what you ticked to one of your portfolios</label><select class="field pvsel" id="bAddToSel" data-baddsel><option value="">Add to…</option>${tg.map(p=>`<option value="${esc(p.id)}">${esc(p.name)}</option>`).join('')}</select>`:'';
-  return `<tr class="pvstrip${fresh?' pvnew':''}"><td colspan="${NC}"><div class="pvacts"><svg class="pvarr" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3v8a4 4 0 0 0 4 4h10M15 11l4 4-4 4"/></svg><button type="button" class="btn${n>=2?' go':''}" data-bgrp ${n>=2?'':'disabled'}>${n>=2?`Group ${esc(nm)} into new portfolio`:'Tick one more to group'}</button>${pick}<button type="button" class="btn" data-bremove>Remove</button><button type="button" class="btn" data-bclr>Clear</button></div></td></tr>`}
+  return `<tr class="pvstrip${fresh?' pvnew':''}"><td colspan="${NC}"><div class="pvacts"><svg class="pvarr" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3v8a4 4 0 0 0 4 4h10M15 11l4 4-4 4"/></svg><button type="button" class="btn${n>=2?' go':''}" data-bgrp ${n>=2?'':'disabled'}>${n>=2?`Combine ${esc(nm)} into a portfolio`:'Tick one more ETF to combine'}</button>${pick}<button type="button" class="btn" data-bclr>Deselect</button><button type="button" class="btn quiet" data-bremove>Delete selected</button></div></td></tr>`}
 /* after grouping or adding, bring the portfolio into view so you see where it went */
 function showPf(id){flashPf(id);setTimeout(()=>{const tr=document.querySelector(`tr[data-pid="${CSS.escape(id)}"]`);if(tr)tr.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'})},60)}
 function bGroup(){const B=S.b;if(tickNames().length<2){toast('Tick at least two to group them');return}
@@ -1473,7 +1516,18 @@ const LASTD={b:null,p:null};
 document.addEventListener('click',e=>{const sp=e.target.closest('.daysbox>span');if(!sp)return;const inp=sp.parentElement.querySelector('input[data-days]');if(!inp)return;const sc=inp.dataset.days,n=parseInt(inp.value,10);if(n&&selOf(sc).d!==n)setSel(sc,{d:Math.min(n,maxDays())});else inp.focus()});
 function renderPicker(sc){const sel=selOf(sc);if(sel.d)LASTD[sc]=sel.d;const seg=$(sc+'Period');if(!seg)return;
   seg.innerHTML=PRESETS.map(([p])=>`<button type="button" data-psel="${p}" data-scope="${sc}" aria-pressed="${sel.p===p}">${p}</button>`).join('');
+  if(sc==='b'){const mp=$('bMoreP'),mb=$('bMoreR');if(mp)mp.innerHTML=BXTRA.map(p=>`<button type="button" data-psel="${p}" data-scope="b" aria-pressed="${sel.p===p}">${p}</button>`).join('');
+    if(mb)mb.textContent=sel.d?`Last ${sel.d} days ▾`:BXTRA.includes(sel.p)?`${sel.p} ▾`:'More ▾';mb&&mb.classList.toggle('on',!!sel.d||BXTRA.includes(sel.p))}
   const inp=$(sc+'Days');if(inp&&document.activeElement!==inp)inp.value=sel.d?String(sel.d):(LASTD[sc]?String(LASTD[sc]):'');inp&&inp.closest('.daysbox').classList.toggle('on',!!sel.d)}
+/* the less-used periods and the custom days box live under More; Import, Export and Clear under the ⋯ menu */
+const BXTRA=['3M','6M','10Y'];
+function bMenusInit(){const m=$('bMoreM'),f=document.querySelector('#bActs .picker>.dform'),i=document.querySelector('#bActs .picker>.vinfo');if(m&&f){const w=document.createElement('div');w.className='pmdays';w.appendChild(f);if(i)w.appendChild(i);m.appendChild(w)}}
+document.addEventListener('click',e=>{if(!e.target.closest)return;const pairs=[['bMoreR','bMoreM'],['bDots','bDotsM']];
+  for(const [b,m] of pairs){if(e.target.closest('#'+b)){const mm=$(m),open=mm.hidden;pairs.forEach(([b2,m2])=>{$(m2).hidden=true;$(b2).setAttribute('aria-expanded','false')});mm.hidden=!open;$(b).setAttribute('aria-expanded',String(open));return}}
+  const a=e.target.closest('[data-pmact]');if(a){$('bDotsM').hidden=true;if(a.dataset.pmact==='io')document.querySelector('#bActs .iob').click();else $('bClear').click();return}
+  if(e.target.closest('#bMoreM [data-psel]')){setTimeout(()=>{$('bMoreM').hidden=true},0);return}
+  if(!e.target.closest('.pmenu'))pairs.forEach(([b,m])=>{const mm=$(m);if(mm&&!mm.hidden){mm.hidden=true;$(b).setAttribute('aria-expanded','false')}})});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')['bMoreM','bDotsM'].forEach(id=>{const m=$(id);if(m)m.hidden=true})});
 function maxDays(){return Math.round((D.ms[D.last]-D.ms[0])/864e5)}
 function setSel(sc,sel){if(sc==='b')S.b.sel=sel;else S.sel=sel;persist();
   if(sc==='b'){bHideHover();renderPicker('b');renderBChart();renderBTable()}else{hideHover();buildSeries();renderPicker('p');renderChart();renderPortfolios()}}
@@ -1505,17 +1559,20 @@ function bOrder(WR,ES){const B=S.b;const idx=B.rows.map((r,j)=>j);if(!BSORT.k||!
   return idx.sort((a,b)=>{const va=val(a),vb=val(b);if(va==null&&vb==null)return a-b;if(va==null)return 1;if(vb==null)return -1;const c=typeof va==='string'?va.localeCompare(vb):va-vb;return (c||a-b)*BSORT.dir})}
 function renderBTable(){const B=S.b;if(!B.open)return;const hp=B.sel.p;
   const best={};TPER.forEach(([p,m])=>{const vs=B.rows.map(r=>periodRet(r.t,m)).filter(v=>v!=null);if(vs.length>1)best[p]=Math.max(...vs)});
-  const ES=B.rows.map(r=>HAS(r.t)?pStats({rows:[{t:r.t,w:100}]},B.sel):null);const bb={};BM.forEach(([k])=>{const vs=ES.map(o=>bmVal(o,k)).filter(v=>v!=null);if(vs.length>1)bb[k]=Math.max(...vs)});
+  const ES=B.rows.map(r=>HAS(r.t)?pStats({rows:[{t:r.t,w:100}]},B.sel):null);const bb={};BM.forEach(([k])=>{const vs=ES.map(o=>bmVal(o,k)).filter(v=>v!=null);if(vs.length>1)bb[k]=k==='vol'?Math.min(...vs):Math.max(...vs)});
   const NC=TPER.length+BM.length+5;const full=B.rows.length>=MAXETF;
   const addRow=`<tr class="addrow"><td><span class="tkcell"><span class="rsw" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span><span class="chsp" aria-hidden="true" style="width:${CHSP_ADD}px"></span><label class="sr" for="bAdd">Ticker to add</label><input class="field tkin" id="bAdd" role="combobox" aria-autocomplete="list" aria-controls="bSug" aria-expanded="false" placeholder="${full?'15 max':'Ticker'}" autocomplete="off" spellcheck="false" value="${esc(S.bDraft||'')}" ${full?'disabled':''}></span></td><td><button type="button" class="btn sm" id="bAddBtn" ${full?'disabled':''}>Add</button></td><td colspan="${NC-2}" class="sub addnote"><span class="addnw"><span>${B.rows.length?'':'Type a ticker and press Enter to add it, then set its % of the portfolio.'}</span></span></td></tr>`;const st0=selStart(B.sel);const WR=B.rows.map(r=>HAS(r.t)?wRetT(r.t,st0):null);const wBest=WR.filter(v=>v!=null).length>1?Math.max(...WR.filter(v=>v!=null)):null;
-  const etfRow=(r,j)=>`<tr class="${r.hidden?'dim':''}${r.k?' ticked':''}" data-bt="${esc(r.t)}"><td>${B.rows.length+S.pfs.length>=2?gripBtn(r.t,'data-gk="top"'):''}<span class="tkcell">${B.rows.length+S.pfs.length>=2?`<label class="sr" for="bk-${j}">Tick ${esc(r.t)} to group it</label><input type="checkbox" class="tkchk" id="bk-${j}"  data-btick="${j}" data-tip="Tick to group" ${r.k?'checked':''}>`:'<span class="tkchk sp"></span>'}<span class="chsp" aria-hidden="true"></span><span class="tkwrap"><label class="sr" for="bt-${j}">Ticker ${j+1}</label><input class="field tkin" id="bt-${j}" data-btk="${j}" list="tickers" autocomplete="off" spellcheck="false" value="${esc(r.t)}" title="${esc(NAMES[r.t]||'Imported prices')}">${xBtn(r.t)}</span></span></td>
-    <td class="num momcell${wBest!=null&&WR[j]===wBest?' best':''}"><span class="momwrap"><button type="button" class="spkbtn" data-bhide="${j}" aria-pressed="${!r.hidden}" aria-label="${r.hidden?'Show':'Hide'} ${esc(r.t)} on the chart" data-tip="${r.hidden?'Show':'Hide'} on chart">${HAS(r.t)?sparkT(r.t,st0,ecol(r.c)):''}</button><span class="v ${cls(WR[j])}">${sg(WR[j])}</span></span></td>
-    ${dsk(TPER.map(([p,m])=>{const v=periodRet(r.t,m);return `<td class="num ${cls(v)}${p===hp?' hl':''}${best[p]!=null&&v===best[p]?' best':''}">${sg(v)}</td>`}).join('')+BM.map(([k])=>bmCell(ES[j],k,bb)).join('')+`<td class="num ercol${ER[r.t]==null?' mut':''}">${fmtER(ER[r.t])}</td>`)}<td class="wcell"><span class="wbox"><label class="sr" for="bw-${j}">${esc(r.t)} percent</label><input class="field" id="bw-${j}" data-bw="${j}" inputmode="decimal" autocomplete="off" placeholder="0" value="${r.w===''||r.w==null?'':esc(r.w)}">%</span></td>${mexpBtn('b'+j,r.t)}
+  const etfRow=(r,j)=>`<tr class="${r.hidden?'dim':''}${r.k?' ticked':''}" data-bt="${esc(r.t)}"><td>${B.rows.length+S.pfs.length>=2?gripBtn(r.t,'data-gk="top"'):''}<span class="tkcell">${B.rows.length+S.pfs.length>=2?`<label class="sr" for="bk-${j}">Tick ${esc(r.t)} to group it</label><input type="checkbox" class="tkchk" id="bk-${j}"  data-btick="${j}" data-tip="Tick to group" ${r.k?'checked':''}>`:'<span class="tkchk sp"></span>'}<span class="chsp" aria-hidden="true"></span><span class="tkwrap"><button type="button" class="tkchip" id="bt-${j}" data-btk="${j}" data-xopen="${esc(r.t)}" data-xtab="in" title="${esc((NAMES[r.t]?NAMES[r.t]+': ':'')+'what\'s inside, and alternatives')}">${esc(r.t)}</button></span></span></td>
+    <td class="num momcell${wBest!=null&&WR[j]===wBest?' best':''}"><span class="momwrap"><button type="button" class="spkbtn" data-bhide="${j}" aria-pressed="${!r.hidden}" aria-label="${r.hidden?'Show':'Hide'} ${esc(r.t)} on the chart" data-tip="${r.hidden?'Show':'Hide'} on chart">${swatch(ecol(r.c),edash(r.c),20)}</button><span class="v ${cls(WR[j])}">${sg(WR[j])}</span></span></td>
+    ${dsk(TPER.map(([p,m])=>{const v=periodRet(r.t,m);return `<td class="num ${cls(v)}${p===hp?' hl':''}${best[p]!=null&&v===best[p]?' best':''}">${sg(v)}</td>`}).join('')+BM.map(([k])=>bmCell(ES[j],k,bb)).join('')+`<td class="num ercol${ER[r.t]==null?' mut':''}">${fmtER(ER[r.t])}</td>`)}<td class="wcell"><span class="wbox"><label class="sr" for="bw-${j}">${esc(r.t)} percent</label><input class="field" id="bw-${j}" data-bw="${j}" inputmode="decimal" autocomplete="off" placeholder="—" value="${r.w===''||r.w==null?'':esc(r.w)}">%</span></td>${mexpBtn('b'+j,r.t)}
     <td class="xcell dsk"><button type="button" class="delbtn bdel" id="bx-${j}" data-brm="${j}" aria-label="Remove ${esc(r.t)}" data-tip="Remove ${esc(r.t)}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M6 7l1 13h10l1-13"/></svg></button></td></tr>${mdetRow('b'+j,bDetail(r.t,ES[j])+xMob(r.t)+`<div class="mi mact"><button type="button" class="btn sm mrm" data-brm="${j}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M6 7l1 13h10l1-13"/></svg>Remove ${esc(r.t)}</button></div>`)}`;
-  $('bTable').innerHTML=`<thead><tr><th style="text-align:left"><span class="hw">${B.rows.length+S.pfs.length>=2?`<label class="sr" for="bTickAll">Tick everything</label><input type="checkbox" class="tkchk" id="bTickAll" data-tip="Tick all" ${B.rows.every(r=>r.k)&&S.pfs.every(p=>p.k)?'checked':''}><span class="chsp" aria-hidden="true" style="width:${CHSP_HEAD}px"></span>`:''}${bsBtn('t','ETF')}</span></th><th class="r retcol"><span class="hw">${bsBtn('ret',selLabel(B.sel,'short')+' return')}${infoBtn('bret','return')}</span></th>${TPER.map(([p,m],k)=>`<th class="dsk r${p===hp?' hl':''}"><span class="hw">${bsBtn(p,pLabel(p,m))}${k===TPER.length-1?infoBtn('returns','returns'):''}</span></th>`).join('')}${BM.map(([k,lab,info])=>`<th class="dsk r bm bm-${k}${k==='sharpe'?' bmfirst':''}"><span class="hw">${bsBtn(k,lab())}${infoBtn(info,lab())}</span></th>`).join('')}<th class="dsk r ercol"><span class="hw">${bsBtn('er','Fee')}${infoBtn('er','expense ratio')}</span></th><th class="r wcell"><span class="hw">${bsBtn('w','<span class="dskl">% of portfolio</span><span class="mobl">%</span>')}</span></th><th class="mob"></th><th class="dsk"></th></tr></thead>
+  const MORE=bMoreCols();
+  const grpRow=`<tr class="bgrp dsk"><th class="lft"><button type="button" class="bmore" data-bmore="1" aria-pressed="${MORE}">${MORE?'Fewer columns':'More columns'}</button></th><th class="lab" colspan="${MORE?8:3}">Returns</th><th class="lab bmfirst" colspan="${MORE?4:2}">Risk</th><th class="lab ercol">Cost</th><th colspan="2"></th></tr>`;
+  $('bTable').classList.toggle('more',MORE);
+  $('bTable').innerHTML=`<thead>${grpRow}<tr><th style="text-align:left"><span class="hw">${B.rows.length+S.pfs.length>=2?`<label class="sr" for="bTickAll">Tick everything</label><input type="checkbox" class="tkchk" id="bTickAll" data-tip="Tick all" ${B.rows.every(r=>r.k)&&S.pfs.every(p=>p.k)?'checked':''}><span class="chsp" aria-hidden="true" style="width:${CHSP_HEAD}px"></span>`:''}${bsBtn('t','ETF')}</span></th><th class="r retcol"><span class="hw">${bsBtn('ret',selLabel(B.sel,'short')+' return')}${infoBtn('bret','return')}</span></th>${TPER.map(([p,m],k)=>`<th class="dsk r${p===hp?' hl':''}"><span class="hw">${bsBtn(p,pLabel(p,m))}${k===TPER.length-1?infoBtn('returns','returns'):''}</span></th>`).join('')}${BM.map(([k,lab,info])=>`<th class="dsk r bm bm-${k}${k==='sharpe'?' bmfirst':''}"><span class="hw">${bsBtn(k,lab())}${infoBtn(info,lab())}</span></th>`).join('')}<th class="dsk r ercol"><span class="hw">${bsBtn('er','Fee')}${infoBtn('er','expense ratio')}</span></th><th class="r wcell"><span class="hw">${bsBtn('w','<span class="dskl">% of portfolio</span><span class="mobl">%</span>')}</span></th><th class="mob"></th><th class="dsk"></th></tr></thead>
     <tbody>${(()=>{const sorted=BSORT.k&&BSORT.dir,ord=bOrder(WR,ES);const items=sorted?sortedTop():topOrder();
       const isK=it=>it.t==='p'?!!it.p.k:!!(B.rows[it.j].k&&HAS(B.rows[it.j].t));const last=[...items].reverse().find(isK);if(!last)PVON=false;
-      return items.map(it=>it.t==='p'?pfRowsHTML(NC,last===it?it.p.id:null,[it.p]):etfRow(B.rows[it.j],it.j)+(last===it?pvStripHTML(NC):'')).join('')})()}${addRow}</tbody>`;
+      return items.map(it=>it.t==='p'?pfRowsHTML(NC,last===it?it.p.id:null,[it.p]):etfRow(B.rows[it.j],it.j)+(last===it?pvStripHTML(NC):'')).join('')})()}${addRow}</tbody>`;bStrip();
   document.querySelectorAll('#bTable button.info:empty').forEach(b=>{b.innerHTML=ICON_I});
 
 }
@@ -2077,6 +2134,7 @@ document.addEventListener('focusout',e=>{const el=e.target;if(!el.dataset||el.da
 document.addEventListener('keydown',e=>{const d=e.target.dataset||{};if(d.pname!=null&&(e.key==='Enter'||e.key==='Escape')){if(e.key==='Escape')e.target.value='';e.target.blur();return}if(e.key==='Enter'&&d.pa2){e.preventDefault();S.paDraft[d.pa2]=e.target.value;pAddTicker(d.pa2);persist();render();$('pa2-'+d.pa2)?.focus()}});
 document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest('[data-bgrp],[data-baddto],[data-bclr],[data-bremove]');if(!t||t.disabled)return;if(Date.now()-PVAT<600)return;
   if(t.hasAttribute('data-bgrp'))bGroup();else if(t.dataset.baddto)bAddTo(t.dataset.baddto);else if(t.hasAttribute('data-bremove')){const n=tickNames().length;S.b.rows=S.b.rows.filter(r=>!r.k);S.pfs=S.pfs.filter(p=>!p.k);persist();render();toast(`Removed ${n} item${n>1?'s':''}`)}else{clearTicks();persist();renderBuilder()}});
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-bmore]');if(!b)return;save('moreCols',!bMoreCols());renderBuilder()});
 document.addEventListener('change',e=>{const el=e.target;const d=el.dataset||{};
   if(d.btick!=null){const r=S.b.rows[+d.btick];if(r){if(el.checked)r.k=true;else delete r.k;persist();renderBuilder()}return}
   if(d.baddsel!=null){if(el.value)bAddTo(el.value);return}
@@ -2264,6 +2322,7 @@ function needTickers(){const s=new Set();S.pfs.forEach(p=>p.rows.forEach(r=>s.ad
 async function ensureData(){const ts=needTickers();if(!ts.length)return;ts.forEach(t=>LOADING.add(t));const got={};
   await Promise.all(ts.map(async t=>{try{const r=await fetch('data/t/'+encodeURIComponent(t)+'.csv');if(!r.ok)throw new Error(r.status);Object.assign(got,readFile(await r.text(),t+'.csv'))}catch(e){NODATA.add(t)}}));
   ts.forEach(t=>LOADING.delete(t));Object.assign(BUILTIN,got);buildDataset();computeTW();render();const bad=ts.filter(t=>NODATA.has(t));if(bad.length)toast(`Couldn’t load prices for ${bad.join(', ')}.`)}
+try{bMenusInit()}catch(e){}
 (async function boot(){
   try{
     const [c,u]=await Promise.all([fetch('data/core.csv'),fetch('data/universe.json')]);
