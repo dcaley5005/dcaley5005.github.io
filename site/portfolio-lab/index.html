@@ -2458,14 +2458,19 @@ function xUse(){XM.d=XM.tab==='in'?XM.ins:XM.alt;XM.err=XM.tab==='in'?XM.errI:XM
 function xRender(){XM.tab==='in'?renderXI():renderXM()}
 function xHead(){$('xmTitle').textContent=XM.tab==='in'?'Under the hood of '+XM.t:'How '+XM.t+' stacks up';document.querySelectorAll('#xm .xtab').forEach(b=>b.setAttribute('aria-selected',b.dataset.xtab===XM.tab))}
 function xTab(k){if(XM.tab===k)return;const md=$('xm').querySelector('.xmd'),B=$('xmBody');
-  const go=()=>{XM.tab=k;XM.sel=null;if(k==='in'&&XM.rng==='3Y'&&!XM.rngSet)XM.rng='1Y';if(k==='alt'&&!XM.rngSet)XM.rng='3Y';xUse();xHead();xRender();B.scrollTop=0;xCascade()};
-  if(!md||XPHONE()||XREDUCE.matches){if(md)md.style.minHeight='';go();return}
-  /* where the window ends up: Compare takes the full height, Under the hood what its cards need */
-  const full=Math.round(Math.min(innerHeight-24,XM.anchorH||1000)),to=k==='alt'?full:Math.min(XM.inH||full,innerHeight-24),from=md.offsetHeight;
-  clearTimeout(XM.tabT);XM.tabAnim=1;document.querySelectorAll('#xm .xtab').forEach(b=>b.setAttribute('aria-selected',b.dataset.xtab===k));
-  B.style.transition='opacity .14s ease-out';B.style.opacity='0';
-  XM.tabT=setTimeout(()=>{md.style.minHeight='';md.style.height=from+'px';void md.offsetHeight;md.style.transition='height .42s cubic-bezier(.22,.9,.3,1)';md.style.height=to+'px';
-    XM.tabT=setTimeout(()=>{md.style.transition='';XM.tabAnim=0;go();B.style.transition='opacity .22s ease-in';B.style.opacity='1';XM.tabT=setTimeout(()=>{B.style.transition='';B.style.opacity=''},240)},Math.abs(to-from)>4?440:0)},150)}
+  const go=()=>{XM.tab=k;XM.sel=null;if(k==='in'&&XM.rng==='3Y'&&!XM.rngSet)XM.rng='1Y';if(k==='alt'&&!XM.rngSet)XM.rng='3Y';xUse();xHead();xRender();B.scrollTop=0};
+  if(!md||XPHONE()||XREDUCE.matches||!md.animate){if(md)md.style.minHeight='';go();xCascade();return}
+  /* Compare takes the full height, Under the hood what its cards need */
+  const full=Math.round(Math.min(innerHeight-24,XM.anchorH||1000)),to=Math.round(k==='alt'?full:Math.min(XM.inH||full,innerHeight-24)),from=md.offsetHeight;
+  if(XM.tabA)XM.tabA.cancel();XM.tabAnim=1;md.style.minHeight='';md.style.height=to+'px';
+  go();
+  const grow=to>from+4,shrink=to<from-4;
+  /* the frame springs to its new height with a small overshoot; the content rides in with it */
+  const kf=grow?[{height:from+'px'},{height:(to+Math.min(14,(to-from)*.06))+'px',offset:.72},{height:to+'px'}]:shrink?[{height:from+'px'},{height:(to-Math.min(10,(from-to)*.06))+'px',offset:.72},{height:to+'px'}]:null;
+  md.style.overflow='hidden';
+  if(kf){XM.tabA=md.animate(kf,{duration:520,easing:'cubic-bezier(.3,.9,.3,1)'});const done=()=>{md.style.overflow='';XM.tabAnim=0;XM.tabA=null;if(XM.tab==='in'){if(!XM.inH)xinFit()}else xGrowRow()};XM.tabA.onfinish=done;XM.tabA.oncancel=()=>{md.style.overflow='';XM.tabAnim=0;XM.tabA=null}}else{md.style.overflow='';XM.tabAnim=0;if(XM.tab==='in'&&!XM.inH)xinFit()}
+  B.animate([{opacity:0,transform:`translateY(${grow?14:-10}px) scale(.985)`,filter:'blur(3px)'},{opacity:1,transform:'none',filter:'blur(0)'}],{duration:380,delay:60,easing:'cubic-bezier(.2,.8,.2,1)',fill:'backwards'});
+  xCascade()}
 /* motion: the window grows out of the compass, its contents settle in, and the row stays lit */
 const XREDUCE=matchMedia('(prefers-reduced-motion: reduce)');
 function xSrc(){const t=XM.t;let el=XM.from&&document.contains(XM.from)&&XM.from.offsetParent?XM.from:null;
@@ -2547,7 +2552,7 @@ function xCorrWord(v){return v>=.85?'Nearly identical':v>=.70?'Very similar':v>=
 function xToggle(){return `<div class="xseg xrngseg" role="group" aria-label="Chart period">${XR.map(([l,k])=>`<button type="button" data-xrng="${k}" class="${XM.rng===k?'sel':''}" aria-pressed="${XM.rng===k}">${l}</button>`).join('')}</div>`}
 function xDescFill(card){const el=card&&card.querySelector('[data-xdesc]');if(!el||el.dataset.done)return;el.dataset.done='1';const t=card.dataset.xc;xinLoad(t).then(d=>{const b=d.blurb||xAutoBlurb(d);if(b){el.textContent=b;el.hidden=false;const dk=el.closest('#xInDock,#xCardDock');if(dk)xMoreSync(dk)}else el.remove();xGrowRow()}).catch(()=>{el.remove();xGrowRow()})}
 /* once the card's description is in, make the chart row tall enough for the card plus about 120px of room for its line chart, as far as the window allows */
-function xGrowRow(){if(ph0())return;const B=$('xmBody'),md=$('xm').querySelector('.xmd'),tp=B&&B.querySelector('.xtop'),fig=B&&B.querySelector('.xfig'),dk=$('xCardDock'),c=dk&&!dk.hidden&&dk.firstElementChild,fr=c&&c.querySelector('.xface.fr');
+function xGrowRow(){if(ph0()||XM.tabAnim)return;const B=$('xmBody'),md=$('xm').querySelector('.xmd'),tp=B&&B.querySelector('.xtop'),fig=B&&B.querySelector('.xfig'),dk=$('xCardDock'),c=dk&&!dk.hidden&&dk.firstElementChild,fr=c&&c.querySelector('.xface.fr');
   if(!B||!md||!tp||!fig||!fr||!XM.d){xMatchH();xGrowModal();return}
   /* the card's natural height: its line chart at the base 60px, not stretched to the current row */
   const sv0=fr.querySelector('.xspark svg'),need=fr.scrollHeight+(c.offsetHeight-fr.clientHeight)-Math.max(0,(sv0?sv0.clientHeight:60)-60),pb=parseFloat(getComputedStyle(B).paddingBottom),chrome=md.offsetHeight-B.clientHeight;
@@ -2670,7 +2675,7 @@ function xChartTip(t,on){if(!on&&XM.sel){t=XM.sel;on=true}
   const dk=t+(rest?'|rest':'');if(dock.dataset.t!==dk){XM.restKey=rest;dock.innerHTML=p.k==='self'?xSelfCard(XM.d.self):xCard(p,XM.d.self,p.k,true);XM.restKey=false;dock.dataset.t=dk}dock.firstElementChild.classList.toggle('hl',XM.sel===t);if(mob)pop.hidden=false;else{wdock.hidden=false;leg.classList.add('showcard')}renderXMButtons();xDescFill(dock.firstElementChild);xMoreSync(dock);xMatchH();if(!mob&&XM.sel===t)xGrowModal()}
 /* the card and the chart box share one height */
 function xMatchH(){const fig=document.querySelector('#xmBody .xfig'),dock=$('xCardDock'),c=dock&&!dock.hidden&&dock.firstElementChild;if(!fig||!c||ph0())return;const fr=c.querySelector('.xface.fr');let need=0;if(fr)need=fr.scrollHeight+(c.offsetHeight-fr.clientHeight);c.style.height=Math.max(fig.offsetHeight,need)+'px'}
-function xGrowModal(){if(ph0())return;const B=$('xmBody'),md=$('xm').querySelector('.xmd'),tp=B&&B.querySelector('.xtop');if(!B||!md||!tp)return;const need=tp.offsetHeight+(tp.offsetTop-B.offsetTop)+parseFloat(getComputedStyle(B).paddingBottom)+14;if(need>B.clientHeight){const nh=Math.min(innerHeight-24,md.offsetHeight+(need-B.clientHeight));if(nh>md.offsetHeight){md.style.height=nh+'px';md.style.minHeight=nh+'px';XM.anchorH=nh}}}
+function xGrowModal(){if(ph0()||XM.tab==='in'||XM.tabAnim)return;const B=$('xmBody'),md=$('xm').querySelector('.xmd'),tp=B&&B.querySelector('.xtop');if(!B||!md||!tp)return;const need=tp.offsetHeight+(tp.offsetTop-B.offsetTop)+parseFloat(getComputedStyle(B).paddingBottom)+14;if(need>B.clientHeight){const nh=Math.min(innerHeight-24,md.offsetHeight+(need-B.clientHeight));if(nh>md.offsetHeight){md.style.height=nh+'px';md.style.minHeight=nh+'px';XM.anchorH=nh}}}
 function xTipBase(t,on){const tip=$('xChartTip'),svg=document.querySelector('#xmBody .xfig svg');if(!tip||!svg)return;const zone=svg.querySelector('.xzone');
   svg.querySelector('.xdots').classList.toggle('xfade',!!on&&t!==XM.d.self.t);svg.querySelectorAll('.xpt').forEach(g=>g.classList.toggle('on',on&&g.dataset.xt===t));
   document.querySelectorAll('#xmBody .xcard').forEach(c=>c.classList.toggle('hl',on&&c.dataset.xc===t));document.querySelectorAll('#xmBody .xcards').forEach(c=>c.classList.toggle('dim',!!on&&!!c.querySelector('.xcard.hl')));
@@ -2961,7 +2966,7 @@ function xRestSeries(d){const s=d.self||{},k=xRk(),to=new Date(d.to+'T00:00:00Z'
 function xRestCard(d){const s=d.self||{},R=d.rest||{},k=xRk(),n=xinN(d),named=d.top.filter(c=>c.wt>0||c.pw);
   const left=i=>Math.max(0,1-named.reduce((a,c)=>a+xinShare(c,i),0)),rv=R.r?R.r[k]:null,fb=s.r?s.r[k]:null;
   const ka=k===5?4:k,ra=R.r?R.r[ka]:null,add=ra==null?null:left(ka)*ra;
-  const why=R.cash>0.003?`Includes about ${xw(R.cash)} in cash and cash-like funds.`:'';
+  const why='';
   const need=(d.top||[]).filter(c=>c.t&&XSTK[c.t]===undefined);
   if(need.length)Promise.all(need.map(c=>xStkLoad(c.t))).then(()=>{const dk=$('xInDock');if(dk&&dk.firstElementChild&&dk.firstElementChild.dataset.xc==='~rest'){dk.dataset.t='~';xinTip(XM.sel||'~rest',true)}});
   const rc=need.length?null:xFind('~rest'),line=rc&&rc.d&&rc.w&&s.d&&s.w;
@@ -3058,7 +3063,7 @@ function xGrpCard(g,d,noload){const s=d.self||{},k=xRk(),key=g.t.slice(g.t.index
   if(need.length&&!noload)Promise.all(need.map(c=>xStkLoad(c.t))).then(()=>{const dk=$('xInDock');if(dk&&dk.firstElementChild&&dk.firstElementChild.dataset.xc===g.t){dk.dataset.t='~';xinTip(XM.sel||g.t,true)}});
   const hv=g.r[k],hb=s.r?s.r[k]:null,line=g.d&&g.w&&s.d&&s.w,isec=g.sec||(g.m[0]&&g.m[0].sec),sub=g.mode==='misc'?'Not in a sector':g.mode==='oth'?`Sector · outside the top ${xinN(d)}`:g.mode==='ind'?'Industry'+(isec?' · '+(XSEC[XYSEC[isec]]||isec):''):'Sector';
   const cov=g.m.reduce((a,c)=>a+c.wt,0),n=g.full||g.m.length,N=xinN(d);
-  const why=g.full?'':g.mode==='misc'?(key==='bonds'?`The bonds ${esc(s.t)} holds. Bonds don't belong to a stock sector, so there's no return to show here.`:key==='out'?`Everything ${esc(s.t)} holds outside its top ${N}. Industries are known only for the top ${N}.`:`Cash, and holdings without a stock sector, like bonds, futures or other funds${XGRP[d.t]?', plus any stocks we don\'t have prices or an industry for yet':''}. There's no return to show here.`):g.mode==='oth'?`These are ${esc(s.t)}'s ${esc(XSEC[key]||key).toLowerCase()} holdings outside its top ${N}. Returns are tracked only for the top ${N}, so there's no return to show.`:!n?`None of ${esc(s.t)}'s top ${N} holdings are in this sector, so there's no return to show.`:g.mode==='sec'&&cov<g.gw-0.005?`Based on its ${n===1?'one holding':n+' holdings'} in the top ${N} (${xw(cov)} of ${xw(g.gw)}).`:'';
+  const why=g.full?'':g.mode==='misc'?(key==='bonds'?`The bonds ${esc(s.t)} holds. Bonds don't belong to a stock sector, so there's no return to show here.`:key==='out'?`Everything ${esc(s.t)} holds outside its top ${N}. Industries are known only for the top ${N}.`:`Cash, and holdings without a stock sector, like bonds, futures or other funds${XGRP[d.t]?', plus any stocks we don\'t have prices or an industry for yet':''}. There's no return to show here.`):g.mode==='oth'?`These are ${esc(s.t)}'s ${esc(XSEC[key]||key).toLowerCase()} holdings outside its top ${N}. Returns are tracked only for the top ${N}, so there's no return to show.`:!n?`None of ${esc(s.t)}'s top ${N} holdings are in this sector, so there's no return to show.`:'';
   return `<article class="xcard" data-xc="${esc(g.t)}" style="--xc:var(--xs)"><div class="xch"><div><b>${esc(g.lbl)}</b><span class="nm">${sub}</span></div><span class="xchip s">${xw(g.gw)} of ${esc(s.t)}</span></div>
     ${ds?`<p class="xfdesc">${esc(ds)}</p>`:''}${n?xToggle():''}
     ${hv==null?'':`<div class="xhero"><b class="${hv>=0?'pos':'neg'}">${xp(hv)}</b><span class="u">${k===5?'/ yr, 3Y':esc(XM.rng)}</span>${hb==null?'':`<span class="xpill ${hv-hb>=0?'up':'dn'}">${xpts(hv-hb)} pts vs ${esc(s.t)}</span>`}</div>`}
