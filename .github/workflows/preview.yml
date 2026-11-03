@@ -41,6 +41,8 @@ jobs:
           name: pages-site
           path: _site
           if_no_artifact_found: fail
+          # the backup run that the gate skips still counts as a success but has no site, so look past it
+          search_artifacts: true
 
       - name: Live page from main, preview page from this branch
         run: |
