@@ -841,8 +841,10 @@ header.top{display:none!important}
 .xtmhr .xtmseg{flex:0 1 300px;min-width:240px}
 .xtm .xinftm{position:absolute;inset:0;min-height:0}
 /* Under the hood cards: same layout as the Alternatives card, line chart takes the spare height */
-.xidock .xcard .xspark{flex:1 1 auto;min-height:63px;display:flex;flex-direction:column}
-.xidock .xcard .xspark svg{flex:1 1 auto;height:auto;min-height:44px}
+.xidock .xcard .xspark{flex:none;display:flex;flex-direction:column}
+.xidock .xcard .xspark svg{flex:none;height:auto;aspect-ratio:2.1/1;min-height:0}
+.xidock>.xcard .xfdesc{-webkit-line-clamp:3;min-height:calc(3 * 1.55em)}.xidock>.xcard .xfdesc.open{-webkit-line-clamp:unset;display:block}
+.xmore{align-self:flex-start;border:0;background:none;padding:0;margin-top:-6px;font:500 12.5px "IBM Plex Sans",sans-serif;color:var(--muted);text-decoration:underline;text-underline-offset:3px;cursor:pointer}.xmore:hover{color:var(--ink)}.xmore.off{visibility:hidden}
 .xidock .xcard .xnoline{flex:1 1 auto}
 @media (max-width:1000px){.xidock .xcard .xspark svg{min-height:130px}.xtmhr .xtmseg{flex:1 1 100%}}
 .xtm{position:relative;flex:1 1 auto;min-height:320px}
@@ -1181,7 +1183,7 @@ tr.xecho>td{background:var(--accentBg);transition:background .2s}
 </div>
 <div class="pop" id="pop" role="tooltip" hidden></div>
 <div class="modal" id="ioModal" hidden><div class="mback" data-ioclose="1"></div><div class="mpanel" role="dialog" aria-modal="true" aria-labelledby="ioTitle"><div class="mhead"><h3 id="ioTitle">Import / Export</h3><button type="button" class="mclose" data-ioclose="1" aria-label="Close"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div><div id="ioBody"></div></div></div>
-<div class="xm" id="xm" hidden><div class="xmback" data-xclose></div><div class="xmd" role="dialog" aria-modal="true" aria-labelledby="xmTitle"><div class="xmh"><div><h2 id="xmTitle">Explore alternatives</h2></div><div class="xmhr"><span class="cnt" id="xmCount" aria-live="polite"></span><div class="xtabs" role="tablist" aria-label="Explore views"><button type="button" class="xtab" role="tab" data-xtab="in" aria-selected="false"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/></svg>Under the hood</button><button type="button" class="xtab" role="tab" data-xtab="alt" aria-selected="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg>Alternatives</button></div><button type="button" class="xclose" id="xmClose" data-xclose aria-label="Close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div></div><div class="xmb" id="xmBody"></div></div></div>
+<div class="xm" id="xm" hidden><div class="xmback" data-xclose></div><div class="xmd" role="dialog" aria-modal="true" aria-labelledby="xmTitle"><div class="xmh"><div><h2 id="xmTitle">Compare</h2></div><div class="xmhr"><span class="cnt" id="xmCount" aria-live="polite"></span><div class="xtabs" role="tablist" aria-label="Explore views"><button type="button" class="xtab" role="tab" data-xtab="in" aria-selected="false"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/></svg>Under the hood</button><button type="button" class="xtab" role="tab" data-xtab="alt" aria-selected="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg>Compare</button></div><button type="button" class="xclose" id="xmClose" data-xclose aria-label="Close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div></div><div class="xmb" id="xmBody"></div></div></div>
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 <div class="drophint" id="drophint" hidden>Drop CSV files to import prices</div>
 
@@ -2396,15 +2398,15 @@ const XDATA={},XLOAD={};
 function xLoad(t){if(!XLOAD[t])XLOAD[t]=fetch('data/peers/'+encodeURIComponent(t)+'.json').then(r=>{if(!r.ok)throw new Error('none');return r.json()}).then(d=>XDATA[t]=d).catch(e=>{delete XLOAD[t];throw e});return XLOAD[t]}
 async function openExplore(t,from,tab){XM.pf=null;XM.tmMode='stk';$('xm').querySelector('.xmd').style.minHeight='';XM.t=t;XM.tab=tab==='in'?'in':'alt';XM.anchorH=null;XM.openTab=XM.tab;XM.alt=XDATA[t]||null;XM.ins=XIN[t]||null;XM.errA=XM.errI=null;XM.secMode=null;XM.rngSet=0;XM.rng=XM.tab==='in'?'1Y':'3Y';XM.added=[];XM.from=from||null;
   {const q=$('qtip');if(q)q.hidden=true}XM.sel=null;
-  if(t==='TPS'){XM.errA='TPS is the 12% Solution strategy, not a fund you can buy, so it has no alternatives to show.';XM.errI='TPS is the 12% Solution strategy, not a fund, so it has no holdings to show.'}
+  if(t==='TPS'){XM.errA='TPS is the 12% Solution strategy, not a fund you can buy, so there is nothing to compare it with.';XM.errI='TPS is the 12% Solution strategy, not a fund, so it has no holdings to show.'}
   xUse();$('xm').hidden=false;document.body.classList.add('xm-open');xHead();xRender();xOpenFx();setTimeout(()=>$('xmClose').focus({preventScroll:true}),0);
   const done=k=>{if(XM.t!==t||$('xm').hidden)return;if(XM.tab===k){xUse();xRender();xCascade()}};
   if(XM.d)xCascade(true);
-  if(!XM.alt&&!XM.errA)xLoad(t).then(d=>{XM.alt=d;done('alt')},()=>{XM.errA=`Alternatives aren't available for ${t} yet. It may have less than 3 years of prices, or it isn't in our ETF list.`;done('alt')});
+  if(!XM.alt&&!XM.errA)xLoad(t).then(d=>{XM.alt=d;done('alt')},()=>{XM.errA=`Comparisons aren't available for ${t} yet. It may have less than 3 years of prices, or it isn't in our ETF list.`;done('alt')});
   if(!XM.ins&&!XM.errI)xinLoad(t).then(d=>{XM.ins=d;done('in')},()=>{XM.errI=`Holdings aren't available for ${t} yet. They're added a slice at a time each night, so check back soon.`;done('in')})}
 function xUse(){XM.d=XM.tab==='in'?XM.ins:XM.alt;XM.err=XM.tab==='in'?XM.errI:XM.errA}
 function xRender(){XM.tab==='in'?renderXI():renderXM()}
-function xHead(){$('xmTitle').textContent=(XM.tab==='in'?'Under the hood of ':'Explore alternatives to ')+XM.t;document.querySelectorAll('#xm .xtab').forEach(b=>b.setAttribute('aria-selected',b.dataset.xtab===XM.tab))}
+function xHead(){$('xmTitle').textContent=XM.tab==='in'?'Under the hood of '+XM.t:'How '+XM.t+' stacks up';document.querySelectorAll('#xm .xtab').forEach(b=>b.setAttribute('aria-selected',b.dataset.xtab===XM.tab))}
 function xTab(k){if(XM.tab===k)return;{const md=$('xm').querySelector('.xmd');if(md&&!XPHONE())md.style.minHeight=Math.max(md.offsetHeight,parseFloat(md.style.minHeight)||0)+'px'}XM.tab=k;XM.sel=null;if(k==='in'&&XM.rng==='3Y'&&!XM.rngSet)XM.rng='1Y';xUse();xHead();xRender();$('xmBody').scrollTop=0;xCascade()}
 /* motion: the window grows out of the compass, its contents settle in, and the row stays lit */
 const XREDUCE=matchMedia('(prefers-reduced-motion: reduce)');
@@ -2485,7 +2487,7 @@ function xHero(c,s,kind){const k=xRk();
   return `<div class="xhero"><b class="${v>=0?'pos':'neg'}">${xp(v)}</b><span class="u">${lab}</span><span class="xpill ${v-bv>=0?'up':'dn'}">${xpts(v-bv)} pts vs ${esc(s.t)}</span></div>`}
 function xCorrWord(v){return v>=.85?'Nearly identical':v>=.70?'Very similar':v>=.60?'Some diversification':'Strong diversification'}
 function xToggle(){return `<div class="xseg xrngseg" role="group" aria-label="Chart period">${XR.map(([l,k])=>`<button type="button" data-xrng="${k}" class="${XM.rng===k?'sel':''}" aria-pressed="${XM.rng===k}">${l}</button>`).join('')}</div>`}
-function xDescFill(card){const el=card&&card.querySelector('[data-xdesc]');if(!el||el.dataset.done)return;el.dataset.done='1';const t=card.dataset.xc;xinLoad(t).then(d=>{const b=d.blurb||xAutoBlurb(d);if(b){el.textContent=b;el.hidden=false}else el.remove();xGrowRow()}).catch(()=>{el.remove();xGrowRow()})}
+function xDescFill(card){const el=card&&card.querySelector('[data-xdesc]');if(!el||el.dataset.done)return;el.dataset.done='1';const t=card.dataset.xc;xinLoad(t).then(d=>{const b=d.blurb||xAutoBlurb(d);if(b){el.textContent=b;el.hidden=false;const dk=el.closest('#xInDock');if(dk)xMoreSync(dk)}else el.remove();xGrowRow()}).catch(()=>{el.remove();xGrowRow()})}
 /* once the card's description is in, make the chart row tall enough for the card plus about 120px of room for its line chart, as far as the window allows */
 function xGrowRow(){if(ph0())return;const B=$('xmBody'),md=$('xm').querySelector('.xmd'),tp=B&&B.querySelector('.xtop'),fig=B&&B.querySelector('.xfig'),dk=$('xCardDock'),c=dk&&!dk.hidden&&dk.firstElementChild,fr=c&&c.querySelector('.xface.fr');
   if(!B||!md||!tp||!fig||!fr||!XM.d){xMatchH();xGrowModal();return}
@@ -2736,7 +2738,7 @@ function renderXI(){const b=$('xmBody');renderXMFoot();xSizeModal();
   xSetGlance('');xSizeModal();
   b.innerHTML=`<div class="xtop xin">${fig}<div class="xcdock xidock" id="xInDock">${xAboutCard(d)}</div></div>`;
   if(!d.pf&&xinEq(d)&&XGRP[t]===undefined)xGrpLoad(t).then(()=>{if(XM.d===d&&XM.tab==='in'&&!$('xm').hidden)xinFit()});
-  $('xInDock').dataset.t='';xinFit();xinFitRow();xinPaint();if(XM.sel&&xFind(XM.sel))xinTip(XM.sel,true);
+  $('xInDock').dataset.t='';xMoreSync($('xInDock'));xinFit();xinFitRow();xinPaint();if(XM.sel&&xFind(XM.sel))xinTip(XM.sel,true);
   if(document.fonts&&document.fonts.status!=='loaded')document.fonts.ready.then(()=>{if(XM.tab==='in'&&!$('xm').hidden){xinFit();xinFitRow();xinPaint()}})}
 
 /* ---------- under the hood of a portfolio: every member's holdings and sectors, weighted by the portfolio's percentages ---------- */
@@ -2745,7 +2747,7 @@ function openExplorePf(id,from,tab){XM.tmMode='stk';const p=pf(id);if(!p)return;
   {const q=$('qtip');if(q)q.hidden=true}XM.sel=null;
   xUse();$('xm').hidden=false;document.body.classList.add('xm-open');xHead();xRender();xOpenFx();setTimeout(()=>$('xmClose').focus({preventScroll:true}),0);
   if(!ws.length)return;const key=JSON.stringify(ws);XM.pfKey=key;
-  xPfAlt(p).then(d=>{if(XM.pf!==id||XM.pfKey!==key||$('xm').hidden)return;XM.alt=d;if(XM.tab==='alt'){xUse();xRender();xCascade()}},e=>{if(XM.pf!==id||XM.pfKey!==key)return;XM.errA=e&&e.user?e.message:"Alternatives for portfolios aren't available yet. They need a file that the nightly update makes, so check back tomorrow.";if(XM.tab==='alt'){xUse();xRender()}});
+  xPfAlt(p).then(d=>{if(XM.pf!==id||XM.pfKey!==key||$('xm').hidden)return;XM.alt=d;if(XM.tab==='alt'){xUse();xRender();xCascade()}},e=>{if(XM.pf!==id||XM.pfKey!==key)return;XM.errA=e&&e.user?e.message:"Comparisons for portfolios aren't available yet. They need a file that the nightly update makes, so check back tomorrow.";if(XM.tab==='alt'){xUse();xRender()}});
   Promise.allSettled(ws.map(x=>x.t==='TPS'?Promise.reject(new Error('strategy')):xinLoad(x.t))).then(()=>{if(XM.pf!==id||XM.pfKey!==key||$('xm').hidden)return;
     try{XM.ins=xinMix(p,ws)}catch(e){console.error(e);XM.ins=null}
     if(!XM.ins)XM.errI="Holdings aren't available for these ETFs yet. They're added a slice at a time each night, so check back soon.";xUse();xRender();xCascade()})}
@@ -2793,9 +2795,9 @@ function xPoolLoad(){if(!XPOOLL)XPOOLL=fetch('data/pool.json').then(r=>{if(!r.ok
 function xUserErr(m){const e=new Error(m);e.user=1;return e}
 async function xPfAlt(p){const ws=weights(p);
   const P=await xPoolLoad(),day=dt=>dayOnOrBefore(Date.parse(dt+'T00:00:00Z'));
-  if(ws.some(x=>x.t==='TPS'))throw xUserErr('This portfolio includes TPS, the 12% Solution strategy, which isn\'t a fund, so alternatives can\'t be worked out for it.');
+  if(ws.some(x=>x.t==='TPS'))throw xUserErr('This portfolio includes TPS, the 12% Solution strategy, which isn\'t a fund, so it can\'t be compared.');
   const s0=day(P.from),iL=day(P.to);if(s0<0||iL<=s0)throw xUserErr('Not enough shared price history to compare this portfolio over 3 years.');
-  if(ws.some(x=>pxd(x.t,s0)==null))throw xUserErr(`Alternatives are picked on the last 3 years, and ${xList(ws.filter(x=>pxd(x.t,s0)==null).map(x=>x.t))} ${ws.filter(x=>pxd(x.t,s0)==null).length===1?"doesn't":"don't"} have 3 years of prices yet.`);
+  if(ws.some(x=>pxd(x.t,s0)==null))throw xUserErr(`Comparisons use the last 3 years, and ${xList(ws.filter(x=>pxd(x.t,s0)==null).map(x=>x.t))} ${ws.filter(x=>pxd(x.t,s0)==null).length===1?"doesn't":"don't"} have 3 years of prices yet.`);
   const V=bhd(p,s0);if(!V||V[iL]==null)throw xUserErr('Not enough price history to compare this portfolio over 3 years.');
   /* weekly returns on the pool's dates, then correlation with every candidate in one pass */
   const wv=P.zd.map(dt=>V[day(dt)]);if(wv.some(v=>v==null))throw xUserErr('Not enough price history to compare this portfolio over 3 years.');
@@ -2890,10 +2892,14 @@ function xRestCard(d){const s=d.self||{},R=d.rest||{},k=xRk(),n=xinN(d),named=d.
     ${line?xSpark(rc,s,'var(--xs)','~rest')+`<div class="xrl xrlr">Risk vs ${esc(s.t)} · ${xRngLbl()}</div><div class="xrisk x3">${xRiskTiles(rc,s)}</div>`:need.length?`<div class="xspark xwait"><svg viewBox="0 0 300 60" preserveAspectRatio="none" aria-hidden="true"><line x1="0" x2="300" y1="30" y2="30" stroke="var(--line)" vector-effect="non-scaling-stroke"/></svg><div class="lg"><span>&nbsp;</span></div></div>`:'<div class="xnoline">Not enough price history for a line chart</div>'}
     ${why?`<p class="xwhy">${why}</p>`:''}</article>`}
 /* swap the card on the right: the hovered or locked holding, else the fund's About card */
+/* under the hood cards: the description keeps 3 lines so every card has the same layout; More opens the rest */
+function xMoreSync(root){requestAnimationFrame(()=>root.querySelectorAll('.xfdesc').forEach(p=>{if(p.hidden)return;let b=p.nextElementSibling;if(!b||!b.classList.contains('xmore')){p.insertAdjacentHTML('afterend','<button type="button" class="xmore off" aria-expanded="false" tabindex="-1">More</button>');b=p.nextElementSibling}
+  if(!p.classList.contains('open')){const off=p.scrollHeight<=p.clientHeight+2;b.classList.toggle('off',off);off?b.setAttribute('tabindex','-1'):b.removeAttribute('tabindex');b.setAttribute('aria-hidden',off)}}))}
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('.xmore');if(!b)return;const p=b.previousElementSibling;const o=p.classList.toggle('open');b.textContent=o?'Less':'More';b.setAttribute('aria-expanded',o);if(typeof xinFit==='function'&&!o)xinFit()});
 function xinTip(t,on){const dock=$('xInDock'),d=XM.d;if(!dock||!d)return;const show=on?t:XM.sel;
   const tm=$('xTm');if(tm){tm.classList.toggle('fade',!!show);tm.querySelectorAll('.xtile[data-ht]').forEach(x=>x.classList.toggle('on',x.dataset.ht===show))}
   const c=show?xFind(show):null,key=c?show+(XM.sel===show?'*':''):'';if(dock.dataset.t===key)return;
-  dock.innerHTML=c?(c.k==='rest'?xRestCard(d):c.k==='grp'?xGrpCard(c,d):xHoldCard(c,d.self)):xAboutCard(d);dock.dataset.t=key;if(c&&XM.sel===show)dock.firstElementChild.classList.add('hl')}
+  dock.innerHTML=c?(c.k==='rest'?xRestCard(d):c.k==='grp'?xGrpCard(c,d):xHoldCard(c,d.self)):xAboutCard(d);dock.dataset.t=key;xMoreSync(dock);if(c&&XM.sel===show)dock.firstElementChild.classList.add('hl')}
 /* make the map as tall as the tallest card, so cards never get cut and the two columns end together */
 function xinFitRow(){const B=$('xmBody'),row=B&&B.querySelector('.xtop.xin'),dock=$('xInDock');if(!B||!row||!dock)return;if(getComputedStyle(row).flexDirection!=='row')return;const S=B.scrollTop,avail=Math.min(B.clientHeight-(row.getBoundingClientRect().top-B.getBoundingClientRect().top)-22-S,B.clientHeight-22);if(avail<=300)return;row.style.height=avail+'px';dock.style.minHeight='';dock.style.overflowY='auto'}
 function xinFit(){const dock=$('xInDock'),d=XM.d;if(!dock||!d)return;dock.style.minHeight='';if(ph0()||!$('xTm'))return;
