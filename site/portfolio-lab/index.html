@@ -14,7 +14,7 @@
   --ink:#1C1B18;--ink2:#3D3A34;--muted:#5E5A52;--faint:#8A8478;--input:#FFFFFF;--inputLine:#CFC7B6;
   --accent:#1D6B4C;--accentBg:#E6F0E9;--pos:#1D6B4C;--neg:#A8401C;--posBar:#3F9A70;--negBar:#C9724C;
   --btn:#1C1B18;--btnInk:#FFFDF8;--warnBg:#F4DDB0;--warnFg:#5A3A08;--grid:#E8E2D5;--lockBg:#ECE8DE;
-  --p1:#2a78d6;--p2:#eb6834;--p3:#1baf7a;--p4:#eda100;--p5:#e87ba4;--p6:#4a3aa7;--tw:#1C1B18;--spy:#8A8478;
+  --chip:#E3EAF7;--chipfg:#1F4C9A;--p1:#2a78d6;--p2:#eb6834;--p3:#1baf7a;--p4:#eda100;--p5:#e87ba4;--p6:#4a3aa7;--p7:#0e8fa3;--p8:#8c5a2b;--p9:#6f8f1f;--p10:#5f6b7a;--tw:#1C1B18;--spy:#8A8478;
   --focus:#2a78d6;--segOn:#1C1B18;--segOnFg:#FFFDF8;--segOnLine:#1C1B18;--tyEq:#2E8A63;--tyEqBg:#E3EFE7;--tyEqFg:#1D5A40;--tyBd:#4A6FA5;--tyBdBg:#E6EAF3;--tyBdFg:#2F4F80;--tyCa:#C98A12;--tyCaBg:#FBF0D6;--tyCaFg:#6B4608;--tyCaLine:#E2B654;--tyOt:#8A5CB8;--tyOtBg:#EFE7F6;--tyOtFg:#5A3D78;--shadow:0 10px 30px rgba(28,27,24,.16);
   color-scheme:light;
 }
@@ -23,7 +23,7 @@
   --ink:#EDE8DC;--ink2:#CFC9BB;--muted:#A39D90;--faint:#7E786C;--input:#121210;--inputLine:#45423B;
   --accent:#6CC39A;--accentBg:#1C2E25;--pos:#6CC39A;--neg:#EE9A74;--posBar:#4FAE82;--negBar:#D07A55;
   --btn:#EDE8DC;--btnInk:#141412;--warnBg:#2E2618;--warnFg:#D9AE6A;--grid:#2A2925;--lockBg:#2A2925;
-  --p1:#3987e5;--p2:#d95926;--p3:#199e70;--p4:#c98500;--p5:#d55181;--p6:#9085e9;--tw:#B8B0A0;--spy:#8F897D;
+  --chip:#24324A;--chipfg:#A9C4F2;--p1:#3987e5;--p2:#d95926;--p3:#199e70;--p4:#c98500;--p5:#d55181;--p6:#9085e9;--p7:#3bb3c7;--p8:#b07a48;--p9:#94b43c;--p10:#8c97a6;--tw:#B8B0A0;--spy:#8F897D;
   --focus:#3987e5;--segOn:#3A3833;--segOnFg:#F3F0E8;--segOnLine:#8A8478;--tyEq:#4FAE82;--tyEqBg:#1C2E25;--tyEqFg:#8FD3B0;--tyBd:#7E9FD6;--tyBdBg:#1F2838;--tyBdFg:#A9BEE6;--tyCa:#E0A93A;--tyCaBg:#3A2E14;--tyCaFg:#F4C27A;--tyCaLine:#8A6A24;--tyOt:#B08BDA;--tyOtBg:#2C2238;--tyOtFg:#CDB2EA;--shadow:0 10px 30px rgba(0,0,0,.5);
   color-scheme:dark;
 }}
@@ -32,7 +32,7 @@
   --ink:#EDE8DC;--ink2:#CFC9BB;--muted:#A39D90;--faint:#7E786C;--input:#121210;--inputLine:#45423B;
   --accent:#6CC39A;--accentBg:#1C2E25;--pos:#6CC39A;--neg:#EE9A74;--posBar:#4FAE82;--negBar:#D07A55;
   --btn:#EDE8DC;--btnInk:#141412;--warnBg:#2E2618;--warnFg:#D9AE6A;--grid:#2A2925;--lockBg:#2A2925;
-  --p1:#3987e5;--p2:#d95926;--p3:#199e70;--p4:#c98500;--p5:#d55181;--p6:#9085e9;--tw:#B8B0A0;--spy:#8F897D;
+  --chip:#24324A;--chipfg:#A9C4F2;--p1:#3987e5;--p2:#d95926;--p3:#199e70;--p4:#c98500;--p5:#d55181;--p6:#9085e9;--p7:#3bb3c7;--p8:#b07a48;--p9:#94b43c;--p10:#8c97a6;--tw:#B8B0A0;--spy:#8F897D;
   --focus:#3987e5;--segOn:#3A3833;--segOnFg:#F3F0E8;--segOnLine:#8A8478;--tyEq:#4FAE82;--tyEqBg:#1C2E25;--tyEqFg:#8FD3B0;--tyBd:#7E9FD6;--tyBdBg:#1F2838;--tyBdFg:#A9BEE6;--tyCa:#E0A93A;--tyCaBg:#3A2E14;--tyCaFg:#F4C27A;--tyCaLine:#8A6A24;--tyOt:#B08BDA;--tyOtBg:#2C2238;--tyOtFg:#CDB2EA;--shadow:0 10px 30px rgba(0,0,0,.5);
   color-scheme:dark;
 }
@@ -166,6 +166,46 @@ th .sort[aria-pressed="true"]{color:var(--ink)}
 td{padding:10px 6px;border-bottom:1px solid var(--line2);white-space:nowrap}
 td.num{text-align:right;font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums}
 td.best{font-weight:700}
+/* the ETF table shows what people decide on; "More columns" brings back the rest (1M 3M 6M YTD 5Y, volatility, worst year) */
+@media (min-width:1001px){#bTable tr:not(.bgrp):not(.addrow)>:nth-child(2){display:none}} /* the top buttons pick which of YTD 1Y 3Y 5Y is highlighted, so a separate range column would repeat one of them */
+#bTable tr.bgrp th{padding:6px 10px 2px;font:600 10.5px "IBM Plex Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:center}
+#bTable tr.bgrp th.lab{border-bottom:1px solid var(--line)}#bTable tr.bgrp th.lft{text-align:left}
+#bTable th.bmfirst,#bTable td.bmfirst,#bTable th.ercol,#bTable td.ercol{padding-left:26px}
+.bmore{border:0;background:transparent;color:var(--muted);font:500 12.5px "IBM Plex Sans",sans-serif;cursor:pointer;text-decoration:underline;text-underline-offset:3px;padding:2px 0}
+.bmore:hover{color:var(--ink)}
+.colwrap{position:relative;display:inline-block}.icob{display:inline-flex;align-items:center;justify-content:center;padding:0 9px}
+@media (max-width:1000px){.colwrap{display:none!important}}
+.pmenu.colm{right:0;left:auto;min-width:0;flex-direction:row;gap:18px;padding:12px 14px;text-transform:none;letter-spacing:0;text-align:left}
+.colg{display:flex;flex-direction:column;gap:2px}.colh{font:600 10.5px "IBM Plex Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.colc{display:flex;align-items:center;gap:8px;padding:4px 2px;font:500 13px "IBM Plex Sans",sans-serif;color:var(--ink2);white-space:nowrap;cursor:pointer}.colc input{accent-color:var(--accent);width:15px;height:15px;margin:0}
+/* one rule: bold green is the best value in a column; risk and fee numbers stay neutral so they don't read as warnings */
+#bTable tr[data-bt] td.num:not(.best){font-weight:400}
+#bTable td.best,#bTable td.best .v{color:var(--pos)}
+#bTable tr[data-bt] :is(td.bm-dd,td.bm-worst,td.bm-vol,td.ercol).neg:not(.best),#bTable tr[data-bt] :is(td.bm-dd,td.bm-worst,td.bm-vol,td.bm-sharpe,td.ercol):not(.best){color:var(--ink2)}
+@media (max-width:1000px){#bTable tr.bgrp{display:none}}
+#bTable:not(.more) td.xcell{width:1%}
+/* portfolio names and the ETFs inside them line up with the ETF tickers: the expand arrow moves after the name */
+#bTable tr.pfrow .tkcell{display:flex;align-items:center}#bTable tr.pfrow .pfchev{order:3;margin-left:4px}#bTable tr.pfrow .tkcell>span[style]{order:2}
+#bTable tr.pfrow .pfname{margin-left:-13px}
+#bTable tr.pfrow .pfn{font-size:15px}.pfn0{font:600 15px "IBM Plex Sans",sans-serif;color:var(--ink2)}
+#bChartbox svg polyline[data-lk]{transition:opacity .15s,stroke-width .15s}
+#bChartbox svg.lfocus polyline[data-lk]:not(.on){opacity:.18}#bChartbox svg.lfocus polyline.on{stroke-width:3.5}
+.pfoff{font-size:13px;color:var(--neg);align-self:center}
+.pfpctw{display:inline-flex;align-items:center;gap:3px;color:var(--muted)}.pfpct{width:56px;text-align:right}
+.pfprev{font:500 12.5px "IBM Plex Mono",monospace;color:var(--muted);align-self:center}.pfprev b{color:var(--ink)}
+#bActs>.iob,#bActs>#bClear{display:none}
+.bmenus{position:relative;display:inline-flex;gap:8px;align-items:center}
+.bmenus .btn.on{border-color:var(--ink2);color:var(--ink)}
+.pmenu{position:absolute;right:0;top:calc(100% + 6px);z-index:30;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:6px;min-width:220px;box-shadow:0 10px 30px rgba(0,0,0,.22);display:flex;flex-direction:column;gap:6px}
+.pmenu[hidden]{display:none}
+.pmenu>button{border:0;background:transparent;text-align:left;padding:8px 10px;border-radius:6px;font:500 13px "IBM Plex Sans",sans-serif;color:var(--ink2);cursor:pointer}.pmenu>button:hover{background:var(--panel2);color:var(--ink)}
+.pmrow{display:flex;gap:4px}.pmrow button{flex:1;border:1px solid var(--line);background:transparent;border-radius:6px;padding:6px 8px;font:500 13px "IBM Plex Mono",monospace;color:var(--ink2);cursor:pointer}
+.pmrow button[aria-pressed="true"]{background:var(--panel2);color:var(--ink);border-color:var(--ink2)}
+.pmdays{display:flex;align-items:center;gap:6px}
+.bstrip{display:flex;flex-wrap:wrap;gap:6px 24px;justify-content:space-between;align-items:baseline;padding:4px 4px 10px;font-size:13px;color:var(--muted)}
+.bnudge{border:0;background:transparent;padding:0;text-align:left;cursor:pointer;color:var(--ink2);font:inherit}.bnudge b{color:var(--ink)}.bnudge span{color:var(--pos);font-weight:600}
+.bnudge:hover span{text-decoration:underline;text-underline-offset:3px}
+.pvacts .btn.quiet{border-color:transparent;background:transparent;color:var(--neg);margin-left:auto}#bTable:not(.more) td.num,#bTable:not(.more) th.r{padding-left:22px;padding-right:22px}
 .pn{display:flex;align-items:center;gap:8px;font-weight:600}
 
 /* builder */
@@ -235,6 +275,7 @@ tr.twrow td{white-space:normal}
 .btable thead th{padding-top:4px;padding-bottom:6px;vertical-align:middle}
 
 .btable td.wcell,.btable th.wcell{width:1%;white-space:nowrap;padding-left:14px}
+.btable td.wcell:empty{padding-left:0;padding-right:0}
 .btable th:first-child,.btable td:first-child{width:1%;white-space:nowrap}
 .btable .wbox .field{width:60px;height:28px;font-size:14px}
 .btable td.xcell{width:44px;text-align:right}
@@ -321,6 +362,8 @@ tr.dim td{opacity:.5}
 
 .pctl{display:flex;flex-wrap:wrap;gap:12px 18px;align-items:flex-end;padding:4px 0 2px}
 .bcgrid .prail{padding:10px 12px;gap:2px;max-height:344px;overflow:auto;overscroll-behavior:contain}
+/* the ETF chart takes the full width: the table's colored dashes are its legend, and hovering the chart shows each line's value */
+.pgrid.bcgrid{grid-template-columns:minmax(0,1fr)}.pgrid.bcgrid>.prail{display:none}
 .bcgrid .plrow{min-height:24px}
 .bcgrid .plrow.bench{min-height:34px}
 .pgrid{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:24px;align-items:start}
@@ -445,6 +488,7 @@ tr.mdet{display:none}
   .btable .wbox .field{width:44px;padding:0 6px}
   .btable .nmin{width:84px}
   .btable td.wcell,.btable th.wcell{padding-left:3px}
+  #bTable th.wcell,#bTable td.wcell:empty{padding-left:0!important;padding-right:0!important}
   .btable .momwrap{gap:4px}.btable .momwrap .v{min-width:48px}
   td.mexpc{width:36px}
   .btable .momwrap svg{width:34px}
@@ -605,7 +649,6 @@ thead tr.grow th{padding-top:0}
 .btable tr.pfrow.ticked>td,.btable tr.pfrow.ticked>td.hl{background:var(--accentBg)}
 .btable tr.pfkid>td{font-size:13px}
 .pfname{width:118px;font:600 14px var(--sans,"IBM Plex Sans",sans-serif)}
-.pfbar{display:flex;height:5px;border-radius:3px;overflow:hidden;gap:1px;width:118px;margin-top:5px}
 .pfchev{width:24px;height:24px;margin:0 0 0 -1px;border:0;background:transparent;color:var(--muted);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;border-radius:6px;flex:none;padding:0}
 .pfchev:hover{background:var(--pill);color:var(--ink)}
 .pfchev svg{transition:transform .15s}.pfchev[aria-expanded="true"] svg{transform:rotate(90deg)}
@@ -637,7 +680,18 @@ html.grabbing,html.grabbing *{cursor:grabbing!important;user-select:none}
 .tkchk.sp{display:inline-block;cursor:default}
 .chsp{display:inline-block;width:24px;flex:none;margin-left:-1px}
 
-.spkbtn{border:0;background:transparent;padding:0;margin:0;cursor:pointer;display:inline-flex;border-radius:4px}
+.spkbtn{border:0;background:transparent;padding:6px 4px;margin:0;cursor:pointer;display:inline-flex;align-items:center;border-radius:4px}
+/* the ticker is a button that opens the ETF: filled, so it reads as tappable and not as a box to type in */
+.tkchip{border:0;background:transparent;color:var(--ink);font:600 14px "IBM Plex Mono",monospace;padding:5px 8px;margin-left:-8px;border-radius:6px;cursor:pointer;line-height:1.2;white-space:nowrap}
+/* an ETF's ticker is its legend: the line's color, deepened toward the text color so every hue stays readable in both themes */
+.tkchip.lg{color:color-mix(in srgb,var(--lc) 74%,var(--ink));font-size:15px}
+.tkchip.lg.dsh{text-decoration:underline dashed;text-decoration-color:color-mix(in srgb,var(--lc) 60%,transparent);text-underline-offset:5px}
+.tkchip:hover{background:var(--panel2);text-decoration:underline;text-underline-offset:4px}
+tr.dim .tkchip.lg{opacity:.45}
+.spkbtn.eye{color:var(--muted);opacity:0;padding:4px;margin-left:2px;transition:opacity .12s}
+tr:hover .spkbtn.eye,.spkbtn.eye:focus-visible,tr.dim .spkbtn.eye{opacity:1}
+@media (hover:none){.spkbtn.eye{opacity:.55}}.tkchip:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.tkchip.sm{font-size:13px;padding:3px 8px}
 .spkbtn:hover{background:var(--panel2)}
 tr.dim .spkbtn{opacity:.5}
 .btable tr.ticked>td{background:var(--accentBg)}
@@ -720,6 +774,7 @@ tr.flash>td{animation:pflash 1.6s ease-out}
 .pclr.armed,#bClear.armed{background:var(--neg);border-color:var(--neg);color:var(--panel)}
 .pclr.undo,#bClear.undo{background:var(--btn);border-color:var(--btn);color:var(--btnInk)}
 .mi.mact{gap:8px;flex-wrap:wrap}
+.mi.mact{display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr))}.mi.mact .mrm{justify-content:center;white-space:nowrap;padding-left:6px;padding-right:6px}.mi.mact .mrm svg{display:none}
 @media (pointer:coarse){input,select,textarea{font-size:16px!important}}
 @media (max-width:380px){.btable .tkin{width:60px;padding:0 4px}.btable .wbox .field{width:40px;padding:0 4px}#bName{width:64px;padding:0 5px}tr.hrowx .tkin{width:66px}}
 
@@ -779,14 +834,17 @@ header.top{display:none!important}
 .xin .xtmfig{flex:1 1 auto;min-width:0;margin:0;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:10px}
 .xtmh{display:flex;flex-direction:column;gap:2px;padding:2px 4px 0}
 .xtmh b{font-size:16px;font-weight:600}
+#xtmTitle{display:none} /* the side card already says how concentrated it is */
 .xtmh span{font-size:12.5px;color:var(--muted)}
 /* Under the hood: map title with the Stocks / Industries / Sectors toggle beside it */
 .xtmhr{display:flex;align-items:center;justify-content:space-between;gap:10px 16px;flex-wrap:wrap}
 .xtmhr .xtmseg{flex:0 1 300px;min-width:240px}
 .xtm .xinftm{position:absolute;inset:0;min-height:0}
 /* Under the hood cards: same layout as the Alternatives card, line chart takes the spare height */
-.xidock .xcard .xspark{flex:1 1 auto;min-height:63px;display:flex;flex-direction:column}
-.xidock .xcard .xspark svg{flex:1 1 auto;height:auto;min-height:44px}
+.xidock .xcard .xspark{flex:none;display:flex;flex-direction:column}
+.xidock .xcard .xspark svg{flex:none;height:auto;aspect-ratio:2.1/1;min-height:0}
+.xidock>.xcard .xfdesc{-webkit-line-clamp:3;min-height:calc(3 * 1.55em)}.xidock>.xcard .xfdesc.open{-webkit-line-clamp:unset;display:block}
+.xmore{align-self:flex-start;border:0;background:none;padding:0;margin-top:-6px;font:500 12.5px "IBM Plex Sans",sans-serif;color:var(--muted);text-decoration:underline;text-underline-offset:3px;cursor:pointer}.xmore:hover{color:var(--ink)}.xmore.off{visibility:hidden}
 .xidock .xcard .xnoline{flex:1 1 auto}
 @media (max-width:1000px){.xidock .xcard .xspark svg{min-height:130px}.xtmhr .xtmseg{flex:1 1 100%}}
 .xtm{position:relative;flex:1 1 auto;min-height:320px}
@@ -840,7 +898,6 @@ header.top{display:none!important}
 tr:hover .xbtn,.xbtn:focus-visible{opacity:1}
 .xbtn:hover{color:var(--accent);background:var(--accentBg)}
 @media (hover:none){.xbtn{opacity:1}}
-@media (max-width:1400px){.btable .bm-vol{display:none}}
 body.xm-open{overflow:hidden}
 .xm{position:fixed;inset:0;z-index:80;display:flex;align-items:center;justify-content:center;padding:12px 2vw}
 .xm[hidden]{display:none}
@@ -1106,13 +1163,13 @@ tr.xecho>td{background:var(--accentBg);transition:background .2s}
             <span style="display:flex;flex-direction:column;gap:2px;min-width:0;flex:1"><h2 id="bTitle">Build a portfolio</h2><span class="sub" id="bSub"></span></span>
       <span class="bchev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
     </button>
-    <div class="bacts" id="bActs"><button type="button" class="iob" data-iomodal="b" aria-haspopup="dialog" title="Import or export"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4v13"/><path d="m3 13 4 4 4-4"/><path d="M17 20V7"/><path d="m21 11-4-4-4 4"/></svg><span class="iol">Import / Export</span></button><div class="picker"><div class="seg" role="group" aria-label="Comparison period" id="bPeriod"></div><form class="dform" action="javascript:void 0" onsubmit="return false"><label class="daysbox" for="bDays"><span>Last</span><input class="field" id="bDays" data-days="b" inputmode="numeric" enterkeyhint="done" autocomplete="off" placeholder="#" maxlength="4"><span>days</span></label></form><button type="button" class="info vinfo" data-info="period" aria-label="How the time period works"></button></div><button type="button" class="btn sm" id="bClear">Clear</button><button type="button" class="btn sm primary" id="bSave">Add to my portfolios</button></div></div>
+    <div class="bacts" id="bActs"><button type="button" class="iob" data-iomodal="b" aria-haspopup="dialog" title="Import or export"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4v13"/><path d="m3 13 4 4 4-4"/><path d="M17 20V7"/><path d="m21 11-4-4-4 4"/></svg><span class="iol">Import / Export</span></button><div class="picker"><div class="seg" role="group" aria-label="Comparison period" id="bPeriod"></div><form class="dform" action="javascript:void 0" onsubmit="return false"><label class="daysbox" for="bDays"><span>Last</span><input class="field" id="bDays" data-days="b" inputmode="numeric" enterkeyhint="done" autocomplete="off" placeholder="#" maxlength="4"><span>days</span></label></form></div><button type="button" class="btn sm" id="bClear">Clear</button><span class="bmenus colwrap"><button type="button" class="btn sm icob" id="bCols" aria-haspopup="true" aria-expanded="false" aria-label="Choose columns" data-tip="Choose columns"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg></button><div class="pmenu colm" id="bColM" hidden></div></span><span class="bmenus"><button type="button" class="btn sm" id="bDots" aria-haspopup="true" aria-expanded="false" aria-label="More actions">⋯</button><div class="pmenu" id="bDotsM" hidden><button type="button" data-pmact="io">Import or export a list</button><button type="button" data-pmact="clear">Clear the list</button></div></span><button type="button" class="btn sm primary" id="bSave">Add to my portfolios</button></div></div>
     <div id="bBody" hidden>
       <div class="bgrid">
         <div class="bleft">
           
           <div class="pgrid bcgrid"><div class="chartbox" id="bChartbox"><svg id="bChart" role="img" aria-label="ETF comparison"></svg><div class="tip" id="bTip" hidden></div></div><aside class="prail" aria-label="Chart lines"><span class="cap" id="bListCap"></span><span class="sub" id="bChartCap" style="font-size:12px;margin:-2px 0 4px"></span><div id="bList" class="plist"></div></aside></div>
-          <div class="tablewrap"><table id="bTable" class="btable"></table></div>
+          <div class="bstrip" id="bStrip"></div><div class="tablewrap"><table id="bTable" class="btable"></table></div>
         </div>
       </div>
     </div>
@@ -1126,7 +1183,7 @@ tr.xecho>td{background:var(--accentBg);transition:background .2s}
 </div>
 <div class="pop" id="pop" role="tooltip" hidden></div>
 <div class="modal" id="ioModal" hidden><div class="mback" data-ioclose="1"></div><div class="mpanel" role="dialog" aria-modal="true" aria-labelledby="ioTitle"><div class="mhead"><h3 id="ioTitle">Import / Export</h3><button type="button" class="mclose" data-ioclose="1" aria-label="Close"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div><div id="ioBody"></div></div></div>
-<div class="xm" id="xm" hidden><div class="xmback" data-xclose></div><div class="xmd" role="dialog" aria-modal="true" aria-labelledby="xmTitle"><div class="xmh"><div><h2 id="xmTitle">Explore alternatives</h2></div><div class="xmhr"><span class="cnt" id="xmCount" aria-live="polite"></span><div class="xtabs" role="tablist" aria-label="Explore views"><button type="button" class="xtab" role="tab" data-xtab="in" aria-selected="false"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/></svg>Under the hood</button><button type="button" class="xtab" role="tab" data-xtab="alt" aria-selected="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg>Alternatives</button></div><button type="button" class="xclose" id="xmClose" data-xclose aria-label="Close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div></div><div class="xmb" id="xmBody"></div></div></div>
+<div class="xm" id="xm" hidden><div class="xmback" data-xclose></div><div class="xmd" role="dialog" aria-modal="true" aria-labelledby="xmTitle"><div class="xmh"><div><h2 id="xmTitle">Compare</h2></div><div class="xmhr"><span class="cnt" id="xmCount" aria-live="polite"></span><div class="xtabs" role="tablist" aria-label="Explore views"><button type="button" class="xtab" role="tab" data-xtab="in" aria-selected="false"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/></svg>Under the hood</button><button type="button" class="xtab" role="tab" data-xtab="alt" aria-selected="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg>Compare</button></div><button type="button" class="xclose" id="xmClose" data-xclose aria-label="Close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div></div><div class="xmb" id="xmBody"></div></div></div>
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 <div class="drophint" id="drophint" hidden>Drop CSV files to import prices</div>
 
@@ -1143,7 +1200,7 @@ const PRESETS=[['1M',1],['3M',3],['6M',6],['YTD',0],['1Y',12],['3Y',36],['5Y',60
 
 /* ---------- info copy ---------- */
 const INFO = {
-  period:{t:()=>'Time period',sec:()=>[['Presets','1M to 10Y go back that many months or years from the latest price. YTD starts at the last close of the prior year.'],['Last … days','Type any number of calendar days, like 30 or 90, and press Enter. It unselects the preset buttons; clicking a preset clears the box.'],['What it changes','The chart, the list beside it and the return column in the table all use this period. The 1Y, 3Y and 5Y columns stay fixed. In Build a portfolio, Sharpe and max drawdown also follow this period; worst year always looks back 10 years.']]},
+  period:{t:()=>'Time period',sec:()=>[['Presets','Count back from the latest price. YTD starts at last year’s final close.'],['Last … days','Type a number of days and press Enter.'],['What it changes','The chart, the highlighted column, Sharpe and max drawdown. Worst year always looks back 10 years.']]},
   bret:{t:()=>selLabel(S.b.sel,'adj')+' return',w:()=>`The total gain or loss over the period picked above the chart (${selLabel(S.b.sel,'span')}), from ${dayLabel(selStart(S.b.sel))} to ${dayLabel(D.last)}.`,h:()=>'Each ETF’s price change over the period, dividends included. The Portfolio total row uses your percentages, bought at the start and held without rebalancing.',y:()=>'The little line shows the path over the same period, so you can tell a steady climb from a late spike or a fade from a high.'},
   ret:{t:L=>selLabel(L,'adj')+' return',w:L=>`The total gain or loss over the period picked above (${selLabel(L,'span')}), from ${dayLabel(selStart(L))} to ${dayLabel(D.last)}.`,h:()=>'Each ETF’s price change over the period (dividends included), weighted by your percentages and held without rebalancing. For the 12% Solution it is the strategy’s actual result.',y:()=>'The little line shows the path over the same period, so you can tell a steady climb from a late spike or a fade from a high.'},
   y10:{t:()=>'Annual return (10 years)',w:()=>'The average yearly growth if you had bought the portfolio at your percentages 10 years ago and held it.',h:()=>'(Ending value ÷ starting value) raised to the power of 1/10, minus 1. This is often called CAGR, the compound annual growth rate.',y:()=>'It is the simplest "how much did it make" number, and small differences compound. $10,000 growing 10% a year becomes about $25,900 in 10 years; at 12% it becomes about $31,100.'},
@@ -1227,7 +1284,7 @@ const S={
   pfs:load('pfs2',null)||SAMPLE.map((p,i)=>({id:'p'+(i+1),name:p.name,color:i,rows:p.rows.map(([t,w])=>({t,w}))})),
   sel:load('sel',null),hidden:load('hidden2',null)||(()=>{const h=load('hidden',{});delete h.spy;return h})(),
   sortKey:load('sortKey','ret'),sortDir:load('sortDir',-1),
-  hover:null,bDraft:'',twOpen:false,delArm:null,pedit:null,paDraft:{},pOpen:{},
+  hover:null,bDraft:'',twOpen:false,delArm:null,pedit:null,paDraft:{},ppDraft:{},pOpen:{},
   b:load('b',null)
 };
 {const okRows=r=>Array.isArray(r)?r.filter(x=>x&&typeof x.t==='string'&&x.t).map(x=>({...x,t:String(x.t).toUpperCase(),w:x.w===''?'':(Number(x.w)||0)})):[];
@@ -1364,19 +1421,20 @@ let SPYS=null;
 
 /* ---------- render: builder ---------- */
 const PERIODS=[['3M',3],['6M',6],['1Y',12],['3Y',36],['5Y',60],['10Y',120]];
-const ECOL=['var(--p1)','var(--p2)','var(--p3)','var(--p4)','var(--p5)','var(--p6)'];
+const EYE_ON='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>',EYE_OFF='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3l18 18"/><path d="M10.6 5.1A10.7 10.7 0 0 1 12 5c6.4 0 10 7 10 7a17 17 0 0 1-3.2 4.1M6.6 6.6C3.8 8.4 2 12 2 12s3.6 7 10 7a9.7 9.7 0 0 0 5.4-1.6"/></svg>';
+const ECOL=['var(--p1)','var(--p2)','var(--p3)','var(--p4)','var(--p5)','var(--p6)','var(--p7)','var(--p8)','var(--p9)','var(--p10)'];
 const pLabel=(p,m)=>p;
 function tRetD(t,s){const a=pxd(t,D.last),b=pxd(t,s);return a!=null&&b!=null?a/b-1:null}
 function periodRet(t,m){return periodRetD(s=>tRetD(t,s),m)}
-function ecol(c){return ECOL[(c||0)%6]}
-function edash(c){c=c||0;return c<6?null:c<12?'7 4':'1.5 4'}
+function ecol(c){return ECOL[(c||0)%ECOL.length]}
+function edash(c){c=c||0;return c<10?null:c<20?'7 4':'1.5 4'}
 function bFreeColor(){const used=S.b.rows.map(r=>r.c);for(let k=0;k<MAXETF;k++)if(!used.includes(k))return k;return 0}
 function bTotal(){return r1(S.b.rows.reduce((a,r)=>a+(Number(r.w)||0),0))}
 const FINE=!!(window.matchMedia&&matchMedia('(hover:hover) and (pointer:fine)').matches);
 function withFocus(fn){const fid=document.activeElement&&document.activeElement.id;fn();if(fid&&$(fid)&&document.activeElement!==$(fid))$(fid).focus()}
 function mixEq(){return !S.b.rows.some(r=>HAS(r.t)&&(Number(r.w)||0)>0)}
 function mixP(){if(mixEq())return {rows:S.b.rows.filter(r=>HAS(r.t)).map(r=>({t:r.t,w:1}))};return {rows:S.b.rows.filter(r=>HAS(r.t)&&(Number(r.w)||0)>0).map(r=>({t:r.t,w:Number(r.w)}))}}
-const TPER=[['1M',1],['3M',3],['6M',6],['YTD','ytd'],['1Y',12],['3Y',36],['5Y',60]];
+const TPER=[['1M',1],['3M',3],['6M',6],['YTD','ytd'],['1Y',12],['3Y',36],['5Y',60],['10Y',120]];
 function mixName(){const n=(S.b.name||'').trim();return n||'Portfolio total'}
 function mixRet(m){const p=mixP();if(!weights(p).length)return null;return periodRetD(s=>bhdRet(p,s),m)}
 function mixRowHTML(){const p=mixP();const ok=weights(p).length>0;const tot=bTotal();const scaled=ok&&!mixEq()&&Math.abs(tot-100)>=0.05;
@@ -1387,7 +1445,7 @@ const bTicked=()=>S.b.rows.filter(r=>r.k&&HAS(r.t));
 const pTicked=()=>S.pfs.filter(p=>p.k);
 const tickNames=()=>pTicked().map(p=>p.name).concat(bTicked().map(r=>r.t));
 function clearTicks(){S.b.rows.forEach(r=>delete r.k);S.pfs.forEach(p=>delete p.k)}
-function tickP(){const tk=bTicked();const set=tk.some(r=>(Number(r.w)||0)>0);return {rows:tk.filter(r=>!set||(Number(r.w)||0)>0).map(r=>({t:r.t,w:set?Number(r.w):1}))}}
+function tickP(){return {rows:bTicked().map(r=>({t:r.t,w:1}))}}
 function tickRows100(skip){const ps=pTicked().filter(p=>p.id!==skip&&weights(p).length);let rows;
   if(!ps.length)rows=tickP().rows.map(r=>({t:r.t,w:r.w}));
   else{const items=ps.length+bTicked().length,acc={};ps.forEach(p=>weights(p).forEach(x=>{acc[x.t]=(acc[x.t]||0)+x.w/items}));bTicked().forEach(r=>{acc[r.t]=(acc[r.t]||0)+1/items});rows=Object.entries(acc).map(([t,w])=>({t,w}))}
@@ -1410,17 +1468,38 @@ function sortValT(t,w,k){const B=S.b;if(k==='t')return t;if(k==='w')return Numbe
 function sortValP(p,k){const B=S.b;if(k==='t')return p.name;if(k==='w')return pTot(p);if(k==='er')return pfER(p)??null;if(!weights(p).length)return null;
   if(k==='ret'){const st0=selStart(B.sel),fc=dFirstAny(p.rows.map(r=>r.t)),s0=Math.max(st0,fc??st0);return bhdRet(p,s0)}
   const tp=TPER.find(x=>x[0]===k);if(tp)return periodRetD(s=>bhdRet(p,s),tp[1]);const o=pStats(p,B.sel);return o&&o.st?o.st[k]:null}
+/* one line above the ETF table: the fund that beat the most of the list with less risk over 3 years, and how to combine */
+function bStrip(){const el=$('bStrip');if(el)el.hidden=true;return;const ts=S.b.rows.map(r=>r.t).filter(t=>HAS(t)&&t!=='TPS');
+  const need=ts.filter(t=>XDATA[t]===undefined&&!XNONE[t]);if(need.length){Promise.all(need.map(t=>xLoad(t).catch(()=>{XNONE[t]=1}))).then(()=>bStrip());}
+  const beat={};ts.forEach(t=>{const d=XDATA[t];if(!d||!d.self)return;const s=d.self,seen=new Set();
+    ['same','closest','div','mom','own'].forEach(k=>(d[k]||[]).forEach(c=>{if(seen.has(c.t)||ts.includes(c.t))return;seen.add(c.t);if(c.r3!=null&&s.r3!=null&&c.r3>s.r3+0.03&&c.vol<s.vol)(beat[c.t]=beat[c.t]||[]).push(t)}))});
+  const top=Object.entries(beat).sort((a,b)=>b[1].length-a[1].length)[0];
+  const nudge=top&&top[1].length>=2?`<button type="button" class="bnudge" data-xopen="${esc(top[1][0])}" data-xtab="alt"><b>${esc(top[0])}</b> beat ${top[1].length} of these with less risk over 3 years · <span>Compare</span></button>`:'<span></span>';
+  el.innerHTML=nudge;el.hidden=!(top&&top[1].length>=2)}
+const XNONE={};
+function bFocusLine(key){const svg=document.querySelector('#bChartbox svg');if(!svg)return;svg.classList.toggle('lfocus',!!key);svg.querySelectorAll('polyline[data-lk]').forEach(l=>l.classList.toggle('on',l.dataset.lk===key))}
+document.addEventListener('mouseover',e=>{if(!e.target.closest)return;const tr=e.target.closest('#bTable tr[data-bt],#bTable tr.pfrow');bFocusLine(tr?(tr.dataset.bt?'r:'+tr.dataset.bt:'p:'+tr.dataset.pid):null)});
+document.addEventListener('focusin',e=>{const tr=e.target.closest&&e.target.closest('#bTable tr[data-bt],#bTable tr.pfrow');if(tr)bFocusLine(tr.dataset.bt?'r:'+tr.dataset.bt:'p:'+tr.dataset.pid)});
+let PREN=null;
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-pren]');if(!b)return;PREN=b.dataset.pren;renderBuilder();setTimeout(()=>{const i=$('pn-'+PREN);if(i){i.focus();i.select()}},0)});
+/* the person picks which columns show; volatility starts hidden */
+const BCOLS=[['Returns',[['1M',3],['3M',4],['6M',5],['YTD',6],['1Y',7],['3Y',8],['5Y',9],['10Y',10]]],['Risk',[['Sharpe',11],['Volatility',12],['Max drawdown',13],['Worst year',14]]],['Cost',[['Fee',15]]]];
+function bHidden(){const h=load('hideCols',null);return new Set(Array.isArray(h)?h:['Volatility'])}
+let BCOLOPEN=false;
+function bColCss(){const h=bHidden();let st=$('bColCss');if(!st){st=document.createElement('style');st.id='bColCss';document.head.appendChild(st)}
+  const n=BCOLS.flatMap(([,cs])=>cs).filter(([l])=>h.has(l)).map(([,i])=>i);st.textContent=n.length?`#bTable tr:not(.bgrp):not(.addrow)>:is(${n.map(i=>':nth-child('+i+')').join(',')}){display:none}`:''}
+function bColMenu(){const h=bHidden();return `${BCOLS.map(([g,cs])=>`<div class="colg"><div class="colh">${g}</div>${cs.map(([l])=>`<label class="colc"><input type="checkbox" data-bcol="${l}" ${h.has(l)?'':'checked'}>${l}</label>`).join('')}</div>`).join('')}`}
 function sortedTop(){const B=S.b,k=BSORT.k,it=topOrder();it.forEach((x,i)=>{x.i=i;x.v=x.t==='p'?sortValP(x.p,k):sortValT(B.rows[x.j].t,B.rows[x.j].w,k)});
   return it.sort((a,b)=>{if(a.v==null&&b.v==null)return a.i-b.i;if(a.v==null)return 1;if(b.v==null)return -1;const c=typeof a.v==='string'?a.v.localeCompare(b.v):a.v-b.v;return (c*BSORT.dir)||a.i-b.i})}
 function memOrder(p){const ix=p.rows.map((r,k)=>k);if(!BSORT.k||!BSORT.dir)return ix;const v=ix.map(k=>sortValT(p.rows[k].t,p.rows[k].w,BSORT.k));
   return ix.sort((a,b)=>{const va=v[a],vb=v[b];if(va==null&&vb==null)return a-b;if(va==null)return 1;if(vb==null)return -1;const c=typeof va==='string'?va.localeCompare(vb):va-vb;return (c*BSORT.dir)||a-b})}
 function pfRowsHTML(NC,stripAfter,list){const B=S.b,st0=selStart(B.sel),hp=B.sel.p;return (list||S.pfs).map(p=>{const ok=weights(p).length>0,col=pfCol(p),open=!!S.pOpen[p.id],hid=!!S.hidden[p.id];
   const fc=ok?dFirstAny(p.rows.map(r=>r.t)):null,s0=Math.max(st0,fc??st0),V=ok?bhd(p,s0):null,v=V?bhdRet(p,s0):null,o=ok?pStats(p,B.sel):null,tot=pTot(p),good=Math.abs(tot-100)<0.05;
-  let h=`<tr class="pfrow${hid?' dim':''}${p.k?' ticked':''}" data-pid="${esc(p.id)}"><td>${S.pfs.length+B.rows.length>=2?gripBtn(p.name,'data-gk="top"'):''}<span class="tkcell"><label class="sr" for="pk-${esc(p.id)}">Tick ${esc(p.name)}</label><input type="checkbox" class="tkchk" id="pk-${esc(p.id)}" data-ptick="${esc(p.id)}" data-tip="Tick to group or add to another portfolio" ${p.k?'checked':''}><button type="button" class="pfchev" data-popen="${esc(p.id)}" aria-expanded="${open}" aria-label="${open?'Hide':'Show'} the ETFs in ${esc(p.name)}" data-tip="${open?'Hide':'Show'} the ETFs inside">${pico('chev',14)}</button><span style="display:flex;flex-direction:column"><span style="display:flex;gap:6px;align-items:center"><label class="sr" for="pn-${esc(p.id)}">Portfolio name</label><input class="field pfname" id="pn-${esc(p.id)}" data-pname="${esc(p.id)}" autocomplete="off" value="${esc(p.name)}">${ok?`<span class="xtools"><button type="button" class="xbtn" data-xpf="${esc(p.id)}" data-xtab="alt" aria-label="Explore alternatives to ${esc(p.name)}" title="Explore alternatives to this mix">${ICON_X}</button><button type="button" class="xbtn" data-xpf="${esc(p.id)}" data-xtab="in" aria-label="Under the hood of ${esc(p.name)}" title="Under the hood: every holding across these ETFs">${ICON_L}</button></span>`:''}</span><span class="pfbar" aria-hidden="true">${weights(p).map(x=>`<span style="width:${x.w*100}%;background:${memCol(p,p.rows.findIndex(q=>q.t===x.t))}"></span>`).join('')}</span></span></span></td>
-    <td class="num momcell" style="font-weight:700"><span class="momwrap"><button type="button" class="spkbtn" data-phide="${esc(p.id)}" aria-pressed="${!hid}" aria-label="${hid?'Show':'Hide'} ${esc(p.name)} on the chart" data-tip="${hid?'Show':'Hide'} on chart">${V?sparkPath(i=>V[i],s0,col,p.name+' path over the period'):''}</button><span class="v ${cls(v)}">${sg(v)}</span></span></td>${dsk(TPER.map(([p2,m])=>{const r=ok?periodRetD(s=>bhdRet(p,s),m):null;return `<td class="num ${cls(r)}${p2===hp?' hl':''}" style="font-weight:700">${sg(r)}</td>`}).join('')+BM.map(([k])=>bmCell(o,k,null,true)).join('')+`<td class="num ercol" style="font-weight:700">${fmtER(pfER(p))}</td>`)}<td class="num wcell"><span style="display:inline-flex;align-items:center;gap:2px"><button type="button" class="pfico" data-pdup2="${esc(p.id)}" aria-label="Duplicate ${esc(p.name)}" data-tip="Duplicate to try other weights">${pico('dup')}</button><button type="button" class="pfico" data-pung="${esc(p.id)}" aria-label="Ungroup ${esc(p.name)}" data-tip="Ungroup back into single ETFs">${pico('ung')}</button><span class="${good?'':'neg'}" style="font-size:13px;margin-left:4px">${good?'100%':tot+'%'}</span></span></td><td class="mob"></td><td class="xcell dsk"><button type="button" class="delbtn bdel" data-pdel2="${esc(p.id)}" aria-label="Delete ${esc(p.name)}" data-tip="Delete ${esc(p.name)}">${pico('trash')}</button></td></tr>`;
+  let h=`<tr class="pfrow${p.k?' ticked':''}" data-pid="${esc(p.id)}"><td>${S.pfs.length+B.rows.length>=2?gripBtn(p.name,'data-gk="top"'):''}<span class="tkcell"><label class="sr" for="pk-${esc(p.id)}">Tick ${esc(p.name)}</label><input type="checkbox" class="tkchk" id="pk-${esc(p.id)}" data-ptick="${esc(p.id)}" data-tip="Tick to group or add to another portfolio" ${p.k?'checked':''}><button type="button" class="pfchev" data-popen="${esc(p.id)}" aria-expanded="${open}" aria-label="${open?'Hide':'Show'} the ETFs in ${esc(p.name)}" data-tip="${open?'Hide':'Show'} the ETFs inside">${pico('chev',14)}</button><span class="chsp" aria-hidden="true"></span><span style="display:flex;flex-direction:column"><span style="display:flex;gap:6px;align-items:center">${PREN===p.id?`<label class="sr" for="pn-${esc(p.id)}">Portfolio name</label><input class="field pfname" id="pn-${esc(p.id)}" data-pname="${esc(p.id)}" autocomplete="off" value="${esc(p.name)}">`:ok?`<button type="button" class="tkchip lg pfn" style="--lc:${col}" data-xpf="${esc(p.id)}" data-xtab="in" title="What's inside ${esc(p.name)}, and alternatives">${esc(p.name)}</button>`:`<span class="pfn0">${esc(p.name)}</span>`}</span></span></span></td>
+    <td class="num momcell" style="font-weight:700"><span class="momwrap"><span class="v ${cls(v)}">${sg(v)}</span></span></td>${dsk(TPER.map(([p2,m])=>{const r=ok?periodRetD(s=>bhdRet(p,s),m):null;return `<td class="num ${cls(r)}${p2===hp?' hl':''}" style="font-weight:700">${sg(r)}</td>`}).join('')+BM.map(([k])=>bmCell(o,k,null,true)).join('')+`<td class="num ercol" style="font-weight:700">${fmtER(pfER(p))}</td>`)}<td class="num wcell">${good?'':`<span class="neg" style="font-size:13px;margin-left:4px">${tot}%</span>`}</td><td class="mob"></td><td class="xcell dsk"></td></tr>`;
   if(open){memOrder(p).forEach(k=>{const r=p.rows[k];const ES=HAS(r.t)?pStats({rows:[{t:r.t,w:100}]},B.sel):null,wr=HAS(r.t)?wRetT(r.t,st0):null;
-      h+=`<tr class="pfkid" data-pk="${esc(p.id)}" data-k="${k}"><td>${p.rows.length>=2?gripBtn(r.t,'data-gk="kid"'):''}<span class="tkcell"><span class="pfkidt" title="${esc(NAMES[r.t]||'')}">${esc(r.t)}</span>${xBtn(r.t)}</span></td><td class="num momcell"><span class="momwrap">${HAS(r.t)?sparkT(r.t,st0,memCol(p,k)):''}<span class="v ${cls(wr)}">${sg(wr)}</span></span></td>${dsk(TPER.map(([p2,m])=>{const x=periodRet(r.t,m);return `<td class="num ${cls(x)}${p2===hp?' hl':''}">${sg(x)}</td>`}).join('')+BM.map(([kk])=>bmCell(ES,kk,null)).join('')+`<td class="num ercol">${fmtER(ER[r.t])}</td>`)}<td class="wcell"><span class="wbox"><label class="sr" for="pw-${esc(p.id)}-${k}">${esc(r.t)} percent of ${esc(p.name)}</label><input class="field" id="pw-${esc(p.id)}-${k}" data-pw2="${esc(p.id)}" data-k="${k}" inputmode="decimal" autocomplete="off" value="${esc(r.w)}">%</span></td><td class="mob"></td><td class="xcell dsk"><button type="button" class="delbtn bdel" data-prm2="${esc(p.id)}" data-k="${k}" aria-label="Take ${esc(r.t)} out of ${esc(p.name)}" data-tip="Take ${esc(r.t)} out of ${esc(p.name)}">${pico('trash')}</button></td></tr>`});
-    h+=`<tr class="pfkid"><td colspan="${NC}"><span class="pfadd"><label class="sr" for="pa2-${esc(p.id)}">Add an ETF to ${esc(p.name)}</label><input class="field tkin" id="pa2-${esc(p.id)}" data-pa2="${esc(p.id)}" placeholder="Ticker" autocomplete="off" spellcheck="false" list="tickers" value="${esc(S.paDraft[p.id]||'')}"><button type="button" class="btn sm" data-padd2="${esc(p.id)}">Add to ${esc(p.name)}</button><button type="button" class="btn sm ghost" data-peven="${esc(p.id)}">Equal split</button>${good?'':`<span class="neg" style="font-size:13px">Percentages add to ${tot}%</span>`}</span></td></tr>`}
+      h+=`<tr class="pfkid" data-pk="${esc(p.id)}" data-k="${k}"><td>${p.rows.length>=2?gripBtn(r.t,'data-gk="kid"'):''}<span class="tkcell"><span class="tkchk sp"></span><span class="chsp" aria-hidden="true"></span><button type="button" class="tkchip sm" data-xopen="${esc(r.t)}" data-xtab="in" title="${esc(NAMES[r.t]||r.t)}">${esc(r.t)}</button></span></td><td class="num momcell"><span class="momwrap">${HAS(r.t)?sparkT(r.t,st0,memCol(p,k)):''}<span class="v ${cls(wr)}">${sg(wr)}</span></span></td>${dsk(TPER.map(([p2,m])=>{const x=periodRet(r.t,m);return `<td class="num ${cls(x)}${p2===hp?' hl':''}">${sg(x)}</td>`}).join('')+BM.map(([kk])=>bmCell(ES,kk,null)).join('')+`<td class="num ercol">${fmtER(ER[r.t])}</td>`)}<td class="wcell"><span class="wbox"><label class="sr" for="pw-${esc(p.id)}-${k}">${esc(r.t)} percent of ${esc(p.name)}</label><input class="field" id="pw-${esc(p.id)}-${k}" data-pw2="${esc(p.id)}" data-k="${k}" inputmode="decimal" autocomplete="off" value="${esc(r.w)}">%</span></td><td class="mob"></td><td class="xcell dsk"><button type="button" class="delbtn bdel" data-prm2="${esc(p.id)}" data-k="${k}" aria-label="Take ${esc(r.t)} out of ${esc(p.name)}" data-tip="Take ${esc(r.t)} out of ${esc(p.name)}">${pico('trash')}</button></td></tr>`});
+    h+=`<tr class="pfkid"><td colspan="${NC}"><span class="pfadd"><label class="sr" for="pa2-${esc(p.id)}">Add an ETF to ${esc(p.name)}</label><input class="field tkin" id="pa2-${esc(p.id)}" data-pa2="${esc(p.id)}" placeholder="Ticker" autocomplete="off" spellcheck="false" list="tickers" value="${esc(S.paDraft[p.id]||'')}"><label class="sr" for="pp2-${esc(p.id)}">Share for the new ETF</label><span class="pfpctw"><input class="field pfpct" id="pp2-${esc(p.id)}" data-pp2="${esc(p.id)}" inputmode="decimal" autocomplete="off" placeholder="${Math.round(100/(p.rows.length+1))}" value="${esc(S.ppDraft[p.id]||'')}">%</span><button type="button" class="btn sm" data-padd2="${esc(p.id)}">Add</button><span class="pfprev" id="pprev-${esc(p.id)}">${pPreview(p)}</span>${good?'':`<span class="pfoff">Adds to ${tot}%</span><button type="button" class="btn sm" data-pfix="${esc(p.id)}">Make it 100%</button>`}</span></td></tr>`}
   if(stripAfter===p.id)h+=pvStripHTML(NC);
   return h}).join('')}
 let PVAT=0,PVON=false;
@@ -1429,13 +1508,15 @@ function pvStripHTML(NC){const fresh=!PVON;if(fresh)PVAT=Date.now();PVON=true;co
   const tg=S.pfs.filter(p=>!p.k);
   const pick=tg.length===1?`<button type="button" class="btn" data-baddto="${esc(tg[0].id)}"><span class="pvsw" style="background:${pfCol(tg[0])}"></span>Add to ${esc(tg[0].name)}</button>`
     :tg.length>1?`<label class="sr" for="bAddToSel">Add what you ticked to one of your portfolios</label><select class="field pvsel" id="bAddToSel" data-baddsel><option value="">Add to…</option>${tg.map(p=>`<option value="${esc(p.id)}">${esc(p.name)}</option>`).join('')}</select>`:'';
-  return `<tr class="pvstrip${fresh?' pvnew':''}"><td colspan="${NC}"><div class="pvacts"><svg class="pvarr" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3v8a4 4 0 0 0 4 4h10M15 11l4 4-4 4"/></svg><button type="button" class="btn${n>=2?' go':''}" data-bgrp ${n>=2?'':'disabled'}>${n>=2?`Group ${esc(nm)} into new portfolio`:'Tick one more to group'}</button>${pick}<button type="button" class="btn" data-bremove>Remove</button><button type="button" class="btn" data-bclr>Clear</button></div></td></tr>`}
+  const tp=S.pfs.filter(p=>p.k),te=S.b.rows.filter(r=>r.k&&HAS(r.t));
+  if(tp.length===1&&!te.length){const p=tp[0];return `<tr class="pvstrip${fresh?' pvnew':''}"><td colspan="${NC}"><div class="pvacts"><svg class="pvarr" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3v8a4 4 0 0 0 4 4h10M15 11l4 4-4 4"/></svg><button type="button" class="btn" data-pren="${esc(p.id)}">Rename</button><button type="button" class="btn go" data-pung="${esc(p.id)}">Ungroup</button><button type="button" class="btn" data-pdup2="${esc(p.id)}">Duplicate</button><button type="button" class="btn" data-bclr>Deselect</button><button type="button" class="btn quiet" data-pdel2="${esc(p.id)}">Delete</button></div></td></tr>`}
+  return `<tr class="pvstrip${fresh?' pvnew':''}"><td colspan="${NC}"><div class="pvacts"><svg class="pvarr" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3v8a4 4 0 0 0 4 4h10M15 11l4 4-4 4"/></svg><button type="button" class="btn${n>=2?' go':''}" data-bgrp ${n>=2?'':'disabled'}>${n>=2?`Combine ${esc(nm)}`:'Tick one more to combine'}</button>${pick}<button type="button" class="btn" data-bclr>Deselect</button><button type="button" class="btn quiet" data-bremove>Delete</button></div></td></tr>`}
 /* after grouping or adding, bring the portfolio into view so you see where it went */
 function showPf(id){flashPf(id);setTimeout(()=>{const tr=document.querySelector(`tr[data-pid="${CSS.escape(id)}"]`);if(tr)tr.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'})},60)}
 function bGroup(){const B=S.b;if(tickNames().length<2){toast('Tick at least two to group them');return}
   if(S.pfs.length>=MAXP){toast(MAXP+' max: remove a portfolio first');return}
   const rows=tickRows100();if(rows.length>MAXETF){toast('Up to 15 ETFs per portfolio');return}const name=autoName(),id='p'+(++uid);clearTicks();S.pfs.push({id,name,color:freeColor(),rows});
-  persist();render();showPf(id);toast(`Created ${name} from ${rows.map(r=>r.t).join(', ')}. It’s at the top of the table.`,true)}
+  PREN=id;persist();render();showPf(id);setTimeout(()=>{const i=$('pn-'+id);if(i){i.focus({preventScroll:true});i.select()}},80)}
 function bAddTo(id){const p=pf(id),B=S.b;if(!p)return;const have=new Set(p.rows.map(r=>r.t));const add=tickRows100(id).filter(r=>!have.has(r.t));
   if(!add.length){toast('Those ETFs are already in '+p.name);return}
   if(p.rows.length+add.length>MAXETF){toast('Up to 15 ETFs per portfolio');return}
@@ -1473,7 +1554,16 @@ const LASTD={b:null,p:null};
 document.addEventListener('click',e=>{const sp=e.target.closest('.daysbox>span');if(!sp)return;const inp=sp.parentElement.querySelector('input[data-days]');if(!inp)return;const sc=inp.dataset.days,n=parseInt(inp.value,10);if(n&&selOf(sc).d!==n)setSel(sc,{d:Math.min(n,maxDays())});else inp.focus()});
 function renderPicker(sc){const sel=selOf(sc);if(sel.d)LASTD[sc]=sel.d;const seg=$(sc+'Period');if(!seg)return;
   seg.innerHTML=PRESETS.map(([p])=>`<button type="button" data-psel="${p}" data-scope="${sc}" aria-pressed="${sel.p===p}">${p}</button>`).join('');
+
   const inp=$(sc+'Days');if(inp&&document.activeElement!==inp)inp.value=sel.d?String(sel.d):(LASTD[sc]?String(LASTD[sc]):'');inp&&inp.closest('.daysbox').classList.toggle('on',!!sel.d)}
+/* the less-used periods and the custom days box live under More; Import, Export and Clear under the ⋯ menu */
+const BXTRA=['3M','6M','10Y'];
+function bMenusInit(){return;const m=$('bDaysSlot'),f=document.querySelector('#bActs .picker>.dform'),i=document.querySelector('#bActs .picker>.vinfo');if(m&&f){m.appendChild(f);if(i)m.appendChild(i)}}
+document.addEventListener('click',e=>{if(!e.target.closest)return;const pairs=[['bDots','bDotsM']];
+  for(const [b,m] of pairs){if(e.target.closest('#'+b)){const mm=$(m),open=mm.hidden;pairs.forEach(([b2,m2])=>{$(m2).hidden=true;$(b2).setAttribute('aria-expanded','false')});mm.hidden=!open;$(b).setAttribute('aria-expanded',String(open));return}}
+  const a=e.target.closest('[data-pmact]');if(a){$('bDotsM').hidden=true;if(a.dataset.pmact==='io')document.querySelector('#bActs .iob').click();else $('bClear').click();return}
+  if(!e.target.closest('.pmenu'))pairs.forEach(([b,m])=>{const mm=$(m);if(mm&&!mm.hidden){mm.hidden=true;$(b).setAttribute('aria-expanded','false')}})});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')['bDotsM'].forEach(id=>{const m=$(id);if(m)m.hidden=true})});
 function maxDays(){return Math.round((D.ms[D.last]-D.ms[0])/864e5)}
 function setSel(sc,sel){if(sc==='b')S.b.sel=sel;else S.sel=sel;persist();
   if(sc==='b'){bHideHover();renderPicker('b');renderBChart();renderBTable()}else{hideHover();buildSeries();renderPicker('p');renderChart();renderPortfolios()}}
@@ -1505,17 +1595,19 @@ function bOrder(WR,ES){const B=S.b;const idx=B.rows.map((r,j)=>j);if(!BSORT.k||!
   return idx.sort((a,b)=>{const va=val(a),vb=val(b);if(va==null&&vb==null)return a-b;if(va==null)return 1;if(vb==null)return -1;const c=typeof va==='string'?va.localeCompare(vb):va-vb;return (c||a-b)*BSORT.dir})}
 function renderBTable(){const B=S.b;if(!B.open)return;const hp=B.sel.p;
   const best={};TPER.forEach(([p,m])=>{const vs=B.rows.map(r=>periodRet(r.t,m)).filter(v=>v!=null);if(vs.length>1)best[p]=Math.max(...vs)});
-  const ES=B.rows.map(r=>HAS(r.t)?pStats({rows:[{t:r.t,w:100}]},B.sel):null);const bb={};BM.forEach(([k])=>{const vs=ES.map(o=>bmVal(o,k)).filter(v=>v!=null);if(vs.length>1)bb[k]=Math.max(...vs)});
+  const ES=B.rows.map(r=>HAS(r.t)?pStats({rows:[{t:r.t,w:100}]},B.sel):null);const bb={};BM.forEach(([k])=>{const vs=ES.map(o=>bmVal(o,k)).filter(v=>v!=null);if(vs.length>1)bb[k]=k==='vol'?Math.min(...vs):Math.max(...vs)});
   const NC=TPER.length+BM.length+5;const full=B.rows.length>=MAXETF;
-  const addRow=`<tr class="addrow"><td><span class="tkcell"><span class="rsw" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span><span class="chsp" aria-hidden="true" style="width:${CHSP_ADD}px"></span><label class="sr" for="bAdd">Ticker to add</label><input class="field tkin" id="bAdd" role="combobox" aria-autocomplete="list" aria-controls="bSug" aria-expanded="false" placeholder="${full?'15 max':'Ticker'}" autocomplete="off" spellcheck="false" value="${esc(S.bDraft||'')}" ${full?'disabled':''}></span></td><td><button type="button" class="btn sm" id="bAddBtn" ${full?'disabled':''}>Add</button></td><td colspan="${NC-2}" class="sub addnote"><span class="addnw"><span>${B.rows.length?'':'Type a ticker and press Enter to add it, then set its % of the portfolio.'}</span></span></td></tr>`;const st0=selStart(B.sel);const WR=B.rows.map(r=>HAS(r.t)?wRetT(r.t,st0):null);const wBest=WR.filter(v=>v!=null).length>1?Math.max(...WR.filter(v=>v!=null)):null;
-  const etfRow=(r,j)=>`<tr class="${r.hidden?'dim':''}${r.k?' ticked':''}" data-bt="${esc(r.t)}"><td>${B.rows.length+S.pfs.length>=2?gripBtn(r.t,'data-gk="top"'):''}<span class="tkcell">${B.rows.length+S.pfs.length>=2?`<label class="sr" for="bk-${j}">Tick ${esc(r.t)} to group it</label><input type="checkbox" class="tkchk" id="bk-${j}"  data-btick="${j}" data-tip="Tick to group" ${r.k?'checked':''}>`:'<span class="tkchk sp"></span>'}<span class="chsp" aria-hidden="true"></span><span class="tkwrap"><label class="sr" for="bt-${j}">Ticker ${j+1}</label><input class="field tkin" id="bt-${j}" data-btk="${j}" list="tickers" autocomplete="off" spellcheck="false" value="${esc(r.t)}" title="${esc(NAMES[r.t]||'Imported prices')}">${xBtn(r.t)}</span></span></td>
-    <td class="num momcell${wBest!=null&&WR[j]===wBest?' best':''}"><span class="momwrap"><button type="button" class="spkbtn" data-bhide="${j}" aria-pressed="${!r.hidden}" aria-label="${r.hidden?'Show':'Hide'} ${esc(r.t)} on the chart" data-tip="${r.hidden?'Show':'Hide'} on chart">${HAS(r.t)?sparkT(r.t,st0,ecol(r.c)):''}</button><span class="v ${cls(WR[j])}">${sg(WR[j])}</span></span></td>
-    ${dsk(TPER.map(([p,m])=>{const v=periodRet(r.t,m);return `<td class="num ${cls(v)}${p===hp?' hl':''}${best[p]!=null&&v===best[p]?' best':''}">${sg(v)}</td>`}).join('')+BM.map(([k])=>bmCell(ES[j],k,bb)).join('')+`<td class="num ercol${ER[r.t]==null?' mut':''}">${fmtER(ER[r.t])}</td>`)}<td class="wcell"><span class="wbox"><label class="sr" for="bw-${j}">${esc(r.t)} percent</label><input class="field" id="bw-${j}" data-bw="${j}" inputmode="decimal" autocomplete="off" placeholder="0" value="${r.w===''||r.w==null?'':esc(r.w)}">%</span></td>${mexpBtn('b'+j,r.t)}
-    <td class="xcell dsk"><button type="button" class="delbtn bdel" id="bx-${j}" data-brm="${j}" aria-label="Remove ${esc(r.t)}" data-tip="Remove ${esc(r.t)}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M6 7l1 13h10l1-13"/></svg></button></td></tr>${mdetRow('b'+j,bDetail(r.t,ES[j])+xMob(r.t)+`<div class="mi mact"><button type="button" class="btn sm mrm" data-brm="${j}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M6 7l1 13h10l1-13"/></svg>Remove ${esc(r.t)}</button></div>`)}`;
-  $('bTable').innerHTML=`<thead><tr><th style="text-align:left"><span class="hw">${B.rows.length+S.pfs.length>=2?`<label class="sr" for="bTickAll">Tick everything</label><input type="checkbox" class="tkchk" id="bTickAll" data-tip="Tick all" ${B.rows.every(r=>r.k)&&S.pfs.every(p=>p.k)?'checked':''}><span class="chsp" aria-hidden="true" style="width:${CHSP_HEAD}px"></span>`:''}${bsBtn('t','ETF')}</span></th><th class="r retcol"><span class="hw">${bsBtn('ret',selLabel(B.sel,'short')+' return')}${infoBtn('bret','return')}</span></th>${TPER.map(([p,m],k)=>`<th class="dsk r${p===hp?' hl':''}"><span class="hw">${bsBtn(p,pLabel(p,m))}${k===TPER.length-1?infoBtn('returns','returns'):''}</span></th>`).join('')}${BM.map(([k,lab,info])=>`<th class="dsk r bm bm-${k}${k==='sharpe'?' bmfirst':''}"><span class="hw">${bsBtn(k,lab())}${infoBtn(info,lab())}</span></th>`).join('')}<th class="dsk r ercol"><span class="hw">${bsBtn('er','Fee')}${infoBtn('er','expense ratio')}</span></th><th class="r wcell"><span class="hw">${bsBtn('w','<span class="dskl">% of portfolio</span><span class="mobl">%</span>')}</span></th><th class="mob"></th><th class="dsk"></th></tr></thead>
+  const addRow=`<tr class="addrow"><td><span class="tkcell"><span class="rsw" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span><span class="chsp" aria-hidden="true" style="width:${CHSP_ADD}px"></span><label class="sr" for="bAdd">Ticker to add</label><input class="field tkin" id="bAdd" role="combobox" aria-autocomplete="list" aria-controls="bSug" aria-expanded="false" placeholder="${full?'15 max':'Ticker'}" autocomplete="off" spellcheck="false" value="${esc(S.bDraft||'')}" ${full?'disabled':''}></span></td><td><button type="button" class="btn sm" id="bAddBtn" ${full?'disabled':''}>Add</button></td><td colspan="${NC-2}" class="sub addnote"><span class="addnw"><span>${B.rows.length?'':'Type a ticker and press Enter to add it.'}</span></span></td></tr>`;const st0=selStart(B.sel);const WR=B.rows.map(r=>HAS(r.t)?wRetT(r.t,st0):null);const wBest=WR.filter(v=>v!=null).length>1?Math.max(...WR.filter(v=>v!=null)):null;
+  const etfRow=(r,j)=>`<tr class="${r.k?'ticked':''}" data-bt="${esc(r.t)}"><td>${B.rows.length+S.pfs.length>=2?gripBtn(r.t,'data-gk="top"'):''}<span class="tkcell">${B.rows.length+S.pfs.length>=2?`<label class="sr" for="bk-${j}">Tick ${esc(r.t)} to group it</label><input type="checkbox" class="tkchk" id="bk-${j}"  data-btick="${j}" data-tip="Tick to group" ${r.k?'checked':''}>`:'<span class="tkchk sp"></span>'}<span class="chsp" aria-hidden="true"></span><span class="tkwrap"><button type="button" class="tkchip lg${edash(r.c)?' dsh':''}" style="--lc:${ecol(r.c)}" id="bt-${j}" data-btk="${j}" data-xopen="${esc(r.t)}" data-xtab="in" title="${esc(NAMES[r.t]||r.t)}">${esc(r.t)}</button></span></span></td>
+    <td class="num momcell${wBest!=null&&WR[j]===wBest?' best':''}"><span class="momwrap"><span class="v ${cls(WR[j])}">${sg(WR[j])}</span></span></td>
+    ${dsk(TPER.map(([p,m])=>{const v=periodRet(r.t,m);return `<td class="num ${cls(v)}${p===hp?' hl':''}${best[p]!=null&&v===best[p]?' best':''}">${sg(v)}</td>`}).join('')+BM.map(([k])=>bmCell(ES[j],k,bb)).join('')+`<td class="num ercol${ER[r.t]==null?' mut':''}">${fmtER(ER[r.t])}</td>`)}<td class="wcell"></td>${mexpBtn('b'+j,r.t)}
+    <td class="xcell dsk"><button type="button" class="delbtn bdel" id="bx-${j}" data-brm="${j}" aria-label="Remove ${esc(r.t)}" data-tip="Remove ${esc(r.t)}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M6 7l1 13h10l1-13"/></svg></button></td></tr>${mdetRow('b'+j,bDetail(r.t,ES[j])+xMob(r.t,`<button type="button" class="btn sm mrm" data-brm="${j}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M6 7l1 13h10l1-13"/></svg>Remove</button>`))}`;
+  const HID=bHidden();bColCss();
+  const grpRow=`<tr class="bgrp dsk"><th class="lft"></th>${BCOLS.map(([g,cs])=>{const k=cs.filter(([l])=>!HID.has(l)).length;return k?`<th class="lab${g==='Risk'?' bmfirst':g==='Cost'?' ercol':''}" colspan="${k}">${g}</th>`:''}).join('')}<th colspan="2"></th></tr>`;
+  $('bTable').innerHTML=`<thead>${grpRow}<tr><th style="text-align:left"><span class="hw">${B.rows.length+S.pfs.length>=2?`<label class="sr" for="bTickAll">Tick everything</label><input type="checkbox" class="tkchk" id="bTickAll" data-tip="Tick all" ${B.rows.every(r=>r.k)&&S.pfs.every(p=>p.k)?'checked':''}><span class="chsp" aria-hidden="true" style="width:${CHSP_HEAD}px"></span>`:''}${bsBtn('t','ETF')}</span></th><th class="r retcol"><span class="hw">${bsBtn('ret',selLabel(B.sel,'short')+' return')}${infoBtn('bret','return')}</span></th>${TPER.map(([p,m],k)=>`<th class="dsk r${p===hp?' hl':''}"><span class="hw">${bsBtn(p,pLabel(p,m))}${k===TPER.length-1?infoBtn('returns','returns'):''}</span></th>`).join('')}${BM.map(([k,lab,info])=>`<th class="dsk r bm bm-${k}${k==='sharpe'?' bmfirst':''}"><span class="hw">${bsBtn(k,lab())}${infoBtn(info,lab())}</span></th>`).join('')}<th class="dsk r ercol"><span class="hw">${bsBtn('er','Fee')}${infoBtn('er','expense ratio')}</span></th><th class="r wcell"><span class="sr">Share in group</span></th><th class="mob"></th><th class="dsk"></th></tr></thead>
     <tbody>${(()=>{const sorted=BSORT.k&&BSORT.dir,ord=bOrder(WR,ES);const items=sorted?sortedTop():topOrder();
       const isK=it=>it.t==='p'?!!it.p.k:!!(B.rows[it.j].k&&HAS(B.rows[it.j].t));const last=[...items].reverse().find(isK);if(!last)PVON=false;
-      return items.map(it=>it.t==='p'?pfRowsHTML(NC,last===it?it.p.id:null,[it.p]):etfRow(B.rows[it.j],it.j)+(last===it?pvStripHTML(NC):'')).join('')})()}${addRow}</tbody>`;
+      return items.map(it=>it.t==='p'?pfRowsHTML(NC,last===it?it.p.id:null,[it.p]):etfRow(B.rows[it.j],it.j)+(last===it?pvStripHTML(NC):'')).join('')})()}${addRow}</tbody>`;bStrip();
   document.querySelectorAll('#bTable button.info:empty').forEach(b=>{b.innerHTML=ICON_I});
 
 }
@@ -1566,11 +1658,11 @@ function bRailToggle(key){const now=Date.now(),lc=bRailClick;
 function renderBChart(){
   const B=S.b,last=D.last,st0=selStart(B.sel);
   $('bChartCap').textContent=`${dayLabel(st0)} to ${dayLabel(last)}`;
-  const lines=[];B.rows.forEach(r=>{if(r.hidden||!HAS(r.t))return;const pts=[];
+  const lines=[];B.rows.forEach(r=>{if(!HAS(r.t))return;const pts=[];
     let s0=st0;while(s0<last&&pxd(r.t,s0)==null)s0++;const b=pxd(r.t,s0);if(b==null)return;for(let i=s0;i<=last;i++){const a=pxd(r.t,i);if(a!=null)pts.push([i,(a/b-1)*100])}
-    if(pts.length>1)lines.push({r:{name:r.t,color:ecol(r.c),dash:edash(r.c),sw:2.5},pts})});
-  S.pfs.forEach(p=>{if(S.hidden[p.id]||!weights(p).length)return;const fc=dFirstAny(p.rows.map(r=>r.t));const s0=Math.max(st0,fc??st0);const V=bhd(p,s0);const pts=[];if(V)for(let i=s0;i<=last;i++){if(V[i]!=null)pts.push([i,(V[i]/V[s0]-1)*100])}
-    if(pts.length>1)lines.push({r:{name:p.name,color:pfCol(p),sw:4,pf:true},pts})});
+    if(pts.length>1)lines.push({r:{name:r.t,key:'r:'+r.t,color:ecol(r.c),dash:edash(r.c),sw:2.5},pts})});
+  S.pfs.forEach(p=>{if(!weights(p).length)return;const fc=dFirstAny(p.rows.map(r=>r.t));const s0=Math.max(st0,fc??st0);const V=bhd(p,s0);const pts=[];if(V)for(let i=s0;i<=last;i++){if(V[i]!=null)pts.push([i,(V[i]/V[s0]-1)*100])}
+    if(pts.length>1)lines.push({r:{name:p.name,key:'p:'+p.id,color:pfCol(p),sw:4,pf:true},pts})});
   const box=$('bChartbox');const W=Math.max(300,box.clientWidth||900),H=CHH.b||(W<600?220:320),mg={l:W<600?48:60,r:16,t:10,b:28};
   let vals=lines.flatMap(l=>l.pts.map(p=>p[1]));if(!vals.length)vals=[-1,1];let lo=Math.min(0,...vals),hi=Math.max(0,...vals);const pad=(hi-lo)*0.06||1;lo-=pad;hi+=pad;
   const ticks=niceTicks(lo,hi,5);lo=Math.min(lo,ticks[0]);hi=Math.max(hi,ticks[ticks.length-1]);
@@ -1579,7 +1671,7 @@ function renderBChart(){
   const svg=$('bChart');svg.setAttribute('viewBox',`0 0 ${W} ${H}`);svg.setAttribute('height',H);
   svg.innerHTML=`${ticks.map(v=>`<line x1="${mg.l}" x2="${W-mg.r}" y1="${Y(v).toFixed(1)}" y2="${Y(v).toFixed(1)}" stroke="${v===0?'var(--faint)':'var(--grid)'}"/><text x="${mg.l-8}" y="${(Y(v)+4).toFixed(1)}" text-anchor="end" font-size="12" fill="var(--muted)" font-family="IBM Plex Mono,monospace">${(v>0?'+':'')+v+'%'}</text>`).join('')}
     ${xt.map(([i,l])=>`<text x="${X(i).toFixed(1)}" y="${H-8}" text-anchor="middle" font-size="12" fill="var(--muted)" font-family="IBM Plex Mono,monospace">${l}</text>`).join('')}
-    ${lines.map(l=>`<polyline points="${thin(l.pts,maxN).map(p=>X(p[0]).toFixed(1)+','+Y(p[1]).toFixed(1)).join(' ')}" fill="none" stroke="${l.r.color}" stroke-width="${l.r.sw||2.5}"${l.r.dash?` stroke-dasharray="${l.r.dash}"`:''} stroke-linejoin="round" stroke-linecap="round"/>`).join('')}
+    ${lines.map(l=>`<polyline data-lk="${esc(l.r.key||'')}" points="${thin(l.pts,maxN).map(p=>X(p[0]).toFixed(1)+','+Y(p[1]).toFixed(1)).join(' ')}" fill="none" stroke="${l.r.color}" stroke-width="${l.r.sw||2.5}"${l.r.dash?` stroke-dasharray="${l.r.dash}"`:''} stroke-linejoin="round" stroke-linecap="round"/>`).join('')}
     ${lines.map(l=>{const p=l.pts[l.pts.length-1];return `<circle cx="${X(p[0]).toFixed(1)}" cy="${Y(p[1]).toFixed(1)}" r="4" fill="${l.r.color}" stroke="var(--panel)" stroke-width="2"/>`}).join('')}
     ${lines.length?'':`<text x="${W/2}" y="${H/2}" text-anchor="middle" font-size="14" fill="var(--muted)">Add ETFs above the table to compare them here</text>`}
     <line id="bxh" y1="${mg.t}" y2="${H-mg.b}" stroke="var(--faint)" visibility="hidden"/><g id="bhdots"></g>`;
@@ -1858,10 +1950,17 @@ function bAddTicker(){const t=cleanTicker(S.bDraft||'');if(!t)return;const B=S.b
   if(B.rows.length>=MAXETF){toast('Up to 15 ETFs per portfolio');return}
   if(!HAS(t)&&!UNI[t]){toast(`${t} isn't in the ETF list. Import a CSV with its prices to use it.`);return}
   B.rows.push({t,w:'',c:bFreeColor()});S.bDraft='';$('bAdd').value='';persist();renderBuilder();$('bAdd').focus()}
+/* what the portfolio becomes once the typed ETF is added at the typed (or suggested) share */
+function pNewShare(p){const v=parseFloat(String(S.ppDraft[p.id]||'').replace(/[^0-9.]/g,''));return v>0&&v<100?v:100/(p.rows.length+1)}
+function pPreview(p){const t=cleanTicker(S.paDraft[p.id]||'');if(!t||p.rows.some(r=>r.t===t))return '';const sh=pNewShare(p),tot=p.rows.reduce((a,x)=>a+(Number(x.w)||0),0);if(!tot)return '';
+  return p.rows.map(r=>`${esc(r.t)} ${r1(Number(r.w)||0)} → ${Math.round((Number(r.w)||0)/tot*(100-sh))}`).join(' · ')+` · <b>${esc(t)} ${Math.round(sh)}</b>`}
 function pAddTicker(id){const p=pf(id);const t=cleanTicker(S.paDraft[id]||'');if(!t)return;
   if(p.rows.some(r=>r.t===t)){toast(t+' is already in this portfolio');return}
   if(p.rows.length>=MAXETF){toast('Up to 15 ETFs per portfolio');return}
-  const left=Math.max(0,r1(100-p.rows.reduce((a,x)=>a+(Number(x.w)||0),0)));p.rows.push({t,w:left});S.paDraft[id]='';render();$('pa-'+id)?.focus();
+  /* the new ETF gets an equal share; the others shrink in proportion, so the total stays at 100% */
+  const before=p.rows.map(x=>({...x})),n=p.rows.length+1,share=pNewShare(p),tot=p.rows.reduce((a,x)=>a+(Number(x.w)||0),0);
+  if(tot>0)p.rows.forEach(x=>{x.w=(Number(x.w)||0)/tot*(100-share)});p.rows.push({t,w:tot>0?share:100/n});if(tot<=0)p.rows.forEach(x=>x.w=1);scaleRows(p.rows);S.paDraft[id]='';S.ppDraft[id]='';
+  const nw=p.rows[p.rows.length-1].w;if(before.length)setTimeout(()=>toast(`Added ${t} at ${nw}%. The others shrank to keep 100%.`,{label:'Undo',fn:()=>{p.rows=before;persist();render()}}),0);render();$('pa-'+id)?.focus();
   if(!HAS(t)&&!UNI[t])toast(`${t} isn't in the ETF list. Import a CSV with its prices to use it.`)}
 function swapTicker(rows,j,el,needData){const t=cleanTicker(el.value||'');if(!t||t===rows[j].t){el.value=rows[j].t;return false}
   if(rows.some(r=>r.t===t)){toast(t+' is already in this list');el.value=rows[j].t;return false}
@@ -2059,24 +2158,29 @@ addEventListener('scroll',()=>{const t=$('qtip');if(t)t.hidden=true},true);
 /* re-render after typing pauses, keeping focus and the cursor where they were */
 let SOFT=0;function softRender(el,ms){clearTimeout(SOFT);const id=el.id;SOFT=setTimeout(()=>{const a=$(id),pos=a&&a.selectionStart;renderBuilder();const b=$(id);if(b){if(document.activeElement!==b)b.focus({preventScroll:true});try{if(pos!=null)b.setSelectionRange(pos,pos)}catch(e){}}},ms)}
 /* portfolio rows */
-document.addEventListener('click',e=>{const el=e.target.closest&&e.target.closest('[data-popen],[data-pdup2],[data-pung],[data-pdel2],[data-prm2],[data-padd2],[data-peven],[data-phide]');if(!el)return;const d=el.dataset;
+document.addEventListener('click',e=>{const el=e.target.closest&&e.target.closest('[data-popen],[data-pdup2],[data-pung],[data-pdel2],[data-prm2],[data-padd2],[data-peven],[data-pfix],[data-phide]');if(!el)return;const d=el.dataset;
   if(d.popen){S.pOpen[d.popen]=!S.pOpen[d.popen];renderBuilder();return}
   if(d.phide){S.hidden[d.phide]=!S.hidden[d.phide];persist();renderBuilder();return}
   if(d.pdup2){dupPf(d.pdup2);return}
-  const p=pf(d.pdup2||d.pung||d.pdel2||d.prm2||d.padd2||d.peven);if(!p)return;
+  const p=pf(d.pdup2||d.pung||d.pdel2||d.prm2||d.padd2||d.peven||d.pfix);if(!p)return;
   if(d.pung){let n=0;p.rows.forEach(r=>{if(!S.b.rows.some(x=>x.t===r.t)&&S.b.rows.length<MAXETF){S.b.rows.push({t:r.t,w:'',c:bFreeColor()});n++}});S.pfs=S.pfs.filter(x=>x!==p);persist();render();toast(`Ungrouped ${p.name}. ${n?n+' ETF'+(n>1?'s':'')+' added back as single rows.':'Its ETFs were already in the table.'}`)}
   else if(d.pdel2){S.pfs=S.pfs.filter(x=>x!==p);persist();render();toast('Deleted '+p.name)}
   else if(d.prm2){p.rows.splice(+d.k,1);if(!p.rows.length)S.pfs=S.pfs.filter(x=>x!==p);persist();render()}
   else if(d.padd2){S.paDraft[p.id]=$('pa2-'+p.id)?.value||'';pAddTicker(p.id);persist();render();$('pa2-'+p.id)?.focus()}
+  else if(d.pfix){scaleRows(p.rows);persist();render()}
   else if(d.peven){const rows=p.rows.map(r=>({t:r.t,w:1}));scaleRows(rows);p.rows=rows;persist();render()}});
 document.addEventListener('input',e=>{const d=e.target.dataset||{};
   if(d.pw2){const p=pf(d.pw2);if(p){const v=e.target.value.replace(/[^0-9.]/g,'');p.rows[+d.k].w=v===''?'':Number(v);persist();softRender(e.target,450)}}
-  else if(d.pa2)S.paDraft[d.pa2]=e.target.value});
+  else if(d.pa2||d.pp2){const id=d.pa2||d.pp2;if(d.pa2)S.paDraft[id]=e.target.value;else S.ppDraft[id]=e.target.value;const p=pf(id),pv=$('pprev-'+id);if(p&&pv)pv.innerHTML=pPreview(p)}});
 document.addEventListener('focusin',e=>{const el=e.target;if(!el.dataset||el.dataset.pname==null)return;const p=pf(el.dataset.pname);if(!p)return;el.placeholder=p.name;el.value=''});
-document.addEventListener('focusout',e=>{const el=e.target;if(!el.dataset||el.dataset.pname==null)return;const p=pf(el.dataset.pname);if(!p)return;const v=el.value.trim();if(v&&v!==p.name){p.name=v;persist();setTimeout(render)}else el.value=p.name});
-document.addEventListener('keydown',e=>{const d=e.target.dataset||{};if(d.pname!=null&&(e.key==='Enter'||e.key==='Escape')){if(e.key==='Escape')e.target.value='';e.target.blur();return}if(e.key==='Enter'&&d.pa2){e.preventDefault();S.paDraft[d.pa2]=e.target.value;pAddTicker(d.pa2);persist();render();$('pa2-'+d.pa2)?.focus()}});
+document.addEventListener('focusout',e=>{const el=e.target;if(!el.dataset||el.dataset.pname==null)return;const p=pf(el.dataset.pname);if(!p)return;const v=el.value.trim();const was=PREN===p.id;if(was)PREN=null;if(v&&v!==p.name){p.name=v;persist();setTimeout(render)}else{el.value=p.name;if(was)setTimeout(render)}});
+document.addEventListener('keydown',e=>{const d=e.target.dataset||{};if(d.pname!=null&&(e.key==='Enter'||e.key==='Escape')){if(e.key==='Escape')e.target.value='';e.target.blur();return}if(e.key==='Enter'&&(d.pa2||d.pp2)){e.preventDefault();const id=d.pa2||d.pp2;pAddTicker(id);persist();render();$('pa2-'+id)?.focus()}});
 document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest('[data-bgrp],[data-baddto],[data-bclr],[data-bremove]');if(!t||t.disabled)return;if(Date.now()-PVAT<600)return;
   if(t.hasAttribute('data-bgrp'))bGroup();else if(t.dataset.baddto)bAddTo(t.dataset.baddto);else if(t.hasAttribute('data-bremove')){const n=tickNames().length;S.b.rows=S.b.rows.filter(r=>!r.k);S.pfs=S.pfs.filter(p=>!p.k);persist();render();toast(`Removed ${n} item${n>1?'s':''}`)}else{clearTicks();persist();renderBuilder()}});
+document.addEventListener('click',e=>{if(!e.target.closest)return;if(e.target.closest('#bCols')){BCOLOPEN=!BCOLOPEN;if(BCOLOPEN)$('bColM').innerHTML=bColMenu();$('bColM').hidden=!BCOLOPEN;$('bCols').setAttribute('aria-expanded',BCOLOPEN);return}
+  if(BCOLOPEN&&!e.target.closest('#bColM')){BCOLOPEN=false;const m=$('bColM');if(m){m.hidden=true;$('bCols').setAttribute('aria-expanded','false')}}});
+document.addEventListener('change',e=>{const l=e.target.dataset&&e.target.dataset.bcol;if(!l)return;const h=bHidden();e.target.checked?h.delete(l):h.add(l);save('hideCols',[...h]);renderBTable()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&BCOLOPEN){BCOLOPEN=false;const m=$('bColM');if(m)m.hidden=true;const b=$('bCols');if(b){b.setAttribute('aria-expanded','false');b.focus()}}});
 document.addEventListener('change',e=>{const el=e.target;const d=el.dataset||{};
   if(d.btick!=null){const r=S.b.rows[+d.btick];if(r){if(el.checked)r.k=true;else delete r.k;persist();renderBuilder()}return}
   if(d.baddsel!=null){if(el.value)bAddTo(el.value);return}
@@ -2264,6 +2368,7 @@ function needTickers(){const s=new Set();S.pfs.forEach(p=>p.rows.forEach(r=>s.ad
 async function ensureData(){const ts=needTickers();if(!ts.length)return;ts.forEach(t=>LOADING.add(t));const got={};
   await Promise.all(ts.map(async t=>{try{const r=await fetch('data/t/'+encodeURIComponent(t)+'.csv');if(!r.ok)throw new Error(r.status);Object.assign(got,readFile(await r.text(),t+'.csv'))}catch(e){NODATA.add(t)}}));
   ts.forEach(t=>LOADING.delete(t));Object.assign(BUILTIN,got);buildDataset();computeTW();render();const bad=ts.filter(t=>NODATA.has(t));if(bad.length)toast(`Couldn’t load prices for ${bad.join(', ')}.`)}
+try{bMenusInit()}catch(e){}
 (async function boot(){
   try{
     const [c,u]=await Promise.all([fetch('data/core.csv'),fetch('data/universe.json')]);
@@ -2282,7 +2387,7 @@ const XRWORD={'1M':'over 1 month','3M':'over 3 months','6M':'over 6 months','YTD
 const ICON_X='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg>';
 const ICON_L='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/></svg>';
 const xBtn=t=>`<span class="xtools"><button type="button" class="xbtn" data-xopen="${esc(t)}" data-xtab="in" aria-label="Under the hood of ${esc(t)}" title="Under the hood: what's in it">${ICON_L}</button><button type="button" class="xbtn" data-xopen="${esc(t)}" aria-label="Explore alternatives to ${esc(t)}" title="Explore alternatives">${ICON_X}</button></span>`;
-const xMob=t=>`<div class="mi mact"><button type="button" class="btn sm mrm" data-xopen="${esc(t)}" data-xtab="in">${ICON_L}Under the hood</button><button type="button" class="btn sm mrm" data-xopen="${esc(t)}">${ICON_X}Explore alternatives</button></div>`;
+const xMob=(t,extra='')=>`<div class="mi mact"><button type="button" class="btn sm mrm" data-xopen="${esc(t)}" data-xtab="in">${ICON_L}Inside</button><button type="button" class="btn sm mrm" data-xopen="${esc(t)}">${ICON_X}Alternatives</button>${extra}</div>`;
 const xp=(v,d=1)=>v==null?'—':(v>0?'+':v<0?'−':'')+Math.abs(v*100).toFixed(d)+'%';
 const xu=(v,d=1)=>v==null?'—':(v<0?'−':'')+Math.abs(v*100).toFixed(d)+'%';
 const xcls=v=>v==null?'':v>0.0005?'p':v<-0.0005?'n':'';
@@ -2293,15 +2398,15 @@ const XDATA={},XLOAD={};
 function xLoad(t){if(!XLOAD[t])XLOAD[t]=fetch('data/peers/'+encodeURIComponent(t)+'.json').then(r=>{if(!r.ok)throw new Error('none');return r.json()}).then(d=>XDATA[t]=d).catch(e=>{delete XLOAD[t];throw e});return XLOAD[t]}
 async function openExplore(t,from,tab){XM.pf=null;XM.tmMode='stk';$('xm').querySelector('.xmd').style.minHeight='';XM.t=t;XM.tab=tab==='in'?'in':'alt';XM.anchorH=null;XM.openTab=XM.tab;XM.alt=XDATA[t]||null;XM.ins=XIN[t]||null;XM.errA=XM.errI=null;XM.secMode=null;XM.rngSet=0;XM.rng=XM.tab==='in'?'1Y':'3Y';XM.added=[];XM.from=from||null;
   {const q=$('qtip');if(q)q.hidden=true}XM.sel=null;
-  if(t==='TPS'){XM.errA='TPS is the 12% Solution strategy, not a fund you can buy, so it has no alternatives to show.';XM.errI='TPS is the 12% Solution strategy, not a fund, so it has no holdings to show.'}
+  if(t==='TPS'){XM.errA='TPS is the 12% Solution strategy, not a fund you can buy, so there is nothing to compare it with.';XM.errI='TPS is the 12% Solution strategy, not a fund, so it has no holdings to show.'}
   xUse();$('xm').hidden=false;document.body.classList.add('xm-open');xHead();xRender();xOpenFx();setTimeout(()=>$('xmClose').focus({preventScroll:true}),0);
   const done=k=>{if(XM.t!==t||$('xm').hidden)return;if(XM.tab===k){xUse();xRender();xCascade()}};
   if(XM.d)xCascade(true);
-  if(!XM.alt&&!XM.errA)xLoad(t).then(d=>{XM.alt=d;done('alt')},()=>{XM.errA=`Alternatives aren't available for ${t} yet. It may have less than 3 years of prices, or it isn't in our ETF list.`;done('alt')});
+  if(!XM.alt&&!XM.errA)xLoad(t).then(d=>{XM.alt=d;done('alt')},()=>{XM.errA=`Comparisons aren't available for ${t} yet. It may have less than 3 years of prices, or it isn't in our ETF list.`;done('alt')});
   if(!XM.ins&&!XM.errI)xinLoad(t).then(d=>{XM.ins=d;done('in')},()=>{XM.errI=`Holdings aren't available for ${t} yet. They're added a slice at a time each night, so check back soon.`;done('in')})}
 function xUse(){XM.d=XM.tab==='in'?XM.ins:XM.alt;XM.err=XM.tab==='in'?XM.errI:XM.errA}
 function xRender(){XM.tab==='in'?renderXI():renderXM()}
-function xHead(){$('xmTitle').textContent=(XM.tab==='in'?'Under the hood of ':'Explore alternatives to ')+XM.t;document.querySelectorAll('#xm .xtab').forEach(b=>b.setAttribute('aria-selected',b.dataset.xtab===XM.tab))}
+function xHead(){$('xmTitle').textContent=XM.tab==='in'?'Under the hood of '+XM.t:'How '+XM.t+' stacks up';document.querySelectorAll('#xm .xtab').forEach(b=>b.setAttribute('aria-selected',b.dataset.xtab===XM.tab))}
 function xTab(k){if(XM.tab===k)return;{const md=$('xm').querySelector('.xmd');if(md&&!XPHONE())md.style.minHeight=Math.max(md.offsetHeight,parseFloat(md.style.minHeight)||0)+'px'}XM.tab=k;XM.sel=null;if(k==='in'&&XM.rng==='3Y'&&!XM.rngSet)XM.rng='1Y';xUse();xHead();xRender();$('xmBody').scrollTop=0;xCascade()}
 /* motion: the window grows out of the compass, its contents settle in, and the row stays lit */
 const XREDUCE=matchMedia('(prefers-reduced-motion: reduce)');
@@ -2382,7 +2487,7 @@ function xHero(c,s,kind){const k=xRk();
   return `<div class="xhero"><b class="${v>=0?'pos':'neg'}">${xp(v)}</b><span class="u">${lab}</span><span class="xpill ${v-bv>=0?'up':'dn'}">${xpts(v-bv)} pts vs ${esc(s.t)}</span></div>`}
 function xCorrWord(v){return v>=.85?'Nearly identical':v>=.70?'Very similar':v>=.60?'Some diversification':'Strong diversification'}
 function xToggle(){return `<div class="xseg xrngseg" role="group" aria-label="Chart period">${XR.map(([l,k])=>`<button type="button" data-xrng="${k}" class="${XM.rng===k?'sel':''}" aria-pressed="${XM.rng===k}">${l}</button>`).join('')}</div>`}
-function xDescFill(card){const el=card&&card.querySelector('[data-xdesc]');if(!el||el.dataset.done)return;el.dataset.done='1';const t=card.dataset.xc;xinLoad(t).then(d=>{const b=d.blurb||xAutoBlurb(d);if(b){el.textContent=b;el.hidden=false}else el.remove();xGrowRow()}).catch(()=>{el.remove();xGrowRow()})}
+function xDescFill(card){const el=card&&card.querySelector('[data-xdesc]');if(!el||el.dataset.done)return;el.dataset.done='1';const t=card.dataset.xc;xinLoad(t).then(d=>{const b=d.blurb||xAutoBlurb(d);if(b){el.textContent=b;el.hidden=false;const dk=el.closest('#xInDock');if(dk)xMoreSync(dk)}else el.remove();xGrowRow()}).catch(()=>{el.remove();xGrowRow()})}
 /* once the card's description is in, make the chart row tall enough for the card plus about 120px of room for its line chart, as far as the window allows */
 function xGrowRow(){if(ph0())return;const B=$('xmBody'),md=$('xm').querySelector('.xmd'),tp=B&&B.querySelector('.xtop'),fig=B&&B.querySelector('.xfig'),dk=$('xCardDock'),c=dk&&!dk.hidden&&dk.firstElementChild,fr=c&&c.querySelector('.xface.fr');
   if(!B||!md||!tp||!fig||!fr||!XM.d){xMatchH();xGrowModal();return}
@@ -2633,7 +2738,7 @@ function renderXI(){const b=$('xmBody');renderXMFoot();xSizeModal();
   xSetGlance('');xSizeModal();
   b.innerHTML=`<div class="xtop xin">${fig}<div class="xcdock xidock" id="xInDock">${xAboutCard(d)}</div></div>`;
   if(!d.pf&&xinEq(d)&&XGRP[t]===undefined)xGrpLoad(t).then(()=>{if(XM.d===d&&XM.tab==='in'&&!$('xm').hidden)xinFit()});
-  $('xInDock').dataset.t='';xinFit();xinFitRow();xinPaint();if(XM.sel&&xFind(XM.sel))xinTip(XM.sel,true);
+  $('xInDock').dataset.t='';xMoreSync($('xInDock'));xinFit();xinFitRow();xinPaint();if(XM.sel&&xFind(XM.sel))xinTip(XM.sel,true);
   if(document.fonts&&document.fonts.status!=='loaded')document.fonts.ready.then(()=>{if(XM.tab==='in'&&!$('xm').hidden){xinFit();xinFitRow();xinPaint()}})}
 
 /* ---------- under the hood of a portfolio: every member's holdings and sectors, weighted by the portfolio's percentages ---------- */
@@ -2642,7 +2747,7 @@ function openExplorePf(id,from,tab){XM.tmMode='stk';const p=pf(id);if(!p)return;
   {const q=$('qtip');if(q)q.hidden=true}XM.sel=null;
   xUse();$('xm').hidden=false;document.body.classList.add('xm-open');xHead();xRender();xOpenFx();setTimeout(()=>$('xmClose').focus({preventScroll:true}),0);
   if(!ws.length)return;const key=JSON.stringify(ws);XM.pfKey=key;
-  xPfAlt(p).then(d=>{if(XM.pf!==id||XM.pfKey!==key||$('xm').hidden)return;XM.alt=d;if(XM.tab==='alt'){xUse();xRender();xCascade()}},e=>{if(XM.pf!==id||XM.pfKey!==key)return;XM.errA=e&&e.user?e.message:"Alternatives for portfolios aren't available yet. They need a file that the nightly update makes, so check back tomorrow.";if(XM.tab==='alt'){xUse();xRender()}});
+  xPfAlt(p).then(d=>{if(XM.pf!==id||XM.pfKey!==key||$('xm').hidden)return;XM.alt=d;if(XM.tab==='alt'){xUse();xRender();xCascade()}},e=>{if(XM.pf!==id||XM.pfKey!==key)return;XM.errA=e&&e.user?e.message:"Comparisons for portfolios aren't available yet. They need a file that the nightly update makes, so check back tomorrow.";if(XM.tab==='alt'){xUse();xRender()}});
   Promise.allSettled(ws.map(x=>x.t==='TPS'?Promise.reject(new Error('strategy')):xinLoad(x.t))).then(()=>{if(XM.pf!==id||XM.pfKey!==key||$('xm').hidden)return;
     try{XM.ins=xinMix(p,ws)}catch(e){console.error(e);XM.ins=null}
     if(!XM.ins)XM.errI="Holdings aren't available for these ETFs yet. They're added a slice at a time each night, so check back soon.";xUse();xRender();xCascade()})}
@@ -2690,9 +2795,9 @@ function xPoolLoad(){if(!XPOOLL)XPOOLL=fetch('data/pool.json').then(r=>{if(!r.ok
 function xUserErr(m){const e=new Error(m);e.user=1;return e}
 async function xPfAlt(p){const ws=weights(p);
   const P=await xPoolLoad(),day=dt=>dayOnOrBefore(Date.parse(dt+'T00:00:00Z'));
-  if(ws.some(x=>x.t==='TPS'))throw xUserErr('This portfolio includes TPS, the 12% Solution strategy, which isn\'t a fund, so alternatives can\'t be worked out for it.');
+  if(ws.some(x=>x.t==='TPS'))throw xUserErr('This portfolio includes TPS, the 12% Solution strategy, which isn\'t a fund, so it can\'t be compared.');
   const s0=day(P.from),iL=day(P.to);if(s0<0||iL<=s0)throw xUserErr('Not enough shared price history to compare this portfolio over 3 years.');
-  if(ws.some(x=>pxd(x.t,s0)==null))throw xUserErr(`Alternatives are picked on the last 3 years, and ${xList(ws.filter(x=>pxd(x.t,s0)==null).map(x=>x.t))} ${ws.filter(x=>pxd(x.t,s0)==null).length===1?"doesn't":"don't"} have 3 years of prices yet.`);
+  if(ws.some(x=>pxd(x.t,s0)==null))throw xUserErr(`Comparisons use the last 3 years, and ${xList(ws.filter(x=>pxd(x.t,s0)==null).map(x=>x.t))} ${ws.filter(x=>pxd(x.t,s0)==null).length===1?"doesn't":"don't"} have 3 years of prices yet.`);
   const V=bhd(p,s0);if(!V||V[iL]==null)throw xUserErr('Not enough price history to compare this portfolio over 3 years.');
   /* weekly returns on the pool's dates, then correlation with every candidate in one pass */
   const wv=P.zd.map(dt=>V[day(dt)]);if(wv.some(v=>v==null))throw xUserErr('Not enough price history to compare this portfolio over 3 years.');
@@ -2787,10 +2892,14 @@ function xRestCard(d){const s=d.self||{},R=d.rest||{},k=xRk(),n=xinN(d),named=d.
     ${line?xSpark(rc,s,'var(--xs)','~rest')+`<div class="xrl xrlr">Risk vs ${esc(s.t)} · ${xRngLbl()}</div><div class="xrisk x3">${xRiskTiles(rc,s)}</div>`:need.length?`<div class="xspark xwait"><svg viewBox="0 0 300 60" preserveAspectRatio="none" aria-hidden="true"><line x1="0" x2="300" y1="30" y2="30" stroke="var(--line)" vector-effect="non-scaling-stroke"/></svg><div class="lg"><span>&nbsp;</span></div></div>`:'<div class="xnoline">Not enough price history for a line chart</div>'}
     ${why?`<p class="xwhy">${why}</p>`:''}</article>`}
 /* swap the card on the right: the hovered or locked holding, else the fund's About card */
+/* under the hood cards: the description keeps 3 lines so every card has the same layout; More opens the rest */
+function xMoreSync(root){requestAnimationFrame(()=>root.querySelectorAll('.xfdesc').forEach(p=>{if(p.hidden)return;let b=p.nextElementSibling;if(!b||!b.classList.contains('xmore')){p.insertAdjacentHTML('afterend','<button type="button" class="xmore off" aria-expanded="false" tabindex="-1">More</button>');b=p.nextElementSibling}
+  if(!p.classList.contains('open')){const off=p.scrollHeight<=p.clientHeight+2;b.classList.toggle('off',off);off?b.setAttribute('tabindex','-1'):b.removeAttribute('tabindex');b.setAttribute('aria-hidden',off)}}))}
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('.xmore');if(!b)return;const p=b.previousElementSibling;const o=p.classList.toggle('open');b.textContent=o?'Less':'More';b.setAttribute('aria-expanded',o);if(typeof xinFit==='function'&&!o)xinFit()});
 function xinTip(t,on){const dock=$('xInDock'),d=XM.d;if(!dock||!d)return;const show=on?t:XM.sel;
   const tm=$('xTm');if(tm){tm.classList.toggle('fade',!!show);tm.querySelectorAll('.xtile[data-ht]').forEach(x=>x.classList.toggle('on',x.dataset.ht===show))}
   const c=show?xFind(show):null,key=c?show+(XM.sel===show?'*':''):'';if(dock.dataset.t===key)return;
-  dock.innerHTML=c?(c.k==='rest'?xRestCard(d):c.k==='grp'?xGrpCard(c,d):xHoldCard(c,d.self)):xAboutCard(d);dock.dataset.t=key;if(c&&XM.sel===show)dock.firstElementChild.classList.add('hl')}
+  dock.innerHTML=c?(c.k==='rest'?xRestCard(d):c.k==='grp'?xGrpCard(c,d):xHoldCard(c,d.self)):xAboutCard(d);dock.dataset.t=key;xMoreSync(dock);if(c&&XM.sel===show)dock.firstElementChild.classList.add('hl')}
 /* make the map as tall as the tallest card, so cards never get cut and the two columns end together */
 function xinFitRow(){const B=$('xmBody'),row=B&&B.querySelector('.xtop.xin'),dock=$('xInDock');if(!B||!row||!dock)return;if(getComputedStyle(row).flexDirection!=='row')return;const S=B.scrollTop,avail=Math.min(B.clientHeight-(row.getBoundingClientRect().top-B.getBoundingClientRect().top)-22-S,B.clientHeight-22);if(avail<=300)return;row.style.height=avail+'px';dock.style.minHeight='';dock.style.overflowY='auto'}
 function xinFit(){const dock=$('xInDock'),d=XM.d;if(!dock||!d)return;dock.style.minHeight='';if(ph0()||!$('xTm'))return;
