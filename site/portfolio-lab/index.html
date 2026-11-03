@@ -853,8 +853,8 @@ header.top{display:none!important}
 .xmore{align-self:flex-start;border:0;background:none;padding:0;margin-top:-6px;font:500 12.5px "IBM Plex Sans",sans-serif;color:var(--muted);text-decoration:underline;text-underline-offset:3px;cursor:pointer}.xmore:hover{color:var(--ink)}.xmore.off{visibility:hidden}
 #tkPrev{position:absolute;z-index:60;width:290px;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:0 14px 34px rgba(0,0,0,.28);padding:12px 14px;display:flex;flex-direction:column;gap:6px;pointer-events:none;font-family:"IBM Plex Sans",sans-serif}
 #tkPrev[hidden]{display:none}#tkPrev .t b{font:700 16px "IBM Plex Mono",monospace;color:var(--ink);margin-right:8px}#tkPrev .t span{font-size:12.5px;color:var(--muted)}
-#tkPrev{width:350px}#tkPrev .lbl{font:600 10px "IBM Plex Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:4px}
-#tkPrev .sb{display:flex;height:8px;border-radius:4px;overflow:hidden;gap:1.5px}#tkPrev .sl{display:flex;gap:4px 12px;flex-wrap:wrap;font-size:12px;color:var(--ink2)}#tkPrev .sl i{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:5px}
+#tkPrev{width:380px}#tkPrev .lbl{font:600 10px "IBM Plex Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+#tkPrev .sb{display:flex;height:8px;border-radius:4px;overflow:hidden;gap:1.5px}#tkPrev .sl{display:flex;gap:4px 14px;flex-wrap:wrap;font-size:12px;color:var(--ink2)}#tkPrev .sl i{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:5px}
 #tkPrev .bm{display:flex;flex-direction:column;gap:3px;border:1px solid color-mix(in srgb,var(--pos) 45%,var(--line));background:color-mix(in srgb,var(--pos) 8%,transparent);border-radius:9px;padding:8px 10px}#tkPrev .bm .h{display:flex;align-items:center;gap:8px;font:700 14px "IBM Plex Mono",monospace;color:var(--ink)}#tkPrev .bm .w{font-size:12.5px;color:var(--ink2)}#tkPrev .f{font-size:12.5px;color:var(--ink2);border-top:1px solid var(--line);padding-top:7px}
 .xbdg{display:flex;flex-direction:column;gap:6px;margin:2px 0 2px}.xbdg p{margin:0;font-size:14.5px;line-height:1.45;color:var(--ink)}
 .xbadge{align-self:flex-start;font:600 11px "IBM Plex Sans",sans-serif;letter-spacing:.06em;text-transform:uppercase;border-radius:999px;padding:3px 10px;white-space:nowrap}
@@ -2194,7 +2194,7 @@ document.addEventListener('mouseover',e=>{if(!FINE||!e.target.closest)return;con
   const ins=isPf?Promise.all(weights(q).map(x=>xinLoad(x.t).then(d=>[x.w,d]).catch(()=>null))):xinLoad(t).catch(()=>null),alt=isPf?Promise.resolve(null):xLoad(t).catch(()=>null);
   const tok=TKP=setTimeout(async()=>{if(!b.isConnected)return;let p=$('tkPrev');if(!p){p=document.createElement('div');p.id='tkPrev';p.setAttribute('role','tooltip');document.body.appendChild(p)}
     const head=isPf?`<div class="t"><b>${esc(q.name)}</b><span>Your portfolio · ${weights(q).length} ETFs</span></div>`:`<div class="t"><b>${esc(t)}</b><span>${esc(NAMES[t]||'')}</span></div>`;
-    const foot=`<div class="f">Click to see what's inside and what could beat it</div>`;
+    const foot='';
     const place=()=>{const r=b.getBoundingClientRect();p.style.left=(r.left+scrollX)+'px';p.style.top=(r.bottom+scrollY+8)+'px';p.hidden=false};
     p.innerHTML=head+foot;place();
     const [di,da]=await Promise.all([ins,alt]);if(TKP!==tok||!b.isConnected)return;
