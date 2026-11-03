@@ -853,7 +853,9 @@ header.top{display:none!important}
 .xmore{align-self:flex-start;border:0;background:none;padding:0;margin-top:-6px;font:500 12.5px "IBM Plex Sans",sans-serif;color:var(--muted);text-decoration:underline;text-underline-offset:3px;cursor:pointer}.xmore:hover{color:var(--ink)}.xmore.off{visibility:hidden}
 #tkPrev{position:absolute;z-index:60;width:290px;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:0 14px 34px rgba(0,0,0,.28);padding:12px 14px;display:flex;flex-direction:column;gap:6px;pointer-events:none;font-family:"IBM Plex Sans",sans-serif}
 #tkPrev[hidden]{display:none}#tkPrev .t b{font:700 16px "IBM Plex Mono",monospace;color:var(--ink);margin-right:8px}#tkPrev .t span{font-size:12.5px;color:var(--muted)}
-#tkPrev .r{display:flex;gap:14px;font:600 13px "IBM Plex Mono",monospace;color:var(--muted)}#tkPrev .f{font-size:12.5px;color:var(--ink2);border-top:1px solid var(--line);padding-top:7px}
+#tkPrev{width:350px}#tkPrev .lbl{font:600 10px "IBM Plex Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+#tkPrev .sb{display:flex;height:8px;border-radius:4px;overflow:hidden;gap:1.5px}#tkPrev .sl{display:flex;gap:4px 12px;flex-wrap:wrap;font-size:12px;color:var(--ink2)}#tkPrev .sl i{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:5px}
+#tkPrev .bm{display:flex;flex-direction:column;gap:3px;border:1px solid color-mix(in srgb,var(--pos) 45%,var(--line));background:color-mix(in srgb,var(--pos) 8%,transparent);border-radius:9px;padding:8px 10px}#tkPrev .bm .h{display:flex;align-items:center;gap:8px;font:700 14px "IBM Plex Mono",monospace;color:var(--ink)}#tkPrev .bm .w{font-size:12.5px;color:var(--ink2)}#tkPrev .f{font-size:12.5px;color:var(--ink2);border-top:1px solid var(--line);padding-top:7px}
 .xbdg{display:flex;flex-direction:column;gap:6px;margin:2px 0 2px}.xbdg p{margin:0;font-size:14.5px;line-height:1.45;color:var(--ink)}
 .xbadge{align-self:flex-start;font:600 11px "IBM Plex Sans",sans-serif;letter-spacing:.06em;text-transform:uppercase;border-radius:999px;padding:3px 10px;white-space:nowrap}
 .xbadge.g{color:var(--pos);background:color-mix(in srgb,var(--pos) 13%,transparent);border:1px solid color-mix(in srgb,var(--pos) 45%,transparent)}
@@ -2179,11 +2181,25 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&BD){bDragEnd(true);
 /* hovering a ticker or portfolio name previews it and says a click opens more (mouse only; a tap just opens it) */
 let TKP=null;
 function tkPrevHide(){clearTimeout(TKP);TKP=null;const p=$('tkPrev');if(p)p.hidden=true}
+const XSECS={technology:'Tech',financial_services:'Financials',healthcare:'Health',consumer_cyclical:'Discretionary',consumer_defensive:'Staples',industrials:'Industrials',communication_services:'Communication',energy:'Energy',utilities:'Utilities',realestate:'Real estate',basic_materials:'Materials'};
+/* what's inside as one bar, and whether something similar did better */
+function tkSecs(sec){const e=Object.entries(sec||{}).filter(x=>x[1]>0).sort((a,b)=>b[1]-a[1]);if(!e.length)return '';const tot=e.reduce((a,x)=>a+x[1],0);
+  return `<div class="lbl">What's inside</div><div class="sb">${e.map(([k,w])=>`<span style="width:${w/tot*100}%;background:${XSECC[k]||'#888'}"></span>`).join('')}</div><div class="sl">${e.slice(0,3).map(([k,w])=>`<span><i style="background:${XSECC[k]||'#888'}"></i>${XSECS[k]||k} ${Math.round(w/tot*100)}%</span>`).join('')}</div>`}
+function tkBest(d){const t=d&&xBestT(d);if(!t)return '';const c=[...d.same,...d.div,...(d.mom||[]),...(d.own||[])].find(x=>x.t===t),s=d.self;if(!c||c.r3==null||s.r3==null)return '';
+  const dr=(c.r3-s.r3)*100,dv=(c.vol-s.vol)*100;const w=`${Math.abs(dr)<1?'Similar return':dr>0?'More return':'A bit less return'} with ${Math.abs(dv)<1.5?'about the same risk':dv<0?'less risk':'more risk'}.`;
+  return `<div class="lbl">Could something do better?</div><div class="bm"><div class="h"><span class="xbadge g">Best Match</span>${esc(t)}</div><span class="w">${w}</span></div>`}
 document.addEventListener('mouseover',e=>{if(!FINE||!e.target.closest)return;const b=e.target.closest('#bTable [data-xopen],#bTable [data-xpf]');if(!b){if(TKP||($('tkPrev')&&!$('tkPrev').hidden))tkPrevHide();return}if(b.contains(e.relatedTarget))return;
-  clearTimeout(TKP);TKP=setTimeout(()=>{if(!b.isConnected)return;let p=$('tkPrev');if(!p){p=document.createElement('div');p.id='tkPrev';p.setAttribute('role','tooltip');document.body.appendChild(p)}
-    let h;if(b.dataset.xpf){const q=pf(b.dataset.xpf);if(!q)return;const v=periodRetD(st=>bhdRet(q,st),12);h=`<div class="t"><b>${esc(q.name)}</b><span>Your portfolio · ${weights(q).length} ETFs</span></div><div class="r"><span class="${cls(v)}">${sg(v)} 1Y</span><span>Fee ${fmtER(pfER(q))}</span></div>`}
-    else{const t=b.dataset.xopen,v=periodRet(t,12);h=`<div class="t"><b>${esc(t)}</b><span>${esc(NAMES[t]||'')}</span></div><div class="r"><span class="${cls(v)}">${sg(v)} 1Y</span><span>Fee ${fmtER(ER[t])}</span></div>`}
-    p.innerHTML=h+`<div class="f">Click to see what's inside and how it compares</div>`;const r=b.getBoundingClientRect();p.style.left=(r.left+scrollX)+'px';p.style.top=(r.bottom+scrollY+8)+'px';p.hidden=false},450)});
+  clearTimeout(TKP);const isPf=!!b.dataset.xpf,q=isPf&&pf(b.dataset.xpf),t=isPf?null:b.dataset.xopen;if(isPf&&!q)return;
+  /* start loading now, so the preview (and the click) are quick */
+  const ins=isPf?Promise.all(weights(q).map(x=>xinLoad(x.t).then(d=>[x.w,d]).catch(()=>null))):xinLoad(t).catch(()=>null),alt=isPf?Promise.resolve(null):xLoad(t).catch(()=>null);
+  const tok=TKP=setTimeout(async()=>{if(!b.isConnected)return;let p=$('tkPrev');if(!p){p=document.createElement('div');p.id='tkPrev';p.setAttribute('role','tooltip');document.body.appendChild(p)}
+    const head=isPf?`<div class="t"><b>${esc(q.name)}</b><span>Your portfolio · ${weights(q).length} ETFs</span></div>`:`<div class="t"><b>${esc(t)}</b><span>${esc(NAMES[t]||'')}</span></div>`;
+    const foot=`<div class="f">Click to see what's inside and what could beat it</div>`;
+    const place=()=>{const r=b.getBoundingClientRect();p.style.left=(r.left+scrollX)+'px';p.style.top=(r.bottom+scrollY+8)+'px';p.hidden=false};
+    p.innerHTML=head+foot;place();
+    const [di,da]=await Promise.all([ins,alt]);if(TKP!==tok||!b.isConnected)return;
+    let sec=null;if(isPf){sec={};(di||[]).forEach(x=>{if(x&&x[1]&&x[1].sec)Object.entries(x[1].sec).forEach(([k,w])=>sec[k]=(sec[k]||0)+w*x[0])})}else sec=di&&di.sec;
+    p.innerHTML=head+tkSecs(sec)+(da?tkBest(da):'')+foot;place()},200)});
 document.addEventListener('click',tkPrevHide,true);addEventListener('scroll',tkPrevHide,{passive:true});
 document.addEventListener('mouseover',e=>{let t=$('qtip');if(BD||matchMedia('(hover:none)').matches){if(t)t.hidden=true;return}const el=e.target.closest&&e.target.closest('#builder [data-tip],#builder .xbtn');if(!el){if(t)t.hidden=true;return}
   if(!t){document.body.insertAdjacentHTML('beforeend','<div id="qtip" role="tooltip" hidden></div>');t=$('qtip')}t.textContent=el.dataset.tip||el.getAttribute('aria-label')||'';t.hidden=false;
