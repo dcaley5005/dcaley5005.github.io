@@ -706,6 +706,10 @@ tr.dim .spkbtn{opacity:.5}
 .pvacts{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:2px 0 6px}
 .pvacts .btn{display:inline-flex;gap:7px;align-items:center;height:36px;padding:0 13px;font-size:13px;border-color:var(--inputLine)}
 .pvacts .btn.go{background:var(--accent);border-color:var(--accent);color:var(--panel)}
+.pvacts .btn[data-bgrp]:disabled{opacity:1;cursor:default;font-weight:600;color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,transparent);border-color:var(--accent);animation:pvglow 2s ease-in-out infinite}
+@keyframes pvglow{0%,100%{box-shadow:0 0 0 0 color-mix(in srgb,var(--accent) 45%,transparent)}50%{box-shadow:0 0 0 6px color-mix(in srgb,var(--accent) 0%,transparent),0 0 16px color-mix(in srgb,var(--accent) 40%,transparent)}}
+@media (prefers-reduced-motion:reduce){.pvacts .btn[data-bgrp]:disabled{animation:none;box-shadow:0 0 12px color-mix(in srgb,var(--accent) 35%,transparent)}}
+.pvacts .btn[data-bclr]{font-weight:600;color:var(--accent);background:transparent;border-color:color-mix(in srgb,var(--accent) 55%,var(--inputLine))}.pvacts .btn[data-bclr]:hover{background:color-mix(in srgb,var(--accent) 10%,transparent)}
 .pvacts .btn:disabled{opacity:.45;cursor:not-allowed}
 .pvacts .pvsw{width:14px;height:4px;border-radius:2px;display:inline-block}
 
@@ -1496,7 +1500,8 @@ function bStrip(){const el=$('bStrip');if(el)el.hidden=true;return;const ts=S.b.
   const nudge=top&&top[1].length>=2?`<button type="button" class="bnudge" data-xopen="${esc(top[1][0])}" data-xtab="alt"><b>${esc(top[0])}</b> beat ${top[1].length} of these with less risk over 3 years · <span>Compare</span></button>`:'<span></span>';
   el.innerHTML=nudge;el.hidden=!(top&&top[1].length>=2)}
 const XNONE={};
-function bFocusLine(key){const svg=document.querySelector('#bChartbox svg');if(!svg)return;svg.classList.toggle('lfocus',!!key);svg.querySelectorAll('polyline[data-lk]').forEach(l=>l.classList.toggle('on',l.dataset.lk===key))}
+/* ticked rows keep their lines lit and the rest dim; hovering a row lights it too */
+function bFocusLine(key){const svg=document.querySelector('#bChartbox svg');if(!svg)return;const on=new Set(S.b.rows.filter(r=>r.k).map(r=>'r:'+r.t).concat(S.pfs.filter(p=>p.k).map(p=>'p:'+p.id)));if(key)on.add(key);svg.classList.toggle('lfocus',on.size>0);svg.querySelectorAll('polyline[data-lk]').forEach(l=>l.classList.toggle('on',on.has(l.dataset.lk)))}
 document.addEventListener('mouseover',e=>{if(!e.target.closest)return;const tr=e.target.closest('#bTable tr[data-bt],#bTable tr.pfrow');bFocusLine(tr?(tr.dataset.bt?'r:'+tr.dataset.bt:'p:'+tr.dataset.pid):null)});
 document.addEventListener('focusin',e=>{const tr=e.target.closest&&e.target.closest('#bTable tr[data-bt],#bTable tr.pfrow');if(tr)bFocusLine(tr.dataset.bt?'r:'+tr.dataset.bt:'p:'+tr.dataset.pid)});
 let PREN=null;
@@ -1674,7 +1679,8 @@ function bRailToggle(key){const now=Date.now(),lc=bRailClick;
     const v={};keys.forEach(k=>{v[k]=alone?true:k===key});bSetVis(v);bRailClick=null}
   else{bRailClick={key,t:now,prev:bVis()};const v=bVis();v[key]=!v[key];bSetVis(v)}
   persist();bHideHover();renderBuilder()}
-function renderBChart(){
+function renderBChart(){renderBChart0();bFocusLine(null)}
+function renderBChart0(){
   const B=S.b,last=D.last,st0=selStart(B.sel);
   $('bChartCap').textContent=`${dayLabel(st0)} to ${dayLabel(last)}`;
   const lines=[];B.rows.forEach(r=>{if(!HAS(r.t))return;const pts=[];
