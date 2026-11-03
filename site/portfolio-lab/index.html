@@ -845,6 +845,7 @@ header.top{display:none!important}
 .xidock .xcard .xspark{flex:none;display:flex;flex-direction:column}
 .xidock .xcard .xspark svg{flex:none;height:auto;aspect-ratio:2.1/1;min-height:0}
 .xidock>.xcard .xfdesc{-webkit-line-clamp:3;min-height:calc(3 * 1.55em)}.xidock>.xcard .xfdesc.open{-webkit-line-clamp:unset;display:block}
+#xCardDock .xcard .xfdesc{-webkit-line-clamp:3}#xCardDock .xcard .xfdesc.open{-webkit-line-clamp:unset;display:block}
 .xmore{align-self:flex-start;border:0;background:none;padding:0;margin-top:-6px;font:500 12.5px "IBM Plex Sans",sans-serif;color:var(--muted);text-decoration:underline;text-underline-offset:3px;cursor:pointer}.xmore:hover{color:var(--ink)}.xmore.off{visibility:hidden}
 #tkPrev{position:absolute;z-index:60;width:290px;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:0 14px 34px rgba(0,0,0,.28);padding:12px 14px;display:flex;flex-direction:column;gap:6px;pointer-events:none;font-family:"IBM Plex Sans",sans-serif}
 #tkPrev[hidden]{display:none}#tkPrev .t b{font:700 16px "IBM Plex Mono",monospace;color:var(--ink);margin-right:8px}#tkPrev .t span{font-size:12.5px;color:var(--muted)}
@@ -858,7 +859,10 @@ header.top{display:none!important}
 .xkg{display:grid;grid-template-columns:1fr 1fr;column-gap:14px}.xkh span{text-transform:none;letter-spacing:0;font-weight:500}
 .xkh{font:600 10.5px "IBM Plex Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
 .xkr{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink2);padding:3px 6px;margin:0 -6px;border-radius:6px}.xkr b{margin-left:auto;font:600 13px "IBM Plex Mono",monospace;color:var(--ink)}.xkr:hover{background:var(--panel2)}
-.xbestgo{display:flex;align-items:center;gap:10px;margin-top:8px;border:1px solid var(--line);background:var(--panel2);border-radius:10px;padding:10px 12px;font:600 14px "IBM Plex Sans",sans-serif;color:var(--ink);cursor:pointer;text-align:left}.xbestgo span:last-child{margin-left:auto}.xbestgo:hover{border-color:var(--pos)}
+.xbestgo{display:flex;flex-direction:column;align-items:stretch;gap:3px;margin-top:10px;border:1px solid color-mix(in srgb,var(--pos) 55%,var(--line));background:color-mix(in srgb,var(--pos) 9%,var(--panel2));border-radius:12px;padding:12px 14px;font-family:"IBM Plex Sans",sans-serif;color:var(--ink);cursor:pointer;text-align:left;transition:border-color .15s,background .15s}
+.xbestgo:hover{border-color:var(--pos);background:color-mix(in srgb,var(--pos) 14%,var(--panel2))}.xbestgo .xbt{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}.xbestgo .xbgo{font-size:13px;font-weight:600;color:var(--pos)}
+.xbestgo>b{font:700 22px "IBM Plex Mono",monospace}.xbestgo .xbn{font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.xbestgo .xbw{font-size:14px;color:var(--ink);margin-top:2px}
+#xmBody .xpt.xbestpt{animation:xbestp 1.8s ease-in-out infinite}@keyframes xbestp{0%,100%{filter:drop-shadow(0 0 0 transparent)}50%{filter:drop-shadow(0 0 7px var(--pos))}}@media (prefers-reduced-motion:reduce){#xmBody .xpt.xbestpt{animation:none;filter:drop-shadow(0 0 5px var(--pos))}}
 .xidock .xcard .xnoline{flex:1 1 auto}
 @media (max-width:1000px){.xidock .xcard .xspark svg{min-height:130px}.xtmhr .xtmseg{flex:1 1 100%}}
 .xtm{position:relative;flex:1 1 auto;min-height:320px}
@@ -2511,7 +2515,7 @@ function xHero(c,s,kind){const k=xRk();
   return `<div class="xhero"><b class="${v>=0?'pos':'neg'}">${xp(v)}</b><span class="u">${lab}</span><span class="xpill ${v-bv>=0?'up':'dn'}">${xpts(v-bv)} pts vs ${esc(s.t)}</span></div>`}
 function xCorrWord(v){return v>=.85?'Nearly identical':v>=.70?'Very similar':v>=.60?'Some diversification':'Strong diversification'}
 function xToggle(){return `<div class="xseg xrngseg" role="group" aria-label="Chart period">${XR.map(([l,k])=>`<button type="button" data-xrng="${k}" class="${XM.rng===k?'sel':''}" aria-pressed="${XM.rng===k}">${l}</button>`).join('')}</div>`}
-function xDescFill(card){const el=card&&card.querySelector('[data-xdesc]');if(!el||el.dataset.done)return;el.dataset.done='1';const t=card.dataset.xc;xinLoad(t).then(d=>{const b=d.blurb||xAutoBlurb(d);if(b){el.textContent=b;el.hidden=false;const dk=el.closest('#xInDock');if(dk)xMoreSync(dk)}else el.remove();xGrowRow()}).catch(()=>{el.remove();xGrowRow()})}
+function xDescFill(card){const el=card&&card.querySelector('[data-xdesc]');if(!el||el.dataset.done)return;el.dataset.done='1';const t=card.dataset.xc;xinLoad(t).then(d=>{const b=d.blurb||xAutoBlurb(d);if(b){el.textContent=b;el.hidden=false;const dk=el.closest('#xInDock,#xCardDock');if(dk)xMoreSync(dk)}else el.remove();xGrowRow()}).catch(()=>{el.remove();xGrowRow()})}
 /* once the card's description is in, make the chart row tall enough for the card plus about 120px of room for its line chart, as far as the window allows */
 function xGrowRow(){if(ph0())return;const B=$('xmBody'),md=$('xm').querySelector('.xmd'),tp=B&&B.querySelector('.xtop'),fig=B&&B.querySelector('.xfig'),dk=$('xCardDock'),c=dk&&!dk.hidden&&dk.firstElementChild,fr=c&&c.querySelector('.xface.fr');
   if(!B||!md||!tp||!fig||!fr||!XM.d){xMatchH();xGrowModal();return}
@@ -2524,16 +2528,16 @@ function xGrowRow(){if(ph0())return;const B=$('xmBody'),md=$('xm').querySelector
 /* every pick gets one badge and one line on why: what you gain, what it costs, and Sharpe only when risk goes up (3-year numbers, like the chart) */
 function xBestT(d){if(!d)return null;if(d._best!==undefined)return d._best;const s=d.self,seen=new Set();let best=null,bs=-1e9;
   [['same',d.same],['div',d.div],['mom',d.mom||[]],['own',d.own||[]]].forEach(([k,a])=>a.forEach(c=>{if(seen.has(c.t))return;seen.add(c.t);const sc=(c.r3>s.r3)+(c.vol<s.vol)+(c.sh>s.sh)+((c.r3-s.r3)-(c.vol-s.vol))*2;if(sc>bs){bs=sc;best=c.t}}));return d._best=best}
-function xBadge(c,s,kind){const dr=(c.r3-s.r3)*100,dv=(c.vol-s.vol)*100,ds=c.sh-s.sh,f=x=>Math.abs(x).toFixed(1);
-  const R=Math.abs(dr)<1?'Same return':dr>0?`+${f(dr)} pts a year`:`${f(dr)} pts less a year`,V=Math.abs(dv)<1.5?'the same risk':dv<0?`${f(dv)} pts less risk`:`${f(dv)} pts more risk`;
-  if(c.t===xBestT(XM.d))return ['Best Match','g',`${R} for ${V}.`];
-  if(kind==='own')return ['Diversifier','g',`Moves less like yours, which spreads risk. ${R}, ${V}.`];
-  if(dr>=1&&dv<=-1.5)return ['Win-Win','g',`${R} with ${V}.`];
-  if(Math.abs(dr)<1&&dv<=-1.5)return ['Smoother Ride','g',`${R}, ${V}.`];
-  if(dr>=1&&dv>=1.5&&ds>0)return ['Worth the Risk','g',`${R} for ${V}. Higher Sharpe: the extra risk paid off.`];
-  if(dr>=1&&dv>=1.5)return ['Riskier Bet','a',`${R}, but ${V}. Lower Sharpe: the extra risk didn't pay off.`];
-  if(kind==='mom')return ['Hot Streak','a','Ahead of yours the last 3 months, but not over 3 years.'];
-  return ['Close Call','n',`${R}, ${V}.`]}
+function xBadge(c,s,kind){const dr=(c.r3-s.r3)*100,dv=(c.vol-s.vol)*100,ds=c.sh-s.sh;
+  const R=Math.abs(dr)<1?'Similar return':dr>0?'More return':'A bit less return',V=Math.abs(dv)<1.5?'about the same risk':dv<0?'less risk':'more risk';
+  if(c.t===xBestT(XM.d))return ['Best Match','g',`${R} with ${V}.`];
+  if(kind==='own')return ['Diversifier','g','Moves differently from yours, which spreads your risk.'];
+  if(dr>=1&&dv<=-1.5)return ['Win-Win','g','More return with less risk.'];
+  if(Math.abs(dr)<1&&dv<=-1.5)return ['Smoother Ride','g','Similar return with a calmer ride.'];
+  if(dr>=1&&dv>=1.5&&ds>0)return ['Worth the Risk','g','More return and more risk, and the extra risk paid off.'];
+  if(dr>=1&&dv>=1.5)return ['Riskier Bet','a',"More return, but the extra risk didn't pay off."];
+  if(kind==='mom')return ['Hot Streak','a','Ahead of yours lately, but not over 3 years.'];
+  return ['Close Call','n',`${R} with ${V}.`]}
 const xBadgeHTML=(c,s,kind)=>{if(c.r3==null||c.vol==null||s.r3==null)return '';const [n,t,l]=xBadge(c,s,kind);return `<div class="xbdg"><span class="xbadge ${t}">${n}</span><p>${l}</p></div>`};
 function xCard(c,s,kind,flip){const col=XCOL[kind];
   const head=`<div class="xch"><div><b>${esc(c.t)}</b><span class="nm">${esc(c.n||NAMES[c.t]||'')}</span></div></div>${xBadgeHTML(c,s,kind)}`;
@@ -2630,10 +2634,10 @@ function xChartTip(t,on){if(!on&&XM.sel){t=XM.sel;on=true}
   /* with nothing picked, the side shows the portfolio itself, with a key for the shapes */
   let rest=false;if(!on&&!ph0()&&XM.d&&XM.d.self&&XM.tab==='alt'){t=XM.d.self.t;on=true;rest=true}
   const leg=document.querySelector('#xmBody .xlegend'),wdock=$('xCardDock'),pop=$('xCardPop'),pdock=$('xPopDock'),mob=ph0()&&!!pdock,dock=mob?pdock:wdock,svg=document.querySelector('#xmBody .xfig svg');const p=on?xFind(t):null;
-  if(svg)svg.querySelectorAll('.xpt').forEach(g=>g.classList.toggle('pinned',!!XM.sel&&g.dataset.xt===XM.sel));
+  if(svg){svg.querySelectorAll('.xpt').forEach(g=>g.classList.toggle('pinned',!!XM.sel&&g.dataset.xt===XM.sel));const bt=rest&&xBestT(XM.d);svg.querySelectorAll('.xpt').forEach(g=>g.classList.toggle('xbestpt',!!bt&&g.dataset.xt===bt))}
   if(!dock||!leg||!p){if(wdock&&!wdock.hidden){wdock.hidden=true;wdock.innerHTML='';wdock.dataset.t=''}if(pop&&!pop.hidden){pop.hidden=true;if(pdock){pdock.innerHTML='';pdock.dataset.t=''}}if(leg)leg.classList.remove('showcard');xMatchH();return xTipBase(t,on)}
   xTipBase(t,false);if(svg){svg.querySelector('.xdots').classList.toggle('xfade',!rest);svg.querySelectorAll('.xpt').forEach(g=>g.classList.toggle('on',!rest&&g.dataset.xt===t))}
-  const dk=t+(rest?'|rest':'');if(dock.dataset.t!==dk){XM.restKey=rest;dock.innerHTML=p.k==='self'?xSelfCard(XM.d.self):xCard(p,XM.d.self,p.k,true);XM.restKey=false;dock.dataset.t=dk}dock.firstElementChild.classList.toggle('hl',XM.sel===t);if(mob)pop.hidden=false;else{wdock.hidden=false;leg.classList.add('showcard')}renderXMButtons();xDescFill(dock.firstElementChild);xMatchH();if(!mob&&XM.sel===t)xGrowModal()}
+  const dk=t+(rest?'|rest':'');if(dock.dataset.t!==dk){XM.restKey=rest;dock.innerHTML=p.k==='self'?xSelfCard(XM.d.self):xCard(p,XM.d.self,p.k,true);XM.restKey=false;dock.dataset.t=dk}dock.firstElementChild.classList.toggle('hl',XM.sel===t);if(mob)pop.hidden=false;else{wdock.hidden=false;leg.classList.add('showcard')}renderXMButtons();xDescFill(dock.firstElementChild);xMoreSync(dock);xMatchH();if(!mob&&XM.sel===t)xGrowModal()}
 /* the card and the chart box share one height */
 function xMatchH(){const fig=document.querySelector('#xmBody .xfig'),dock=$('xCardDock'),c=dock&&!dock.hidden&&dock.firstElementChild;if(!fig||!c||ph0())return;const fr=c.querySelector('.xface.fr');let need=0;if(fr)need=fr.scrollHeight+(c.offsetHeight-fr.clientHeight);c.style.height=Math.max(fig.offsetHeight,need)+'px'}
 function xGrowModal(){if(ph0())return;const B=$('xmBody'),md=$('xm').querySelector('.xmd'),tp=B&&B.querySelector('.xtop');if(!B||!md||!tp)return;const need=tp.offsetHeight+(tp.offsetTop-B.offsetTop)+parseFloat(getComputedStyle(B).paddingBottom)+14;if(need>B.clientHeight){const nh=Math.min(innerHeight-24,md.offsetHeight+(need-B.clientHeight));if(nh>md.offsetHeight){md.style.height=nh+'px';md.style.minHeight=nh+'px';XM.anchorH=nh}}}
@@ -2669,16 +2673,16 @@ function xSparkMove(box,e){const d=XM.d,c=xFind(box.dataset.xsp),s=d.self;if(!c)
   tip.innerHTML=`<div class="xth"><b>${dayFmt(R.dates[i])}</b><span>growth since ${dayFmt(R.dates[0])}</span></div><div class="xtt c2"><span class="l" style="color:var(--xc);font-weight:600">${esc(c.lbl||c.t)}</span><span class="v">${f(a)}</span><span class="l" style="color:var(--ink);font-weight:600">${esc(s.t)}</span><span class="v">${f(b)}</span></div><div class="xtf"><span style="color:var(--xc)">${gap===0?'Even':esc(gap>0?(c.lbl||c.t):s.t)+' ahead by '+Math.abs(gap).toFixed(1)+' pts'}</span></div>`;
   tip.hidden=false;const bx=box.getBoundingClientRect();let tx=e.clientX-bx.left+12;if(tx+tip.offsetWidth>bx.width)tx=e.clientX-bx.left-tip.offsetWidth-12;tip.style.left=Math.max(0,tx)+'px';tip.style.top=(-tip.offsetHeight-6)+'px'}
 function xSparkOut(box){const cr=box.querySelector('.xcross');if(cr)cr.style.display='none';const tip=box.querySelector('.xtip');if(tip)tip.hidden=true}
-function xSelfCard(s){if(XM.d&&XM.d.pf)return xSelfCard0(s,false).replace('>The ETF you clicked<','>Your portfolio<').replace(/<button type="button" class="xadd"[^>]*><\/button>/,'');return xSelfCard0(s,true)}
-function xKey(){const d=XM.d;if(!d)return '';const b=xBestT(d);const row=(k,svg,l,a)=>a&&a.length?`<div class="xkr" data-xk="${k}"><svg width="14" height="14" aria-hidden="true">${svg}</svg><span>${l}</span><b>${a.length}</b></div>`:'';
-  return `<div class="xkey"><div class="xkh">The shapes on the chart <span>· all move like yours but ◆</span></div><div class="xkg">${row('same','<circle cx="7" cy="7" r="6" fill="var(--xs)"/>','More return',d.same)}${row('div','<rect x="1" y="1" width="12" height="12" fill="var(--xd)"/>','Less risk',d.div)}${row('mom','<path d="M7 1L13 12H1Z" fill="var(--xm)"/>','Ahead lately',d.mom)}${row('own','<path d="M7 1L13 7L7 13L1 7Z" fill="var(--xo)"/>','Moves differently',d.own)}</div>
-  ${b?`<button type="button" class="xbestgo" data-xbest="${esc(b)}"><span class="xbadge g">Best Match</span><span>Start with ${esc(b)}</span><span aria-hidden="true">→</span></button>`:''}</div>`}
+function xSelfCard(s){if(XM.d&&XM.d.pf)return xSelfCard0(s,false);return xSelfCard0(s,true)}
+function xKey(){const d=XM.d;if(!d)return '';const b=xBestT(d);const row=(k,svg,l,a)=>a&&a.length?`<div class="xkr" data-xk="${k}"><svg width="14" height="14" aria-hidden="true">${svg}</svg><span>${l}</span></div>`:'';
+  return `<div class="xkey"><div class="xkh">The shapes on the chart</div><div class="xkg">${row('same','<circle cx="7" cy="7" r="6" fill="var(--xs)"/>','More return',d.same)}${row('div','<rect x="1" y="1" width="12" height="12" fill="var(--xd)"/>','Less risk',d.div)}${row('mom','<path d="M7 1L13 12H1Z" fill="var(--xm)"/>','Ahead lately',d.mom)}${row('own','<path d="M7 1L13 7L7 13L1 7Z" fill="var(--xo)"/>','Moves differently',d.own)}</div>
+  ${b?(()=>{const c=xFind(b);const w=c?xBadge(c,d.self,c.k)[2]:'';return `<button type="button" class="xbestgo" data-xbest="${esc(b)}"><span class="xbt"><span class="xbadge g">Best Match</span><span class="xbgo">See why →</span></span><b>${esc(b)}</b><span class="xbn">${esc(NAMES[b]||'')}</span><span class="xbw">${esc(w)}</span></button>`})():''}</div>`}
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-xbest]');if(!b)return;e.stopPropagation();XM.sel=b.dataset.xbest;xChartTip(XM.sel,true)},true);
 function xSelfCard0(s,flip){const n=XM.d.same.length,m=XM.d.div.length,mo=XM.d.mom?XM.d.mom.length:null,ow=(XM.d.own||[]).length;
   const sp=xSpark(s,s,'var(--ink)',s.t).replace(/<polyline[^>]*stroke-dasharray="4 3"[^>]*\/>/,'').replace(/<span>┅[^<]*<\/span>/,'');
-  const head=`<div class="xch"><div><b>${esc(s.t)}</b><span class="nm">${esc(s.n&&s.n!==s.t?s.n:NAMES[s.t]||'')}</span></div><span class="xchip xbasechip">The ETF you clicked</span></div>`;
+  const head=`<div class="xch"><div><b>${esc(s.t)}</b><span class="nm">${esc(s.n&&s.n!==s.t?s.n:NAMES[s.t]||'')}</span></div></div>`;
   const main=`<p class="xfdesc" data-xdesc hidden></p>${xToggle()}${xHero(s,s,'self')}${sp}<div class="xrl xrlr">Risk · ${xRngLbl()}</div><div class="xrisk x3">${xRiskTiles(s,s,true).replace(/<\/b><\/div>/g,'</b><i class="xbase">base</i></div>')}</div>${XM.restKey?xKey():''}`;
-  const add=`<button type="button" class="xadd" data-xadd="${esc(s.t)}"></button>`;
+  const add='';
   if(!flip)return `<article class="xcard" data-xc="${esc(s.t)}" style="--xc:var(--ink)">${head}${main}${add}</article>`;
   return `<article class="xcard xflipcard" data-xc="${esc(s.t)}" style="--xc:var(--ink)"><div class="xflip"><div class="xflipin"><div class="xface fr">${xFaceX()}${head}${main}${xFlipBtn(0,s.t)}${add}</div><div class="xface bk">${xBackHTML(s)}</div></div></div></article>`}
 function xMini(c,s,col){const R=xRange(c,s),n=R.a.length;if(n<2)return '';const self=c===s;const all=self?R.a:R.a.concat(R.b);const lo=Math.min(0,...all),hi=Math.max(0,...all),rg=(hi-lo)||1;const X=i=>1+i*94/(n-1),Y=v=>2+(hi-v)/rg*24;
