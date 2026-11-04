@@ -2493,7 +2493,12 @@ function xCascade(withGrow,noKids){if(XREDUCE.matches||!$('xm').animate||!XM.d)r
   if(!noKids)[...$('xmBody').children].filter(el=>!el.classList.contains('xghost')).forEach((el,i)=>el.animate([{opacity:0,transform:'translateY(10px)'},{opacity:1,transform:'none'}],{duration:240,delay:d0+i*55,easing:'cubic-bezier(.2,.8,.2,1)',fill:'backwards'}));
   [...document.querySelectorAll('#xmBody .xpt')].filter(el=>!el.closest('.xghost')).forEach((el,i)=>el.animate([{opacity:0,transform:'scale(.4)'},{opacity:1,transform:'none'}],{duration:260,delay:d0+180+i*35,easing:'cubic-bezier(.3,1.4,.5,1)',fill:'backwards'}));
   const tiles=[...document.querySelectorAll('#xTm .xtile')].filter(el=>!el.closest('.xghost')),step=Math.min(30,900/Math.max(1,tiles.length));
-  tiles.forEach((el,i)=>el.animate([{opacity:0,transform:'scale(.86)'},{opacity:1,transform:'none'}],{duration:520,delay:d0+40+i*step,easing:XEASE.dec,fill:'backwards'}));
+  if(/[?&]tiles=fly\b/.test(location.search)){
+    /* fly-in version: each tile comes from the map's top-left corner and drops into place; small tiles move faster */
+    const mx=Math.max(1,...tiles.map(t=>t.offsetWidth*t.offsetHeight));
+    tiles.forEach((el,i)=>{const sz=Math.sqrt(el.offsetWidth*el.offsetHeight/mx),dx=-(el.offsetLeft+el.offsetWidth/2),dy=-(el.offsetTop+el.offsetHeight/2);
+      el.animate([{opacity:0,transform:`translate(${dx}px,${dy}px) scale(.2)`},{opacity:1,offset:.25},{opacity:1,transform:'none'}],{duration:Math.round(320+520*sz),delay:d0+40+i*step*.8,easing:'cubic-bezier(.3,1.25,.5,1)',fill:'backwards'})})}
+  else tiles.forEach((el,i)=>el.animate([{opacity:0,transform:'scale(.86)'},{opacity:1,transform:'none'}],{duration:520,delay:d0+40+i*step,easing:XEASE.dec,fill:'backwards'}));
   const dk=[...document.querySelectorAll('#xInDock')].find(el=>!el.closest('.xghost'));if(dk&&XM.tab==='in')dk.animate([{opacity:0,transform:'translateX(28px)'},{opacity:1,transform:'none'}],{duration:500,delay:d0+220,easing:XEASE.dec,fill:'backwards'})}
 function closeExplore(){if($('xm').hidden||XM.closing)return;const el=xSrc(),row=el&&el.closest('tr');
   const finish=()=>{XM.closing=false;$('xm').hidden=true;xFinishClose(row)};
