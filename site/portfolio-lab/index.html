@@ -2462,39 +2462,45 @@ function xTab(k){if(XM.tab===k)return;const md=$('xm').querySelector('.xmd'),B=$
   if(!md||XPHONE()||XREDUCE.matches||!md.animate){if(md)md.style.minHeight='';go();xCascade();return}
   /* Compare takes the full height, Under the hood what its cards need */
   const full=Math.round(Math.min(innerHeight-24,XM.anchorH||1000)),to=Math.round(k==='alt'?full:Math.min(XM.inH||full,innerHeight-24)),from=md.offsetHeight;
-  if(XM.tabA)XM.tabA.cancel();XM.tabAnim=1;md.style.minHeight='';md.style.height=to+'px';
-  go();
-  const grow=to>from+4,shrink=to<from-4;
-  /* the frame springs to its new height with a small overshoot; the content rides in with it */
-  const kf=grow||shrink?[{height:from+'px'},{height:to+'px'}]:null;
-  md.style.overflow='hidden';
-  if(kf){XM.tabA=md.animate(kf,{duration:460,easing:'cubic-bezier(.16,1,.3,1)'});const done=()=>{md.style.overflow='';XM.tabAnim=0;XM.tabA=null;if(XM.tab==='in'){if(!XM.inH)xinFit()}else xGrowRow()};XM.tabA.onfinish=done;XM.tabA.oncancel=()=>{md.style.overflow='';XM.tabAnim=0;XM.tabA=null}}else{md.style.overflow='';XM.tabAnim=0;if(XM.tab==='in'&&!XM.inH)xinFit()}
-  B.animate([{opacity:0},{opacity:1}],{duration:220,easing:'ease-out',fill:'backwards'});
-  xCascade()}
+  if(XM.tabA)XM.tabA.cancel();document.querySelectorAll('#xm .xghost').forEach(g=>g.remove());$('xmBody').style.position='';XM.tabAnim=1;
+  /* the view that's showing now moves into a layer of its own, to slide out over the new one */
+  const cs=getComputedStyle(B),bw=B.clientWidth,bh=B.clientHeight,st=B.scrollTop,gh=document.createElement('div');gh.className='xghost';gh.setAttribute('aria-hidden','true');
+  while(B.firstChild)gh.appendChild(B.firstChild);
+  gh.style.cssText=`position:absolute;left:0;top:0;width:${bw}px;height:${bh}px;box-sizing:border-box;padding:${cs.padding};margin:0;pointer-events:none;overflow:hidden;z-index:2;background:transparent`;
+  md.style.minHeight='';md.style.height=to+'px';md.style.overflow='hidden';
+  go();B.style.position='relative';B.appendChild(gh);gh.scrollTop=st;
+  const dir=k==='alt'?1:-1,D=460;
+  XM.tabA=md.animate([{height:from+'px'},{height:to+'px'}],{duration:D,easing:XEASE.std});
+  gh.animate([{opacity:1,transform:'none'},{opacity:0,transform:`translateX(${-dir*22}px)`,offset:.4},{opacity:0,transform:`translateX(${-dir*56}px)`}],{duration:320,easing:'cubic-bezier(.4,0,.2,1)',fill:'forwards'}).onfinish=()=>gh.remove();
+  [...B.children].forEach(el=>{if(el!==gh)el.animate([{opacity:0,transform:`translateX(${dir*56}px)`},{opacity:0,offset:.18},{opacity:1,transform:`translateX(${dir*10}px)`,offset:.6},{opacity:1,transform:'none'}],{duration:D,easing:XEASE.std,fill:'backwards'})});
+  const done=()=>{md.style.overflow='';B.style.position='';XM.tabAnim=0;XM.tabA=null;gh.remove();if(XM.tab==='in'){if(!XM.inH)xinFit()}else xGrowRow()};
+  XM.tabA.onfinish=done;XM.tabA.oncancel=()=>{md.style.overflow='';B.style.position='';XM.tabAnim=0;XM.tabA=null;gh.remove()};
+  xCascade(true,true)}
 /* motion: the window grows out of the compass, its contents settle in, and the row stays lit */
 const XREDUCE=matchMedia('(prefers-reduced-motion: reduce)');
+const XEASE={std:'cubic-bezier(.2,0,0,1)',dec:'cubic-bezier(.05,.7,.1,1)',acc:'cubic-bezier(.3,0,.8,.15)'};
 function xSrc(){const t=XM.t;let el=XM.from&&document.contains(XM.from)&&XM.from.offsetParent?XM.from:null;
   if(!el&&t)el=[...document.querySelectorAll(`[data-xopen="${CSS.escape(t)}"]`)].find(x=>x.offsetParent);return el}
 function xDelta(el){const d=$('xm').querySelector('.xmd').getBoundingClientRect();if(!el)return null;const r=el.getBoundingClientRect();return {dx:r.left+r.width/2-(d.left+d.width/2),dy:r.top+r.height/2-(d.top+d.height/2)}}
 function xOpenFx(){const el=xSrc();const row=el&&el.closest('tr');document.querySelectorAll('tr.xecho').forEach(r=>r.classList.remove('xecho'));if(row)row.classList.add('xecho');
   if(XREDUCE.matches||!$('xm').animate)return;const md=$('xm').querySelector('.xmd'),p=xDelta(el);
   if(XPHONE()){md.animate([{opacity:0,transform:'translateY(24px)'},{opacity:1,transform:'none'}],{duration:280,easing:'cubic-bezier(.2,.8,.2,1)',fill:'backwards'});return}
-  $('xm').querySelector('.xmback').animate([{opacity:0},{opacity:1}],{duration:220,easing:'ease-out',fill:'backwards'});
-  md.animate(p?[{opacity:0,transform:`translate(${p.dx}px,${p.dy}px) scale(.12)`},{opacity:1,offset:.4},{opacity:1,transform:'none'}]:[{opacity:0,transform:'scale(.96)'},{opacity:1,transform:'none'}],{duration:300,easing:'cubic-bezier(.2,.8,.2,1)',fill:'backwards'})}
+  $('xm').querySelector('.xmback').animate([{opacity:0},{opacity:1}],{duration:320,easing:'ease-out',fill:'backwards'});
+  md.animate(p?[{opacity:0,transform:`translate(${p.dx}px,${p.dy}px) scale(.25)`},{opacity:1,offset:.3},{opacity:1,transform:'none'}]:[{opacity:0,transform:'scale(.96)'},{opacity:1,transform:'none'}],{duration:480,easing:XEASE.dec,fill:'backwards'})}
 const XPHONE=()=>innerWidth<=700;
-function xCascade(withGrow){if(XREDUCE.matches||!$('xm').animate||!XM.d)return;const d0=withGrow?150:40;
+function xCascade(withGrow,noKids){if(XREDUCE.matches||!$('xm').animate||!XM.d)return;const d0=withGrow?150:40;
   if(XPHONE()){[...$('xmBody').children].slice(0,4).forEach((el,i)=>el.animate([{opacity:0},{opacity:1}],{duration:260,delay:120+i*50,easing:'ease-out',fill:'backwards'}));return}
-  [...$('xmBody').children].forEach((el,i)=>el.animate([{opacity:0,transform:'translateY(10px)'},{opacity:1,transform:'none'}],{duration:240,delay:d0+i*55,easing:'cubic-bezier(.2,.8,.2,1)',fill:'backwards'}));
-  document.querySelectorAll('#xmBody .xpt').forEach((el,i)=>el.animate([{opacity:0,transform:'scale(.4)'},{opacity:1,transform:'none'}],{duration:260,delay:d0+180+i*35,easing:'cubic-bezier(.3,1.4,.5,1)',fill:'backwards'}));
-  const tiles=[...document.querySelectorAll('#xTm .xtile')],step=Math.min(14,420/Math.max(1,tiles.length));
-  tiles.forEach((el,i)=>el.animate([{opacity:0,transform:'scale(.82)'},{opacity:1,transform:'none'}],{duration:340,delay:d0+120+i*step,easing:'cubic-bezier(.2,1.25,.4,1)',fill:'backwards'}));
-  const dk=$('xInDock');if(dk&&XM.tab==='in')dk.animate([{opacity:0,transform:'translateX(24px)'},{opacity:1,transform:'none'}],{duration:360,delay:d0+160,easing:'cubic-bezier(.16,1,.3,1)',fill:'backwards'})}
+  if(!noKids)[...$('xmBody').children].filter(el=>!el.classList.contains('xghost')).forEach((el,i)=>el.animate([{opacity:0,transform:'translateY(10px)'},{opacity:1,transform:'none'}],{duration:240,delay:d0+i*55,easing:'cubic-bezier(.2,.8,.2,1)',fill:'backwards'}));
+  [...document.querySelectorAll('#xmBody .xpt')].filter(el=>!el.closest('.xghost')).forEach((el,i)=>el.animate([{opacity:0,transform:'scale(.4)'},{opacity:1,transform:'none'}],{duration:260,delay:d0+180+i*35,easing:'cubic-bezier(.3,1.4,.5,1)',fill:'backwards'}));
+  const tiles=[...document.querySelectorAll('#xTm .xtile')].filter(el=>!el.closest('.xghost')),step=Math.min(30,900/Math.max(1,tiles.length));
+  tiles.forEach((el,i)=>el.animate([{opacity:0,transform:'scale(.86)'},{opacity:1,transform:'none'}],{duration:520,delay:d0+40+i*step,easing:XEASE.dec,fill:'backwards'}));
+  const dk=[...document.querySelectorAll('#xInDock')].find(el=>!el.closest('.xghost'));if(dk&&XM.tab==='in')dk.animate([{opacity:0,transform:'translateX(28px)'},{opacity:1,transform:'none'}],{duration:500,delay:d0+220,easing:XEASE.dec,fill:'backwards'})}
 function closeExplore(){if($('xm').hidden||XM.closing)return;const el=xSrc(),row=el&&el.closest('tr');
   const finish=()=>{XM.closing=false;$('xm').hidden=true;xFinishClose(row)};
   if(XREDUCE.matches||!$('xm').animate){finish();return}
   XM.closing=true;const md=$('xm').querySelector('.xmd'),p=XPHONE()?null:xDelta(el),bk=$('xm').querySelector('.xmback');
-  bk.animate([{opacity:1},{opacity:0}],{duration:170,easing:'ease-in',fill:'forwards'});
-  const a=md.animate([{opacity:1,transform:'none'},p?{opacity:0,transform:`translate(${p.dx}px,${p.dy}px) scale(.12)`}:{opacity:0,transform:'scale(.96)'}],{duration:200,easing:'cubic-bezier(.4,0,.8,.4)',fill:'forwards'});
+  bk.animate([{opacity:1},{opacity:0}],{duration:240,easing:'ease-in',fill:'forwards'});
+  const a=md.animate([{opacity:1,transform:'none'},{opacity:1,offset:.6},p?{opacity:0,transform:`translate(${p.dx}px,${p.dy}px) scale(.25)`}:{opacity:0,transform:'scale(.96)'}],{duration:260,easing:XEASE.acc,fill:'forwards'});
   a.onfinish=()=>{finish();a.cancel();bk.getAnimations().forEach(x=>x.cancel())}}
 function xFinishClose(row){document.body.classList.remove('xm-open');const added=XM.added.slice();XM.t=null;
   document.querySelectorAll('tr.xecho').forEach(r=>r.classList.remove('xecho'));if(row&&document.contains(row)){row.classList.remove('flash');void row.offsetWidth;row.classList.add('flash')}
