@@ -851,6 +851,10 @@ header.top{display:none!important}
 .xidock>.xcard .xfdesc{-webkit-line-clamp:3;min-height:calc(3 * 1.55em)}.xidock>.xcard .xfdesc.open{-webkit-line-clamp:unset;display:block}
 #xCardDock .xcard .xfdesc{-webkit-line-clamp:3}#xCardDock .xcard .xfdesc.open{-webkit-line-clamp:unset;display:block}
 .xmore{align-self:flex-start;border:0;background:none;padding:0;margin-top:-6px;font:500 12.5px "IBM Plex Sans",sans-serif;color:var(--muted);text-decoration:underline;text-underline-offset:3px;cursor:pointer}.xmore:hover{color:var(--ink)}.xmore.off{visibility:hidden}
+.xacts{display:contents}
+.xpopdock .xacts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.xpopdock .xacts>*{margin:0!important;height:52px!important;min-width:0;font-size:14.5px!important;padding:8px 10px!important;gap:8px!important}
+.xpopdock .xacts .xfliparr{display:none!important}.xpopdock .xacts .xadd{white-space:nowrap}
 /* phones: Under the hood's card pops up over the map, sized to its content */
 #xInPop .xpopwrap{height:auto;max-height:100%}#xInPop .xpopdock .xcard{height:auto;max-height:calc(100dvh - 28px);overflow-y:auto}#xInPop .xch{padding-right:48px}
 .mrng{display:none}
@@ -2514,9 +2518,11 @@ function xSrc(){const t=XM.t;let el=XM.from&&document.contains(XM.from)&&XM.from
 function xDelta(el){const d=$('xm').querySelector('.xmd').getBoundingClientRect();if(!el)return null;const r=el.getBoundingClientRect();return {dx:r.left+r.width/2-(d.left+d.width/2),dy:r.top+r.height/2-(d.top+d.height/2)}}
 function xOpenFx(){const el=xSrc();const row=el&&el.closest('tr');document.querySelectorAll('tr.xecho').forEach(r=>r.classList.remove('xecho'));if(row)row.classList.add('xecho');
   if(XREDUCE.matches||!$('xm').animate)return;const md=$('xm').querySelector('.xmd'),p=xDelta(el);
-  if(XPHONE()){md.animate([{opacity:0,transform:'translateY(24px)'},{opacity:1,transform:'none'}],{duration:280,easing:'cubic-bezier(.2,.8,.2,1)',fill:'backwards'});return}
-  $('xm').querySelector('.xmback').animate([{opacity:0},{opacity:1}],{duration:320,easing:'ease-out',fill:'backwards'});
-  md.animate(p?[{opacity:0,transform:`translate(${p.dx}px,${p.dy}px) scale(.25)`},{opacity:1,offset:.3},{opacity:1,transform:'none'}]:[{opacity:0,transform:'scale(.96)'},{opacity:1,transform:'none'}],{duration:480,easing:XEASE.dec,fill:'backwards'})}
+  const bk=$('xm').querySelector('.xmback');bk.animate([{opacity:0},{opacity:1}],{duration:300,easing:'ease-out',fill:'backwards'});
+  md.style.willChange='transform,opacity';
+  const a=XPHONE()?md.animate([{transform:'translateY(100%)'},{transform:'none'}],{duration:440,easing:'cubic-bezier(.32,.72,0,1)',fill:'backwards'})
+    :md.animate([{opacity:0,transform:`translate(${p?Math.round(p.dx*.06):0}px,${p?Math.round(p.dy*.06)+22:22}px) scale(.965)`},{opacity:1,offset:.45},{opacity:1,transform:'none'}],{duration:460,easing:'cubic-bezier(.22,1,.36,1)',fill:'backwards'});
+  a.onfinish=()=>{md.style.willChange=''}}
 const XPHONE=()=>innerWidth<=700;
 function xCascade(withGrow,noKids){if(XREDUCE.matches||!$('xm').animate||!XM.d)return;const d0=withGrow?150:40;
   const tiles=[...document.querySelectorAll('#xTm .xtile')].filter(el=>!el.closest('.xghost')),step=Math.min(18,600/Math.max(1,tiles.length));
@@ -2535,7 +2541,8 @@ function closeExplore(){if($('xm').hidden||XM.closing)return;const el=xSrc(),row
   if(XREDUCE.matches||!$('xm').animate){finish();return}
   XM.closing=true;const md=$('xm').querySelector('.xmd'),p=XPHONE()?null:xDelta(el),bk=$('xm').querySelector('.xmback');
   bk.animate([{opacity:1},{opacity:0}],{duration:240,easing:'ease-in',fill:'forwards'});
-  const a=md.animate([{opacity:1,transform:'none'},{opacity:1,offset:.6},p?{opacity:0,transform:`translate(${p.dx}px,${p.dy}px) scale(.25)`}:{opacity:0,transform:'scale(.96)'}],{duration:260,easing:XEASE.acc,fill:'forwards'});
+  const a=XPHONE()?md.animate([{transform:'none'},{transform:'translateY(100%)'}],{duration:280,easing:'cubic-bezier(.4,0,1,1)',fill:'forwards'})
+    :md.animate([{opacity:1,transform:'none'},{opacity:0,transform:'translateY(14px) scale(.975)'}],{duration:220,easing:'cubic-bezier(.4,0,1,1)',fill:'forwards'});
   a.onfinish=()=>{finish();a.cancel();bk.getAnimations().forEach(x=>x.cancel())}}
 function xFinishClose(row){document.body.classList.remove('xm-open');const added=XM.added.slice();XM.t=null;
   document.querySelectorAll('tr.xecho').forEach(r=>r.classList.remove('xecho'));if(row&&document.contains(row)){row.classList.remove('flash');void row.offsetWidth;row.classList.add('flash')}
@@ -2548,7 +2555,7 @@ function xToggleAdd(t){const B=S.b;const i=B.rows.findIndex(r=>r.t===t);
   persist();render();renderXMButtons();renderXMFoot()}
 function xBtnState(t){if(XM.added.includes(t))return ['✓ Added','on',false];if(xInBuild(t))return ['In your portfolio','',true];if(S.b.rows.length>=MAXETF)return ['Portfolio is full (15)','',true];if(!xCanPrice(t))return ['No prices','',true];return ['+ Add to Portfolio','',false]}
 const XSHORT={'✓ Added':'✓ Added','In your portfolio':'In portfolio','Portfolio is full (15)':'Full','No prices':'No data','+ Add to Portfolio':'+ Add'};
-function renderXMButtons(){document.querySelectorAll('#xmBody .xpt').forEach(g=>{const t=g.dataset.xt;g.classList.toggle('added',g.dataset.xk!=='self'&&(XM.added.includes(t)||xInBuild(t)))});document.querySelectorAll('#xmBody .xadd').forEach(b=>{const [txt0,c,dis]=xBtnState(b.dataset.xadd);const txt=b.dataset.sm?XSHORT[txt0]||txt0:txt0;if(b.closest('.xface')){const ic=c==='on'?'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l4.8 4.8L19.5 7"/></svg>':'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>';b.innerHTML='<span class="xadic">'+ic+'</span><span>'+esc(txt.replace('✓ ','').replace(/^\+ /,''))+'</span>'}else b.textContent=txt;b.title=txt0;b.className='xadd'+(c?' '+c:'');b.disabled=dis;b.setAttribute('aria-pressed',c==='on')})}
+function renderXMButtons(){document.querySelectorAll('#xmBody .xpt').forEach(g=>{const t=g.dataset.xt;g.classList.toggle('added',g.dataset.xk!=='self'&&(XM.added.includes(t)||xInBuild(t)))});document.querySelectorAll('#xmBody .xadd').forEach(b=>{const [txt0,c,dis]=xBtnState(b.dataset.xadd);const txt=b.dataset.sm||b.closest('.xpopdock .xacts')?XSHORT[txt0]||txt0:txt0;if(b.closest('.xface')){const ic=c==='on'?'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l4.8 4.8L19.5 7"/></svg>':'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>';b.innerHTML='<span class="xadic">'+ic+'</span><span>'+esc(txt.replace('✓ ','').replace(/^\+ /,''))+'</span>'}else b.textContent=txt;b.title=txt0;b.className='xadd'+(c?' '+c:'');b.disabled=dis;b.setAttribute('aria-pressed',c==='on')})}
 function renderXMFoot(){const a=XM.added;$('xmCount').innerHTML=a.length?`<span class="xcl">✓ ${a.length} added</span>${a.map(t=>`<button type="button" class="xrm" data-xadd="${esc(t)}" aria-label="Remove ${esc(t)} from your portfolio" title="Remove ${esc(t)} from your portfolio">${esc(t)}<svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 2l6 6M8 2L2 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>`).join('')}`:''}
 /* plain-language reason for each card */
 function xWhy(c,s,kind){const b=s.t,dr=c.r3-s.r3,ddw=c.dd<s.dd-0.05,cheaper=c.er!=null&&s.er!=null&&c.er<s.er-0.02;
@@ -2628,7 +2635,7 @@ function xCard(c,s,kind,flip){const col=XCOL[kind];
     <p class="xwhy">${xWhy(c,s,kind)}</p>${add}</article>`;
   return `<article class="xcard xflipcard" data-xc="${esc(c.t)}" style="--xc:${col}"><div class="xflip"><div class="xflipin"><div class="xface fr">${xFaceX()}${head}
     ${main}
-    ${xFlipBtn(0,c.t)}${add}</div><div class="xface bk">${xBackHTML(c)}</div></div></div></article>`}
+    <div class="xacts">${xFlipBtn(0,c.t)}${add}</div></div><div class="xface bk">${xBackHTML(c)}</div></div></div></article>`}
 const XICONDESC='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h7l4 4v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v4h4"/><path d="M9.5 12h5M9.5 15.5h5"/></svg>';
 const XICONCHART='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4v15a1 1 0 0 0 1 1h15"/><path d="M7.5 15.5l3.5-4 2.5 2.5L18 8.5"/></svg>';
 const XICONFLIP='<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>';
@@ -2754,7 +2761,7 @@ function xSparkMove(box,e){const d=XM.d,c=xFind(box.dataset.xsp),s=d.self;if(!c)
 function xSparkOut(box){const cr=box.querySelector('.xcross');if(cr)cr.style.display='none';const tip=box.querySelector('.xtip');if(tip)tip.hidden=true}
 function xSelfCard(s){if(XM.d&&XM.d.pf)return xSelfCard0(s,false);return xSelfCard0(s,true)}
 function xKey(){const d=XM.d;if(!d)return '';const b=xBestT(d);const row=(k,svg,l,a)=>a&&a.length?`<div class="xkr" data-xk="${k}"><svg width="14" height="14" aria-hidden="true">${svg}</svg><span>${l}</span></div>`:'';
-  return `<div class="xkey"><div class="xkh">The shapes on the chart</div><div class="xkg">${row('same','<circle cx="7" cy="7" r="6" fill="var(--xs)"/>','More return',d.same)}${row('div','<rect x="1" y="1" width="12" height="12" fill="var(--xd)"/>','Less risk',d.div)}${row('mom','<path d="M7 1L13 12H1Z" fill="var(--xm)"/>','Ahead lately',d.mom)}${row('own','<path d="M7 1L13 7L7 13L1 7Z" fill="var(--xo)"/>','Moves differently',d.own)}</div>
+  return `<div class="xkey"><div class="xkh">The shapes on the chart</div><div class="xkg">${row('same','<circle cx="7" cy="7" r="6" fill="var(--xs)"/>','More return',d.same)}${row('div','<rect x="1" y="1" width="12" height="12" fill="var(--xd)"/>','Smoother ride',d.div)}${row('mom','<path d="M7 1L13 12H1Z" fill="var(--xm)"/>','Hot streak',d.mom)}${row('own','<path d="M7 1L13 7L7 13L1 7Z" fill="var(--xo)"/>','Diversifier',d.own)}</div>
   ${b?(()=>{const c=xFind(b);const w=c?xBadge(c,d.self,c.k)[2]:'';return `<button type="button" class="xbestgo" data-xbest="${esc(b)}" title="${esc(NAMES[b]||b)}"><span class="xbt"><span class="xbadge g">Best Match</span><b>${esc(b)}</b><span class="xbgo">See why →</span></span><span class="xbw">${esc(w)}</span></button>`})():''}</div>`}
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-xbest]');if(!b)return;e.stopPropagation();XM.sel=b.dataset.xbest;xChartTip(XM.sel,true)},true);
 function xSelfCard0(s,flip){const n=XM.d.same.length,m=XM.d.div.length,mo=XM.d.mom?XM.d.mom.length:null,ow=(XM.d.own||[]).length;
@@ -2763,7 +2770,7 @@ function xSelfCard0(s,flip){const n=XM.d.same.length,m=XM.d.div.length,mo=XM.d.m
   const main=`<p class="xfdesc" data-xdesc hidden></p>${xToggle()}${xHero(s,s,'self')}${sp}<div class="xrl xrlr">Risk · ${xRngLbl()}</div><div class="xrisk x3">${xRiskTiles(s,s,true)}</div>${XM.restKey?xKey():''}`;
   const add='';
   if(!flip)return `<article class="xcard" data-xc="${esc(s.t)}" style="--xc:var(--ink)">${head}${main}${add}</article>`;
-  return `<article class="xcard xflipcard" data-xc="${esc(s.t)}" style="--xc:var(--ink)"><div class="xflip"><div class="xflipin"><div class="xface fr">${xFaceX()}${head}${main}${xFlipBtn(0,s.t)}${add}</div><div class="xface bk">${xBackHTML(s)}</div></div></div></article>`}
+  return `<article class="xcard xflipcard" data-xc="${esc(s.t)}" style="--xc:var(--ink)"><div class="xflip"><div class="xflipin"><div class="xface fr">${xFaceX()}${head}${main}<div class="xacts">${xFlipBtn(0,s.t)}${add}</div></div><div class="xface bk">${xBackHTML(s)}</div></div></div></article>`}
 function xMini(c,s,col){const R=xRange(c,s),n=R.a.length;if(n<2)return '';const self=c===s;const all=self?R.a:R.a.concat(R.b);const lo=Math.min(0,...all),hi=Math.max(0,...all),rg=(hi-lo)||1;const X=i=>1+i*94/(n-1),Y=v=>2+(hi-v)/rg*24;
   const path=a=>a.map((v,i)=>(i?'L':'M')+X(i).toFixed(1)+' '+Y(v).toFixed(1)).join('');
   return `<svg class="xmini" viewBox="0 0 96 28" width="96" height="28" aria-hidden="true"><line x1="0" x2="96" y1="${Y(0).toFixed(1)}" y2="${Y(0).toFixed(1)}" stroke="var(--grid)"/>${self?'':`<path d="${path(R.b)}" fill="none" stroke="var(--faint)" stroke-width="1" stroke-dasharray="2 2"/>`}<path d="${path(R.a)}" fill="none" stroke="${col}" stroke-width="1.6"/></svg>`}
@@ -2805,7 +2812,7 @@ function renderXM(){const b=$('xmBody');renderXMFoot();XM.chH=null;xSizeModal();
     :`<div class="xnote"><b>No less risky fund kept up with ${esc(t)}</b><span>No ETF that moves 70%+ in step with ${esc(t)} had 15%+ less volatility and a Sharpe at least 90% of ${esc(t)}'s.</span></div>`;
   const mo=!d.mom?'':`<section class="xsec"><h3>Momentum <small>Moves like ${esc(t)} and is ahead of it over the last 3 months</small></h3>${d.mom.length?`<div class="xcards">${d.mom.map(c=>xCard(c,s,'mom')).join('')}${d.mom.length<3?`<div class="xnote"><b>Only ${d.mom.length} ahead lately</b><span>${esc(t)} is ${xp(s.m3)} over the last 3 months, so few similar funds have kept ahead of it.</span></div>`:''}</div>`:`<div class="xnote"><b>Nothing similar is ahead of ${esc(t)} lately</b><span>No fund that moves 70%+ in step with ${esc(t)} is ahead of it over the last 3 months with a Sharpe at least 90% of ${esc(t)}'s. ${esc(t)} itself is ${xp(s.m3)}.</span></div>`}</section>`;
   xSetGlance('');xSizeModal();
-  b.innerHTML=`<div class="xtop">${xChart(d)}<div class="xlegend"><div class="li"><svg width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="6" fill="var(--ink)"/></svg><span>${esc(t)}, ${d.pf?'your portfolio':'the ETF you clicked'}</span></div><div class="li" data-xk="same"><svg width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="6" fill="var(--xs)"/></svg><span>Highly correlated w/ higher returns</span></div><div class="li" data-xk="div"><svg width="14" height="14" aria-hidden="true"><rect x="1" y="1" width="12" height="12" fill="var(--xd)"/></svg><span>Highly correlated w/ less volatility</span></div>${d.mom?`<div class="li" data-xk="mom"><svg width="14" height="14" aria-hidden="true"><path d="M7 1L13 12H1Z" fill="var(--xm)"/></svg><span>Highly correlated w/ more momentum</span></div>`:''}<div class="li" data-xk="own"><svg width="14" height="14" aria-hidden="true"><path d="M7 1L13 7L7 13L1 7Z" fill="var(--xo)"/></svg><span>Barely correlated w/ higher Sharpe</span></div>
+  b.innerHTML=`<div class="xtop">${xChart(d)}<div class="xlegend"><div class="li"><svg width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="6" fill="var(--ink)"/></svg><span>${esc(t)}, ${d.pf?'your portfolio':'the ETF you clicked'}</span></div><div class="li" data-xk="same"><svg width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="6" fill="var(--xs)"/></svg><span>More return</span></div><div class="li" data-xk="div"><svg width="14" height="14" aria-hidden="true"><rect x="1" y="1" width="12" height="12" fill="var(--xd)"/></svg><span>Smoother ride</span></div>${d.mom?`<div class="li" data-xk="mom"><svg width="14" height="14" aria-hidden="true"><path d="M7 1L13 12H1Z" fill="var(--xm)"/></svg><span>Hot streak</span></div>`:''}<div class="li" data-xk="own"><svg width="14" height="14" aria-hidden="true"><path d="M7 1L13 7L7 13L1 7Z" fill="var(--xo)"/></svg><span>Diversifier</span></div>
     <div class="xcdock" id="xCardDock" hidden></div><div class="xsteps"><b class="xsth">How to use this</b><ol><li><span>${matchMedia('(hover:none)').matches?'Tap':'Click'} any shape on the chart to open its card.</span></li><li><span>Compare its returns and risk with ${esc(t)}.</span></li><li><span>Like it? Hit <b>Add to Portfolio</b> to add it to your portfolio.</span></li></ol><span class="xstf">Picked from ${d.pool.toLocaleString()} ETFs.</span></div></div></div>
     <div class="xpop" id="xCardPop" hidden><div class="xpopwrap"><div class="xpopdock" id="xPopDock"></div></div></div>
     `;
@@ -3027,6 +3034,14 @@ function xRestCard(d){const s=d.self||{},R=d.rest||{},k=xRk(),n=xinN(d),named=d.
 function xMoreSync(root){requestAnimationFrame(()=>root.querySelectorAll('.xfdesc').forEach(p=>{if(p.hidden)return;let b=p.nextElementSibling;if(!b||!b.classList.contains('xmore')){p.insertAdjacentHTML('afterend','<button type="button" class="xmore off" aria-expanded="false" tabindex="-1">More</button>');b=p.nextElementSibling}
   if(!p.classList.contains('open')){const off=p.scrollHeight<=p.clientHeight+2;b.classList.toggle('off',off);off?b.setAttribute('tabindex','-1'):b.removeAttribute('tabindex');b.setAttribute('aria-hidden',off)}}))}
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('.xmore');if(!b)return;const p=b.previousElementSibling;const o=p.classList.toggle('open');b.textContent=o?'Less':'More';b.setAttribute('aria-expanded',o);if(typeof xinFit==='function'&&!o)xinFit()});
+function xTmSwap(paint){const tm=$('xTm');if(!tm||XREDUCE.matches||!tm.animate){paint();return}
+  const old=tm.cloneNode(true);old.removeAttribute('id');old.querySelectorAll('[id]').forEach(e=>e.removeAttribute('id'));old.setAttribute('aria-hidden','true');
+  old.style.cssText=`position:absolute;left:${tm.offsetLeft}px;top:${tm.offsetTop}px;width:${tm.offsetWidth}px;height:${tm.offsetHeight}px;margin:0;pointer-events:none;z-index:3`;
+  tm.parentElement.style.position=tm.parentElement.style.position||'relative';tm.parentElement.appendChild(old);paint();
+  old.animate([{opacity:1,transform:'none'},{opacity:0,transform:'scale(.97)'}],{duration:220,easing:'cubic-bezier(.4,0,1,1)',fill:'forwards'}).onfinish=()=>old.remove();
+  const tiles=[...tm.querySelectorAll('.xtile')],mx=Math.max(1,...tiles.map(t=>t.offsetWidth*t.offsetHeight)),step=Math.min(22,520/Math.max(1,tiles.length));
+  tiles.map(el=>({el,a:el.offsetWidth*el.offsetHeight})).sort((x,y)=>y.a-x.a).forEach(({el,a},i)=>{const sz=Math.sqrt(a/mx);
+    el.animate([{opacity:0,transform:'scale(.6)'},{opacity:1,transform:'none'}],{duration:Math.round(300+260*sz),delay:80+i*step,easing:'cubic-bezier(.3,1.25,.5,1)',fill:'backwards'})})}
 function xinTip(t,on){const dock=$('xInDock'),d=XM.d;if(!dock||!d)return;const show=on?t:XM.sel;
   const tm=$('xTm');if(tm){tm.classList.toggle('fade',!!show);tm.querySelectorAll('.xtile[data-ht]').forEach(x=>x.classList.toggle('on',x.dataset.ht===show))}
   const c=show?xFind(show):null,key=c?show+(XM.sel===show?'*':''):'';if(dock.dataset.t===key)return;
@@ -3189,7 +3204,7 @@ function dayFmt(k){return MON[+k.slice(5,7)-1]+' '+(+k.slice(8))+', '+k.slice(0,
 document.addEventListener('click',e=>{{const q=e.target.closest('[data-xpf]');if(q){e.preventDefault();e.stopPropagation();openExplorePf(q.dataset.xpf,q,q.dataset.xtab);return}}const o=e.target.closest('[data-xopen]');if(o){e.preventDefault();openExplore(o.dataset.xopen,o,o.dataset.xtab);return}
   if($('xm').hidden)return;
   {const b=e.target.closest('#xm .xtab');if(b){xTab(b.dataset.xtab);return}}
-  {const v=e.target.closest('#xmBody [data-xtmm]');if(v){XM.tmMode=v.dataset.xtmm;document.querySelectorAll('#xmBody [data-xtmm]').forEach(b=>{const on=b===v;b.classList.toggle('sel',on);b.setAttribute('aria-pressed',on)});const ti=$('xtmTitle');if(ti){ti.innerHTML=xinTitle();ti.title=xinNote()}if(XM.sel){XM.sel=null;const dk=$('xInDock');if(dk)dk.dataset.t='~';xinTip(null,false)}xinPaint();return}}
+  {const v=e.target.closest('#xmBody [data-xtmm]');if(v){XM.tmMode=v.dataset.xtmm;document.querySelectorAll('#xmBody [data-xtmm]').forEach(b=>{const on=b===v;b.classList.toggle('sel',on);b.setAttribute('aria-pressed',on)});const ti=$('xtmTitle');if(ti){ti.innerHTML=xinTitle();ti.title=xinNote()}if(XM.sel){XM.sel=null;const dk=$('xInDock');if(dk)dk.dataset.t='~';xinTip(null,false)}xTmSwap(()=>xinPaint());return}}
   {const g=e.target.closest('#xmBody [data-xgo]');if(g){xTab(g.dataset.xgo);return}}
   {const m=e.target.closest('#xmBody [data-xsm]');if(m){XM.secMode=m.dataset.xsm;const el=$('xinSec');if(el)el.outerHTML=xinSecHTML(XM.d);return}}
   {const tt=e.target.closest('#xmBody .xtile[data-ht]');if(tt){const t=tt.dataset.ht;XM.sel=XM.sel===t?null:t;$('xInDock').dataset.t='~';xinTip(t,!!XM.sel);
