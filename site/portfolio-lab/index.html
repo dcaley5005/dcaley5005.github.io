@@ -851,6 +851,7 @@ header.top{display:none!important}
 .xidock>.xcard .xfdesc{-webkit-line-clamp:3;min-height:calc(3 * 1.55em)}.xidock>.xcard .xfdesc.open{-webkit-line-clamp:unset;display:block}
 #xCardDock .xcard .xfdesc{-webkit-line-clamp:3}#xCardDock .xcard .xfdesc.open{-webkit-line-clamp:unset;display:block}
 .xmore{align-self:flex-start;border:0;background:none;padding:0;margin-top:-6px;font:500 12.5px "IBM Plex Sans",sans-serif;color:var(--muted);text-decoration:underline;text-underline-offset:3px;cursor:pointer}.xmore:hover{color:var(--ink)}.xmore.off{visibility:hidden}
+.xtile.xmv>*{opacity:0}
 .xacts{display:contents}
 .xpopdock .xacts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
 .xpopdock .xacts>*{margin:0!important;height:52px!important;min-width:0;font-size:14.5px!important;padding:8px 10px!important;gap:8px!important}
@@ -1236,6 +1237,9 @@ tr.xecho>td{background:var(--accentBg);transition:background .2s}
 <div class="drophint" id="drophint" hidden>Drop CSV files to import prices</div>
 
 <script>
+/* preview only: ?palette=editorial|wellness|terminal tries another set of ETF colours */
+(()=>{const P={editorial:['#5b8fc7','#d9774a','#5aa38a','#c9a14a','#b86f8f','#8a86c9','#6fb3b8','#a8846b'],wellness:['#7fb2ff','#ffb27a','#8fe3b8','#f5d76e','#ff8fab','#b9a7ff','#7fdbe6','#d6c3a5'],terminal:['#f2a93b','#36c5f0','#9ad66b','#ff6b6b','#c792ea','#f7e26b','#5ee0c1','#ff9fd1']};
+  const k=(location.search.match(/[?&]palette=(\w+)/)||[])[1],p=P[k];if(!p)return;const st=document.createElement('style');st.textContent=':root,:root[data-theme]{'+p.map((c,i)=>`--p${i+1}:${c}!important;`).join('')+'}';document.head.appendChild(st)})();
 let UNI={};const LOADING=new Set(),NODATA=new Set(); /* UNI: ticker -> name from data/universe.json */
 const NAMES = {SPY:'S&P 500',QQQ:'Nasdaq 100',MDY:'S&P MidCap 400',IWM:'Russell 2000',EFA:'Developed intl. stocks',VTI:'Total US stock market',VEA:'Developed intl. stocks',VWO:'Emerging markets',TLT:'20+ yr Treasuries',IEF:'7–10 yr Treasuries',JNK:'High-yield corporate bonds',HYG:'High-yield corporate bonds',AGG:'US aggregate bonds',BND:'Total US bond market',LQD:'Investment-grade corporate bonds',TIP:'Inflation-protected Treasuries',SHY:'1–3 yr Treasuries',GLD:'Gold',XLK:'Technology Select Sector',FCNTX:'Fidelity Contrafund (mutual fund)',VT:'Total world stocks',VXUS:'Total intl. stocks ex-US',IJR:'S&P SmallCap 600',ACWI:'MSCI All Country World',ACWX:'MSCI All Country World ex-US',IEUR:'Core MSCI Europe',TPS:'The 12 Percent Solution ETF',IEMG:'Core MSCI Emerging Markets'};
 const SAMPLE = [];
@@ -3034,14 +3038,33 @@ function xRestCard(d){const s=d.self||{},R=d.rest||{},k=xRk(),n=xinN(d),named=d.
 function xMoreSync(root){requestAnimationFrame(()=>root.querySelectorAll('.xfdesc').forEach(p=>{if(p.hidden)return;let b=p.nextElementSibling;if(!b||!b.classList.contains('xmore')){p.insertAdjacentHTML('afterend','<button type="button" class="xmore off" aria-expanded="false" tabindex="-1">More</button>');b=p.nextElementSibling}
   if(!p.classList.contains('open')){const off=p.scrollHeight<=p.clientHeight+2;b.classList.toggle('off',off);off?b.setAttribute('tabindex','-1'):b.removeAttribute('tabindex');b.setAttribute('aria-hidden',off)}}))}
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('.xmore');if(!b)return;const p=b.previousElementSibling;const o=p.classList.toggle('open');b.textContent=o?'Less':'More';b.setAttribute('aria-expanded',o);if(typeof xinFit==='function'&&!o)xinFit()});
-function xTmSwap(paint){const tm=$('xTm');if(!tm||XREDUCE.matches||!tm.animate){paint();return}
+/* Stocks / Sectors / Industries: going to a coarser view, the stocks slide together into their sector
+   or industry; going finer, each sector splits back into its stocks. Tiles with no match just fade. */
+function xTmKeys(d){const top=d.top||[],bySt={},indSec={};top.forEach(c=>{const sk=XYSEC[c.sec]||c.sec||'';if(c.t)bySt[c.t]={sec:sk,ind:c.ind||''};if(c.ind)indSec[c.ind]=sk});
+  return ht=>{if(!ht)return null;let m=ht.match(/^~g:(sec|ind):(.*)$/);if(m)return m[1]==='sec'?{sec:m[2],ind:null}:{sec:indSec[m[2]]||null,ind:m[2]};return bySt[ht]||null}}
+function xTmSwap(paint,from,to){const tm=$('xTm');if(!tm||XREDUCE.matches||!tm.animate){paint();return}
+  const LV={sec:0,ind:1,stk:2},coarse=LV[from]<LV[to]?from:to,merge=LV[to]<LV[from],key=xTmKeys(XM.d||{}),lvl=k=>k&&(coarse==='sec'?k.sec:k.ind);
+  const rect=el=>({x:el.offsetLeft,y:el.offsetTop,w:el.offsetWidth,h:el.offsetHeight});
   const old=tm.cloneNode(true);old.removeAttribute('id');old.querySelectorAll('[id]').forEach(e=>e.removeAttribute('id'));old.setAttribute('aria-hidden','true');
-  old.style.cssText=`position:absolute;left:${tm.offsetLeft}px;top:${tm.offsetTop}px;width:${tm.offsetWidth}px;height:${tm.offsetHeight}px;margin:0;pointer-events:none;z-index:3`;
-  tm.parentElement.style.position=tm.parentElement.style.position||'relative';tm.parentElement.appendChild(old);paint();
-  old.animate([{opacity:1,transform:'none'},{opacity:0,transform:'scale(.97)'}],{duration:220,easing:'cubic-bezier(.4,0,1,1)',fill:'forwards'}).onfinish=()=>old.remove();
-  const tiles=[...tm.querySelectorAll('.xtile')],mx=Math.max(1,...tiles.map(t=>t.offsetWidth*t.offsetHeight)),step=Math.min(22,520/Math.max(1,tiles.length));
-  tiles.map(el=>({el,a:el.offsetWidth*el.offsetHeight})).sort((x,y)=>y.a-x.a).forEach(({el,a},i)=>{const sz=Math.sqrt(a/mx);
-    el.animate([{opacity:0,transform:'scale(.6)'},{opacity:1,transform:'none'}],{duration:Math.round(300+260*sz),delay:80+i*step,easing:'cubic-bezier(.3,1.25,.5,1)',fill:'backwards'})})}
+  old.style.cssText=`position:absolute;left:${tm.offsetLeft}px;top:${tm.offsetTop}px;width:${tm.offsetWidth}px;height:${tm.offsetHeight}px;margin:0;pointer-events:none;z-index:3;background:transparent`;
+  tm.parentElement.appendChild(old);paint();
+  const oldT=[...old.querySelectorAll('.xtile')],newT=[...tm.querySelectorAll('.xtile')];
+  const groupOf=(els)=>{const m={};els.forEach(el=>{const g=lvl(key(el.dataset.ht));if(g)(m[g]=m[g]||[]).push(el)});return m};
+  const move=(el,fr,to,o0,o1,dur,delay,ease)=>{el.style.transformOrigin='0 0';return el.animate([{transform:`translate(${fr.x-to.x}px,${fr.y-to.y}px) scale(${fr.w/Math.max(1,to.w)},${fr.h/Math.max(1,to.h)})`,opacity:o0},{transform:'none',opacity:o1}],{duration:dur,delay,easing:ease,fill:'both'})};
+  const D=520,E='cubic-bezier(.65,0,.35,1)';
+  if(merge){/* old pieces fly into the new group's box, then the group fades in over them */
+    const targets={};newT.forEach(el=>{const g=lvl(key(el.dataset.ht));if(g)targets[g]=rect(el)});
+    oldT.forEach(el=>{const g=lvl(key(el.dataset.ht)),t=g&&targets[g],r=rect(el);
+      if(t){el.style.transformOrigin='0 0';el.classList.add('xmv');el.animate([{transform:'none',opacity:1},{transform:`translate(${t.x-r.x}px,${t.y-r.y}px) scale(${t.w/Math.max(1,r.w)},${t.h/Math.max(1,r.h)})`,opacity:.9,offset:.85},{transform:`translate(${t.x-r.x}px,${t.y-r.y}px) scale(${t.w/Math.max(1,r.w)},${t.h/Math.max(1,r.h)})`,opacity:0}],{duration:D,easing:E,fill:'forwards'})}
+      else el.animate([{opacity:1},{opacity:0}],{duration:200,fill:'forwards'})});
+    newT.forEach(el=>{const g=lvl(key(el.dataset.ht));el.animate([{opacity:0},{opacity:1}],{duration:260,delay:g&&targets[g]?D*.62:120,easing:'ease-out',fill:'backwards'})});
+    setTimeout(()=>old.remove(),D+60)}
+  else{/* each new piece starts as its old group's box and slides out to its own place */
+    const src={};oldT.forEach(el=>{const g=lvl(key(el.dataset.ht));if(g)src[g]=rect(el)});
+    old.animate([{opacity:1},{opacity:0}],{duration:240,delay:60,easing:'ease-in',fill:'forwards'}).onfinish=()=>old.remove();
+    newT.forEach(el=>{const g=lvl(key(el.dataset.ht)),fr=g&&src[g],r=rect(el);
+      if(fr){el.classList.add('xmv');move(el,fr,r,.35,1,D,0,E).onfinish=function(){this.cancel();el.style.transformOrigin='';el.classList.remove('xmv')}}
+      else el.animate([{opacity:0,transform:'scale(.85)'},{opacity:1,transform:'none'}],{duration:320,delay:D*.4,easing:'cubic-bezier(.2,0,0,1)',fill:'backwards'})})}}
 function xinTip(t,on){const dock=$('xInDock'),d=XM.d;if(!dock||!d)return;const show=on?t:XM.sel;
   const tm=$('xTm');if(tm){tm.classList.toggle('fade',!!show);tm.querySelectorAll('.xtile[data-ht]').forEach(x=>x.classList.toggle('on',x.dataset.ht===show))}
   const c=show?xFind(show):null,key=c?show+(XM.sel===show?'*':''):'';if(dock.dataset.t===key)return;
@@ -3204,7 +3227,7 @@ function dayFmt(k){return MON[+k.slice(5,7)-1]+' '+(+k.slice(8))+', '+k.slice(0,
 document.addEventListener('click',e=>{{const q=e.target.closest('[data-xpf]');if(q){e.preventDefault();e.stopPropagation();openExplorePf(q.dataset.xpf,q,q.dataset.xtab);return}}const o=e.target.closest('[data-xopen]');if(o){e.preventDefault();openExplore(o.dataset.xopen,o,o.dataset.xtab);return}
   if($('xm').hidden)return;
   {const b=e.target.closest('#xm .xtab');if(b){xTab(b.dataset.xtab);return}}
-  {const v=e.target.closest('#xmBody [data-xtmm]');if(v){XM.tmMode=v.dataset.xtmm;document.querySelectorAll('#xmBody [data-xtmm]').forEach(b=>{const on=b===v;b.classList.toggle('sel',on);b.setAttribute('aria-pressed',on)});const ti=$('xtmTitle');if(ti){ti.innerHTML=xinTitle();ti.title=xinNote()}if(XM.sel){XM.sel=null;const dk=$('xInDock');if(dk)dk.dataset.t='~';xinTip(null,false)}xTmSwap(()=>xinPaint());return}}
+  {const v=e.target.closest('#xmBody [data-xtmm]');if(v){const pm=XM.tmMode||'stk';if(v.dataset.xtmm===pm)return;XM.tmMode=v.dataset.xtmm;document.querySelectorAll('#xmBody [data-xtmm]').forEach(b=>{const on=b===v;b.classList.toggle('sel',on);b.setAttribute('aria-pressed',on)});const ti=$('xtmTitle');if(ti){ti.innerHTML=xinTitle();ti.title=xinNote()}if(XM.sel){XM.sel=null;const dk=$('xInDock');if(dk)dk.dataset.t='~';xinTip(null,false)}xTmSwap(()=>xinPaint(),pm,XM.tmMode);return}}
   {const g=e.target.closest('#xmBody [data-xgo]');if(g){xTab(g.dataset.xgo);return}}
   {const m=e.target.closest('#xmBody [data-xsm]');if(m){XM.secMode=m.dataset.xsm;const el=$('xinSec');if(el)el.outerHTML=xinSecHTML(XM.d);return}}
   {const tt=e.target.closest('#xmBody .xtile[data-ht]');if(tt){const t=tt.dataset.ht;XM.sel=XM.sel===t?null:t;$('xInDock').dataset.t='~';xinTip(t,!!XM.sel);
