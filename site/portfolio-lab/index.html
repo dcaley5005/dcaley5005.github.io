@@ -851,6 +851,8 @@ header.top{display:none!important}
 .xidock>.xcard .xfdesc{-webkit-line-clamp:3;min-height:calc(3 * 1.55em)}.xidock>.xcard .xfdesc.open{-webkit-line-clamp:unset;display:block}
 #xCardDock .xcard .xfdesc{-webkit-line-clamp:3}#xCardDock .xcard .xfdesc.open{-webkit-line-clamp:unset;display:block}
 .xmore{align-self:flex-start;border:0;background:none;padding:0;margin-top:-6px;font:500 12.5px "IBM Plex Sans",sans-serif;color:var(--muted);text-decoration:underline;text-underline-offset:3px;cursor:pointer}.xmore:hover{color:var(--ink)}.xmore.off{visibility:hidden}
+/* phones: Under the hood's card pops up over the map, sized to its content */
+#xInPop .xpopwrap{height:auto;max-height:100%}#xInPop .xpopdock .xcard{height:auto;max-height:calc(100dvh - 28px);overflow-y:auto}#xInPop .xch{padding-right:48px}
 .mrng{display:none}
 @media (max-width:640px){
   /* header: title with the date under it, the ⋯ menu beside them; the range row moves under the chart */
@@ -2208,6 +2210,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&BD){bDragEnd(true);
 /* hovering a ticker or portfolio name previews it and says a click opens more (mouse only; a tap just opens it) */
 let TKP=null;
 function tkPrevHide(){clearTimeout(TKP);TKP=null;const p=$('tkPrev');if(p)p.hidden=true}
+const XSECXS={technology:'Tech',financial_services:'Fin.',healthcare:'Health',consumer_cyclical:'Discr.',consumer_defensive:'Staples',industrials:'Indust.',communication_services:'Comms',energy:'Energy',utilities:'Util.',realestate:'Real est.',basic_materials:'Mats'};
 const XSECS={technology:'Tech',financial_services:'Financials',healthcare:'Health',consumer_cyclical:'Discretionary',consumer_defensive:'Staples',industrials:'Industrials',communication_services:'Communication',energy:'Energy',utilities:'Utilities',realestate:'Real estate',basic_materials:'Materials'};
 /* what's inside as one bar, and whether something similar did better */
 function tkSecs(sec){const e=Object.entries(sec||{}).filter(x=>x[1]>0).sort((a,b)=>b[1]-a[1]);if(!e.length)return '';const tot=e.reduce((a,x)=>a+x[1],0);
@@ -2516,15 +2519,16 @@ function xOpenFx(){const el=xSrc();const row=el&&el.closest('tr');document.query
   md.animate(p?[{opacity:0,transform:`translate(${p.dx}px,${p.dy}px) scale(.25)`},{opacity:1,offset:.3},{opacity:1,transform:'none'}]:[{opacity:0,transform:'scale(.96)'},{opacity:1,transform:'none'}],{duration:480,easing:XEASE.dec,fill:'backwards'})}
 const XPHONE=()=>innerWidth<=700;
 function xCascade(withGrow,noKids){if(XREDUCE.matches||!$('xm').animate||!XM.d)return;const d0=withGrow?150:40;
-  if(XPHONE()){[...$('xmBody').children].slice(0,4).forEach((el,i)=>el.animate([{opacity:0},{opacity:1}],{duration:260,delay:120+i*50,easing:'ease-out',fill:'backwards'}));return}
-  if(!noKids)[...$('xmBody').children].filter(el=>!el.classList.contains('xghost')).forEach((el,i)=>el.animate([{opacity:0,transform:'translateY(10px)'},{opacity:1,transform:'none'}],{duration:240,delay:d0+i*55,easing:'cubic-bezier(.2,.8,.2,1)',fill:'backwards'}));
-  [...document.querySelectorAll('#xmBody .xpt')].filter(el=>!el.closest('.xghost')).forEach((el,i)=>el.animate([{opacity:0,transform:'scale(.4)'},{opacity:1,transform:'none'}],{duration:260,delay:d0+180+i*35,easing:'cubic-bezier(.3,1.4,.5,1)',fill:'backwards'}));
   const tiles=[...document.querySelectorAll('#xTm .xtile')].filter(el=>!el.closest('.xghost')),step=Math.min(18,600/Math.max(1,tiles.length));
   /* tiles fly in from the map's top-left corner and land, biggest first; small ones move faster.
      The full show plays on open; coming back from Compare it runs about twice as fast. */
   {const mx=Math.max(1,...tiles.map(t=>t.offsetWidth*t.offsetHeight)),q=noKids?.55:1;
     tiles.map(el=>({el,a:el.offsetWidth*el.offsetHeight})).sort((x,y)=>y.a-x.a).forEach(({el,a},i)=>{const sz=Math.sqrt(a/mx),dx=-(el.offsetLeft+el.offsetWidth/2),dy=-(el.offsetTop+el.offsetHeight/2);
       el.animate([{opacity:0,transform:`translate(${dx}px,${dy}px) scale(.2)`},{opacity:1,offset:.25},{opacity:1,transform:'none'}],{duration:Math.round((300+450*sz)*q),delay:Math.round((d0+40)*q+i*step*q),easing:'cubic-bezier(.3,1.25,.5,1)',fill:'backwards'})})}
+  if(XPHONE()){[...$('xmBody').children].slice(0,4).forEach((el,i)=>el.animate([{opacity:0},{opacity:1}],{duration:260,delay:120+i*50,easing:'ease-out',fill:'backwards'}));return}
+  if(!noKids)[...$('xmBody').children].filter(el=>!el.classList.contains('xghost')).forEach((el,i)=>el.animate([{opacity:0,transform:'translateY(10px)'},{opacity:1,transform:'none'}],{duration:240,delay:d0+i*55,easing:'cubic-bezier(.2,.8,.2,1)',fill:'backwards'}));
+  [...document.querySelectorAll('#xmBody .xpt')].filter(el=>!el.closest('.xghost')).forEach((el,i)=>el.animate([{opacity:0,transform:'scale(.4)'},{opacity:1,transform:'none'}],{duration:260,delay:d0+180+i*35,easing:'cubic-bezier(.3,1.4,.5,1)',fill:'backwards'}));
+
   const dk=[...document.querySelectorAll('#xInDock')].find(el=>!el.closest('.xghost'));if(dk&&XM.tab==='in')dk.animate([{opacity:0,transform:'translateX(28px)'},{opacity:1,transform:'none'}],{duration:500,delay:d0+220,easing:XEASE.dec,fill:'backwards'})}
 function closeExplore(){if($('xm').hidden||XM.closing)return;const el=xSrc(),row=el&&el.closest('tr');
   const finish=()=>{XM.closing=false;$('xm').hidden=true;xFinishClose(row)};
@@ -2862,7 +2866,8 @@ function renderXI(){const b=$('xmBody');renderXMFoot();xSizeModal();
   if(!xinEq(d)||!['stk','ind','sec'].includes(XM.tmMode))XM.tmMode='stk';
   const fig=xinEq(d)?`<figure class="xtmfig"><div class="xtmh"><div class="xtmhr"><b id="xtmTitle" title="${esc(xinNote())}">${xinTitle()}</b>${xTmToggle()}</div></div><div class="xtm" id="xTm"></div></figure>`:xinAssetsHTML(d);
   xSetGlance('');xSizeModal();
-  b.innerHTML=`<div class="xtop xin">${fig}<div class="xcdock xidock" id="xInDock">${xAboutCard(d)}</div></div>`;
+  b.innerHTML=XPHONE()?`<div class="xtop xin">${fig}</div><div class="xpop" id="xInPop" hidden><div class="xpopwrap"><div class="xpopdock xidock" id="xInDock">${xAboutCard(d)}</div></div></div>`
+    :`<div class="xtop xin">${fig}<div class="xcdock xidock" id="xInDock">${xAboutCard(d)}</div></div>`;
   if(!d.pf&&xinEq(d)&&XGRP[t]===undefined)xGrpLoad(t).then(()=>{if(XM.d===d&&XM.tab==='in'&&!$('xm').hidden)xinFit()});
   $('xInDock').dataset.t='';xMoreSync($('xInDock'));xinFit();xinFitRow();xinPaint();if(XM.sel&&xFind(XM.sel))xinTip(XM.sel,true);
   if(document.fonts&&document.fonts.status!=='loaded')document.fonts.ready.then(()=>{if(XM.tab==='in'&&!$('xm').hidden){xinFit();xinFitRow();xinPaint()}})}
@@ -3025,7 +3030,10 @@ document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest
 function xinTip(t,on){const dock=$('xInDock'),d=XM.d;if(!dock||!d)return;const show=on?t:XM.sel;
   const tm=$('xTm');if(tm){tm.classList.toggle('fade',!!show);tm.querySelectorAll('.xtile[data-ht]').forEach(x=>x.classList.toggle('on',x.dataset.ht===show))}
   const c=show?xFind(show):null,key=c?show+(XM.sel===show?'*':''):'';if(dock.dataset.t===key)return;
-  dock.innerHTML=c?(c.k==='rest'?xRestCard(d):c.k==='grp'?xGrpCard(c,d):xHoldCard(c,d.self)):xAboutCard(d);dock.dataset.t=key;xMoreSync(dock);if(c&&XM.sel===show)dock.firstElementChild.classList.add('hl')}
+  dock.innerHTML=c?(c.k==='rest'?xRestCard(d):c.k==='grp'?xGrpCard(c,d):xHoldCard(c,d.self)):xAboutCard(d);dock.dataset.t=key;
+  const pop=$('xInPop');if(pop){if(c&&dock.firstElementChild)dock.firstElementChild.insertAdjacentHTML('afterbegin',xFaceX());const was=pop.hidden;pop.hidden=!c;
+    if(c&&was&&!XREDUCE.matches&&pop.animate){pop.animate([{opacity:0},{opacity:1}],{duration:200,easing:'ease-out'});dock.animate([{transform:'translateY(28px) scale(.97)',opacity:0},{transform:'none',opacity:1}],{duration:340,easing:XEASE.dec})}}
+  xMoreSync(dock);if(c&&XM.sel===show)dock.firstElementChild.classList.add('hl')}
 /* make the map as tall as the tallest card, so cards never get cut and the two columns end together */
 function xinFitRow(){const B=$('xmBody'),row=B&&B.querySelector('.xtop.xin'),dock=$('xInDock');if(!B||!row||!dock)return;if(getComputedStyle(row).flexDirection!=='row')return;const S=B.scrollTop,avail=Math.min(B.clientHeight-(row.getBoundingClientRect().top-B.getBoundingClientRect().top)-22-S,B.clientHeight-22);if(avail<=300)return;row.style.height=avail+'px';dock.style.minHeight='';dock.style.overflowY='auto'}
 function xinFit(){const dock=$('xInDock'),d=XM.d;if(!dock||!d)return;dock.style.minHeight='';if(ph0()||!$('xTm'))return;
@@ -3054,7 +3062,7 @@ function xinPaint(){const el=$('xTm'),d=XM.d;if(!el||!d)return;const W=el.client
   let h='';tiles.forEach(({c,x,y,w,h:hh})=>{const r=c.r?c.r[k]:null,L=w>=150&&hh>=110,M=w>=74&&hh>=58,nm=c.n||c.hn||'';
     /* fit the ticker: drop the exchange suffix (2330.TW -> 2330) when the tile is narrow, or leave it off */
     let tk=c.t||nm;const fits=x=>x.length*(L?11.6:7.9)+(L?24:16)<=w&&hh>=24;if(!fits(tk))tk=tk.split('.')[0];const S=fits(tk);
-    const inner=`${S?`<span class="xtk">${esc(tk)}</span>`:''}${L&&nm?`<span class="xtn">${esc(nm)}</span>`:''}${M?`<span class="xtv">${xw(c.sw)}</span><span class="xtv">${xp(r)}</span>`:''}`;
+    const inner=`${S?`<span class="xtk">${esc(tk)}</span>`:''}${L&&nm?`<span class="xtn">${esc(nm)}</span>`:''}${M&&S?`<span class="xtv">${xw(c.sw)}</span><span class="xtv">${xp(r)}</span>`:''}`;
     const lab=`${c.t||''} ${nm}: ${xw(c.sw)} of ${d.t} ${XAGO[XM.rng]}, ${xp(r)} ${XRWORD[XM.rng]}`;
     h+=c.t?`<button type="button" class="xtile b-${xBucket(r)}${L?' l':''}${XM.sel===c.t?' on':''}" data-ht="${esc(c.t)}" style="${box(x,y,w,hh)}" aria-label="${esc(lab)}">${inner}</button>`
       :`<div class="xtile rest b-o" style="${box(x,y,w,hh)}" title="${esc(lab)}">${inner}</div>`});
@@ -3118,8 +3126,11 @@ function xinGrpPaint(el,d,mode){const W=el.clientWidth,H=el.clientHeight,k=xRk()
   const box=(x,y,w,h)=>`left:${(x+g).toFixed(1)}px;top:${(y+g).toFixed(1)}px;width:${Math.max(0,w-2*g).toFixed(1)}px;height:${Math.max(0,h-2*g).toFixed(1)}px`;
   let h='';tiles.forEach(({c,x,y,w,h:hh})=>{const r=c.G?c.G.r[k]:c.m&&c.m.length?xGrpR(c.m,k):null,L=w>=150&&hh>=100,M=w>=70&&hh>=62;
     /* the name wraps onto lines; it shows only when its longest word fits */
-    const lw=c.lbl.split(' ').reduce((a,s)=>Math.max(a,s.length),0),fs=Math.min(L?15:12.5,(w-(L?24:16))/(lw*0.6)),showN=fs>=9.5&&hh>=(M?44:26);
-    const inner=`${showN?`<span class="xtk xtg" style="font-size:${fs.toFixed(1)}px">${esc(c.lbl)}</span>`:''}${M?`<span class="xtv">${xw(c.w)}</span>${c.id?`<span class="xtv">${xp(r)}</span>`:''}`:''}`;
+    const fit=t=>{const lw=t.split(' ').reduce((a,s)=>Math.max(a,s.length),0);return Math.min(L?15:12.5,(w-(L?24:16))/(lw*0.6))};
+    let nm=c.lbl,fs=fit(nm);const sk=Object.keys(XSEC).find(k=>XSEC[k]===c.lbl);
+    for(const alt of sk?[XSECS[sk],XSECXS[sk]]:[]){if(fs>=9.5||!alt)break;nm=alt;fs=fit(nm)}
+    const lines=nm.length*fs*0.6<=w-(L?24:16)?1:nm.split(' ').length,showN=fs>=9.5&&hh>=Math.max(M?44:26,lines*fs*1.3+14);
+    const inner=`${showN?`<span class="xtk xtg" style="font-size:${fs.toFixed(1)}px">${esc(nm)}</span>`:''}${M&&showN?`<span class="xtv">${xw(c.w)}</span>${c.id?`<span class="xtv">${xp(r)}</span>`:''}`:''}`;
     const lab=`${c.lbl}: ${xw(c.w)} of ${d.t}${c.id?`, ${r==null?'return unknown':xp(r)+' '+XRWORD[XM.rng]}`:''}`;
     h+=c.id?`<button type="button" class="xtile b-${xBucket(r)}${L?' l':''}${XM.sel===c.id?' on':''}" data-ht="${esc(c.id)}" style="${box(x,y,w,hh)}" aria-label="${esc(lab)}">${inner}</button>`
       :`<div class="xtile rest b-o" style="${box(x,y,w,hh)}" title="${esc(lab)}">${inner}</div>`});
@@ -3182,9 +3193,10 @@ document.addEventListener('click',e=>{{const q=e.target.closest('[data-xpf]');if
   {const g=e.target.closest('#xmBody [data-xgo]');if(g){xTab(g.dataset.xgo);return}}
   {const m=e.target.closest('#xmBody [data-xsm]');if(m){XM.secMode=m.dataset.xsm;const el=$('xinSec');if(el)el.outerHTML=xinSecHTML(XM.d);return}}
   {const tt=e.target.closest('#xmBody .xtile[data-ht]');if(tt){const t=tt.dataset.ht;XM.sel=XM.sel===t?null:t;$('xInDock').dataset.t='~';xinTip(t,!!XM.sel);
-    if(XM.sel&&ph0()){const dk=$('xInDock'),B=$('xmBody');if(dk&&B){const r=dk.getBoundingClientRect(),b=B.getBoundingClientRect();if(r.top>b.bottom-120)B.scrollTo({top:B.scrollTop+(r.top-b.top)-80,behavior:XREDUCE.matches?'auto':'smooth'})}}return}}
+    if(XM.sel&&ph0()&&!$('xInPop')){const dk=$('xInDock'),B=$('xmBody');if(dk&&B){const r=dk.getBoundingClientRect(),b=B.getBoundingClientRect();if(r.top>b.bottom-120)B.scrollTo({top:B.scrollTop+(r.top-b.top)-80,behavior:XREDUCE.matches?'auto':'smooth'})}}return}}
   if(e.target.closest('[data-xclose]')){closeExplore();return}
   {const pp=$('xCardPop');if(pp&&!pp.hidden&&(e.target===pp||e.target.closest('[data-xpopx]'))){const t=XM.sel;XM.sel=null;xChartTip(t,false);return}}
+  {const ip=$('xInPop');if(ip&&!ip.hidden&&(e.target===ip||e.target.closest('#xInPop [data-xpopx]'))){const t=XM.sel;XM.sel=null;xinTip(t,false);return}}
   const a=e.target.closest('[data-xadd]');if(a&&!a.disabled){xToggleAdd(a.dataset.xadd);return}
   const g=e.target.closest('#xmBody [data-xrng],#xgMini [data-xrng]');if(g){xSetRange(g.dataset.xrng);return}
   const p=e.target.closest('#xmBody .xpt');if(p){XM.sel=p.dataset.xt;xChartTip(p.dataset.xt,true);
@@ -3198,7 +3210,7 @@ document.addEventListener('mouseover',e=>{if($('xm').hidden||XM.tab!=='in'||xFak
 document.addEventListener('mouseout',e=>{if($('xm').hidden||XM.tab!=='in'||xFakeHover())return;const tt=e.target.closest&&e.target.closest('#xmBody .xtile[data-ht]');if(tt&&!(e.relatedTarget&&e.relatedTarget.closest&&e.relatedTarget.closest('#xmBody .xtile[data-ht]')))xinTip(tt.dataset.ht,false)});
 addEventListener('resize',()=>{if($('xm').hidden||XM.tab!=='in')return;cancelAnimationFrame(XM.rz);XM.rz=requestAnimationFrame(()=>{xinFit();xinPaint()})});
 document.addEventListener('pointerover',e=>{if(!e.target.closest)return;const tr=e.target.closest('tr');const o=e.target.closest('[data-xopen]')||(tr&&tr.querySelector('[data-xopen]'));if(o&&o.dataset.xopen!=='TPS'&&!XDATA[o.dataset.xopen])xLoad(o.dataset.xopen).catch(()=>{});if(e.target.closest('[data-xpf][data-xtab="alt"]')&&!XPOOL)xPoolLoad().catch(()=>{});const L=e.target.closest('[data-xopen][data-xtab="in"]');if(L&&L.dataset.xopen!=='TPS'&&!XIN[L.dataset.xopen])xinLoad(L.dataset.xopen).catch(()=>{})});
-document.addEventListener('keydown',e=>{if($('xm').hidden)return;if(e.key==='Escape'){e.stopPropagation();const pp=$('xCardPop');if(pp&&!pp.hidden){const t=XM.sel;XM.sel=null;xChartTip(t,false)}else closeExplore()}
+document.addEventListener('keydown',e=>{if($('xm').hidden)return;if(e.key==='Escape'){e.stopPropagation();const pp=$('xCardPop'),ip=$('xInPop');if(pp&&!pp.hidden){const t=XM.sel;XM.sel=null;xChartTip(t,false)}else if(ip&&!ip.hidden){const t=XM.sel;XM.sel=null;xinTip(t,false)}else closeExplore()}
   if(e.key==='Tab'){const f=[...$('xm').querySelectorAll('button:not(:disabled),[tabindex="0"]')].filter(x=>x.offsetParent);if(!f.length)return;const i=f.indexOf(document.activeElement);if(e.shiftKey&&i<=0){e.preventDefault();f[f.length-1].focus()}else if(!e.shiftKey&&i===f.length-1){e.preventDefault();f[0].focus()}}},true);
 document.addEventListener('mouseover',e=>{if($('xm').hidden||xFakeHover())return;const p=e.target.closest('#xmBody .xpt');if(p){xChartTip(p.dataset.xt,true);return}
   const lk=e.target.closest('#xmBody .xlegend .li[data-xk]');if(lk){const svg=document.querySelector('#xmBody .xfig svg');if(svg){svg.querySelector('.xdots').classList.add('xfade');svg.querySelectorAll('.xpt').forEach(g=>g.classList.toggle('on',g.dataset.xk===lk.dataset.xk))}return}
