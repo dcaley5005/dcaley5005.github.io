@@ -9,35 +9,48 @@ Dan reviews on an iPhone, an iPad (Chrome, landscape) and a 2560x1440 monitor. M
 came from layout problems that only showed at one size, after something loaded late, or in a state the
 test never reached. This skill exists so those get caught before Dan sees them.
 
-## When
+## When: two tiers
 
-- Before opening or updating a pull request that touches `site/portfolio-lab/index.html`.
-- After any fix Dan asks for, before telling him it's ready.
-- When Dan reports something looks off: reproduce it with the script first, then fix, then rerun.
+Dan reviews the preview while we work, so a long run during his review is wasted: the page changes
+under it. Run the quick tier before every push he'll look at, and the full tier only before a merge.
+
+- **Quick, about 1 minute:** before pushing any page change Dan will review. iPad Pro landscape and a
+  laptop (how he reviews), SPY, and the main-page flows.
+- **Full, about 3 minutes:** when Dan says merge, before merging. Phone, iPad portrait, the short
+  1024x768 iPad window, iPad Pro, laptop and 2560 wide, SPY and a portfolio, plus a dark-mode smoke run.
+- When Dan reports something looks off: reproduce it with `--only <size>` first, then fix, then rerun.
 
 ## How
 
-1. Test the real site with live data (the session can reach danielcaley.com):
-   `node tools/qa/portfolio-lab-qa.js --live https://danielcaley.com/ --page portfolio-lab-preview --out <dir>`
-   tests the open pull request's preview; `--page portfolio-lab` tests the live page after a merge.
-   Files come through curl (the session's proxy and certificates) and are served to the browser locally.
-   If the site isn't reachable, use a local folder holding `portfolio-lab/index.html` and real
-   `portfolio-lab/data/`: `--root <folder>`. Say which data it is and how old. Never add made-up data
-   files to make a test pass; missing per-fund files are reported as unchecked.
-2. Use `--tickers SPY,QQQ` by default. Add a fund that's mostly bonds or one with thin data when the
-   change touches empty states. Add `--only phone,ipadL` to rerun one size while fixing.
-3. Read `report.md`. Every FAIL gets fixed or explained before Dan sees the change.
-4. Run `python3 tools/qa/sheet.py <dir>` and look at the sheets, at least phone, iPad landscape, laptop and
-   big monitor. The script measures; your eyes catch what it doesn't (overlaps, awkward wrapping, colors,
-   cut-off text). Send Dan the sheets that show the change.
-5. In the pull request and in the message to Dan, list the sizes checked, what failed and was fixed,
-   and anything unchecked. Name the data used.
+1. Test this repo's page against the live data, so nothing waits on a deploy:
+   `node tools/qa/portfolio-lab-qa.js --live https://danielcaley.com/ --local --tier quick --out <dir>`
+   (`--tier full` before a merge). Without `--local`, `--page portfolio-lab-preview` tests the deployed
+   preview and `--page portfolio-lab` the live page after a merge. If the site isn't reachable, use a
+   local folder holding `portfolio-lab/index.html` and real `portfolio-lab/data/`: `--root <folder>`.
+   Never add made-up data files to make a test pass; missing per-fund files are reported as unchecked.
+2. Sizes run three at a time (`--conc`). `--only phone,laptop` reruns some sizes while fixing.
+   `--tickers SPY,pf` picks what to open; `pf` is a portfolio made by the Combine check. Add a mostly-bond
+   fund when a change touches empty states.
+3. Read `report.md`. Its first line gives the time per section. Every FAIL gets fixed or explained before
+   Dan sees the change. A failing check can be the test's fault (see the rules below): prove which with a
+   small script before changing the page or the check.
+4. Look at the screenshots, at least phone, iPad landscape, laptop and big monitor (`python3 tools/qa/sheet.py <dir>`).
+   The script measures; your eyes catch overlaps, wrapping, colours and cut-off text.
+5. In the pull request and the message to Dan, say which tier ran, what failed and was fixed, and what
+   was unchecked.
 
 ## What the script checks (and why)
 
-Sizes: phone 390x844 and 430x932, iPad portrait 768x1024, iPad landscape 1024x768 (a short window:
-cards are taller than the space), iPad 11" 1180x820, iPad Pro 1366x1024, laptop 1512x982, 1920x1080,
-2560x1440. Light everywhere, dark on phone and laptop. Touch sizes tap; laptop and up use a mouse.
+Sizes: phone 390x844, iPad portrait 768x1024, iPad landscape 1024x768 (a short window: cards are taller
+than the space), iPad Pro 1366x1024, laptop 1512x982, 2560x1440. Touch sizes tap; laptop and up use a mouse.
+Dark mode gets a smoke run on phone and laptop: colours, the map opens, no script errors.
+
+- **Main-page flows.** The ticker box's list waits for typing; the hover preview shows what's inside and
+  the Best Match; ticking one row makes "Tick one more to combine" glow, Delete solid red, and only that
+  row's line lit; Delete removes it and Undo brings it back; Combine makes a portfolio with its name box
+  open; the Columns picker hides a column in every row and shrinks the "Returns" label with it.
+- **Motion.** After switching to Under the hood and back to Compare, nothing is left over from the slide,
+  the window holds its size, and closing leaves nothing behind.
 
 - **No sideways page scroll; the ETF table fits and the main panel is centered on wide screens.**
   2560 once cut off the table's last columns.
@@ -58,7 +71,7 @@ cards are taller than the space), iPad 11" 1180x820, iPad Pro 1366x1024, laptop 
   listed as unchecked, not passed.
 
 Local runs delay per-fund files by 300ms (`--latency`), like a real connection. Instant answers hid the
-Alternatives jump in testing. A full run (9 sizes, 2 funds) takes about 15 minutes; use `--only` while fixing.
+Alternatives jump in testing.
 
 ## Rules we learned the hard way
 
@@ -72,3 +85,5 @@ Alternatives jump in testing. A full run (9 sizes, 2 funds) takes about 15 minut
   animations and fine spacing still need his eye on a real device.
 - A preview or a merge counts as done only when the deploy run succeeded. Say if you couldn't open the
   page yourself.
+- Find elements fresh after anything that redraws the table; a held element goes stale and the click
+  silently misses. The tick bar ignores clicks for 0.6s after it appears, so wait before pressing its buttons.
