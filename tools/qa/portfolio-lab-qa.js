@@ -243,7 +243,7 @@ async function runSize(br, [tag, w, h, input], scheme) {
         }
         if (w > 1000) check(S, `Under the hood ${T}`, 'Card does not grow when picking tiles', Math.max(...heights) - Math.min(...heights) <= 4, heights.join(' / ') + 'px');
         for (const m of ['ind', 'sec']) { await press(pg, await pg.$(`[data-xtmm="${m}"]`), touch); await sleep(500);
-          const sum = await pg.$$eval('#xTm .xtile', ts => ts.reduce((a, t) => a + parseFloat(((t.getAttribute('aria-label') || t.title || '').match(/: ([\d.]+)% of /) || [0, 0])[1]), 0));
+          const sum = await pg.$$eval('#xTm > .xtile', ts => ts.reduce((a, t) => a + parseFloat(((t.getAttribute('aria-label') || t.title || '').match(/: ([\d.]+)% of /) || [0, 0])[1]), 0));
           const nm = m === 'ind' ? 'Industries' : 'Sectors';
           check(S, `Under the hood ${T}`, `${nm} cover the whole fund`, sum >= 97 && sum <= 103, sum.toFixed(1) + '%');
           /* the biggest group's card: its description, return, line chart and risk */
