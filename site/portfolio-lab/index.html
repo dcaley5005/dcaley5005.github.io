@@ -3050,12 +3050,14 @@ function xTmSwap(paint,from,to){const tm=$('xTm');if(!tm||XREDUCE.matches||!tm.a
   tm.parentElement.appendChild(old);paint();
   const oldT=[...old.querySelectorAll('.xtile')],newT=[...tm.querySelectorAll('.xtile')];
   const groupOf=(els)=>{const m={};els.forEach(el=>{const g=lvl(key(el.dataset.ht));if(g)(m[g]=m[g]||[]).push(el)});return m};
-  const move=(el,fr,to,o0,o1,dur,delay,ease)=>{el.style.transformOrigin='0 0';return el.animate([{transform:`translate(${fr.x-to.x}px,${fr.y-to.y}px) scale(${fr.w/Math.max(1,to.w)},${fr.h/Math.max(1,to.h)})`,opacity:o0},{transform:'none',opacity:o1}],{duration:dur,delay,easing:ease,fill:'both'})};
+  /* move real geometry (not a scaled picture), so tiles stay crisp blocks with their own corners */
+  const box=r=>({left:r.x+'px',top:r.y+'px',width:r.w+'px',height:r.h+'px'});
+  const move=(el,fr,to,o0,o1,dur,delay,ease)=>el.animate([{...box(fr),opacity:o0},{...box(to),opacity:o1}],{duration:dur,delay,easing:ease,fill:'both'});
   const D=520,E='cubic-bezier(.65,0,.35,1)';
   if(merge){/* old pieces fly into the new group's box, then the group fades in over them */
     const targets={};newT.forEach(el=>{const g=lvl(key(el.dataset.ht));if(g)targets[g]=rect(el)});
     oldT.forEach(el=>{const g=lvl(key(el.dataset.ht)),t=g&&targets[g],r=rect(el);
-      if(t){el.style.transformOrigin='0 0';el.classList.add('xmv');el.animate([{transform:'none',opacity:1},{transform:`translate(${t.x-r.x}px,${t.y-r.y}px) scale(${t.w/Math.max(1,r.w)},${t.h/Math.max(1,r.h)})`,opacity:.9,offset:.85},{transform:`translate(${t.x-r.x}px,${t.y-r.y}px) scale(${t.w/Math.max(1,r.w)},${t.h/Math.max(1,r.h)})`,opacity:0}],{duration:D,easing:E,fill:'forwards'})}
+      if(t){el.classList.add('xmv');el.animate([{...box(r),opacity:1},{...box(t),opacity:1,offset:.82},{...box(t),opacity:0}],{duration:D,easing:E,fill:'forwards'})}
       else el.animate([{opacity:1},{opacity:0}],{duration:200,fill:'forwards'})});
     newT.forEach(el=>{const g=lvl(key(el.dataset.ht));el.animate([{opacity:0},{opacity:1}],{duration:260,delay:g&&targets[g]?D*.62:120,easing:'ease-out',fill:'backwards'})});
     setTimeout(()=>old.remove(),D+60)}
@@ -3063,7 +3065,7 @@ function xTmSwap(paint,from,to){const tm=$('xTm');if(!tm||XREDUCE.matches||!tm.a
     const src={};oldT.forEach(el=>{const g=lvl(key(el.dataset.ht));if(g)src[g]=rect(el)});
     old.animate([{opacity:1},{opacity:0}],{duration:240,delay:60,easing:'ease-in',fill:'forwards'}).onfinish=()=>old.remove();
     newT.forEach(el=>{const g=lvl(key(el.dataset.ht)),fr=g&&src[g],r=rect(el);
-      if(fr){el.classList.add('xmv');move(el,fr,r,.35,1,D,0,E).onfinish=function(){this.cancel();el.style.transformOrigin='';el.classList.remove('xmv')}}
+      if(fr){el.classList.add('xmv');move(el,fr,r,1,1,D,0,E).onfinish=function(){this.cancel();el.classList.remove('xmv')}}
       else el.animate([{opacity:0,transform:'scale(.85)'},{opacity:1,transform:'none'}],{duration:320,delay:D*.4,easing:'cubic-bezier(.2,0,0,1)',fill:'backwards'})})}}
 function xinTip(t,on){const dock=$('xInDock'),d=XM.d;if(!dock||!d)return;const show=on?t:XM.sel;
   const tm=$('xTm');if(tm){tm.classList.toggle('fade',!!show);tm.querySelectorAll('.xtile[data-ht]').forEach(x=>x.classList.toggle('on',x.dataset.ht===show))}
