@@ -851,6 +851,24 @@ header.top{display:none!important}
 .xidock>.xcard .xfdesc{-webkit-line-clamp:3;min-height:calc(3 * 1.55em)}.xidock>.xcard .xfdesc.open{-webkit-line-clamp:unset;display:block}
 #xCardDock .xcard .xfdesc{-webkit-line-clamp:3}#xCardDock .xcard .xfdesc.open{-webkit-line-clamp:unset;display:block}
 .xmore{align-self:flex-start;border:0;background:none;padding:0;margin-top:-6px;font:500 12.5px "IBM Plex Sans",sans-serif;color:var(--muted);text-decoration:underline;text-underline-offset:3px;cursor:pointer}.xmore:hover{color:var(--ink)}.xmore.off{visibility:hidden}
+.mrng{display:none}
+@media (max-width:640px){
+  /* header: title with the date under it, the ⋯ menu beside them; the range row moves under the chart */
+  .bbrand{flex-direction:column!important;align-items:flex-start!important;gap:2px!important;padding-right:56px!important}.bbrand .asof{font-size:12px}
+  #builder .bheadwrap{position:relative}#builder .bacts{position:absolute!important;top:12px;right:16px}
+  #builder .bacts .picker,#builder .bacts .iob,#builder #bClear{display:none!important}
+  .mrng{display:flex;gap:2px;background:var(--panel2);border-radius:10px;padding:3px;margin:8px 0 6px;min-height:40px;align-items:center}
+  .mrng>button{flex:1;border:0;background:transparent;color:var(--ink2);font:600 13px "IBM Plex Mono",monospace;padding:8px 0;border-radius:7px;min-width:0}
+  .mrng>button[aria-pressed="true"]{background:var(--panel);color:var(--ink);box-shadow:0 0 0 1px var(--line)}
+  .mrng .mdays{flex:1;display:flex;align-items:center;justify-content:center;gap:10px;font:500 14px "IBM Plex Sans",sans-serif;color:var(--ink2)}
+  .mrng .mdays input{width:84px;height:32px;text-align:center;font:600 15px "IBM Plex Mono",monospace}
+  .mrng .mdx{flex:none;width:40px;height:32px;border:0;background:transparent;color:var(--muted);font-size:16px}
+  /* the table's second column is Sharpe, with its i */
+  #bTable th.bm-sharpe,#bTable td.bm-sharpe{display:table-cell!important}
+}
+/* a portfolio's own card has no flip side to stretch into, so its line chart gets a real height */
+#xCardDock .xcard:not(.xflipcard) .xspark svg,#xPopDock .xcard:not(.xflipcard) .xspark svg{height:clamp(90px,14vh,150px)}
+#xPopDock .xcard:has(.xkey) .xspark svg{height:76px!important;min-height:76px!important}#xPopDock .xcard:has(.xkey) .xspark{height:auto!important;flex:none!important;min-height:0!important}
 #tkPrev{position:absolute;z-index:60;width:290px;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:0 14px 34px rgba(0,0,0,.28);padding:12px 14px;display:flex;flex-direction:column;gap:6px;pointer-events:none;font-family:"IBM Plex Sans",sans-serif}
 #tkPrev[hidden]{display:none}#tkPrev .t b{font:700 16px "IBM Plex Mono",monospace;color:var(--ink);margin-right:8px}#tkPrev .t span{font-size:12.5px;color:var(--muted)}
 #tkPrev{width:380px}#tkPrev .lbl{font:600 10px "IBM Plex Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:4px}
@@ -865,9 +883,9 @@ header.top{display:none!important}
 .xkg{display:grid;grid-template-columns:1fr 1fr;column-gap:14px}.xkh span{text-transform:none;letter-spacing:0;font-weight:500}
 .xkh{font:600 10.5px "IBM Plex Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
 .xkr{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink2);padding:3px 6px;margin:0 -6px;border-radius:6px}.xkr b{margin-left:auto;font:600 13px "IBM Plex Mono",monospace;color:var(--ink)}.xkr:hover{background:var(--panel2)}
-.xbestgo{display:flex;flex-direction:column;align-items:stretch;gap:3px;margin-top:10px;border:1px solid color-mix(in srgb,var(--pos) 55%,var(--line));background:color-mix(in srgb,var(--pos) 9%,var(--panel2));border-radius:12px;padding:12px 14px;font-family:"IBM Plex Sans",sans-serif;color:var(--ink);cursor:pointer;text-align:left;transition:border-color .15s,background .15s}
-.xbestgo:hover{border-color:var(--pos);background:color-mix(in srgb,var(--pos) 14%,var(--panel2))}.xbestgo .xbt{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}.xbestgo .xbgo{font-size:13px;font-weight:600;color:var(--pos)}
-.xbestgo>b{font:700 22px "IBM Plex Mono",monospace}.xbestgo .xbn{font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.xbestgo .xbw{font-size:14px;color:var(--ink);margin-top:2px}
+.xbestgo{display:flex;flex-direction:column;align-items:stretch;gap:4px;margin-top:8px;border:1px solid color-mix(in srgb,var(--pos) 55%,var(--line));background:color-mix(in srgb,var(--pos) 9%,var(--panel2));border-radius:12px;padding:9px 12px;font-family:"IBM Plex Sans",sans-serif;color:var(--ink);cursor:pointer;text-align:left;transition:border-color .15s,background .15s}
+.xbestgo:hover{border-color:var(--pos);background:color-mix(in srgb,var(--pos) 14%,var(--panel2))}.xbestgo .xbt{display:flex;align-items:center;gap:10px}.xbestgo .xbt .xbgo{margin-left:auto}.xbestgo .xbt b{font:700 17px "IBM Plex Mono",monospace}.xbestgo .xbgo{font-size:13px;font-weight:600;color:var(--pos)}
+.xbestgo>b{font:700 22px "IBM Plex Mono",monospace}.xbestgo .xbn{font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.xbestgo .xbw{font-size:13.5px;color:var(--ink)}
 #xmBody .xpt.xbestpt{animation:xbestp 1.8s ease-in-out infinite}@keyframes xbestp{0%,100%{filter:drop-shadow(0 0 0 transparent)}50%{filter:drop-shadow(0 0 7px var(--pos))}}@media (prefers-reduced-motion:reduce){#xmBody .xpt.xbestpt{animation:none;filter:drop-shadow(0 0 5px var(--pos))}}
 .xidock .xcard .xnoline{flex:1 1 auto}
 @media (max-width:1000px){.xidock .xcard .xspark svg{min-height:130px}.xtmhr .xtmseg{flex:1 1 100%}}
@@ -1192,7 +1210,7 @@ tr.xecho>td{background:var(--accentBg);transition:background .2s}
       <div class="bgrid">
         <div class="bleft">
           
-          <div class="pgrid bcgrid"><div class="chartbox" id="bChartbox"><svg id="bChart" role="img" aria-label="ETF comparison"></svg><div class="tip" id="bTip" hidden></div></div><aside class="prail" aria-label="Chart lines"><span class="cap" id="bListCap"></span><span class="sub" id="bChartCap" style="font-size:12px;margin:-2px 0 4px"></span><div id="bList" class="plist"></div></aside></div>
+          <div class="pgrid bcgrid"><div class="chartbox" id="bChartbox"><svg id="bChart" role="img" aria-label="ETF comparison"></svg><div class="tip" id="bTip" hidden></div></div><aside class="prail" aria-label="Chart lines"><span class="cap" id="bListCap"></span><span class="sub" id="bChartCap" style="font-size:12px;margin:-2px 0 4px"></span><div id="bList" class="plist"></div></aside></div><div class="mrng" id="bPeriodM" role="group" aria-label="Time period"></div>
           <div class="bstrip" id="bStrip"></div><div class="tablewrap"><table id="bTable" class="btable"></table></div>
         </div>
       </div>
@@ -1581,7 +1599,14 @@ document.addEventListener('click',e=>{const sp=e.target.closest('.daysbox>span')
 function renderPicker(sc){const sel=selOf(sc);if(sel.d)LASTD[sc]=sel.d;const seg=$(sc+'Period');if(!seg)return;
   seg.innerHTML=PRESETS.map(([p])=>`<button type="button" data-psel="${p}" data-scope="${sc}" aria-pressed="${sel.p===p}">${p}</button>`).join('');
 
-  const inp=$(sc+'Days');if(inp&&document.activeElement!==inp)inp.value=sel.d?String(sel.d):(LASTD[sc]?String(LASTD[sc]):'');inp&&inp.closest('.daysbox').classList.toggle('on',!!sel.d)}
+  const inp=$(sc+'Days');if(inp&&document.activeElement!==inp)inp.value=sel.d?String(sel.d):(LASTD[sc]?String(LASTD[sc]):'');inp&&inp.closest('.daysbox').classList.toggle('on',!!sel.d);
+  /* phones: the same choices in one row under the chart; Days turns the row into a number box */
+  const m=sc==='b'&&$('bPeriodM');if(!m||(MDAYS&&document.activeElement&&document.activeElement.id==='bDaysM'))return;
+  m.innerHTML=MDAYS?`<label class="mdays" for="bDaysM"><span>Last</span><input class="field" id="bDaysM" data-days="b" inputmode="numeric" enterkeyhint="done" autocomplete="off" maxlength="4" placeholder="#" value="${sel.d||''}"><span>days</span></label><button type="button" class="mdx" data-mdaysx aria-label="Back to the presets">✕</button>`
+    :PRESETS.map(([p])=>`<button type="button" data-psel="${p}" data-scope="b" aria-pressed="${sel.p===p}">${p}</button>`).join('')+`<button type="button" data-mdays aria-pressed="${!!sel.d}">${sel.d?sel.d+'D':'Days'}</button>`}
+let MDAYS=false;
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-mdays],[data-mdaysx]');if(!b)return;
+  if(b.hasAttribute('data-mdays')){MDAYS=true;renderPicker('b');setTimeout(()=>{const i=$('bDaysM');if(i)i.focus()},0)}else{MDAYS=false;renderPicker('b')}});
 /* the less-used periods and the custom days box live under More; Import, Export and Clear under the ⋯ menu */
 const BXTRA=['3M','6M','10Y'];
 function bMenusInit(){return;const m=$('bDaysSlot'),f=document.querySelector('#bActs .picker>.dform'),i=document.querySelector('#bActs .picker>.vinfo');if(m&&f){m.appendChild(f);if(i)m.appendChild(i)}}
@@ -2098,12 +2123,12 @@ document.addEventListener('keydown',e=>{
   if(e.key==='Escape'&&e.target.id==='bAdd')hideSug();
   if(e.key==='Enter'&&e.target.id==='bAdd'){e.preventDefault();const it=sugIdx>=0?sugItems(e.target.value)[sugIdx]:null;if(it){pickSug(it.t);return}S.bDraft=e.target.value;bAddTicker();setTimeout(showSug,30)}
   if(e.key==='Enter'&&e.target.id==='bName'){e.preventDefault();bSave()}
-  if(e.key==='Enter'&&e.target.dataset&&e.target.dataset.days){e.preventDefault();daysInput(e.target,true);if(!FINE)e.target.blur()}
+  if(e.key==='Enter'&&e.target.dataset&&e.target.dataset.days){e.preventDefault();daysInput(e.target,true);if(e.target.id==='bDaysM'){MDAYS=false;e.target.blur();renderPicker('b');return}if(!FINE)e.target.blur()}
   if(e.key==='Enter'&&e.target.dataset&&e.target.dataset.paddIn){e.preventDefault();S.paDraft[e.target.dataset.paddIn]=e.target.value;pAddTicker(e.target.dataset.paddIn)}
 });
 const DSNAP={};
 document.addEventListener('focusin',e=>{const el=e.target;if(!el.dataset||!el.dataset.days)return;const sc=el.dataset.days;DSNAP[sc]={sel:{...selOf(sc)},val:el.value};el.value=''});
-document.addEventListener('focusout',e=>{const el=e.target;if(!el.dataset||!el.dataset.days)return;const sc=el.dataset.days,snap=DSNAP[sc];delete DSNAP[sc];
+document.addEventListener('focusout',e=>{const el=e.target;if(!el.dataset||!el.dataset.days)return;if(el.id==='bDaysM'&&MDAYS){MDAYS=false;setTimeout(()=>renderPicker('b'),0)}const sc=el.dataset.days,snap=DSNAP[sc];delete DSNAP[sc];
   if(String(el.value).trim()!==''||!snap)return;clearTimeout(daysInput._t);el.value=snap.val;
   const cur=selOf(sc);if(JSON.stringify(cur)!==JSON.stringify(snap.sel))setSel(sc,snap.sel);else renderPicker(sc)});
 function daysInput(el,commit){const sc=el.dataset.days;const digits=String(el.value).replace(/\D/g,'');if(digits!==el.value)el.value=digits;
@@ -2228,7 +2253,7 @@ document.addEventListener('focusin',e=>{const el=e.target;if(!el.dataset||el.dat
 document.addEventListener('focusout',e=>{const el=e.target;if(!el.dataset||el.dataset.pname==null)return;const p=pf(el.dataset.pname);if(!p)return;const v=el.value.trim();const was=PREN===p.id;if(was)PREN=null;if(v&&v!==p.name){p.name=v;persist();setTimeout(render)}else{el.value=p.name;if(was)setTimeout(render)}});
 document.addEventListener('keydown',e=>{const d=e.target.dataset||{};if(d.pname!=null&&(e.key==='Enter'||e.key==='Escape')){if(e.key==='Escape')e.target.value='';e.target.blur();return}if(e.key==='Enter'&&(d.pa2||d.pp2)){e.preventDefault();const id=d.pa2||d.pp2;pAddTicker(id);persist();render();$('pa2-'+id)?.focus()}});
 document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest('[data-bgrp],[data-baddto],[data-bclr],[data-bremove]');if(!t||t.disabled)return;if(Date.now()-PVAT<600)return;
-  if(t.hasAttribute('data-bgrp'))bGroup();else if(t.dataset.baddto)bAddTo(t.dataset.baddto);else if(t.hasAttribute('data-bremove')){const n=tickNames().length;S.b.rows=S.b.rows.filter(r=>!r.k);S.pfs=S.pfs.filter(p=>!p.k);persist();render();toast(`Removed ${n} item${n>1?'s':''}`)}else{clearTicks();persist();renderBuilder()}});
+  if(t.hasAttribute('data-bgrp'))bGroup();else if(t.dataset.baddto)bAddTo(t.dataset.baddto);else if(t.hasAttribute('data-bremove')){const n=tickNames().length,rows0=S.b.rows.slice(),pfs0=S.pfs.slice();S.b.rows=S.b.rows.filter(r=>!r.k);S.pfs=S.pfs.filter(p=>!p.k);persist();render();toast(`Removed ${n} item${n>1?'s':''}`,{label:'Undo',fn:()=>{S.b.rows=rows0;S.pfs=pfs0;clearTicks();persist();render();toast('Restored')}})}else{clearTicks();persist();renderBuilder()}});
 document.addEventListener('click',e=>{if(!e.target.closest)return;if(e.target.closest('#bCols')){BCOLOPEN=!BCOLOPEN;if(BCOLOPEN)$('bColM').innerHTML=bColMenu();$('bColM').hidden=!BCOLOPEN;$('bCols').setAttribute('aria-expanded',BCOLOPEN);return}
   if(BCOLOPEN&&!e.target.closest('#bColM')){BCOLOPEN=false;const m=$('bColM');if(m){m.hidden=true;$('bCols').setAttribute('aria-expanded','false')}}});
 document.addEventListener('change',e=>{const l=e.target.dataset&&e.target.dataset.bcol;if(!l)return;const h=bHidden();e.target.checked?h.delete(l):h.add(l);save('hideCols',[...h]);renderBTable()});
@@ -2561,7 +2586,7 @@ function xRiskTiles(c0,s0,front){const same=c0===s0;const c={...c0,...xRisk(c0)}
    +('er' in c0?t('Fee',fmtER(c.er),c.er!=null&&s.er!=null?f2(c.er-s.er):null,c.er!=null&&s.er!=null&&c.er<=s.er):'')}
 function xHero(c,s,kind){const k=xRk();
   const v=c.r&&c.r[k]!=null?c.r[k]:c.r3,bv=s.r&&s.r[k]!=null?s.r[k]:s.r3,lab=k===5?'/ yr, 3Y':esc(XM.rng);
-  if(kind==='self')return `<div class="xhero"><b class="${v>=0?'pos':'neg'}">${xp(v)}</b><span class="u">${lab}</span><span class="xpill base">The base</span></div>`;
+  if(kind==='self')return `<div class="xhero"><b class="${v>=0?'pos':'neg'}">${xp(v)}</b><span class="u">${lab}</span></div>`;
   return `<div class="xhero"><b class="${v>=0?'pos':'neg'}">${xp(v)}</b><span class="u">${lab}</span><span class="xpill ${v-bv>=0?'up':'dn'}">${xpts(v-bv)} pts vs ${esc(s.t)}</span></div>`}
 function xCorrWord(v){return v>=.85?'Nearly identical':v>=.70?'Very similar':v>=.60?'Some diversification':'Strong diversification'}
 function xToggle(){return `<div class="xseg xrngseg" role="group" aria-label="Chart period">${XR.map(([l,k])=>`<button type="button" data-xrng="${k}" class="${XM.rng===k?'sel':''}" aria-pressed="${XM.rng===k}">${l}</button>`).join('')}</div>`}
@@ -2687,7 +2712,7 @@ function xChartTip(t,on){if(!on&&XM.sel){t=XM.sel;on=true}
   if(svg){svg.querySelectorAll('.xpt').forEach(g=>g.classList.toggle('pinned',!!XM.sel&&g.dataset.xt===XM.sel));const bt=rest&&xBestT(XM.d);svg.querySelectorAll('.xpt').forEach(g=>g.classList.toggle('xbestpt',!!bt&&g.dataset.xt===bt))}
   if(!dock||!leg||!p){if(wdock&&!wdock.hidden){wdock.hidden=true;wdock.innerHTML='';wdock.dataset.t=''}if(pop&&!pop.hidden){pop.hidden=true;if(pdock){pdock.innerHTML='';pdock.dataset.t=''}}if(leg)leg.classList.remove('showcard');xMatchH();return xTipBase(t,on)}
   xTipBase(t,false);if(svg){svg.querySelector('.xdots').classList.toggle('xfade',!rest);svg.querySelectorAll('.xpt').forEach(g=>g.classList.toggle('on',!rest&&g.dataset.xt===t))}
-  const dk=t+(rest?'|rest':'');if(dock.dataset.t!==dk){XM.restKey=rest;dock.innerHTML=p.k==='self'?xSelfCard(XM.d.self):xCard(p,XM.d.self,p.k,true);XM.restKey=false;dock.dataset.t=dk}dock.firstElementChild.classList.toggle('hl',XM.sel===t);if(mob)pop.hidden=false;else{wdock.hidden=false;leg.classList.add('showcard')}renderXMButtons();xDescFill(dock.firstElementChild);xMoreSync(dock);xMatchH();if(!mob&&XM.sel===t)xGrowModal()}
+  const dk=t+(rest?'|rest':'');if(dock.dataset.t!==dk){XM.restKey=p.k==='self'&&XM.tab==='alt';dock.innerHTML=p.k==='self'?xSelfCard(XM.d.self):xCard(p,XM.d.self,p.k,true);XM.restKey=false;dock.dataset.t=dk}dock.firstElementChild.classList.toggle('hl',XM.sel===t);if(mob)pop.hidden=false;else{wdock.hidden=false;leg.classList.add('showcard')}renderXMButtons();xDescFill(dock.firstElementChild);xMoreSync(dock);xMatchH();if(!mob&&XM.sel===t)xGrowModal()}
 /* the card and the chart box share one height */
 function xMatchH(){const fig=document.querySelector('#xmBody .xfig'),dock=$('xCardDock'),c=dock&&!dock.hidden&&dock.firstElementChild;if(!fig||!c||ph0())return;const fr=c.querySelector('.xface.fr');let need=0;if(fr)need=fr.scrollHeight+(c.offsetHeight-fr.clientHeight);c.style.height=Math.max(fig.offsetHeight,need)+'px'}
 function xGrowModal(){if(ph0()||XM.tab==='in'||XM.tabAnim)return;const B=$('xmBody'),md=$('xm').querySelector('.xmd'),tp=B&&B.querySelector('.xtop');if(!B||!md||!tp)return;const need=tp.offsetHeight+(tp.offsetTop-B.offsetTop)+parseFloat(getComputedStyle(B).paddingBottom)+14;if(need>B.clientHeight){const nh=Math.min(innerHeight-24,md.offsetHeight+(need-B.clientHeight));if(nh>md.offsetHeight){md.style.height=nh+'px';md.style.minHeight=nh+'px';XM.anchorH=nh}}}
@@ -2726,12 +2751,12 @@ function xSparkOut(box){const cr=box.querySelector('.xcross');if(cr)cr.style.dis
 function xSelfCard(s){if(XM.d&&XM.d.pf)return xSelfCard0(s,false);return xSelfCard0(s,true)}
 function xKey(){const d=XM.d;if(!d)return '';const b=xBestT(d);const row=(k,svg,l,a)=>a&&a.length?`<div class="xkr" data-xk="${k}"><svg width="14" height="14" aria-hidden="true">${svg}</svg><span>${l}</span></div>`:'';
   return `<div class="xkey"><div class="xkh">The shapes on the chart</div><div class="xkg">${row('same','<circle cx="7" cy="7" r="6" fill="var(--xs)"/>','More return',d.same)}${row('div','<rect x="1" y="1" width="12" height="12" fill="var(--xd)"/>','Less risk',d.div)}${row('mom','<path d="M7 1L13 12H1Z" fill="var(--xm)"/>','Ahead lately',d.mom)}${row('own','<path d="M7 1L13 7L7 13L1 7Z" fill="var(--xo)"/>','Moves differently',d.own)}</div>
-  ${b?(()=>{const c=xFind(b);const w=c?xBadge(c,d.self,c.k)[2]:'';return `<button type="button" class="xbestgo" data-xbest="${esc(b)}"><span class="xbt"><span class="xbadge g">Best Match</span><span class="xbgo">See why →</span></span><b>${esc(b)}</b><span class="xbn">${esc(NAMES[b]||'')}</span><span class="xbw">${esc(w)}</span></button>`})():''}</div>`}
+  ${b?(()=>{const c=xFind(b);const w=c?xBadge(c,d.self,c.k)[2]:'';return `<button type="button" class="xbestgo" data-xbest="${esc(b)}" title="${esc(NAMES[b]||b)}"><span class="xbt"><span class="xbadge g">Best Match</span><b>${esc(b)}</b><span class="xbgo">See why →</span></span><span class="xbw">${esc(w)}</span></button>`})():''}</div>`}
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-xbest]');if(!b)return;e.stopPropagation();XM.sel=b.dataset.xbest;xChartTip(XM.sel,true)},true);
 function xSelfCard0(s,flip){const n=XM.d.same.length,m=XM.d.div.length,mo=XM.d.mom?XM.d.mom.length:null,ow=(XM.d.own||[]).length;
   const sp=xSpark(s,s,'var(--ink)',s.t).replace(/<polyline[^>]*stroke-dasharray="4 3"[^>]*\/>/,'').replace(/<span>┅[^<]*<\/span>/,'');
   const head=`<div class="xch"><div><b>${esc(s.t)}</b><span class="nm">${esc(s.n&&s.n!==s.t?s.n:NAMES[s.t]||'')}</span></div></div>`;
-  const main=`<p class="xfdesc" data-xdesc hidden></p>${xToggle()}${xHero(s,s,'self')}${sp}<div class="xrl xrlr">Risk · ${xRngLbl()}</div><div class="xrisk x3">${xRiskTiles(s,s,true).replace(/<\/b><\/div>/g,'</b><i class="xbase">base</i></div>')}</div>${XM.restKey?xKey():''}`;
+  const main=`<p class="xfdesc" data-xdesc hidden></p>${xToggle()}${xHero(s,s,'self')}${sp}<div class="xrl xrlr">Risk · ${xRngLbl()}</div><div class="xrisk x3">${xRiskTiles(s,s,true)}</div>${XM.restKey?xKey():''}`;
   const add='';
   if(!flip)return `<article class="xcard" data-xc="${esc(s.t)}" style="--xc:var(--ink)">${head}${main}${add}</article>`;
   return `<article class="xcard xflipcard" data-xc="${esc(s.t)}" style="--xc:var(--ink)"><div class="xflip"><div class="xflipin"><div class="xface fr">${xFaceX()}${head}${main}${xFlipBtn(0,s.t)}${add}</div><div class="xface bk">${xBackHTML(s)}</div></div></div></article>`}
