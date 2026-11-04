@@ -2586,7 +2586,7 @@ function xRiskTiles(c0,s0,front){const same=c0===s0;const c={...c0,...xRisk(c0)}
    +('er' in c0?t('Fee',fmtER(c.er),c.er!=null&&s.er!=null?f2(c.er-s.er):null,c.er!=null&&s.er!=null&&c.er<=s.er):'')}
 function xHero(c,s,kind){const k=xRk();
   const v=c.r&&c.r[k]!=null?c.r[k]:c.r3,bv=s.r&&s.r[k]!=null?s.r[k]:s.r3,lab=k===5?'/ yr, 3Y':esc(XM.rng);
-  if(kind==='self')return `<div class="xhero"><b class="${v>=0?'pos':'neg'}">${xp(v)}</b><span class="u">${lab}</span><span class="xpill base">The base</span></div>`;
+  if(kind==='self')return `<div class="xhero"><b class="${v>=0?'pos':'neg'}">${xp(v)}</b><span class="u">${lab}</span></div>`;
   return `<div class="xhero"><b class="${v>=0?'pos':'neg'}">${xp(v)}</b><span class="u">${lab}</span><span class="xpill ${v-bv>=0?'up':'dn'}">${xpts(v-bv)} pts vs ${esc(s.t)}</span></div>`}
 function xCorrWord(v){return v>=.85?'Nearly identical':v>=.70?'Very similar':v>=.60?'Some diversification':'Strong diversification'}
 function xToggle(){return `<div class="xseg xrngseg" role="group" aria-label="Chart period">${XR.map(([l,k])=>`<button type="button" data-xrng="${k}" class="${XM.rng===k?'sel':''}" aria-pressed="${XM.rng===k}">${l}</button>`).join('')}</div>`}
@@ -2756,7 +2756,7 @@ document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest
 function xSelfCard0(s,flip){const n=XM.d.same.length,m=XM.d.div.length,mo=XM.d.mom?XM.d.mom.length:null,ow=(XM.d.own||[]).length;
   const sp=xSpark(s,s,'var(--ink)',s.t).replace(/<polyline[^>]*stroke-dasharray="4 3"[^>]*\/>/,'').replace(/<span>┅[^<]*<\/span>/,'');
   const head=`<div class="xch"><div><b>${esc(s.t)}</b><span class="nm">${esc(s.n&&s.n!==s.t?s.n:NAMES[s.t]||'')}</span></div></div>`;
-  const main=`<p class="xfdesc" data-xdesc hidden></p>${xToggle()}${xHero(s,s,'self')}${sp}<div class="xrl xrlr">Risk · ${xRngLbl()}</div><div class="xrisk x3">${xRiskTiles(s,s,true).replace(/<\/b><\/div>/g,'</b><i class="xbase">base</i></div>')}</div>${XM.restKey?xKey():''}`;
+  const main=`<p class="xfdesc" data-xdesc hidden></p>${xToggle()}${xHero(s,s,'self')}${sp}<div class="xrl xrlr">Risk · ${xRngLbl()}</div><div class="xrisk x3">${xRiskTiles(s,s,true)}</div>${XM.restKey?xKey():''}`;
   const add='';
   if(!flip)return `<article class="xcard" data-xc="${esc(s.t)}" style="--xc:var(--ink)">${head}${main}${add}</article>`;
   return `<article class="xcard xflipcard" data-xc="${esc(s.t)}" style="--xc:var(--ink)"><div class="xflip"><div class="xflipin"><div class="xface fr">${xFaceX()}${head}${main}${xFlipBtn(0,s.t)}${add}</div><div class="xface bk">${xBackHTML(s)}</div></div></div></article>`}
