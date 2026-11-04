@@ -1954,7 +1954,9 @@ function sugItems(q){q=String(q||'').trim().toUpperCase();const added=new Set(S.
   const all=allTickers().map(t=>({t,n:NAMES[t]||'Imported prices',a:added.has(t)}));
   const hit=all.filter(o=>!q||o.t.startsWith(q)||o.n.toUpperCase().includes(q));
   hit.sort((x,y)=>(x.a-y.a)||((y.t.startsWith(q))-(x.t.startsWith(q)))||x.t.localeCompare(y.t));return hit.slice(0,40)}
-function showSug(){const inp=$('bAdd');if(!inp||inp.disabled){hideSug();return}let box=$('bSug');
+/* the list waits for typing; on an empty box only the down arrow opens it */
+let SUGF=false;
+function showSug(force){const inp=$('bAdd');if(force)SUGF=true;if(!inp||inp.disabled||(!inp.value.trim()&&!SUGF)){hideSug();return}let box=$('bSug');
   if(!box){document.body.insertAdjacentHTML('beforeend','<div class="sug" id="bSug" role="listbox" hidden></div>');box=$('bSug')}
   const items=sugItems(inp.value);if(!items.length){hideSug();return}
   sugIdx=Math.min(sugIdx,items.length-1);
@@ -1966,7 +1968,7 @@ function showSug(){const inp=$('bAdd');if(!inp||inp.disabled){hideSug();return}l
   box.style.left=(scrollX+Math.max(vL+8,Math.min(r.left,vL+vW-w-8)))+'px';
   box.style.top=(scrollY+(down?r.bottom+4:r.top-h-4))+'px';inp.setAttribute('aria-expanded','true')}
 if(window.visualViewport){const vr=()=>{const b=$('bSug');if(b&&!b.hidden&&document.activeElement?.id==='bAdd')showSug()};visualViewport.addEventListener('resize',vr);visualViewport.addEventListener('scroll',vr)}
-function hideSug(){const box=$('bSug');if(box)box.hidden=true;sugIdx=-1;$('bAdd')?.setAttribute('aria-expanded','false')}
+function hideSug(){const box=$('bSug');SUGF=false;if(box)box.hidden=true;sugIdx=-1;$('bAdd')?.setAttribute('aria-expanded','false')}
 function pickSug(t){if(S.b.rows.some(r=>r.t===t)){toast(t+' is already added');return}S.bDraft=t;bAddTicker();setTimeout(showSug,30)}
 document.addEventListener('focusin',e=>{if(e.target.id==='bAdd'){sugIdx=-1;showSug()}});
 document.addEventListener('focusout',e=>{if(e.target.id==='bAdd')setTimeout(()=>{if(document.activeElement?.id!=='bAdd')hideSug()},150)});
@@ -2092,7 +2094,7 @@ document.addEventListener('click',e=>{
 });
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape'){popPinned=false;hidePop();closeIO()}
-  if(e.target.id==='bAdd'&&(e.key==='ArrowDown'||e.key==='ArrowUp')){e.preventDefault();const n=sugItems(e.target.value).length;if(n){sugIdx=e.key==='ArrowDown'?Math.min(n-1,sugIdx+1):Math.max(-1,sugIdx-1);showSug();$('bSug').querySelector('.act')?.scrollIntoView({block:'nearest'})}}
+  if(e.target.id==='bAdd'&&(e.key==='ArrowDown'||e.key==='ArrowUp')){e.preventDefault();const n=sugItems(e.target.value).length;if(n){sugIdx=e.key==='ArrowDown'?Math.min(n-1,sugIdx+1):Math.max(-1,sugIdx-1);showSug(true);$('bSug').querySelector('.act')?.scrollIntoView({block:'nearest'})}}
   if(e.key==='Escape'&&e.target.id==='bAdd')hideSug();
   if(e.key==='Enter'&&e.target.id==='bAdd'){e.preventDefault();const it=sugIdx>=0?sugItems(e.target.value)[sugIdx]:null;if(it){pickSug(it.t);return}S.bDraft=e.target.value;bAddTicker();setTimeout(showSug,30)}
   if(e.key==='Enter'&&e.target.id==='bName'){e.preventDefault();bSave()}
@@ -2110,7 +2112,7 @@ function daysInput(el,commit){const sc=el.dataset.days;const digits=String(el.va
   if(commit)go();else daysInput._t=setTimeout(go,400)}
 document.addEventListener('input',e=>{const el=e.target;
   if(el.dataset&&el.dataset.days){daysInput(el,false);return}
-  if(el.id==='bAdd'){S.bDraft=el.value;sugIdx=-1;showSug()}
+  if(el.id==='bAdd'){S.bDraft=el.value;sugIdx=-1;SUGF=false;showSug()}
   else if(el.dataset&&el.dataset.paddIn)S.paDraft[el.dataset.paddIn]=el.value;
   else if(el.id==='bName'){S.b.name=el.value;save('b',S.b);updateSave();renderMixLive()}
   else if(el.dataset&&el.dataset.bw!=null){const v=String(el.value).replace(/[^0-9.]/g,'');S.b.rows[+el.dataset.bw].w=v===''?'':Math.round(parseFloat(v)*100)/100;save('b',S.b);updateSave();renderMixLive()}
