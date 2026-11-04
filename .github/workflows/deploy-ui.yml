@@ -38,6 +38,8 @@ jobs:
           name: pages-site
           path: _site
           if_no_artifact_found: fail
+          # the backup run that the gate skips still counts as a success but has no site, so look past it
+          search_artifacts: true
 
       # Swap in the page this push changed; everything else is the refresh's output, untouched.
       - name: Swap in the new page
