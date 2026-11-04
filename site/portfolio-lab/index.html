@@ -851,8 +851,24 @@ header.top{display:none!important}
 .xidock>.xcard .xfdesc{-webkit-line-clamp:3;min-height:calc(3 * 1.55em)}.xidock>.xcard .xfdesc.open{-webkit-line-clamp:unset;display:block}
 #xCardDock .xcard .xfdesc{-webkit-line-clamp:3}#xCardDock .xcard .xfdesc.open{-webkit-line-clamp:unset;display:block}
 .xmore{align-self:flex-start;border:0;background:none;padding:0;margin-top:-6px;font:500 12.5px "IBM Plex Sans",sans-serif;color:var(--muted);text-decoration:underline;text-underline-offset:3px;cursor:pointer}.xmore:hover{color:var(--ink)}.xmore.off{visibility:hidden}
+.mrng{display:none}
+@media (max-width:640px){
+  /* header: title with the date under it, the ⋯ menu beside them; the range row moves under the chart */
+  .bbrand{flex-direction:column!important;align-items:flex-start!important;gap:2px!important;padding-right:56px!important}.bbrand .asof{font-size:12px}
+  #builder .bheadwrap{position:relative}#builder .bacts{position:absolute!important;top:12px;right:16px}
+  #builder .bacts .picker,#builder .bacts .iob,#builder #bClear{display:none!important}
+  .mrng{display:flex;gap:2px;background:var(--panel2);border-radius:10px;padding:3px;margin:8px 0 6px;min-height:40px;align-items:center}
+  .mrng>button{flex:1;border:0;background:transparent;color:var(--ink2);font:600 13px "IBM Plex Mono",monospace;padding:8px 0;border-radius:7px;min-width:0}
+  .mrng>button[aria-pressed="true"]{background:var(--panel);color:var(--ink);box-shadow:0 0 0 1px var(--line)}
+  .mrng .mdays{flex:1;display:flex;align-items:center;justify-content:center;gap:10px;font:500 14px "IBM Plex Sans",sans-serif;color:var(--ink2)}
+  .mrng .mdays input{width:84px;height:32px;text-align:center;font:600 15px "IBM Plex Mono",monospace}
+  .mrng .mdx{flex:none;width:40px;height:32px;border:0;background:transparent;color:var(--muted);font-size:16px}
+  /* the table's second column is Sharpe, with its i */
+  #bTable th.bm-sharpe,#bTable td.bm-sharpe{display:table-cell!important}
+}
 /* a portfolio's own card has no flip side to stretch into, so its line chart gets a real height */
 #xCardDock .xcard:not(.xflipcard) .xspark svg,#xPopDock .xcard:not(.xflipcard) .xspark svg{height:clamp(90px,14vh,150px)}
+#xPopDock .xcard:has(.xkey) .xspark svg{height:clamp(90px,14vh,150px)!important;min-height:90px!important}
 #tkPrev{position:absolute;z-index:60;width:290px;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:0 14px 34px rgba(0,0,0,.28);padding:12px 14px;display:flex;flex-direction:column;gap:6px;pointer-events:none;font-family:"IBM Plex Sans",sans-serif}
 #tkPrev[hidden]{display:none}#tkPrev .t b{font:700 16px "IBM Plex Mono",monospace;color:var(--ink);margin-right:8px}#tkPrev .t span{font-size:12.5px;color:var(--muted)}
 #tkPrev{width:380px}#tkPrev .lbl{font:600 10px "IBM Plex Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:4px}
@@ -1194,7 +1210,7 @@ tr.xecho>td{background:var(--accentBg);transition:background .2s}
       <div class="bgrid">
         <div class="bleft">
           
-          <div class="pgrid bcgrid"><div class="chartbox" id="bChartbox"><svg id="bChart" role="img" aria-label="ETF comparison"></svg><div class="tip" id="bTip" hidden></div></div><aside class="prail" aria-label="Chart lines"><span class="cap" id="bListCap"></span><span class="sub" id="bChartCap" style="font-size:12px;margin:-2px 0 4px"></span><div id="bList" class="plist"></div></aside></div>
+          <div class="pgrid bcgrid"><div class="chartbox" id="bChartbox"><svg id="bChart" role="img" aria-label="ETF comparison"></svg><div class="tip" id="bTip" hidden></div></div><aside class="prail" aria-label="Chart lines"><span class="cap" id="bListCap"></span><span class="sub" id="bChartCap" style="font-size:12px;margin:-2px 0 4px"></span><div id="bList" class="plist"></div></aside></div><div class="mrng" id="bPeriodM" role="group" aria-label="Time period"></div>
           <div class="bstrip" id="bStrip"></div><div class="tablewrap"><table id="bTable" class="btable"></table></div>
         </div>
       </div>
@@ -1583,7 +1599,14 @@ document.addEventListener('click',e=>{const sp=e.target.closest('.daysbox>span')
 function renderPicker(sc){const sel=selOf(sc);if(sel.d)LASTD[sc]=sel.d;const seg=$(sc+'Period');if(!seg)return;
   seg.innerHTML=PRESETS.map(([p])=>`<button type="button" data-psel="${p}" data-scope="${sc}" aria-pressed="${sel.p===p}">${p}</button>`).join('');
 
-  const inp=$(sc+'Days');if(inp&&document.activeElement!==inp)inp.value=sel.d?String(sel.d):(LASTD[sc]?String(LASTD[sc]):'');inp&&inp.closest('.daysbox').classList.toggle('on',!!sel.d)}
+  const inp=$(sc+'Days');if(inp&&document.activeElement!==inp)inp.value=sel.d?String(sel.d):(LASTD[sc]?String(LASTD[sc]):'');inp&&inp.closest('.daysbox').classList.toggle('on',!!sel.d);
+  /* phones: the same choices in one row under the chart; Days turns the row into a number box */
+  const m=sc==='b'&&$('bPeriodM');if(!m||(MDAYS&&document.activeElement&&document.activeElement.id==='bDaysM'))return;
+  m.innerHTML=MDAYS?`<label class="mdays" for="bDaysM"><span>Last</span><input class="field" id="bDaysM" data-days="b" inputmode="numeric" enterkeyhint="done" autocomplete="off" maxlength="4" placeholder="#" value="${sel.d||''}"><span>days</span></label><button type="button" class="mdx" data-mdaysx aria-label="Back to the presets">✕</button>`
+    :PRESETS.map(([p])=>`<button type="button" data-psel="${p}" data-scope="b" aria-pressed="${sel.p===p}">${p}</button>`).join('')+`<button type="button" data-mdays aria-pressed="${!!sel.d}">${sel.d?sel.d+'D':'Days'}</button>`}
+let MDAYS=false;
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-mdays],[data-mdaysx]');if(!b)return;
+  if(b.hasAttribute('data-mdays')){MDAYS=true;renderPicker('b');setTimeout(()=>{const i=$('bDaysM');if(i)i.focus()},0)}else{MDAYS=false;renderPicker('b')}});
 /* the less-used periods and the custom days box live under More; Import, Export and Clear under the ⋯ menu */
 const BXTRA=['3M','6M','10Y'];
 function bMenusInit(){return;const m=$('bDaysSlot'),f=document.querySelector('#bActs .picker>.dform'),i=document.querySelector('#bActs .picker>.vinfo');if(m&&f){m.appendChild(f);if(i)m.appendChild(i)}}
@@ -2100,12 +2123,12 @@ document.addEventListener('keydown',e=>{
   if(e.key==='Escape'&&e.target.id==='bAdd')hideSug();
   if(e.key==='Enter'&&e.target.id==='bAdd'){e.preventDefault();const it=sugIdx>=0?sugItems(e.target.value)[sugIdx]:null;if(it){pickSug(it.t);return}S.bDraft=e.target.value;bAddTicker();setTimeout(showSug,30)}
   if(e.key==='Enter'&&e.target.id==='bName'){e.preventDefault();bSave()}
-  if(e.key==='Enter'&&e.target.dataset&&e.target.dataset.days){e.preventDefault();daysInput(e.target,true);if(!FINE)e.target.blur()}
+  if(e.key==='Enter'&&e.target.dataset&&e.target.dataset.days){e.preventDefault();daysInput(e.target,true);if(e.target.id==='bDaysM'){MDAYS=false;e.target.blur();renderPicker('b');return}if(!FINE)e.target.blur()}
   if(e.key==='Enter'&&e.target.dataset&&e.target.dataset.paddIn){e.preventDefault();S.paDraft[e.target.dataset.paddIn]=e.target.value;pAddTicker(e.target.dataset.paddIn)}
 });
 const DSNAP={};
 document.addEventListener('focusin',e=>{const el=e.target;if(!el.dataset||!el.dataset.days)return;const sc=el.dataset.days;DSNAP[sc]={sel:{...selOf(sc)},val:el.value};el.value=''});
-document.addEventListener('focusout',e=>{const el=e.target;if(!el.dataset||!el.dataset.days)return;const sc=el.dataset.days,snap=DSNAP[sc];delete DSNAP[sc];
+document.addEventListener('focusout',e=>{const el=e.target;if(!el.dataset||!el.dataset.days)return;if(el.id==='bDaysM'&&MDAYS){MDAYS=false;setTimeout(()=>renderPicker('b'),0)}const sc=el.dataset.days,snap=DSNAP[sc];delete DSNAP[sc];
   if(String(el.value).trim()!==''||!snap)return;clearTimeout(daysInput._t);el.value=snap.val;
   const cur=selOf(sc);if(JSON.stringify(cur)!==JSON.stringify(snap.sel))setSel(sc,snap.sel);else renderPicker(sc)});
 function daysInput(el,commit){const sc=el.dataset.days;const digits=String(el.value).replace(/\D/g,'');if(digits!==el.value)el.value=digits;
