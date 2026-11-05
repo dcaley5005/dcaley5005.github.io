@@ -2864,10 +2864,10 @@ function xChartTip(t,on){if(!on&&XM.sel){t=XM.sel;on=true}
   const leg=document.querySelector('#xmBody .xlegend'),wdock=$('xCardDock'),pop=$('xCardPop'),pdock=$('xPopDock'),mob=ph0()&&!!pdock,dock=mob?pdock:wdock,svg=document.querySelector('#xmBody .xfig svg');const p=on?xFind(t):null;
   if(svg){svg.querySelectorAll('.xpt').forEach(g=>g.classList.toggle('pinned',!!XM.sel&&g.dataset.xt===XM.sel));const bt=rest&&xBestT(XM.d);svg.querySelectorAll('.xpt').forEach(g=>g.classList.toggle('xbestpt',!!bt&&g.dataset.xt===bt))}
   const ptS=k=>k?`#xmBody .xfig .xpt[data-xt="${CSS.escape(k.split('|')[0])}"]`:'';
-  if(!dock||!leg||!p){if(wdock&&!wdock.hidden){wdock.hidden=true;wdock.innerHTML='';wdock.dataset.t=''}if(pop&&!pop.hidden){xPopOut(pop,xSrcRect(pop.dataset.src));pop.hidden=true;if(pdock){pdock.innerHTML='';pdock.dataset.t=''}}if(leg)leg.classList.remove('showcard');xMatchH();return xTipBase(t,on)}
+  if(!dock||!leg||!p){if(wdock&&!wdock.hidden){wdock.hidden=true;wdock.innerHTML='';wdock.dataset.t='';wdock._drawn=null}if(pop&&!pop.hidden){xPopOut(pop,xSrcRect(pop.dataset.src));pop.hidden=true;if(pdock){pdock.innerHTML='';pdock.dataset.t='';pdock._drawn=null}}if(leg)leg.classList.remove('showcard');xMatchH();return xTipBase(t,on)}
   xTipBase(t,false);if(svg){svg.querySelector('.xdots').classList.toggle('xfade',!rest);svg.querySelectorAll('.xpt').forEach(g=>g.classList.toggle('on',!rest&&g.dataset.xt===t))}
   const dk=t+(rest?'|rest':''),wasT=dock.dataset.t,wasHid=mob?pop.hidden:wdock.hidden;let chg=false;if(dock.dataset.t!==dk){chg=true;XM.restKey=p.k==='self'&&XM.tab==='alt';dock.innerHTML=p.k==='self'?xSelfCard(XM.d.self):xCard(p,XM.d.self,p.k,true);XM.restKey=false;dock.dataset.t=dk}dock.firstElementChild.classList.toggle('hl',XM.sel===t);if(mob)pop.hidden=false;else{wdock.hidden=false;leg.classList.add('showcard')}
-  if(chg&&(mob||XM.sel===t))xRevealSvg(dock.querySelector('.xspark svg'),700,mob&&wasHid?260:80);
+  if(chg)xDrawCard(dock,dk,mob&&wasHid?260:80);
   if(mob){const sel=XM.popSrc||ptS(dk);XM.popSrc=null;if(wasHid||chg)pop.dataset.src=sel;if(wasHid&&!XREDUCE.matches&&pop.animate){pop.animate([{opacity:0},{opacity:1}],{duration:200,easing:'ease-out'});xGrowIn(dock.firstElementChild,xSrcRect(sel))}}else if(!mob&&chg&&wasT&&!wasHid)xSwapIn(dock.firstElementChild);renderXMButtons();xDescFill(dock.firstElementChild);xMoreSync(dock);xMatchH();if(!mob&&XM.sel===t)xGrowModal()}
 /* the card and the chart box share one height */
 function xMatchH(){const fig=document.querySelector('#xmBody .xfig'),dock=$('xCardDock'),c=dock&&!dock.hidden&&dock.firstElementChild;if(!fig||!c||ph0())return;const fr=c.querySelector('.xface.fr');let need=0;if(fr)need=fr.scrollHeight+(c.offsetHeight-fr.clientHeight);const h0=c.style.height?c.offsetHeight:0,h1=Math.max(fig.offsetHeight,need);c.style.height=h1+'px';
@@ -3185,6 +3185,10 @@ document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest
    or industry; going finer, each sector splits back into its stocks. Tiles with no match just fade. */
 function xTmKeys(d){const top=d.top||[],bySt={},indSec={};top.forEach(c=>{const sk=XYSEC[c.sec]||c.sec||'';if(c.t)bySt[c.t]={sec:sk,ind:c.ind||''};if(c.ind)indSec[c.ind]=sk});
   return ht=>{if(!ht)return null;let m=ht.match(/^~g:(sec|ind):(.*)$/);if(m)return m[1]==='sec'?{sec:m[2],ind:null}:{sec:indSec[m[2]]||null,ind:m[2]};return bySt[ht]||null}}
+/* a card's line draws in whenever a new card shows (hover or tap) and when its prices arrive;
+   the same card again (hover, then click) doesn't redraw, and a period change glides instead */
+function xDrawCard(dock,base,delay){const svg=dock.querySelector('.xspark:not(.xwait) svg');if(!svg)return;if(XM.noReveal){dock._drawn=base;return}
+  if(dock._drawn===base)return;dock._drawn=base;xRevealSvg(svg,700,delay)}
 function xTmMorph(host,sel,paint){if(XREDUCE.matches||!host.animate){paint();return}
   const rect=el=>({x:el.offsetLeft,y:el.offsetTop,w:el.offsetWidth,h:el.offsetHeight}),box=r=>({left:r.x+'px',top:r.y+'px',width:Math.max(0,r.w)+'px',height:Math.max(0,r.h)+'px'});
   const old=new Map();host.querySelectorAll(sel).forEach(el=>{const k=el.dataset.ht||el.dataset.tip;if(k)old.set(k,{el,r:rect(el),bg:getComputedStyle(el).backgroundColor})});
@@ -3240,7 +3244,7 @@ function xinTip(t,on){const dock=$('xInDock'),d=XM.d;if(!dock||!d)return;const s
   const tm=$('xTm');if(tm){tm.classList.toggle('fade',!!show);tm.querySelectorAll('.xtile[data-ht]').forEach(x=>x.classList.toggle('on',x.dataset.ht===show))}
   const c=show?xFind(show):null,key=c?show+(XM.sel===show?'*':''):'';if(dock.dataset.t===key)return;
   const tlS=k=>k?`#xTm>.xtile[data-ht="${CSS.escape(k.replace(/\*$/,''))}"]`:'',pop0=$('xInPop'),prevK=dock.dataset.t;if(pop0&&!pop0.hidden&&!c)xPopOut(pop0,xSrcRect(pop0.dataset.src||tlS(prevK)));
-  dock.innerHTML=c?(c.k==='rest'?xRestCard(d):c.k==='grp'?xGrpCard(c,d):xHoldCard(c,d.self)):xAboutCard(d);dock.dataset.t=key;if(!XM.noReveal&&($('xInPop')||key.endsWith('*')))xRevealSvg(dock.querySelector('.xspark svg'),700,$('xInPop')&&c?260:80);
+  dock.innerHTML=c?(c.k==='rest'?xRestCard(d):c.k==='grp'?xGrpCard(c,d):xHoldCard(c,d.self)):xAboutCard(d);dock.dataset.t=key;xDrawCard(dock,key.replace(/\*$/,''),$('xInPop')&&c?260:80);
   const pop=$('xInPop');if(pop){if(c&&dock.firstElementChild)dock.firstElementChild.insertAdjacentHTML('afterbegin',xFaceX());const was=pop.hidden;pop.hidden=!c;
     if(c)pop.dataset.src=tlS(show);if(c&&was&&!XREDUCE.matches&&pop.animate){pop.animate([{opacity:0},{opacity:1}],{duration:200,easing:'ease-out'});xGrowIn(dock.firstElementChild,xSrcRect(tlS(show)))}}
   else if(prevK!==undefined&&prevK!=='~'&&!XM.tabAnim)xSwapIn(dock.firstElementChild);
