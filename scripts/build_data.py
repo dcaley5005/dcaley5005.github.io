@@ -43,8 +43,8 @@ OUT = OUT_SITE / "portfolio-lab" / "data"
 UNIVERSE_FILE = ROOT / "data" / "universe.json"
 FUND_FILE = ROOT / "data" / "fund_info.json"
 FUND_FIELDS = ["aum", "er", "er_ann", "vol", "px", "cat", "fam", "type", "inc", "asof"]
-FUND_MAX_AGE_DAYS = 7
-FUND_MINUTES = float(os.environ.get("FUND_INFO_MINUTES", "30"))
+FUND_MAX_AGE_DAYS = 14   # fees, size and category barely move; the weekly run refreshes about half each Saturday
+FUND_MINUTES = float(os.environ.get("FUND_INFO_MINUTES", "0") or 0)   # 0 on weeknights: prices only
 LIVE = "https://danielcaley.com/portfolio-lab/data"  # previous deploy, used as a fallback
 
 UNIVERSE_SIZE = int(os.environ.get("UNIVERSE_SIZE", "0"))  # 0 = every non-leveraged ETF
@@ -400,7 +400,8 @@ def build_whats_inside(series, names, fund):
     log(f"Holding prices: {len(prices)} of {len(syms)}")
     # symbols Yahoo didn't know: try the other exchange code, the country's code, or today's US ticker
     full_syms = {s for d in nport.values() for s, _ in (d.get("full") or {}).get("h", [])}
-    found = H.resolve_symbols(nport, sorted((full_syms - set(prices)) & H.FAILED_NOW), start)
+    # (weekly only: on weeknights the saved renames from data/sym_alias.json are still applied in load_nport)
+    found = H.resolve_symbols(nport, sorted((full_syms - set(prices)) & H.FAILED_NOW), start) if H.WEEKLY else {}
     if found:
         H.apply_alias(nport, {a: b for a, (b, _) in found.items()})
         for a, (b, ser) in found.items():
@@ -411,8 +412,49 @@ def build_whats_inside(series, names, fund):
     # (by how much of the funds they make up, so NVIDIA and Apple come before small names)
     order = sorted((x for x in syms if x in prices), key=lambda x: (x not in pri, -pri.get(x, 0), x))
     stocks = H.update_stocks(syms, refresh=order)
-    H.save_pull_status()
+    H.log_pull_summary()
     H.build_inside(OUT / "inside", series, hold, stocks, prices, names, fund, nport)
+    write_descriptions(OUT / "desc.json", stocks, set(prices))
+
+
+ABBR = re.compile(r"\b(?:Inc|Corp|Co|Ltd|Plc|plc|Bhd|Tbk|Cos|Bros|Mfg|Intl|No|St|Mr|Dr|Jr|Sr|U\.S|S\.A|N\.V|A\.G|S\.p\.A)\.$")
+
+
+VERB = re.compile(r"^(?:.{0,90}?)\b(operates|designs|provides|engages|offers|manufactures|develops|focuses|owns|produces|"
+                  r"explores|sells|invests|specializes|acquires|distributes|researches|delivers|creates|builds|makes|"
+                  r"serves|is|are|operates|discovers|generates|transmits|leases|explores|markets|retails|holds|seeks|tracks)\b")
+GEO = re.compile(r"\s+(?:primarily\s+)?(?:in|across|throughout)\s+(?:the\s+)?[A-Z][\w.'-]*(?:\s+[A-Z][\w.'-]*)*(?=,|\s+and\b|$).*$"
+                 r"|\s+(?:worldwide|internationally|globally)$")
+
+
+def short_desc(ds, cap=120):
+    """One line about what the company does, from Yahoo's summary: its first sentence ("Inc." isn't a sentence
+    end), without the company's own name up front or the list of countries at the end."""
+    ds = " ".join((ds or "").split())
+    if not ds:
+        return ""
+    end = None
+    for m in re.finditer(r"\.(?=\s+[A-Z])", ds):
+        if not ABBR.search(ds[:m.end()]):
+            end = m.end()
+            break
+    s = (ds[:end] if end else ds).rstrip(".")
+    m = VERB.search(s)
+    if m and m.start(1) > 0:
+        s = s[m.start(1):]
+    s = GEO.sub("", s).rstrip(" ,;:")
+    s = re.sub(r"^(?:is|are)\s+", "", s)
+    s = re.sub(r"(?:\s+(?:and|or|in|of|the|primarily))+$", "", s).rstrip(" ,;:")
+    if len(s) > cap:
+        s = s[:cap].rsplit(" ", 1)[0].rstrip(",;:") + "…"
+    return s[:1].upper() + s[1:] if s else ""
+
+
+def write_descriptions(path, stocks, have):
+    """data/desc.json: a one-line description per holding, for the holdings card (loaded when first needed)."""
+    out = {s: d for s, v in stocks.items() if s in have and (d := short_desc(v.get("ds")))}
+    path.write_text(json.dumps(out, separators=(",", ":"), ensure_ascii=False))
+    log(f"Descriptions: {len(out)} holdings")
 
 
 def load_universe():

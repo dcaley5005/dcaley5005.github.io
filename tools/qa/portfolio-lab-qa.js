@@ -275,8 +275,9 @@ async function run() {
     try { await runSize(br, z, sc) } catch (e) { check(z[0] + (sc === 'dark' ? '-dark' : ''), 'Page', 'Test run finished', false, String(e.message || e).slice(0, 200)) } } };
   await Promise.all(Array.from({ length: Math.max(1, CONC) }, lane));
   await br.close(); if (srv) srv.close();
-  /* a missing page-wide file is a real problem; a missing per-fund file usually means the local data copy is partial */
-  const nf = miss.filter(u => !/favicon/.test(u)), core = nf.filter(u => !/\/data\/(inside|peers|stock|t|grp)\//.test(u)), fund = nf.length - core.length;
+  /* a missing page-wide file is a real problem; a missing per-fund file usually means the local data copy is partial.
+     desc.json is optional (the holdings card falls back to industry and sector without it) */
+  const nf = miss.filter(u => !/favicon/.test(u)), core = nf.filter(u => !/\/data\/(inside|peers|stock|t|grp)\//.test(u) && !/\/data\/desc\.json$/.test(u)), fund = nf.length - core.length;
   if (ROOT || LIVE) { check('all', 'Data', 'No missing page-wide files', core.length === 0, core.slice(0, 5).join(', '));
     if (fund) check('all', 'Data', 'Per-fund files', null, `${fund} not in this data copy, so cards for those funds ran without their details`); }
   const fail = results.filter(r => r.ok === false), un = results.filter(r => r.ok === null);

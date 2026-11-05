@@ -9,10 +9,17 @@ on:
     # Backup the next morning, only if the evening run didn't happen or failed (the gate job checks).
     # A run that lands while the market is open leaves out today's part-day price (drop_open_day).
     - cron: "17 12 * * 2-6"
+    # Weekly, Saturday morning Pacific: also rechecks the slow-changing data (fund details, holdings,
+    # company details, renamed tickers). Weeknight runs only refresh prices.
+    - cron: "47 15 * * 6"
   workflow_dispatch:
     inputs:
       rebuild_universe:
         description: "Re-rank the ETF list now"
+        type: boolean
+        default: false
+      weekly:
+        description: "Also recheck fund details, holdings and company details (the Saturday refresh)"
         type: boolean
         default: false
   push:
@@ -82,12 +89,12 @@ jobs:
         run: python scripts/build_data.py
         env:
           REBUILD_UNIVERSE: ${{ inputs.rebuild_universe }}
-          # A push that only changes the site reuses the saved fund details and holdings instead of
-          # refreshing them from Yahoo, so it deploys in minutes; scheduled and manual runs refresh as usual.
-          FUND_INFO_MINUTES: ${{ github.event_name == 'push' && '0' || '30' }}
-          HOLDINGS_MINUTES: ${{ github.event_name == 'push' && '0' || '15' }}
-          # scheduled and manual runs take their pace from data/pull_status.json, which adjusts itself
-          STOCK_INFO_MINUTES: ${{ github.event_name == 'push' && '0' || 'auto' }}
+          # Weeknights (and pushes) refresh prices only and reuse the saved fund details, holdings and
+          # company details; the Saturday run (or a manual run with "weekly" ticked) rechecks those too.
+          REFRESH_KIND: ${{ (github.event.schedule == '47 15 * * 6' || inputs.weekly) && 'weekly' || 'nightly' }}
+          FUND_INFO_MINUTES: ${{ (github.event.schedule == '47 15 * * 6' || inputs.weekly) && '30' || '0' }}
+          HOLDINGS_MINUTES: ${{ (github.event.schedule == '47 15 * * 6' || inputs.weekly) && '20' || '0' }}
+          STOCK_INFO_MINUTES: ${{ (github.event.schedule == '47 15 * * 6' || inputs.weekly) && '15' || '0' }}
 
       - name: Save the ETF list, fund details and holdings if they changed
         run: |
@@ -97,7 +104,6 @@ jobs:
           [ -f data/fund_info.json ] && git add data/fund_info.json
           [ -f data/holdings.json ] && git add data/holdings.json
           [ -f data/stocks.json ] && git add data/stocks.json
-          [ -f data/pull_status.json ] && git add data/pull_status.json
           [ -f data/sym_alias.json ] && git add data/sym_alias.json
           # main may have moved while this ran (a site push or the SEC update), so catch up before pushing
           git diff --cached --quiet || (git commit -m "Update ETF list and fund details" && git pull --rebase origin main && git push)
