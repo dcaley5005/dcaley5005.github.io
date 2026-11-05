@@ -2833,7 +2833,7 @@ function xSetRange(k){XM.rng=k;XM.rngSet=1;document.querySelectorAll('.xbk-body'
   document.querySelectorAll('#xmBody [data-xrng]').forEach(b=>{const on=b.dataset.xrng===k;b.classList.toggle('sel',on);b.setAttribute('aria-pressed',on)});{const w=document.querySelector('#xmBody .xgwrap');if(w&&w._h0&&!XGMINI())xgPaint(w,XG.cur);if(w&&XGMINI())setTimeout(()=>xgSync(true),0)}
   document.querySelectorAll('#xmBody .xcard').forEach(card=>{const c=xFind(card.dataset.xc);const rk=card.querySelector('.xrisk'),lb=card.querySelector('.xrlr'),hr=card.querySelector('.xhero');if(c&&rk)rk.innerHTML=xRiskTiles(c,d.self,XM.tab==='alt');if(lb)lb.textContent=`Risk vs ${d.self.t} · ${xRngLbl()}`;if(c&&hr&&['self','same','div','mom','own'].includes(c.k))hr.outerHTML=xHero(c,d.self,c.k)});
   {const T=$('xCmp');if(T){T.innerHTML=xCmpTable();renderXMButtons()}}
-  const rs=xRisk(d.self),gs=$('xgSh'),gd=$('xgDd');if(gs)gs.innerHTML=`<span>Sharpe</span><b>${rs.sh==null?'—':rs.sh.toFixed(2)}</b>`;if(gd)gd.innerHTML=`<span>Max DD</span><b>${xu(rs.dd)}</b>`;if(XM.tab!=='in'){xMatchH();xFitNow()}if(XM.tab==='in'){xinPaint();const dk=$('xInDock');if(dk){dk.dataset.t='~';xinTip(null,false)}const ti=$('xtmTitle');if(ti)ti.title=xinNote()}}
+  const rs=xRisk(d.self),gs=$('xgSh'),gd=$('xgDd');if(gs)gs.innerHTML=`<span>Sharpe</span><b>${rs.sh==null?'—':rs.sh.toFixed(2)}</b>`;if(gd)gd.innerHTML=`<span>Max DD</span><b>${xu(rs.dd)}</b>`;if(XM.tab!=='in'){xMatchH();xFitNow()}if(XM.tab==='in'){const tm=$('xTm');tm?xTmMorph(tm,'.xtile',()=>xinPaint()):xinPaint();const dk=$('xInDock');if(dk){const olds=[...dk.querySelectorAll('.xspark polyline')].map(p=>p.getAttribute('points'));dk.dataset.t='~';XM.noReveal=1;try{xinTip(null,false)}finally{XM.noReveal=0}if(olds.length&&!XREDUCE.matches){const gl=[];dk.querySelectorAll('.xspark polyline').forEach((p,i)=>{if(olds[i])gl.push({p,from:olds[i]})});if(gl.length)xGlidePolys(gl,460)}}const ti=$('xtmTitle');if(ti)ti.title=xinNote()}}
 /* return vs volatility dot chart */
 function ph0(){return innerWidth<=1000}
 function xChart(d){const s=d.self,seen=new Set();const pts=[{...s,k:'self'}].concat(d.same.map(c=>({...c,k:'same'})),(d.closest||[]).map(c=>({...c,k:'same'})),d.div.map(c=>({...c,k:'div'})),(d.mom||[]).map(c=>({...c,k:'mom'})),(d.own||[]).map(c=>({...c,k:'own'}))).filter(p=>!seen.has(p.t)&&seen.add(p.t));
@@ -3190,6 +3190,16 @@ document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest
    or industry; going finer, each sector splits back into its stocks. Tiles with no match just fade. */
 function xTmKeys(d){const top=d.top||[],bySt={},indSec={};top.forEach(c=>{const sk=XYSEC[c.sec]||c.sec||'';if(c.t)bySt[c.t]={sec:sk,ind:c.ind||''};if(c.ind)indSec[c.ind]=sk});
   return ht=>{if(!ht)return null;let m=ht.match(/^~g:(sec|ind):(.*)$/);if(m)return m[1]==='sec'?{sec:m[2],ind:null}:{sec:indSec[m[2]]||null,ind:m[2]};return bySt[ht]||null}}
+function xTmMorph(host,sel,paint){if(XREDUCE.matches||!host.animate){paint();return}
+  const rect=el=>({x:el.offsetLeft,y:el.offsetTop,w:el.offsetWidth,h:el.offsetHeight}),box=r=>({left:r.x+'px',top:r.y+'px',width:Math.max(0,r.w)+'px',height:Math.max(0,r.h)+'px'});
+  const old=new Map();host.querySelectorAll(sel).forEach(el=>{const k=el.dataset.ht||el.dataset.tip;if(k)old.set(k,{el,r:rect(el),bg:getComputedStyle(el).backgroundColor})});
+  host.querySelectorAll('.xbsl').forEach(l=>l.remove());paint();const D=560,E='cubic-bezier(.65,0,.3,1)',used=new Set();host.classList.add('xswap');
+  host.querySelectorAll(sel).forEach(el=>{const k=el.dataset.ht||el.dataset.tip,o=k&&old.get(k);
+    if(o){used.add(k);const r=rect(el),bg=getComputedStyle(el).backgroundColor;el.animate([{...box(o.r),backgroundColor:o.bg},{...box(r),backgroundColor:bg}],{duration:D,easing:E,fill:'backwards'});[...el.children].forEach(c=>c.animate([{opacity:.0},{opacity:0,offset:.55},{opacity:1}],{duration:D,fill:'backwards'}))}
+    else el.animate([{opacity:0},{opacity:1}],{duration:300,delay:D*.5,fill:'backwards'})});
+  const gone=[...old].filter(([k])=>!used.has(k));if(gone.length){const layer=document.createElement('div');layer.className='xbsl';layer.setAttribute('aria-hidden','true');host.appendChild(layer);
+    gone.forEach(([,o])=>{o.el.style.left=o.r.x+'px';o.el.style.top=o.r.y+'px';o.el.style.width=o.r.w+'px';o.el.style.height=o.r.h+'px';layer.appendChild(o.el);o.el.animate([{opacity:1},{opacity:0}],{duration:240,fill:'forwards'})});setTimeout(()=>layer.remove(),300)}
+  clearTimeout(host._mT);host._mT=setTimeout(()=>host.classList.remove('xswap'),D+40)}
 function xTmSwap(paint,from,to){const tm=$('xTm');if(!tm)return paint();const key=xTmKeys(XM.d||{});xBlockSwap(tm,'.xtile',paint,from,to,el=>key(el.dataset.ht))}
 /* Blocks merge and split like bricks. Going coarser: each piece slides into a packed spot inside its
    group's box and takes the group's colour, then the seams close and it is the group tile; nothing is
@@ -3235,7 +3245,7 @@ function xinTip(t,on){const dock=$('xInDock'),d=XM.d;if(!dock||!d)return;const s
   const tm=$('xTm');if(tm){tm.classList.toggle('fade',!!show);tm.querySelectorAll('.xtile[data-ht]').forEach(x=>x.classList.toggle('on',x.dataset.ht===show))}
   const c=show?xFind(show):null,key=c?show+(XM.sel===show?'*':''):'';if(dock.dataset.t===key)return;
   const tlS=k=>k?`#xTm>.xtile[data-ht="${CSS.escape(k.replace(/\*$/,''))}"]`:'',pop0=$('xInPop'),prevK=dock.dataset.t;if(pop0&&!pop0.hidden&&!c)xPopOut(pop0,xSrcRect(pop0.dataset.src||tlS(prevK)));
-  dock.innerHTML=c?(c.k==='rest'?xRestCard(d):c.k==='grp'?xGrpCard(c,d):xHoldCard(c,d.self)):xAboutCard(d);dock.dataset.t=key;if($('xInPop')||key.endsWith('*'))xRevealSvg(dock.querySelector('.xspark svg'),700,$('xInPop')&&c?260:80);
+  dock.innerHTML=c?(c.k==='rest'?xRestCard(d):c.k==='grp'?xGrpCard(c,d):xHoldCard(c,d.self)):xAboutCard(d);dock.dataset.t=key;if(!XM.noReveal&&($('xInPop')||key.endsWith('*')))xRevealSvg(dock.querySelector('.xspark svg'),700,$('xInPop')&&c?260:80);
   const pop=$('xInPop');if(pop){if(c&&dock.firstElementChild)dock.firstElementChild.insertAdjacentHTML('afterbegin',xFaceX());const was=pop.hidden;pop.hidden=!c;
     if(c)pop.dataset.src=tlS(show);if(c&&was&&!XREDUCE.matches&&pop.animate){pop.animate([{opacity:0},{opacity:1}],{duration:200,easing:'ease-out'});xGrowIn(dock.firstElementChild,xSrcRect(tlS(show)))}}
   else if(prevK!==undefined&&prevK!=='~'&&!XM.tabAnim)xSwapIn(dock.firstElementChild);
