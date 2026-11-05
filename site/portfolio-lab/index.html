@@ -715,7 +715,7 @@ tr.dim .spkbtn{opacity:.5}
   #bPv [data-bclr]{order:-1;border:0!important;background:none!important;padding:0 4px!important;height:28px!important}
   #bPv .btn,#bPv .pvsel{height:42px!important;padding:0 14px;font-size:14px;border-radius:12px}
   #bPv .btn[data-bgrp]{flex:1 1 auto;justify-content:center}
-  body.pvbar{padding-bottom:130px}}
+  body.pvbar{padding-bottom:130px}body.pvbar .toast{bottom:calc(150px + env(safe-area-inset-bottom,0px))}}
 .pvacts .btn{display:inline-flex;gap:7px;align-items:center;height:36px;padding:0 13px;font-size:13px;border-color:var(--inputLine)}
 .pvacts .btn.go{background:var(--accent);border-color:var(--accent);color:var(--panel)}
 .pvacts .btn[data-bgrp]:disabled{opacity:1;cursor:default;font-weight:600;color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,transparent);border-color:var(--accent);animation:pvglow 2s ease-in-out infinite}
@@ -1158,14 +1158,11 @@ tr.xecho>td{background:var(--accentBg);transition:background .2s}
 .xseg button{flex:1;border:0;background:transparent;color:var(--ink2);font:600 13.5px "IBM Plex Sans",sans-serif;padding:7px 4px;border-radius:8px;cursor:pointer}
 .xseg button.sel{background:var(--panel2);color:var(--ink);box-shadow:0 1px 4px rgba(0,0,0,.25)}
 .xftm{position:relative;flex:1 1 auto;min-height:118px;margin-bottom:0}
-.xftile.xfret{color:inherit}.xftile .xfvs{display:block;font-style:normal;font-size:11.5px;opacity:.8;margin-top:auto}
 .xftip.rich{white-space:normal;width:250px;padding:10px 12px;display:flex;flex-direction:column;gap:5px;font-size:12.5px;line-height:1.35}
 .xftip .fth{display:flex;align-items:center;gap:8px}.xftip .fth b{font-size:14px}.xftip .ftd{color:var(--muted)}
 .xftip .ftg{margin-left:auto;font:600 10px "IBM Plex Sans",sans-serif;letter-spacing:.05em;text-transform:uppercase;padding:2px 7px;border-radius:999px;background:var(--panel2);color:var(--muted);white-space:nowrap}.xftip .ftg.up{background:color-mix(in srgb,var(--pos) 16%,transparent);color:var(--pos)}.xftip .ftg.dn{background:color-mix(in srgb,var(--neg) 16%,transparent);color:var(--neg)}
 .xftip .ftl{color:var(--ink2)}.xftip .pos{color:var(--pos)}.xftip .neg{color:var(--neg)}.xftip .ftp{color:var(--ink2)}
-.xftip .ftper{display:grid;grid-template-columns:repeat(6,1fr);gap:2px;border-top:1px solid var(--line);padding-top:6px;margin-top:2px}.xftip .ftper span{display:flex;flex-direction:column;align-items:center;font:500 11px "IBM Plex Mono",monospace;color:var(--ink2)}.xftip .ftper i{font:600 9.5px "IBM Plex Sans",sans-serif;font-style:normal;color:var(--muted)}.xftip .ftper span.on{color:var(--ink);font-weight:700}
 .xdrv{flex:none;font-size:12.5px}.xdrvh{display:flex;align-items:center;gap:8px;font:600 10.5px "IBM Plex Sans",sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}.xdrvh i{font-style:normal;text-transform:none;letter-spacing:0;font-weight:500}
-.xfcol{margin-left:auto;display:inline-flex;border:1px solid var(--line);border-radius:7px;overflow:hidden}.xfcol button{border:0;background:transparent;font:600 10.5px "IBM Plex Sans",sans-serif;color:var(--muted);padding:3px 8px;cursor:pointer;text-transform:none;letter-spacing:0}.xfcol button.sel{background:var(--panel2);color:var(--ink)}
 .xdrv ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}.xdrv li{display:grid;grid-template-columns:10px minmax(0,1fr) auto 72px;align-items:center;gap:8px}.xdrv li .sw{width:10px;height:10px;border-radius:3px}.xdrv li b{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.xdrv li .r{font:500 12px "IBM Plex Mono",monospace;color:var(--muted)}.xdrv li .p{font:600 12px "IBM Plex Mono",monospace;text-align:right}.xdrv li.up .p{color:var(--pos)}.xdrv li.dn .p{color:var(--neg)}
 .xbk-body .xch{padding-right:104px}
 .xgoback{position:absolute;top:12px;right:12px;z-index:4;display:inline-flex;align-items:center;gap:5px;height:34px;padding:0 12px 0 8px;border-radius:99px;border:1px solid var(--inputLine);background:var(--panel);color:var(--ink);font:600 13.5px "IBM Plex Sans",sans-serif;cursor:pointer}
@@ -1583,6 +1580,7 @@ function pfRowsHTML(NC,stripAfter,list){const B=S.b,st0=selStart(B.sel),hp=B.sel
   return h}).join('')}
 let PVAT=0,PVON=false;
 /* 1d: the action strip opens right under the last ticked row, joined to the ticked rows by a green edge */
+addEventListener('resize',()=>{const el=$('bPv');if(el&&(innerWidth<=700)!==(el.parentElement===document.body))renderBTable()});
 function bPvPlace(NC,on){const wrap=$('bTable')&&$('bTable').parentElement;if(!wrap)return;let el=$('bPv');const PH=innerWidth<=700,host=PH?document.body:wrap;
   /* phone: a floating bar at the bottom of the screen (slides up, slides away); bigger screens: over the column headers */
   if(el&&el.parentElement!==host){el.remove();el=null}
@@ -1616,10 +1614,9 @@ let BKEYS=null;
 function bSparks(old){const gl=[],seen=new Set();document.querySelectorAll('#bTable tr').forEach(tr=>{const k=bRowKey(tr),svg=tr.querySelector('.momwrap svg'),p=svg&&svg.querySelector('polyline');if(!k||!p)return;seen.add(k);
     if(BSPG&&old.has(k)){gl.push({p,from:old.get(k)});return}
     /* new sparkline: draw it in; if the table redraws mid-draw, carry on from where it had got to */
-    const now=performance.now(),t0=BSPT.get(k);if(!BSPK||!BSPK.has(k)){BSPT.set(k,now);xRevealSvg(svg,650,120)}
+    const T=bSparks.T||(bSparks.T=new Map()),now=performance.now(),t0=T.get(k);if(!BSPK||!BSPK.has(k)){T.set(k,now);xRevealSvg(svg,650,120)}
     else if(t0&&now-t0<770&&svg.animate&&!XREDUCE.matches){const fr=Math.max(0,Math.min(1,(now-t0-120)/650));svg.animate([{clipPath:`inset(0 ${((1-fr)*100).toFixed(1)}% 0 0)`},{clipPath:'inset(0 0% 0 0)'}],{duration:Math.max(60,770-(now-t0)),easing:'cubic-bezier(.2,0,.25,1)',fill:'backwards'})}});
   BSPG=false;BSPK=seen;if(gl.length)xGlidePolys(gl,520)}
-const BSPT=new Map();
 function bNewRows(){const trs=[...document.querySelectorAll('#bTable tr')],now=new Set();trs.forEach(tr=>{const k=bRowKey(tr);if(k&&k!=='add')now.add(k)});
   if(BKEYS&&document.body.animate&&!matchMedia('(prefers-reduced-motion: reduce)').matches)trs.forEach(tr=>{const k=bRowKey(tr);if(k&&k!=='add'&&!BKEYS.has(k))trAnim(tr,[{opacity:0,transform:'translateX(-18px)'},{opacity:1,transform:'none'}],{duration:260,delay:60,easing:'cubic-bezier(.2,0,0,1)',fill:'backwards'})});BKEYS=now}
 function bRemove(go,keys){const gone=keys||new Set(S.b.rows.filter(r=>r.k).map(r=>'r:'+r.t).concat(S.pfs.filter(p=>p.k).map(p=>'p:'+p.id)));
@@ -2778,9 +2775,8 @@ function xBackFill(card){const body=card.querySelector('.xbk-body');if(!body||bo
     <div class="xseg" role="group" aria-label="Map view"><button type="button" data-xseg="ind" class="sel">Industries</button><button type="button" data-xseg="sec">Sectors</button><button type="button" data-xseg="stk">Top 10 stocks</button></div>
     <div class="xftm"></div>`;
     body._d=d;xTmPaint(body,'ind');xFitNow()}).catch(()=>{delete body.dataset.done;body.innerHTML=`<p class="xbk-load">Holdings aren't available for ${esc(t)} yet. They're added a slice at a time each night, so check back soon.</p>`})}
-/* MOCK: one-line descriptions for the biggest companies (the real version would come from the nightly data) */
+/* short descriptions for the biggest companies; anything else shows its industry and sector */
 const XDESC={AAPL:'iPhone, Mac and services maker',MSFT:'Windows, Office and the Azure cloud',NVDA:'Chips that power AI and gaming',AMZN:'Online store and AWS cloud',GOOGL:'Google search, YouTube and Google Cloud',GOOG:'Google search, YouTube and Google Cloud',META:'Facebook, Instagram and WhatsApp',AVGO:'Chips and infrastructure software',TSLA:'Electric cars and batteries','BRK-B':'Insurance, railroads and energy under Warren Buffett','BRK.B':'Insurance, railroads and energy under Warren Buffett',JPM:'Largest US bank',LLY:'Drugmaker behind Mounjaro and Zepbound',V:'Card payments network',MA:'Card payments network',UNH:'Health insurer and care provider',XOM:'Oil and gas producer',JNJ:'Medicines and medical devices',WMT:'Discount stores and groceries',PG:'Household brands like Tide and Pampers',HD:'Home-improvement stores',COST:'Membership warehouse stores',ORCL:'Databases and cloud software',ABBV:'Drugmaker behind Humira and Skyrizi',BAC:'Large US bank',KO:'Soft drinks',PEP:'Snacks and soft drinks',CVX:'Oil and gas producer',MRK:'Drugmaker behind Keytruda',CSCO:'Networking equipment',AMD:'Computer and AI chips',CRM:'Sales and customer software',ADBE:'Photoshop and creative software',NFLX:'Streaming video',INTC:'Computer chips',WFC:'Large US bank',PM:'Cigarettes and smoke-free products',IBM:'IT services and software',TMO:'Lab equipment and services',QCOM:'Phone chips',ABT:'Medical devices and diagnostics',GE:'Jet engines',CAT:'Construction and mining machines',TXN:'Analog chips',PLTR:'Data-analysis software',DIS:'Theme parks, films and streaming',INTU:'TurboTax and QuickBooks',GS:'Investment bank',MS:'Investment bank and wealth manager',T:'Phone and internet service',VZ:'Phone and internet service',PFE:'Drugmaker',TSM:'Contract chipmaker',ACN:'Consulting and IT services',MU:'Memory chips'};
-let XFCOL='sec';
 function xTmItems(d,mode){const top=(d.top||[]).filter(c=>c.wt>0),k=xRk();
   const sk=x=>x?XYSEC[x]||x:'',R=c=>c.r?c.r[k]:null;
   if(mode==='stk')return top.slice().sort((a,b)=>b.wt-a.wt).slice(0,10).map(c=>({t:c.t,n:c.n||c.hn||'',w:c.wt,col:xSecCol(c.sec),gs:sk(c.sec),gi:c.ind||'',r:R(c),m:[c],kind:'stk',desc:XDESC[c.t]||[c.ind,XSEC[sk(c.sec)]||c.sec].filter(Boolean).join(' · ')}));
@@ -2814,7 +2810,6 @@ function xTmTipHTML(box,c){const ctx=box._ctx||{},f=ctx.fund,pts=c.pts;
     ${pts!=null&&f!=null?`<div class="ftp">${pts>=0?'Added':'Took away'} <b>${Math.abs(pts).toFixed(1)} pts</b> of the fund's ${xp(f)}</div>`:''}`}
 function xTmTip(tl,on){const box=tl.parentElement,tip=box&&box.querySelector('.xftip');if(!tip)return;if(!on){tip.hidden=true;return}
   const c=box._items&&box._items[+tl.dataset.i];if(c){tip.innerHTML=xTmTipHTML(box,c);tip.classList.add('rich');tip.dataset.k=tl.dataset.tip}else{tip.textContent=tl.dataset.tip;tip.classList.remove('rich')}tip.hidden=false;let x=tl.offsetLeft+tl.offsetWidth/2-tip.offsetWidth/2;x=Math.max(2,Math.min(box.clientWidth-tip.offsetWidth-2,x));let y=tl.offsetTop-tip.offsetHeight-6;if(y<0)y=tl.offsetTop+tl.offsetHeight+6;tip.style.left=x+'px';tip.style.top=y+'px'}
-document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-xfcol]');if(!b)return;XFCOL=b.dataset.xfcol;requestAnimationFrame(()=>document.querySelectorAll('.xbk-body').forEach(body=>{if(body._d)xTmPaint(body,body.dataset.mode||'ind')}))});
 document.addEventListener('click',e=>{if(!e.target.closest)return;
   const fb=e.target.closest('[data-xflip]');if(fb){const card=fb.closest('.xcard'),fl=card&&card.querySelector('.xflip');if(fl)xDoFlip(fl,card);return}
   const sg=e.target.closest('[data-xseg]');if(sg){const body=sg.closest('.xbk-body');if(body){body.querySelectorAll('[data-xseg]').forEach(b=>b.classList.toggle('sel',b===sg));const pm=body.dataset.mode||'ind',m=sg.dataset.xseg;if(pm===m)return;body.dataset.mode=m;body.querySelectorAll('.xftip').forEach(t=>t.hidden=true);const bx=body.querySelector('.xftm');if(bx)xBlockSwap(bx,'.xftile',()=>xTmPaint(body,m),pm,m,el=>({sec:el.dataset.gs||null,ind:el.dataset.gi||null}));else xTmPaint(body,m)}return}
@@ -3427,16 +3422,16 @@ document.addEventListener('click',e=>{{const q=e.target.closest('[data-xpf]');if
 /* touch screens send pretend mouse events with every tap; hover behavior ignores them, so a tap does only what it says */
 let xTouchAt=0;document.addEventListener('touchstart',()=>{xTouchAt=Date.now()},{passive:true,capture:true});
 const xFakeHover=()=>Date.now()-xTouchAt<1000;
-document.addEventListener('mouseover',e=>{if($('xm').hidden||XM.tab!=='in'||xFakeHover())return;const tt=e.target.closest&&e.target.closest('#xmBody .xtile[data-ht]');if(tt)xinTip(tt.dataset.ht,true)});
-document.addEventListener('mouseout',e=>{if($('xm').hidden||XM.tab!=='in'||xFakeHover())return;const tt=e.target.closest&&e.target.closest('#xmBody .xtile[data-ht]');if(tt&&!(e.relatedTarget&&e.relatedTarget.closest&&e.relatedTarget.closest('#xmBody .xtile[data-ht]')))xinTip(tt.dataset.ht,false)});
+document.addEventListener('mouseover',e=>{if($('xm').hidden||XM.tab!=='in'||xFakeHover()||$('xInPop'))return;const tt=e.target.closest&&e.target.closest('#xmBody .xtile[data-ht]');if(tt)xinTip(tt.dataset.ht,true)});
+document.addEventListener('mouseout',e=>{if($('xm').hidden||XM.tab!=='in'||xFakeHover()||$('xInPop'))return;const tt=e.target.closest&&e.target.closest('#xmBody .xtile[data-ht]');if(tt&&!(e.relatedTarget&&e.relatedTarget.closest&&e.relatedTarget.closest('#xmBody .xtile[data-ht]')))xinTip(tt.dataset.ht,false)});
 addEventListener('resize',()=>{if($('xm').hidden||XM.tab!=='in')return;cancelAnimationFrame(XM.rz);XM.rz=requestAnimationFrame(()=>{xinFit();xinPaint()})});
 document.addEventListener('pointerover',e=>{if(!e.target.closest)return;const tr=e.target.closest('tr');const o=e.target.closest('[data-xopen]')||(tr&&tr.querySelector('[data-xopen]'));if(o&&o.dataset.xopen!=='TPS'&&!XDATA[o.dataset.xopen])xLoad(o.dataset.xopen).catch(()=>{});if(e.target.closest('[data-xpf][data-xtab="alt"]')&&!XPOOL)xPoolLoad().catch(()=>{});const L=e.target.closest('[data-xopen][data-xtab="in"]');if(L&&L.dataset.xopen!=='TPS'&&!XIN[L.dataset.xopen])xinLoad(L.dataset.xopen).catch(()=>{})});
 document.addEventListener('keydown',e=>{if($('xm').hidden)return;if(e.key==='Escape'){e.stopPropagation();const pp=$('xCardPop'),ip=$('xInPop');if(pp&&!pp.hidden){const t=XM.sel;XM.sel=null;xChartTip(t,false)}else if(ip&&!ip.hidden){const t=XM.sel;XM.sel=null;xinTip(t,false)}else closeExplore()}
   if(e.key==='Tab'){const f=[...$('xm').querySelectorAll('button:not(:disabled),[tabindex="0"]')].filter(x=>x.offsetParent);if(!f.length)return;const i=f.indexOf(document.activeElement);if(e.shiftKey&&i<=0){e.preventDefault();f[f.length-1].focus()}else if(!e.shiftKey&&i===f.length-1){e.preventDefault();f[0].focus()}}},true);
-document.addEventListener('mouseover',e=>{if($('xm').hidden||xFakeHover())return;const p=e.target.closest('#xmBody .xpt');if(p){xChartTip(p.dataset.xt,true);return}
+document.addEventListener('mouseover',e=>{if($('xm').hidden||xFakeHover()||(ph0()&&$('xPopDock')))return;const p=e.target.closest('#xmBody .xpt');if(p){xChartTip(p.dataset.xt,true);return}
   const lk=e.target.closest('#xmBody .xlegend .li[data-xk]');if(lk){const svg=document.querySelector('#xmBody .xfig svg');if(svg){svg.querySelector('.xdots').classList.add('xfade');svg.querySelectorAll('.xpt').forEach(g=>g.classList.toggle('on',g.dataset.xk===lk.dataset.xk))}return}
   const c=e.target.closest('#xmBody [data-xc]');if(c){const svg=document.querySelector('#xmBody .xfig svg');if(svg){svg.querySelector('.xdots').classList.add('xfade');svg.querySelectorAll('.xpt').forEach(g=>g.classList.toggle('on',g.dataset.xt===c.dataset.xc))}}});
-document.addEventListener('mouseout',e=>{if($('xm').hidden||xFakeHover())return;const p=e.target.closest('#xmBody .xpt');if(p&&!p.contains(e.relatedTarget)){xChartTip(p.dataset.xt,false);return}
+document.addEventListener('mouseout',e=>{if($('xm').hidden||xFakeHover()||(ph0()&&$('xPopDock')))return;const p=e.target.closest('#xmBody .xpt');if(p&&!p.contains(e.relatedTarget)){xChartTip(p.dataset.xt,false);return}
   const lk=e.target.closest('#xmBody .xlegend .li[data-xk]');if(lk&&!lk.contains(e.relatedTarget)){const svg=document.querySelector('#xmBody .xfig svg');if(svg){svg.querySelector('.xdots').classList.remove('xfade');svg.querySelectorAll('.xpt').forEach(g=>g.classList.remove('on'))}return}
   const c=e.target.closest('#xmBody [data-xc]');if(c&&!c.contains(e.relatedTarget)){const svg=document.querySelector('#xmBody .xfig svg');if(svg){svg.querySelector('.xdots').classList.remove('xfade');svg.querySelectorAll('.xpt').forEach(g=>g.classList.remove('on'))}}});
 document.addEventListener('mouseover',e=>{if($('xm').hidden||!XM.d||xFakeHover())return;const r=e.target.closest&&e.target.closest('#xCmp tr[data-xrow]');document.querySelectorAll('#xCmp tr.on').forEach(x=>{if(x!==r)x.classList.remove('on')});if(!r)return;r.classList.add('on');const svg=document.querySelector('#xmBody .xfig svg');if(svg){svg.querySelector('.xdots').classList.add('xfade');svg.querySelectorAll('.xpt').forEach(g=>g.classList.toggle('on',g.dataset.xt===r.dataset.xrow||g.dataset.xt===XM.sel))}});
