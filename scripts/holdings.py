@@ -5,9 +5,9 @@ and the stock/bond/cash split. Per holding: name, sector and industry (cached fo
 since they rarely change) and daily prices, so the site can show a card for each holding
 the same way it does for ETFs.
 
-Kept in the repo so each run only refreshes a slice:
+Kept in the repo and refreshed by the weekly (Saturday) run; weeknight runs only update prices:
   data/holdings.json  per-ETF holdings, refreshed every HOLD_MAX_AGE_DAYS
-  data/stocks.json    per-holding name, sector, industry, refreshed every STOCK_MAX_AGE_DAYS
+  data/stocks.json    per-holding name, sector, industry, description, refreshed every STOCK_MAX_AGE_DAYS
 
 Run directly for a trial on a few ETFs (prints what came back, writes nothing to the repo):
   python scripts/holdings.py XLK SPY AGG
@@ -74,43 +74,26 @@ def _holding_map():
         except Exception:
             _HOLDING_MAP = {}
     return _HOLDING_MAP
-HOLD_MAX_AGE_DAYS = 14
+# Holdings change about monthly and company details hardly at all, so the weekly run rechecks a quarter of the
+# holdings and the oldest company details each Saturday. Weeknight runs set these budgets to 0 (prices only).
+HOLD_MAX_AGE_DAYS = 28
 STOCK_MAX_AGE_DAYS = 120
-HOLD_MINUTES = float(os.environ.get("HOLDINGS_MINUTES", "15"))
-# How much each run pulls is set by data/pull_status.json, which steps itself up while Yahoo answers and
-# backs off when it refuses (see pull_limits and save_pull_status). STOCK_INFO_MINUTES=0 turns lookups off.
-PULL_FILE = ROOT / "data" / "pull_status.json"
-PULL_START = {"new_prices": 1500, "lookup_minutes": 20}
-PULL_MAX = {"new_prices": 2500, "lookup_minutes": 30}
-PULL_MIN = {"new_prices": 600, "lookup_minutes": 10}
+def _minutes(name):
+    try:
+        return float(os.environ.get(name) or 0)
+    except ValueError:
+        return 0.0
+
+
+STOCK_MINUTES = _minutes("STOCK_INFO_MINUTES")
+HOLD_MINUTES = _minutes("HOLDINGS_MINUTES")
+WEEKLY = os.environ.get("REFRESH_KIND", "").lower() == "weekly"
 STATS = {"price_refusals": 0, "lookup_pauses": 0, "new_wanted": 0, "new_got": 0, "lookups_done": 0, "lookups_left": 0}
 
 
-def pull_limits():
-    try:
-        s = json.loads(PULL_FILE.read_text())
-    except Exception:
-        s = {}
-    return {k: s.get(k, v) for k, v in PULL_START.items()}
-
-
-def save_pull_status():
-    """After a run: step up if Yahoo never refused, back off if it did, and keep a short record."""
-    lim = pull_limits()
-    refused = STATS["price_refusals"] + STATS["lookup_pauses"]
-    if not refused and not (STATS["new_wanted"] or STATS["lookups_done"]):
-        return      # nothing was pulled (a site-only run), so nothing to learn from
-    nxt = {}
-    for k in lim:
-        step = 500 if k == "new_prices" else 5
-        nxt[k] = min(PULL_MAX[k], lim[k] + step) if not refused else max(PULL_MIN[k], round(lim[k] * 0.6))
-    rec = {**nxt, "last_run": {"at": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"), "limits": lim, **STATS}}
-    PULL_FILE.write_text(json.dumps(rec, indent=1))
-    log(f"Pull summary: {json.dumps(rec['last_run'])}; next run {nxt}")
-
-
-_env_min = os.environ.get("STOCK_INFO_MINUTES", "auto")
-STOCK_MINUTES = float(_env_min) if _env_min not in ("", "auto") else pull_limits()["lookup_minutes"]
+def log_pull_summary():
+    """One line in the run log about what was pulled (nothing is saved)."""
+    log(f"Pull summary: {json.dumps(STATS)}")
 
 
 def log(*a):
@@ -315,7 +298,8 @@ def download(syms, start):
 PRICE_CACHE = ROOT / ".cache" / "holding_prices.pkl"   # kept by actions/cache, not in git
 FAILED_NOW = set()        # symbols Yahoo returned nothing for, this run or recently (for resolve_symbols)
 PRICE_SLICES = 6          # holdings outside the priority set refresh one slice per run
-NEW_PER_RUN = int(os.environ.get("NEW_HOLDING_PRICES") or pull_limits()["new_prices"])   # first downloads per run
+NEW_PER_RUN = int(os.environ.get("NEW_HOLDING_PRICES") or 600)   # first downloads per run (new holdings are rare now)
+FAILED_SKIP_DAYS = 90     # a symbol Yahoo has no prices for is left alone this long before it's tried again
 
 
 def download_cached(syms, start, priority):
@@ -332,8 +316,8 @@ def download_cached(syms, start, priority):
             log(f"  price cache unreadable ({e}); starting over")
     day = datetime.now(timezone.utc).toordinal()
     cache.pop("__failed__", None)          # the old list blamed symbols for Yahoo's refusals; start over
-    failed = cache.pop("__failed2__", {})  # symbol -> day it last failed; skipped for 30 days
-    failed = {x: d for x, d in failed.items() if day - d < 30}
+    failed = cache.pop("__failed2__", {})  # symbol -> day it last failed; skipped for FAILED_SKIP_DAYS
+    failed = {x: d for x, d in failed.items() if day - d < FAILED_SKIP_DAYS}
     syms = sorted(set(syms))
     rank = priority if isinstance(priority, dict) else {x: 0 for x in priority}
     pri = set(rank) & set(syms)
