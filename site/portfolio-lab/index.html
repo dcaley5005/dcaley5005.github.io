@@ -888,6 +888,11 @@ header.top{display:none!important}
 .xbadge.a{color:var(--warnFg);background:color-mix(in srgb,var(--warnFg) 13%,transparent);border:1px solid color-mix(in srgb,var(--warnFg) 45%,transparent)}
 .xbadge.n{color:var(--muted);border:1px solid var(--line)}
 .xkey{display:flex;flex-direction:column;gap:2px;border-top:1px solid var(--line);padding-top:10px;margin-top:4px}
+.xphk{display:none}
+@media (max-width:700px){.xphk{display:flex;flex-direction:column;gap:12px;margin-top:14px}
+  .xphk .xkey{border:1px solid var(--line);border-radius:14px;background:var(--panel2);padding:14px 16px;margin:0;gap:6px}
+  .xphk .xbestgo{order:-1;margin:0 0 6px}.xphk .xkh{margin-bottom:2px}.xphk .xkr{font-size:14px;padding:5px 6px}
+  .xphh{margin:0;font-size:13px;color:var(--muted);text-align:center}}
 .xkg{display:grid;grid-template-columns:1fr 1fr;column-gap:14px}.xkh span{text-transform:none;letter-spacing:0;font-weight:500}
 .xkh{font:600 10.5px "IBM Plex Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
 .xkr{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink2);padding:3px 6px;margin:0 -6px;border-radius:6px}.xkr b{margin-left:auto;font:600 13px "IBM Plex Mono",monospace;color:var(--ink)}.xkr:hover{background:var(--panel2)}
@@ -1127,7 +1132,7 @@ tr.xecho>td{background:var(--accentBg);transition:background .2s}
 .xflipbtn .xfliparr{margin-left:auto;flex:none;width:34px;height:34px;border-radius:50%;border:1px solid color-mix(in srgb,var(--xo) 55%,transparent);display:flex;align-items:center;justify-content:center;color:var(--xo)}
 .xflipcard .xface .xadd{margin-top:10px;height:60px;border-radius:12px;font-size:16px}
 .xflipcard .xface .xadd{display:flex;align-items:center;gap:12px;padding:10px 14px;text-align:left;border:1px solid color-mix(in srgb,#1faa59 55%,transparent);background:linear-gradient(180deg,color-mix(in srgb,#1faa59 30%,var(--panel2)),color-mix(in srgb,#1faa59 16%,var(--panel2)));color:var(--ink)}
-.xflipcard .xface .xadd .xadic{flex:none;width:38px;height:38px;border-radius:10px;background:color-mix(in srgb,#1faa59 34%,var(--panel));display:flex;align-items:center;justify-content:center;color:#7be2a8}
+.xflipcard .xface .xadd .xadic{flex:none;width:38px;height:38px;border-radius:10px;background:color-mix(in srgb,#1faa59 34%,var(--panel));display:flex;align-items:center;justify-content:center;color:color-mix(in srgb,#1faa59 62%,var(--ink))}
 .xflipcard .xface .xadd.on:hover{font-size:16px}.xflipcard .xface .xadd.on:hover::after{content:none}
 .xbk-body{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;gap:11px}
 .xfdesc{margin:0;font-size:14.5px;line-height:1.55;color:var(--ink);display:-webkit-box;-webkit-line-clamp:6;-webkit-box-orient:vertical;overflow:hidden;flex:none}
@@ -2672,7 +2677,7 @@ function xTmPaintItems(box,items){const W=box.clientWidth,H=box.clientHeight;if(
   const tiles=xSquarify(items.map(x=>({c:x,a:x.w/tw*W*H})),0,0,W,H);
   box.innerHTML=tiles.map(({c,x,y,w,h},i)=>{const pc=c.w*100,p1=pc.toFixed(1)+'%',lab=`${c.t}${c.n?' · '+c.n:''} · ${p1}`;
     const lw=c.t.split(' ').reduce((a,x)=>Math.max(a,x.length),0),bfs=Math.max(9,Math.min(13,(w-22)/(lw*0.68),(w-22)*2/(c.t.length*0.62))),bfs1=Math.min(13,(w-22)/(c.t.length*0.6));const inner=w>=110&&h>=54?`<b style="font-size:${bfs.toFixed(1)}px">${esc(c.t)}</b><i>${p1}</i>${c.n?`<span>${esc(c.n)}</span>`:''}`:w>=54&&h>=54&&bfs1>=9?`<b class="one" style="font-size:${bfs1.toFixed(1)}px">${esc(c.t)}</b><i>${p1}</i>`:w>=36&&h>=22?`<i style="font-size:${Math.max(10,Math.min(12.5,w/3.8)).toFixed(1)}px">${pc<10?p1:Math.round(pc)+'%'}</i>`:'';
-    return `<div class="xftile" data-tip="${esc(lab)}"${c.gs?` data-gs="${esc(c.gs)}"`:''}${c.gi?` data-gi="${esc(c.gi)}"`:''} style="left:${x.toFixed(1)}px;top:${y.toFixed(1)}px;width:${Math.max(0,w-3).toFixed(1)}px;height:${Math.max(0,h-3).toFixed(1)}px;background:${c.col||XSCOL[i%XSCOL.length]}">${inner}</div>`}).join('')+'<div class="xftip" hidden></div>'}
+    return `<div class="xftile" data-tip="${esc(lab)}"${c.gs?` data-gs="${esc(c.gs)}"`:''}${c.gi?` data-gi="${esc(c.gi)}"`:''} style="left:${x.toFixed(1)}px;top:${y.toFixed(1)}px;width:${Math.max(0,w-3).toFixed(1)}px;height:${Math.max(0,h-3).toFixed(1)}px;${w-3<22||h-3<18?'padding:0;':''}background:${c.col||XSCOL[i%XSCOL.length]}">${inner}</div>`}).join('')+'<div class="xftip" hidden></div>'}
 function xTmTip(tl,on){const box=tl.parentElement,tip=box&&box.querySelector('.xftip');if(!tip)return;if(!on){tip.hidden=true;return}
   tip.textContent=tl.dataset.tip;tip.hidden=false;let x=tl.offsetLeft+tl.offsetWidth/2-tip.offsetWidth/2;x=Math.max(2,Math.min(box.clientWidth-tip.offsetWidth-2,x));let y=tl.offsetTop-tip.offsetHeight-6;if(y<0)y=tl.offsetTop+tl.offsetHeight+6;tip.style.left=x+'px';tip.style.top=y+'px'}
 document.addEventListener('click',e=>{if(!e.target.closest)return;
@@ -2821,6 +2826,7 @@ function renderXM(){const b=$('xmBody');renderXMFoot();XM.chH=null;xSizeModal();
   xSetGlance('');xSizeModal();
   b.innerHTML=`<div class="xtop">${xChart(d)}<div class="xlegend"><div class="li"><svg width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="6" fill="var(--ink)"/></svg><span>${esc(t)}, ${d.pf?'your portfolio':'the ETF you clicked'}</span></div><div class="li" data-xk="same"><svg width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="6" fill="var(--xs)"/></svg><span>More return</span></div><div class="li" data-xk="div"><svg width="14" height="14" aria-hidden="true"><rect x="1" y="1" width="12" height="12" fill="var(--xd)"/></svg><span>Smoother ride</span></div>${d.mom?`<div class="li" data-xk="mom"><svg width="14" height="14" aria-hidden="true"><path d="M7 1L13 12H1Z" fill="var(--xm)"/></svg><span>Hot streak</span></div>`:''}<div class="li" data-xk="own"><svg width="14" height="14" aria-hidden="true"><path d="M7 1L13 7L7 13L1 7Z" fill="var(--xo)"/></svg><span>Diversifier</span></div>
     <div class="xcdock" id="xCardDock" hidden></div><div class="xsteps"><b class="xsth">How to use this</b><ol><li><span>${matchMedia('(hover:none)').matches?'Tap':'Click'} any shape on the chart to open its card.</span></li><li><span>Compare its returns and risk with ${esc(t)}.</span></li><li><span>Like it? Hit <b>Add to Portfolio</b> to add it to your portfolio.</span></li></ol><span class="xstf">Picked from ${d.pool.toLocaleString()} ETFs.</span></div></div></div>
+    <div class="xphk">${xKey()}<p class="xphh">${matchMedia('(hover:none)').matches?'Tap':'Click'} any shape to see how it compares. Picked from ${d.pool.toLocaleString()} ETFs.</p></div>
     <div class="xpop" id="xCardPop" hidden><div class="xpopwrap"><div class="xpopdock" id="xPopDock"></div></div></div>
     `;
   renderXMButtons();xgSync(true);xFitChart();if(!ph0())requestAnimationFrame(()=>{if(XM.tab==='alt'&&!XM.sel)xChartTip(null,false)});
@@ -3111,12 +3117,17 @@ function xSquarify(items,x,y,w,h){const out=[];let R={x,y,w,h},row=[],rest=items
     else{const rh=s/R.w;let xx=R.x;row.forEach(r=>{const ww=r.a/rh;out.push({...r,x:xx,y:R.y,w:ww,h:rh});xx+=ww});R={x:R.x,y:R.y+rh,w:R.w,h:R.h-rh}}};
   while(rest.length){const len=Math.min(R.w,R.h),it=rest[0];if(!row.length||worst(row.concat([it]),len)<=worst(row,len)){row.push(it);rest.shift()}else{lay(row);row=[]}}
   if(row.length)lay(row);return out}
-function xinPaint(){const el=$('xTm'),d=XM.d;if(!el||!d)return;const W=el.clientWidth,H=el.clientHeight;if(!W||!H)return;
+/* phone: the map grows to fill the sheet down to the bottom (tapping a tile opens its card as a pop-up, so nothing else needs the room) */
+function xinPhoneH(el){if(!XPHONE()){if(el.style.height)el.style.height='';return}const B=$('xmBody');if(!B)return;
+  const br=B.getBoundingClientRect(),cs=getComputedStyle(B),avail=B.clientHeight-parseFloat(cs.paddingBottom);let low=0;
+  [...B.children].forEach(c=>{const p=getComputedStyle(c).position;if(!c.offsetParent||p==='absolute'||p==='fixed')return;low=Math.max(low,c.getBoundingClientRect().bottom-br.top+B.scrollTop+parseFloat(getComputedStyle(c).marginBottom||0))});
+  if(!low)return;const h=Math.max(300,Math.floor(el.offsetHeight+avail-low));if(Math.abs(h-el.offsetHeight)>1)el.style.height=h+'px'}
+function xinPaint(){const el=$('xTm'),d=XM.d;if(!el||!d)return;xinPhoneH(el);const W=el.clientWidth,H=el.clientHeight;if(!W||!H)return;
   if((XM.tmMode||'stk')!=='stk'){if(!d.pf&&XGRP[d.t]===undefined){el.innerHTML='';xGrpLoad(d.t).then(()=>{if(XM.d===d&&XM.tab==='in'&&(XM.tmMode||'stk')!=='stk')xinPaint()});return}xinGrpPaint(el,d,XM.tmMode);return}
   const k=xRk(),top=d.top.filter(c=>c.wt>0||c.pw).map(c=>({...c,sw:xinShare(c,k)})).filter(c=>c.sw>0).sort((a,b)=>b.sw-a.sw),tw=top.reduce((a,c)=>a+c.sw,0),rest0=d.rest&&d.rest.wt>0.003?d.rest:null,rest=rest0?{...rest0,sw:Math.max(0.003,1-tw)}:null;
   const rw=rest?Math.max(64,Math.round(W*rest.sw)):0,aw=W-rw,g=1.5;
   const tiles=xSquarify(top.map(c=>({c,a:c.sw/tw*aw*H})),0,0,aw,H);
-  const box=(x,y,w,h)=>`left:${(x+g).toFixed(1)}px;top:${(y+g).toFixed(1)}px;width:${Math.max(0,w-2*g).toFixed(1)}px;height:${Math.max(0,h-2*g).toFixed(1)}px`;
+  const box=(x,y,w,h)=>`left:${(x+g).toFixed(1)}px;top:${(y+g).toFixed(1)}px;width:${Math.max(0,w-2*g).toFixed(1)}px;height:${Math.max(0,h-2*g).toFixed(1)}px${w-2*g<20||h-2*g<18?';padding:0':''}`;
   let h='';tiles.forEach(({c,x,y,w,h:hh})=>{const r=c.r?c.r[k]:null,L=w>=150&&hh>=110,M=w>=74&&hh>=58,nm=c.n||c.hn||'';
     /* fit the ticker: drop the exchange suffix (2330.TW -> 2330) when the tile is narrow, or leave it off */
     let tk=c.t||nm;const fits=x=>x.length*(L?11.6:7.9)+(L?24:16)<=w&&hh>=24;if(!fits(tk))tk=tk.split('.')[0];const S=fits(tk);
@@ -3181,7 +3192,7 @@ function xGrpCard(g,d,noload){const s=d.self||{},k=xRk(),key=g.t.slice(g.t.index
 /* industry or sector tiles, drawn like the stock tiles: size is the share of the fund, color is the return */
 function xinGrpPaint(el,d,mode){const W=el.clientWidth,H=el.clientHeight,k=xRk(),items=xinGroups(d,mode),tw=items.reduce((a,x)=>a+x.w,0)||1,g=1.5;
   const tiles=xSquarify(items.map(x=>({c:x,a:x.w/tw*W*H})),0,0,W,H);
-  const box=(x,y,w,h)=>`left:${(x+g).toFixed(1)}px;top:${(y+g).toFixed(1)}px;width:${Math.max(0,w-2*g).toFixed(1)}px;height:${Math.max(0,h-2*g).toFixed(1)}px`;
+  const box=(x,y,w,h)=>`left:${(x+g).toFixed(1)}px;top:${(y+g).toFixed(1)}px;width:${Math.max(0,w-2*g).toFixed(1)}px;height:${Math.max(0,h-2*g).toFixed(1)}px${w-2*g<20||h-2*g<18?';padding:0':''}`;
   let h='';tiles.forEach(({c,x,y,w,h:hh})=>{const r=c.G?c.G.r[k]:c.m&&c.m.length?xGrpR(c.m,k):null,L=w>=150&&hh>=100,M=w>=70&&hh>=62;
     /* the name wraps onto lines; it shows only when its longest word fits */
     const fit=t=>{const lw=t.split(' ').reduce((a,s)=>Math.max(a,s.length),0);return Math.min(L?15:12.5,(w-(L?24:16))/(lw*0.6))};
