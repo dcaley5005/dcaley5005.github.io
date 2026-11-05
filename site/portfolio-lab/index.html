@@ -708,7 +708,14 @@ tr.dim .spkbtn{opacity:.5}
 .pvacts{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:2px 0 6px}
 #bPv{position:absolute;left:0;right:0;top:0;z-index:6;display:flex;align-items:center;padding:0 10px 0 14px;box-sizing:border-box;background:color-mix(in srgb,var(--accent) 9%,var(--panel));border-bottom:1px solid var(--line);box-shadow:inset 4px 0 0 var(--accent);overflow-x:auto;scrollbar-width:none}#bPv::-webkit-scrollbar{display:none}
 #bPv .pvacts{flex-wrap:nowrap;padding:0;width:100%}#bPv .pvacts>*{flex:none}#bPv .pvn{font:600 13px "IBM Plex Sans",sans-serif;color:var(--accent);margin-right:6px;white-space:nowrap}
-@media (max-width:700px){#bPv{padding:0 8px 0 10px}#bPv .btn,#bPv .pvsel{height:32px!important;padding:0 10px;font-size:12.5px}#bPv .pvn{display:none}}
+@media (max-width:700px){
+  #bPv{position:fixed;left:10px;right:10px;top:auto;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:58;padding:12px;border:1px solid var(--line);border-radius:18px;background:var(--panel);box-shadow:0 12px 34px rgba(0,0,0,.28),0 2px 6px rgba(0,0,0,.12);overflow:visible}
+  #bPv .pvacts{flex-wrap:wrap;gap:8px;row-gap:10px}
+  #bPv .pvn{display:block;order:-2;flex:1 1 calc(100% - 120px);font-size:14px;color:var(--ink);align-self:center}
+  #bPv [data-bclr]{order:-1;border:0!important;background:none!important;padding:0 4px!important;height:28px!important}
+  #bPv .btn,#bPv .pvsel{height:42px!important;padding:0 14px;font-size:14px;border-radius:12px}
+  #bPv .btn[data-bgrp]{flex:1 1 auto;justify-content:center}
+  body.pvbar{padding-bottom:130px}body.pvbar .toast{bottom:calc(150px + env(safe-area-inset-bottom,0px))}}
 .pvacts .btn{display:inline-flex;gap:7px;align-items:center;height:36px;padding:0 13px;font-size:13px;border-color:var(--inputLine)}
 .pvacts .btn.go{background:var(--accent);border-color:var(--accent);color:var(--panel)}
 .pvacts .btn[data-bgrp]:disabled{opacity:1;cursor:default;font-weight:600;color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,transparent);border-color:var(--accent);animation:pvglow 2s ease-in-out infinite}
@@ -1151,6 +1158,12 @@ tr.xecho>td{background:var(--accentBg);transition:background .2s}
 .xseg button{flex:1;border:0;background:transparent;color:var(--ink2);font:600 13.5px "IBM Plex Sans",sans-serif;padding:7px 4px;border-radius:8px;cursor:pointer}
 .xseg button.sel{background:var(--panel2);color:var(--ink);box-shadow:0 1px 4px rgba(0,0,0,.25)}
 .xftm{position:relative;flex:1 1 auto;min-height:118px;margin-bottom:0}
+.xftip.rich{white-space:normal;width:250px;padding:10px 12px;display:flex;flex-direction:column;gap:5px;font-size:12.5px;line-height:1.35}
+.xftip .fth{display:flex;align-items:center;gap:8px}.xftip .fth b{font-size:14px}.xftip .ftd{color:var(--muted)}
+.xftip .ftg{margin-left:auto;font:600 10px "IBM Plex Sans",sans-serif;letter-spacing:.05em;text-transform:uppercase;padding:2px 7px;border-radius:999px;background:var(--panel2);color:var(--muted);white-space:nowrap}.xftip .ftg.up{background:color-mix(in srgb,var(--pos) 16%,transparent);color:var(--pos)}.xftip .ftg.dn{background:color-mix(in srgb,var(--neg) 16%,transparent);color:var(--neg)}
+.xftip .ftl{color:var(--ink2)}.xftip .pos{color:var(--pos)}.xftip .neg{color:var(--neg)}.xftip .ftp{color:var(--ink2)}
+.xdrv{flex:none;font-size:12.5px}.xdrvh{display:flex;align-items:center;gap:8px;font:600 10.5px "IBM Plex Sans",sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}.xdrvh i{font-style:normal;text-transform:none;letter-spacing:0;font-weight:500}
+.xdrv ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}.xdrv li{display:grid;grid-template-columns:10px minmax(0,1fr) auto 72px;align-items:center;gap:8px}.xdrv li .sw{width:10px;height:10px;border-radius:3px}.xdrv li b{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.xdrv li .r{font:500 12px "IBM Plex Mono",monospace;color:var(--muted)}.xdrv li .p{font:600 12px "IBM Plex Mono",monospace;text-align:right}.xdrv li.up .p{color:var(--pos)}.xdrv li.dn .p{color:var(--neg)}
 .xbk-body .xch{padding-right:104px}
 .xgoback{position:absolute;top:12px;right:12px;z-index:4;display:inline-flex;align-items:center;gap:5px;height:34px;padding:0 12px 0 8px;border-radius:99px;border:1px solid var(--inputLine);background:var(--panel);color:var(--ink);font:600 13.5px "IBM Plex Sans",sans-serif;cursor:pointer}
 .xgoback:hover{border-color:var(--accent);color:var(--accent)}
@@ -1567,12 +1580,16 @@ function pfRowsHTML(NC,stripAfter,list){const B=S.b,st0=selStart(B.sel),hp=B.sel
   return h}).join('')}
 let PVAT=0,PVON=false;
 /* 1d: the action strip opens right under the last ticked row, joined to the ticked rows by a green edge */
-function bPvPlace(NC,on){const wrap=$('bTable')&&$('bTable').parentElement;if(!wrap)return;let el=$('bPv');
-  if(!on){if(el){el.remove()}return}const fresh=!el;const t=document.createElement('table');t.innerHTML=pvStripHTML(NC);const acts=t.querySelector('.pvacts');if(!acts)return;
+addEventListener('resize',()=>{const el=$('bPv');if(el&&(innerWidth<=700)!==(el.parentElement===document.body))renderBTable()});
+function bPvPlace(NC,on){const wrap=$('bTable')&&$('bTable').parentElement;if(!wrap)return;let el=$('bPv');const PH=innerWidth<=700,host=PH?document.body:wrap;
+  /* phone: a floating bar at the bottom of the screen (slides up, slides away); bigger screens: over the column headers */
+  if(el&&el.parentElement!==host){el.remove();el=null}
+  document.body.classList.toggle('pvbar',!!on&&PH);
+  if(!on){if(el){el.removeAttribute('id');if(PH&&el.animate&&!matchMedia('(prefers-reduced-motion: reduce)').matches){el.animate([{transform:'none',opacity:1},{transform:'translateY(130%)',opacity:.6}],{duration:220,easing:'cubic-bezier(.4,0,1,1)',fill:'forwards'}).onfinish=()=>el.remove()}else el.remove()}return}const fresh=!el;const t=document.createElement('table');t.innerHTML=pvStripHTML(NC);const acts=t.querySelector('.pvacts');if(!acts)return;
   const n=tickNames().length;acts.querySelector('.pvarr')?.replaceWith(Object.assign(document.createElement('span'),{className:'pvn',textContent:n+' selected'}));
-  if(!el){el=document.createElement('div');el.id='bPv';el.setAttribute('role','toolbar');el.setAttribute('aria-label','Actions for what you ticked');wrap.appendChild(el)}
-  el.innerHTML='';el.appendChild(acts);const th=$('bTable').tHead;el.style.height=Math.max(44,th?th.offsetHeight:44)+'px';
-  if(fresh&&el.animate&&!matchMedia('(prefers-reduced-motion: reduce)').matches)el.animate([{opacity:0,transform:'translateY(-6px)'},{opacity:1,transform:'none'}],{duration:200,easing:'cubic-bezier(.2,0,0,1)'})}
+  if(!el){el=document.createElement('div');el.id='bPv';el.setAttribute('role','toolbar');el.setAttribute('aria-label','Actions for what you ticked');host.appendChild(el)}
+  el.innerHTML='';el.appendChild(acts);const th=$('bTable').tHead;el.style.height=PH?'':Math.max(44,th?th.offsetHeight:44)+'px';
+  if(fresh&&el.animate&&!matchMedia('(prefers-reduced-motion: reduce)').matches)el.animate(PH?[{opacity:.6,transform:'translateY(130%)'},{opacity:1,transform:'none'}]:[{opacity:0,transform:'translateY(-6px)'},{opacity:1,transform:'none'}],{duration:PH?320:200,easing:PH?'cubic-bezier(.2,.9,.3,1)':'cubic-bezier(.2,0,0,1)'})}
 function pvStripHTML(NC){const fresh=!PVON;if(fresh)PVAT=Date.now();PVON=true;const names=tickNames(),n=names.length,nm=names.join(' + ');
   const tg=S.pfs.filter(p=>!p.k);
   const pick=tg.length===1?`<button type="button" class="btn" data-baddto="${esc(tg[0].id)}"><span class="pvsw" style="background:${pfCol(tg[0])}"></span>Add to ${esc(tg[0].name)}</button>`
@@ -1594,6 +1611,12 @@ function bFlip(fn,inNew){const R=!document.body.animate||matchMedia('(prefers-re
   })}
 /* rows that weren't there before slide in from the left: adding an ETF, Undo, opening a portfolio */
 let BKEYS=null;
+function bSparks(old){const gl=[],seen=new Set();document.querySelectorAll('#bTable tr').forEach(tr=>{const k=bRowKey(tr),svg=tr.querySelector('.momwrap svg'),p=svg&&svg.querySelector('polyline');if(!k||!p)return;seen.add(k);
+    if(BSPG&&old.has(k)){gl.push({p,from:old.get(k)});return}
+    /* new sparkline: draw it in; if the table redraws mid-draw, carry on from where it had got to */
+    const T=bSparks.T||(bSparks.T=new Map()),now=performance.now(),t0=T.get(k);if(!BSPK||!BSPK.has(k)){T.set(k,now);xRevealSvg(svg,650,120)}
+    else if(t0&&now-t0<770&&svg.animate&&!XREDUCE.matches){const fr=Math.max(0,Math.min(1,(now-t0-120)/650));svg.animate([{clipPath:`inset(0 ${((1-fr)*100).toFixed(1)}% 0 0)`},{clipPath:'inset(0 0% 0 0)'}],{duration:Math.max(60,770-(now-t0)),easing:'cubic-bezier(.2,0,.25,1)',fill:'backwards'})}});
+  BSPG=false;BSPK=seen;if(gl.length)xGlidePolys(gl,520)}
 function bNewRows(){const trs=[...document.querySelectorAll('#bTable tr')],now=new Set();trs.forEach(tr=>{const k=bRowKey(tr);if(k&&k!=='add')now.add(k)});
   if(BKEYS&&document.body.animate&&!matchMedia('(prefers-reduced-motion: reduce)').matches)trs.forEach(tr=>{const k=bRowKey(tr);if(k&&k!=='add'&&!BKEYS.has(k))trAnim(tr,[{opacity:0,transform:'translateX(-18px)'},{opacity:1,transform:'none'}],{duration:260,delay:60,easing:'cubic-bezier(.2,0,0,1)',fill:'backwards'})});BKEYS=now}
 function bRemove(go,keys){const gone=keys||new Set(S.b.rows.filter(r=>r.k).map(r=>'r:'+r.t).concat(S.pfs.filter(p=>p.k).map(p=>'p:'+p.id)));
@@ -1670,7 +1693,7 @@ document.addEventListener('click',e=>{if(!e.target.closest)return;const pairs=[[
   if(!e.target.closest('.pmenu'))pairs.forEach(([b,m])=>{const mm=$(m);if(mm&&!mm.hidden){mm.hidden=true;$(b).setAttribute('aria-expanded','false')}})});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')['bDotsM'].forEach(id=>{const m=$(id);if(m)m.hidden=true})});
 function maxDays(){return Math.round((D.ms[D.last]-D.ms[0])/864e5)}
-function setSel(sc,sel){if(sc==='b'){S.b.sel=sel;BGLIDE=true}else S.sel=sel;persist();
+function setSel(sc,sel){if(sc==='b'){S.b.sel=sel;BGLIDE=true;BSPG=true}else S.sel=sel;persist();
   if(sc==='b'){bHideHover();renderPicker('b');renderBChart();renderBTable()}else{hideHover();buildSeries();renderPicker('p');renderChart();renderPortfolios()}}
 function fitBHead(){const bd=$('builder');if(!bd||!S.b.open)return;bd.classList.remove('hwrap');const a=$('bActs').getBoundingClientRect(),rg=document.createRange();rg.selectNodeContents($('bTitle'));const t=rg.getBoundingClientRect();if(a.left<t.right+20||window.innerWidth<=900)bd.classList.add('hwrap')}
 function renderBuilder(){S.b.open=true;withFocus(()=>{
@@ -1698,7 +1721,7 @@ function bsBtn(k,label){const on=BSORT.k===k;const arrow=on?(BSORT.dir<0?' ↓':
 function bOrder(WR,ES){const B=S.b;const idx=B.rows.map((r,j)=>j);if(!BSORT.k||!BSORT.dir)return idx;const k=BSORT.k;
   const val=j=>{const r=B.rows[j];if(k==='t')return r.t;if(k==='ret')return WR[j];if(k==='w')return Number(r.w)||0;if(k==='er')return ER[r.t]??null;const tp=TPER.find(x=>x[0]===k);if(tp)return periodRet(r.t,tp[1]);const st=ES[j]&&ES[j].st;return st?st[k]:null};
   return idx.sort((a,b)=>{const va=val(a),vb=val(b);if(va==null&&vb==null)return a-b;if(va==null)return 1;if(vb==null)return -1;const c=typeof va==='string'?va.localeCompare(vb):va-vb;return (c||a-b)*BSORT.dir})}
-function renderBTable(){const B=S.b;if(!B.open)return;const hp=B.sel.p;
+function renderBTable(){const B=S.b;if(!B.open)return;const hp=B.sel.p;const spOld=new Map();if(BSPG)document.querySelectorAll('#bTable tr').forEach(tr=>{const k=bRowKey(tr),p=tr.querySelector('.momwrap svg polyline');if(k&&p)spOld.set(k,p.getAttribute('points'))});
   const best={};TPER.forEach(([p,m])=>{const vs=B.rows.map(r=>periodRet(r.t,m)).filter(v=>v!=null);if(vs.length>1)best[p]=Math.max(...vs)});
   const ES=B.rows.map(r=>HAS(r.t)?pStats({rows:[{t:r.t,w:100}]},B.sel):null);const bb={};BM.forEach(([k])=>{const vs=ES.map(o=>bmVal(o,k)).filter(v=>v!=null);if(vs.length>1)bb[k]=k==='vol'?Math.min(...vs):Math.max(...vs)});
   const NC=TPER.length+BM.length+5;const full=B.rows.length>=MAXETF;
@@ -1712,7 +1735,7 @@ function renderBTable(){const B=S.b;if(!B.open)return;const hp=B.sel.p;
   $('bTable').innerHTML=`<thead>${grpRow}<tr><th style="text-align:left"><span class="hw">${B.rows.length+S.pfs.length>=2?`<label class="sr" for="bTickAll">Tick everything</label><input type="checkbox" class="tkchk" id="bTickAll" data-tip="Tick all" ${B.rows.every(r=>r.k)&&S.pfs.every(p=>p.k)?'checked':''}><span class="chsp" aria-hidden="true" style="width:${CHSP_HEAD}px"></span>`:''}${bsBtn('t','ETF')}</span></th><th class="r retcol"><span class="hw">${bsBtn('ret',selLabel(B.sel,'short')+' return')}${infoBtn('bret','return')}</span></th>${TPER.map(([p,m],k)=>`<th class="dsk r${p===hp?' hl':''}"><span class="hw">${bsBtn(p,pLabel(p,m))}${k===TPER.length-1?infoBtn('returns','returns'):''}</span></th>`).join('')}${BM.map(([k,lab,info])=>`<th class="dsk r bm bm-${k}${k==='sharpe'?' bmfirst':''}"><span class="hw">${bsBtn(k,lab())}${infoBtn(info,lab())}</span></th>`).join('')}<th class="dsk r ercol"><span class="hw">${bsBtn('er','Fee')}${infoBtn('er','expense ratio')}</span></th><th class="r wcell"><span class="sr">Share in group</span></th><th class="mob"></th><th class="dsk"></th></tr></thead>
     <tbody>${(()=>{const sorted=BSORT.k&&BSORT.dir,ord=bOrder(WR,ES);const items=sorted?sortedTop():topOrder();
       const isK=it=>it.t==='p'?!!it.p.k:!!(B.rows[it.j].k&&HAS(B.rows[it.j].t));const last=[...items].reverse().find(isK);if(!last)PVON=false;
-      return items.map(it=>it.t==='p'?pfRowsHTML(NC,null,[it.p]):etfRow(B.rows[it.j],it.j)).join('')})()}${addRow}</tbody>`;bStrip();bNewRows();bPvPlace(NC,S.pfs.some(p=>p.k)||S.b.rows.some(r=>r.k&&HAS(r.t)));
+      return items.map(it=>it.t==='p'?pfRowsHTML(NC,null,[it.p]):etfRow(B.rows[it.j],it.j)).join('')})()}${addRow}</tbody>`;bStrip();bSparks(spOld);bNewRows();bPvPlace(NC,S.pfs.some(p=>p.k)||S.b.rows.some(r=>r.k&&HAS(r.t)));
   document.querySelectorAll('#bTable button.info:empty').forEach(b=>{b.innerHTML=ICON_I});
 
 }
@@ -1760,12 +1783,14 @@ function bRailToggle(key){const now=Date.now(),lc=bRailClick;
     const v={};keys.forEach(k=>{v[k]=alone?true:k===key});bSetVis(v);bRailClick=null}
   else{bRailClick={key,t:now,prev:bVis()};const v=bVis();v[key]=!v[key];bSetVis(v)}
   persist();bHideHover();renderBuilder()}
-let BGLIDE=false,BLK=null;
+let BGLIDE=false,BLK=null,BSPG=false,BSPK=null;
+/* draw a whole little chart in from the left (works with any stroke, dashed or not) */
+function xRevealSvg(svg,dur,delay){if(!svg||!svg.animate||matchMedia('(prefers-reduced-motion: reduce)').matches)return;svg.animate([{clipPath:'inset(0 100% 0 0)'},{clipPath:'inset(0 0% 0 0)'}],{duration:dur||700,delay:delay||0,easing:'cubic-bezier(.45,0,.25,1)',fill:'backwards'})}
 function renderBChart(){const g=BGLIDE&&!matchMedia('(prefers-reduced-motion: reduce)').matches;BGLIDE=false;let old=null;
   if(g){old=new Map();document.querySelectorAll('#bChartbox svg polyline[data-lk]').forEach(p=>old.set(p.dataset.lk,p.getAttribute('points')))}
   const prev=BLK;renderBChart0();bFocusLine(null);if(old&&old.size)bGlide(old);
   const ls=[...document.querySelectorAll('#bChartbox svg polyline[data-lk]')];BLK=new Set(ls.map(p=>p.dataset.lk));
-  if(prev&&!matchMedia('(prefers-reduced-motion: reduce)').matches)ls.filter(p=>!prev.has(p.dataset.lk)&&!p.getAttribute('stroke-dasharray')&&p.animate).forEach(p=>{let L=0;try{L=p.getTotalLength()}catch(e){}if(!L)return;L=Math.ceil(L)+2;
+  if(!matchMedia('(prefers-reduced-motion: reduce)').matches)ls.filter(p=>!(prev||new Set()).has(p.dataset.lk)&&!p.getAttribute('stroke-dasharray')&&p.animate).forEach(p=>{let L=0;try{L=p.getTotalLength()}catch(e){}if(!L)return;L=Math.ceil(L)+2;
     p.style.strokeDasharray=L;const a=p.animate([{strokeDashoffset:L},{strokeDashoffset:0}],{duration:1100,easing:'cubic-bezier(.45,0,.25,1)'});a.onfinish=a.oncancel=()=>{p.style.strokeDasharray=''}})}
 /* move polylines from old points to new ones; pairs: [{p, from}] */
 function xGlidePolys(pairs,D){const N=180,parse=q=>q.trim().split(/\s+/).map(x=>x.split(',').map(Number)).filter(x=>x.length===2&&!isNaN(x[1]));
@@ -2750,28 +2775,45 @@ function xBackFill(card){const body=card.querySelector('.xbk-body');if(!body||bo
     <div class="xseg" role="group" aria-label="Map view"><button type="button" data-xseg="ind" class="sel">Industries</button><button type="button" data-xseg="sec">Sectors</button><button type="button" data-xseg="stk">Top 10 stocks</button></div>
     <div class="xftm"></div>`;
     body._d=d;xTmPaint(body,'ind');xFitNow()}).catch(()=>{delete body.dataset.done;body.innerHTML=`<p class="xbk-load">Holdings aren't available for ${esc(t)} yet. They're added a slice at a time each night, so check back soon.</p>`})}
-function xTmItems(d,mode){const top=(d.top||[]).filter(c=>c.wt>0);
-  const sk=x=>x?XYSEC[x]||x:'';
-  if(mode==='stk')return top.slice().sort((a,b)=>b.wt-a.wt).slice(0,10).map(c=>({t:c.t,n:c.n||c.hn||'',w:c.wt,col:xSecCol(c.sec),gs:sk(c.sec),gi:c.ind||''}));
-  if(mode==='sec')return Object.entries(d.sec||{}).map(([k,v])=>({t:XSEC[k]||k,n:'',w:v,col:xSecCol(k),gs:sk(k)})).filter(x=>x.w>0.002).sort((a,b)=>b.w-a.w);
+/* short descriptions for the biggest companies; anything else shows its industry and sector */
+const XDESC={AAPL:'iPhone, Mac and services maker',MSFT:'Windows, Office and the Azure cloud',NVDA:'Chips that power AI and gaming',AMZN:'Online store and AWS cloud',GOOGL:'Google search, YouTube and Google Cloud',GOOG:'Google search, YouTube and Google Cloud',META:'Facebook, Instagram and WhatsApp',AVGO:'Chips and infrastructure software',TSLA:'Electric cars and batteries','BRK-B':'Insurance, railroads and energy under Warren Buffett','BRK.B':'Insurance, railroads and energy under Warren Buffett',JPM:'Largest US bank',LLY:'Drugmaker behind Mounjaro and Zepbound',V:'Card payments network',MA:'Card payments network',UNH:'Health insurer and care provider',XOM:'Oil and gas producer',JNJ:'Medicines and medical devices',WMT:'Discount stores and groceries',PG:'Household brands like Tide and Pampers',HD:'Home-improvement stores',COST:'Membership warehouse stores',ORCL:'Databases and cloud software',ABBV:'Drugmaker behind Humira and Skyrizi',BAC:'Large US bank',KO:'Soft drinks',PEP:'Snacks and soft drinks',CVX:'Oil and gas producer',MRK:'Drugmaker behind Keytruda',CSCO:'Networking equipment',AMD:'Computer and AI chips',CRM:'Sales and customer software',ADBE:'Photoshop and creative software',NFLX:'Streaming video',INTC:'Computer chips',WFC:'Large US bank',PM:'Cigarettes and smoke-free products',IBM:'IT services and software',TMO:'Lab equipment and services',QCOM:'Phone chips',ABT:'Medical devices and diagnostics',GE:'Jet engines',CAT:'Construction and mining machines',TXN:'Analog chips',PLTR:'Data-analysis software',DIS:'Theme parks, films and streaming',INTU:'TurboTax and QuickBooks',GS:'Investment bank',MS:'Investment bank and wealth manager',T:'Phone and internet service',VZ:'Phone and internet service',PFE:'Drugmaker',TSM:'Contract chipmaker',ACN:'Consulting and IT services',MU:'Memory chips'};
+function xTmItems(d,mode){const top=(d.top||[]).filter(c=>c.wt>0),k=xRk();
+  const sk=x=>x?XYSEC[x]||x:'',R=c=>c.r?c.r[k]:null;
+  if(mode==='stk')return top.slice().sort((a,b)=>b.wt-a.wt).slice(0,10).map(c=>({t:c.t,n:c.n||c.hn||'',w:c.wt,col:xSecCol(c.sec),gs:sk(c.sec),gi:c.ind||'',r:R(c),m:[c],kind:'stk',desc:XDESC[c.t]||[c.ind,XSEC[sk(c.sec)]||c.sec].filter(Boolean).join(' · ')}));
+  if(mode==='sec')return Object.entries(d.sec||{}).map(([kk,v])=>{const m=top.filter(c=>sk(c.sec)===kk);return {t:XSEC[kk]||kk,n:'',w:v,col:xSecCol(kk),gs:sk(kk),r:xGrpR(m,k),m,kind:'sec'}}).filter(x=>x.w>0.002).sort((a,b)=>b.w-a.w);
   const agg={},asec={},un=[];top.forEach(c=>{if(c.ind){agg[c.ind]=(agg[c.ind]||0)+c.wt;asec[c.ind]=asec[c.ind]||c.sec}else un.push(c)});
   /* holdings with no industry label: the big ones get their own tile under their company name; only the small remainder is lumped as Other holdings */
   un.sort((a,b)=>b.wt-a.wt);let other=0,shown=0;
-  const out=Object.entries(agg).map(([k,v])=>({t:k,n:'',w:v,col:xSecCol(asec[k]),gs:sk(asec[k]),gi:k}));
-  un.forEach(c=>{if(c.wt>=0.02&&shown<6){out.push({t:c.hn||c.n||c.t,n:(c.hn||c.n)&&c.t?c.t:'',w:c.wt,col:xSecCol(c.sec),gs:sk(c.sec)});shown++}else other+=c.wt});
-  out.sort((a,b)=>b.w-a.w);if(other>0.005)out.push({t:'Other holdings',n:'',w:other,col:XNOSEC});return out}
-function xTmPaint(body,mode){const box=body.querySelector('.xftm');if(!box||!body._d)return;xTmPaintItems(box,xTmItems(body._d,mode))}
+  const out=Object.entries(agg).map(([kk,v])=>{const m=top.filter(c=>c.ind===kk);return {t:kk,n:'',w:v,col:xSecCol(asec[kk]),gs:sk(asec[kk]),gi:kk,r:xGrpR(m,k),m,kind:'ind',desc:XSEC[sk(asec[kk])]||''}});
+  un.forEach(c=>{if(c.wt>=0.02&&shown<6){out.push({t:c.hn||c.n||c.t,n:(c.hn||c.n)&&c.t?c.t:'',w:c.wt,col:xSecCol(c.sec),gs:sk(c.sec),r:R(c),m:[c],kind:'stk',desc:XDESC[c.t]||''});shown++}else other+=c.wt});
+  out.sort((a,b)=>b.w-a.w);if(other>0.005)out.push({t:'Other holdings',n:'',w:other,col:XNOSEC,r:null,m:[],kind:'oth'});return out}
+function xTmPaint(body,mode){const box=body.querySelector('.xftm');if(!box||!body._d)return;const d=body._d,k=xRk(),items=xTmItems(d,mode);
+  const fund=d.self&&d.self.r?d.self.r[k]:null;items.forEach(x=>{x.pts=x.r!=null?x.w*x.r*100:null});
+  const ranked=items.filter(x=>x.pts!=null).sort((a,b)=>b.pts-a.pts);if(ranked[0])ranked[0].top=true;
+  box._ctx={fund,mode,t:d.t,k};box._items=items;xTmPaintItems(box,items);xDrivers(body,items,fund,d.t)}
+/* 4) under the map: what moved the fund most over the chosen period, in points */
+function xDrivers(body,items,fund,t){let el=body.querySelector('.xdrv');if(!el){el=document.createElement('div');el.className='xdrv';body.appendChild(el)}
+  const has=items.filter(x=>x.pts!=null&&x.kind!=='oth'),up=has.filter(x=>x.pts>0).sort((a,b)=>b.pts-a.pts).slice(0,3),dn=has.filter(x=>x.pts<0).sort((a,b)=>a.pts-b.pts)[0];
+  const pts=v=>(v>=0?'+':'−')+Math.abs(v).toFixed(1)+' pts';
+  const row=(x,cls)=>`<li class="${cls}"><span class="sw" style="background:${x.col}"></span><b>${esc(x.t)}</b><span class="r">${xp(x.r)}</span><span class="p">${pts(x.pts)}</span></li>`;
+  el.innerHTML=has.length?`<div class="xdrvh"><span>What moved ${esc(t)} · ${XM.rng}${fund!=null?` <i>(fund ${xp(fund)})</i>`:''}</span></div><ol>${up.map(x=>row(x,'up')).join('')}${dn?row(dn,'dn'):''}</ol>`:''}
 function xTmPaintItems(box,items){const W=box.clientWidth,H=box.clientHeight;if(!W||!H)return;const tw=items.reduce((a,x)=>a+x.w,0)||1;
   const tiles=xSquarify(items.map(x=>({c:x,a:x.w/tw*W*H})),0,0,W,H);
-  box.innerHTML=tiles.map(({c,x,y,w,h},i)=>{const pc=c.w*100,p1=pc.toFixed(1)+'%',lab=`${c.t}${c.n?' · '+c.n:''} · ${p1}`;
+  box.innerHTML=tiles.map(({c,x,y,w,h},i)=>{const pc=c.w*100,p1=pc.toFixed(1)+'%',lab=`${c.t}${c.n?' · '+c.n:''} · ${pc.toFixed(1)}%`,ix=items.indexOf(c);
     const lw=c.t.split(' ').reduce((a,x)=>Math.max(a,x.length),0),bfs=Math.max(9,Math.min(13,(w-22)/(lw*0.68),(w-22)*2/(c.t.length*0.62))),bfs1=Math.min(13,(w-22)/(c.t.length*0.6));const inner=w>=110&&h>=54?`<b style="font-size:${bfs.toFixed(1)}px">${esc(c.t)}</b><i>${p1}</i>${c.n?`<span>${esc(c.n)}</span>`:''}`:w>=54&&h>=54&&bfs1>=9?`<b class="one" style="font-size:${bfs1.toFixed(1)}px">${esc(c.t)}</b><i>${p1}</i>`:w>=36&&h>=22?`<i style="font-size:${Math.max(10,Math.min(12.5,w/3.8)).toFixed(1)}px">${pc<10?p1:Math.round(pc)+'%'}</i>`:'';
-    return `<div class="xftile" data-tip="${esc(lab)}"${c.gs?` data-gs="${esc(c.gs)}"`:''}${c.gi?` data-gi="${esc(c.gi)}"`:''} style="left:${x.toFixed(1)}px;top:${y.toFixed(1)}px;width:${Math.max(0,w-3).toFixed(1)}px;height:${Math.max(0,h-3).toFixed(1)}px;${w-3<22||h-3<18?'padding:0;':''}background:${c.col||XSCOL[i%XSCOL.length]}">${inner}</div>`}).join('')+'<div class="xftip" hidden></div>'}
+    return `<div class="xftile" data-tip="${esc(lab)}" data-i="${ix}"${c.gs?` data-gs="${esc(c.gs)}"`:''}${c.gi?` data-gi="${esc(c.gi)}"`:''} style="left:${x.toFixed(1)}px;top:${y.toFixed(1)}px;width:${Math.max(0,w-3).toFixed(1)}px;height:${Math.max(0,h-3).toFixed(1)}px;${w-3<22||h-3<18?'padding:0;':''}background:${c.col||XSCOL[i%XSCOL.length]}">${inner}</div>`}).join('')+'<div class="xftip" hidden></div>'}
+function xTmTipHTML(box,c){const ctx=box._ctx||{},f=ctx.fund,pts=c.pts;
+  const tag=c.top&&pts>0?'<span class="ftg up">Biggest driver</span>':c.r!=null&&f!=null?(c.r<f-0.005?'<span class="ftg dn">Held it back</span>':c.r>f+0.005?'<span class="ftg up">Pulled ahead</span>':'<span class="ftg">Kept pace</span>'):'';
+  const per=XM.rng==='3Y'?' a year over 3Y':' over '+XM.rng;
+  return `<div class="fth"><b>${esc(c.t)}</b>${tag}</div>${c.desc?`<div class="ftd">${esc(c.desc)}</div>`:''}
+    ${c.r!=null?`<div class="ftl"><b class="${c.r>=0?'pos':'neg'}">${xp(c.r)}</b>${per}</div>`:''}
+    ${pts!=null&&f!=null?`<div class="ftp">${pts>=0?'Added':'Took away'} <b>${Math.abs(pts).toFixed(1)} pts</b> of the fund's ${xp(f)}</div>`:''}`}
 function xTmTip(tl,on){const box=tl.parentElement,tip=box&&box.querySelector('.xftip');if(!tip)return;if(!on){tip.hidden=true;return}
-  tip.textContent=tl.dataset.tip;tip.hidden=false;let x=tl.offsetLeft+tl.offsetWidth/2-tip.offsetWidth/2;x=Math.max(2,Math.min(box.clientWidth-tip.offsetWidth-2,x));let y=tl.offsetTop-tip.offsetHeight-6;if(y<0)y=tl.offsetTop+tl.offsetHeight+6;tip.style.left=x+'px';tip.style.top=y+'px'}
+  const c=box._items&&box._items[+tl.dataset.i];if(c){tip.innerHTML=xTmTipHTML(box,c);tip.classList.add('rich');tip.dataset.k=tl.dataset.tip}else{tip.textContent=tl.dataset.tip;tip.classList.remove('rich')}tip.hidden=false;let x=tl.offsetLeft+tl.offsetWidth/2-tip.offsetWidth/2;x=Math.max(2,Math.min(box.clientWidth-tip.offsetWidth-2,x));let y=tl.offsetTop-tip.offsetHeight-6;if(y<0)y=tl.offsetTop+tl.offsetHeight+6;tip.style.left=x+'px';tip.style.top=y+'px'}
 document.addEventListener('click',e=>{if(!e.target.closest)return;
   const fb=e.target.closest('[data-xflip]');if(fb){const card=fb.closest('.xcard'),fl=card&&card.querySelector('.xflip');if(fl)xDoFlip(fl,card);return}
   const sg=e.target.closest('[data-xseg]');if(sg){const body=sg.closest('.xbk-body');if(body){body.querySelectorAll('[data-xseg]').forEach(b=>b.classList.toggle('sel',b===sg));const pm=body.dataset.mode||'ind',m=sg.dataset.xseg;if(pm===m)return;body.dataset.mode=m;body.querySelectorAll('.xftip').forEach(t=>t.hidden=true);const bx=body.querySelector('.xftm');if(bx)xBlockSwap(bx,'.xftile',()=>xTmPaint(body,m),pm,m,el=>({sec:el.dataset.gs||null,ind:el.dataset.gi||null}));else xTmPaint(body,m)}return}
-  const tl=e.target.closest('.xftile');if(tl){const tip=tl.parentElement.querySelector('.xftip');xTmTip(tl,!(tip&&!tip.hidden&&tip.textContent===tl.dataset.tip&&XTOUCH));return}
+  const tl=e.target.closest('.xftile');if(tl){const tip=tl.parentElement.querySelector('.xftip');xTmTip(tl,!(tip&&!tip.hidden&&(tip.dataset.k||tip.textContent)===tl.dataset.tip&&XTOUCH));return}
   if(!e.target.closest('.xftm'))document.querySelectorAll('.xftip').forEach(tp=>tp.hidden=true)});
 /* after the card flips, the holdings map appears under a mouse that hasn't moved; wait for a real move before showing a tile's label */
 let XTMSTILL=false,XTOUCH=false;
@@ -2780,13 +2822,13 @@ document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('[da
 document.addEventListener('mousemove',e=>{if(!XTMSTILL)return;XTMSTILL=false;if(XTOUCH)return;const tl=e.target.closest&&e.target.closest('.xftile');if(tl)xTmTip(tl,true)});
 document.addEventListener('mouseover',e=>{if(!e.target.closest||XTMSTILL||XTOUCH)return;const tl=e.target.closest('.xftile');if(tl)xTmTip(tl,true)});
 document.addEventListener('mouseout',e=>{if(!e.target.closest||XTOUCH)return;const tl=e.target.closest('.xftile');if(tl&&!(e.relatedTarget&&e.relatedTarget.closest&&e.relatedTarget.closest('.xftile')===tl))xTmTip(tl,false)});
-function xSetRange(k){XM.rng=k;XM.rngSet=1;const d=XM.d;if(!d)return;
+function xSetRange(k){XM.rng=k;XM.rngSet=1;document.querySelectorAll('.xbk-body').forEach(body=>{if(body._d&&body.offsetParent)xTmPaint(body,body.dataset.mode||'ind')});const d=XM.d;if(!d)return;
   /* redraw each line chart at the height it already has, so nothing jumps while periods are clicked through */
   const gl=[];document.querySelectorAll('#xmBody .xspark').forEach(box=>{const c=xFind(box.dataset.xsp);if(!c)return;const col=box.closest('.xcard').style.getPropertyValue('--xc'),sv=box.querySelector('svg'),h=sv&&sv.style.height,olds=[...box.querySelectorAll('polyline')].map(p=>p.getAttribute('points')),par=box.parentNode,nx=box.nextSibling;let html=xSpark(c,d.self,col,c.t);if(h)html=html.replace('<svg ','<svg style="height:'+h+'" ');box.outerHTML=html;const nb=nx?nx.previousSibling:par.lastElementChild;if(nb&&nb.querySelectorAll&&!XREDUCE.matches)[...nb.querySelectorAll('polyline')].forEach((p,i)=>{if(olds[i])gl.push({p,from:olds[i]})})});if(gl.length)xGlidePolys(gl,460);
   document.querySelectorAll('#xmBody [data-xrng]').forEach(b=>{const on=b.dataset.xrng===k;b.classList.toggle('sel',on);b.setAttribute('aria-pressed',on)});{const w=document.querySelector('#xmBody .xgwrap');if(w&&w._h0&&!XGMINI())xgPaint(w,XG.cur);if(w&&XGMINI())setTimeout(()=>xgSync(true),0)}
   document.querySelectorAll('#xmBody .xcard').forEach(card=>{const c=xFind(card.dataset.xc);const rk=card.querySelector('.xrisk'),lb=card.querySelector('.xrlr'),hr=card.querySelector('.xhero');if(c&&rk)rk.innerHTML=xRiskTiles(c,d.self,XM.tab==='alt');if(lb)lb.textContent=`Risk vs ${d.self.t} · ${xRngLbl()}`;if(c&&hr&&['self','same','div','mom','own'].includes(c.k))hr.outerHTML=xHero(c,d.self,c.k)});
   {const T=$('xCmp');if(T){T.innerHTML=xCmpTable();renderXMButtons()}}
-  const rs=xRisk(d.self),gs=$('xgSh'),gd=$('xgDd');if(gs)gs.innerHTML=`<span>Sharpe</span><b>${rs.sh==null?'—':rs.sh.toFixed(2)}</b>`;if(gd)gd.innerHTML=`<span>Max DD</span><b>${xu(rs.dd)}</b>`;if(XM.tab!=='in'){xMatchH();xFitNow()}if(XM.tab==='in'){xinPaint();const dk=$('xInDock');if(dk){dk.dataset.t='~';xinTip(null,false)}const ti=$('xtmTitle');if(ti)ti.title=xinNote()}}
+  const rs=xRisk(d.self),gs=$('xgSh'),gd=$('xgDd');if(gs)gs.innerHTML=`<span>Sharpe</span><b>${rs.sh==null?'—':rs.sh.toFixed(2)}</b>`;if(gd)gd.innerHTML=`<span>Max DD</span><b>${xu(rs.dd)}</b>`;if(XM.tab!=='in'){xMatchH();xFitNow()}if(XM.tab==='in'){const tm=$('xTm');tm?xTmMorph(tm,'.xtile',()=>xinPaint()):xinPaint();const dk=$('xInDock');if(dk){const olds=[...dk.querySelectorAll('.xspark polyline')].map(p=>p.getAttribute('points'));dk.dataset.t='~';XM.noReveal=1;try{xinTip(null,false)}finally{XM.noReveal=0}if(olds.length&&!XREDUCE.matches){const gl=[];dk.querySelectorAll('.xspark polyline').forEach((p,i)=>{if(olds[i])gl.push({p,from:olds[i]})});if(gl.length)xGlidePolys(gl,460)}}const ti=$('xtmTitle');if(ti)ti.title=xinNote()}}
 /* return vs volatility dot chart */
 function ph0(){return innerWidth<=1000}
 function xChart(d){const s=d.self,seen=new Set();const pts=[{...s,k:'self'}].concat(d.same.map(c=>({...c,k:'same'})),(d.closest||[]).map(c=>({...c,k:'same'})),d.div.map(c=>({...c,k:'div'})),(d.mom||[]).map(c=>({...c,k:'mom'})),(d.own||[]).map(c=>({...c,k:'own'}))).filter(p=>!seen.has(p.t)&&seen.add(p.t));
@@ -2825,6 +2867,7 @@ function xChartTip(t,on){if(!on&&XM.sel){t=XM.sel;on=true}
   if(!dock||!leg||!p){if(wdock&&!wdock.hidden){wdock.hidden=true;wdock.innerHTML='';wdock.dataset.t=''}if(pop&&!pop.hidden){xPopOut(pop,xSrcRect(pop.dataset.src));pop.hidden=true;if(pdock){pdock.innerHTML='';pdock.dataset.t=''}}if(leg)leg.classList.remove('showcard');xMatchH();return xTipBase(t,on)}
   xTipBase(t,false);if(svg){svg.querySelector('.xdots').classList.toggle('xfade',!rest);svg.querySelectorAll('.xpt').forEach(g=>g.classList.toggle('on',!rest&&g.dataset.xt===t))}
   const dk=t+(rest?'|rest':''),wasT=dock.dataset.t,wasHid=mob?pop.hidden:wdock.hidden;let chg=false;if(dock.dataset.t!==dk){chg=true;XM.restKey=p.k==='self'&&XM.tab==='alt';dock.innerHTML=p.k==='self'?xSelfCard(XM.d.self):xCard(p,XM.d.self,p.k,true);XM.restKey=false;dock.dataset.t=dk}dock.firstElementChild.classList.toggle('hl',XM.sel===t);if(mob)pop.hidden=false;else{wdock.hidden=false;leg.classList.add('showcard')}
+  if(chg&&(mob||XM.sel===t))xRevealSvg(dock.querySelector('.xspark svg'),700,mob&&wasHid?260:80);
   if(mob){const sel=XM.popSrc||ptS(dk);XM.popSrc=null;if(wasHid||chg)pop.dataset.src=sel;if(wasHid&&!XREDUCE.matches&&pop.animate){pop.animate([{opacity:0},{opacity:1}],{duration:200,easing:'ease-out'});xGrowIn(dock.firstElementChild,xSrcRect(sel))}}else if(!mob&&chg&&wasT&&!wasHid)xSwapIn(dock.firstElementChild);renderXMButtons();xDescFill(dock.firstElementChild);xMoreSync(dock);xMatchH();if(!mob&&XM.sel===t)xGrowModal()}
 /* the card and the chart box share one height */
 function xMatchH(){const fig=document.querySelector('#xmBody .xfig'),dock=$('xCardDock'),c=dock&&!dock.hidden&&dock.firstElementChild;if(!fig||!c||ph0())return;const fr=c.querySelector('.xface.fr');let need=0;if(fr)need=fr.scrollHeight+(c.offsetHeight-fr.clientHeight);const h0=c.style.height?c.offsetHeight:0,h1=Math.max(fig.offsetHeight,need);c.style.height=h1+'px';
@@ -3142,6 +3185,16 @@ document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest
    or industry; going finer, each sector splits back into its stocks. Tiles with no match just fade. */
 function xTmKeys(d){const top=d.top||[],bySt={},indSec={};top.forEach(c=>{const sk=XYSEC[c.sec]||c.sec||'';if(c.t)bySt[c.t]={sec:sk,ind:c.ind||''};if(c.ind)indSec[c.ind]=sk});
   return ht=>{if(!ht)return null;let m=ht.match(/^~g:(sec|ind):(.*)$/);if(m)return m[1]==='sec'?{sec:m[2],ind:null}:{sec:indSec[m[2]]||null,ind:m[2]};return bySt[ht]||null}}
+function xTmMorph(host,sel,paint){if(XREDUCE.matches||!host.animate){paint();return}
+  const rect=el=>({x:el.offsetLeft,y:el.offsetTop,w:el.offsetWidth,h:el.offsetHeight}),box=r=>({left:r.x+'px',top:r.y+'px',width:Math.max(0,r.w)+'px',height:Math.max(0,r.h)+'px'});
+  const old=new Map();host.querySelectorAll(sel).forEach(el=>{const k=el.dataset.ht||el.dataset.tip;if(k)old.set(k,{el,r:rect(el),bg:getComputedStyle(el).backgroundColor})});
+  host.querySelectorAll('.xbsl').forEach(l=>l.remove());paint();const D=560,E='cubic-bezier(.65,0,.3,1)',used=new Set();host.classList.add('xswap');
+  host.querySelectorAll(sel).forEach(el=>{const k=el.dataset.ht||el.dataset.tip,o=k&&old.get(k);
+    if(o){used.add(k);const r=rect(el),bg=getComputedStyle(el).backgroundColor;el.animate([{...box(o.r),backgroundColor:o.bg},{...box(r),backgroundColor:bg}],{duration:D,easing:E,fill:'backwards'});[...el.children].forEach(c=>c.animate([{opacity:.0},{opacity:0,offset:.55},{opacity:1}],{duration:D,fill:'backwards'}))}
+    else el.animate([{opacity:0},{opacity:1}],{duration:300,delay:D*.5,fill:'backwards'})});
+  const gone=[...old].filter(([k])=>!used.has(k));if(gone.length){const layer=document.createElement('div');layer.className='xbsl';layer.setAttribute('aria-hidden','true');host.appendChild(layer);
+    gone.forEach(([,o])=>{o.el.style.left=o.r.x+'px';o.el.style.top=o.r.y+'px';o.el.style.width=o.r.w+'px';o.el.style.height=o.r.h+'px';layer.appendChild(o.el);o.el.animate([{opacity:1},{opacity:0}],{duration:240,fill:'forwards'})});setTimeout(()=>layer.remove(),300)}
+  clearTimeout(host._mT);host._mT=setTimeout(()=>host.classList.remove('xswap'),D+40)}
 function xTmSwap(paint,from,to){const tm=$('xTm');if(!tm)return paint();const key=xTmKeys(XM.d||{});xBlockSwap(tm,'.xtile',paint,from,to,el=>key(el.dataset.ht))}
 /* Blocks merge and split like bricks. Going coarser: each piece slides into a packed spot inside its
    group's box and takes the group's colour, then the seams close and it is the group tile; nothing is
@@ -3187,7 +3240,7 @@ function xinTip(t,on){const dock=$('xInDock'),d=XM.d;if(!dock||!d)return;const s
   const tm=$('xTm');if(tm){tm.classList.toggle('fade',!!show);tm.querySelectorAll('.xtile[data-ht]').forEach(x=>x.classList.toggle('on',x.dataset.ht===show))}
   const c=show?xFind(show):null,key=c?show+(XM.sel===show?'*':''):'';if(dock.dataset.t===key)return;
   const tlS=k=>k?`#xTm>.xtile[data-ht="${CSS.escape(k.replace(/\*$/,''))}"]`:'',pop0=$('xInPop'),prevK=dock.dataset.t;if(pop0&&!pop0.hidden&&!c)xPopOut(pop0,xSrcRect(pop0.dataset.src||tlS(prevK)));
-  dock.innerHTML=c?(c.k==='rest'?xRestCard(d):c.k==='grp'?xGrpCard(c,d):xHoldCard(c,d.self)):xAboutCard(d);dock.dataset.t=key;
+  dock.innerHTML=c?(c.k==='rest'?xRestCard(d):c.k==='grp'?xGrpCard(c,d):xHoldCard(c,d.self)):xAboutCard(d);dock.dataset.t=key;if(!XM.noReveal&&($('xInPop')||key.endsWith('*')))xRevealSvg(dock.querySelector('.xspark svg'),700,$('xInPop')&&c?260:80);
   const pop=$('xInPop');if(pop){if(c&&dock.firstElementChild)dock.firstElementChild.insertAdjacentHTML('afterbegin',xFaceX());const was=pop.hidden;pop.hidden=!c;
     if(c)pop.dataset.src=tlS(show);if(c&&was&&!XREDUCE.matches&&pop.animate){pop.animate([{opacity:0},{opacity:1}],{duration:200,easing:'ease-out'});xGrowIn(dock.firstElementChild,xSrcRect(tlS(show)))}}
   else if(prevK!==undefined&&prevK!=='~'&&!XM.tabAnim)xSwapIn(dock.firstElementChild);
@@ -3369,16 +3422,16 @@ document.addEventListener('click',e=>{{const q=e.target.closest('[data-xpf]');if
 /* touch screens send pretend mouse events with every tap; hover behavior ignores them, so a tap does only what it says */
 let xTouchAt=0;document.addEventListener('touchstart',()=>{xTouchAt=Date.now()},{passive:true,capture:true});
 const xFakeHover=()=>Date.now()-xTouchAt<1000;
-document.addEventListener('mouseover',e=>{if($('xm').hidden||XM.tab!=='in'||xFakeHover())return;const tt=e.target.closest&&e.target.closest('#xmBody .xtile[data-ht]');if(tt)xinTip(tt.dataset.ht,true)});
-document.addEventListener('mouseout',e=>{if($('xm').hidden||XM.tab!=='in'||xFakeHover())return;const tt=e.target.closest&&e.target.closest('#xmBody .xtile[data-ht]');if(tt&&!(e.relatedTarget&&e.relatedTarget.closest&&e.relatedTarget.closest('#xmBody .xtile[data-ht]')))xinTip(tt.dataset.ht,false)});
+document.addEventListener('mouseover',e=>{if($('xm').hidden||XM.tab!=='in'||xFakeHover()||$('xInPop'))return;const tt=e.target.closest&&e.target.closest('#xmBody .xtile[data-ht]');if(tt)xinTip(tt.dataset.ht,true)});
+document.addEventListener('mouseout',e=>{if($('xm').hidden||XM.tab!=='in'||xFakeHover()||$('xInPop'))return;const tt=e.target.closest&&e.target.closest('#xmBody .xtile[data-ht]');if(tt&&!(e.relatedTarget&&e.relatedTarget.closest&&e.relatedTarget.closest('#xmBody .xtile[data-ht]')))xinTip(tt.dataset.ht,false)});
 addEventListener('resize',()=>{if($('xm').hidden||XM.tab!=='in')return;cancelAnimationFrame(XM.rz);XM.rz=requestAnimationFrame(()=>{xinFit();xinPaint()})});
 document.addEventListener('pointerover',e=>{if(!e.target.closest)return;const tr=e.target.closest('tr');const o=e.target.closest('[data-xopen]')||(tr&&tr.querySelector('[data-xopen]'));if(o&&o.dataset.xopen!=='TPS'&&!XDATA[o.dataset.xopen])xLoad(o.dataset.xopen).catch(()=>{});if(e.target.closest('[data-xpf][data-xtab="alt"]')&&!XPOOL)xPoolLoad().catch(()=>{});const L=e.target.closest('[data-xopen][data-xtab="in"]');if(L&&L.dataset.xopen!=='TPS'&&!XIN[L.dataset.xopen])xinLoad(L.dataset.xopen).catch(()=>{})});
 document.addEventListener('keydown',e=>{if($('xm').hidden)return;if(e.key==='Escape'){e.stopPropagation();const pp=$('xCardPop'),ip=$('xInPop');if(pp&&!pp.hidden){const t=XM.sel;XM.sel=null;xChartTip(t,false)}else if(ip&&!ip.hidden){const t=XM.sel;XM.sel=null;xinTip(t,false)}else closeExplore()}
   if(e.key==='Tab'){const f=[...$('xm').querySelectorAll('button:not(:disabled),[tabindex="0"]')].filter(x=>x.offsetParent);if(!f.length)return;const i=f.indexOf(document.activeElement);if(e.shiftKey&&i<=0){e.preventDefault();f[f.length-1].focus()}else if(!e.shiftKey&&i===f.length-1){e.preventDefault();f[0].focus()}}},true);
-document.addEventListener('mouseover',e=>{if($('xm').hidden||xFakeHover())return;const p=e.target.closest('#xmBody .xpt');if(p){xChartTip(p.dataset.xt,true);return}
+document.addEventListener('mouseover',e=>{if($('xm').hidden||xFakeHover()||(ph0()&&$('xPopDock')))return;const p=e.target.closest('#xmBody .xpt');if(p){xChartTip(p.dataset.xt,true);return}
   const lk=e.target.closest('#xmBody .xlegend .li[data-xk]');if(lk){const svg=document.querySelector('#xmBody .xfig svg');if(svg){svg.querySelector('.xdots').classList.add('xfade');svg.querySelectorAll('.xpt').forEach(g=>g.classList.toggle('on',g.dataset.xk===lk.dataset.xk))}return}
   const c=e.target.closest('#xmBody [data-xc]');if(c){const svg=document.querySelector('#xmBody .xfig svg');if(svg){svg.querySelector('.xdots').classList.add('xfade');svg.querySelectorAll('.xpt').forEach(g=>g.classList.toggle('on',g.dataset.xt===c.dataset.xc))}}});
-document.addEventListener('mouseout',e=>{if($('xm').hidden||xFakeHover())return;const p=e.target.closest('#xmBody .xpt');if(p&&!p.contains(e.relatedTarget)){xChartTip(p.dataset.xt,false);return}
+document.addEventListener('mouseout',e=>{if($('xm').hidden||xFakeHover()||(ph0()&&$('xPopDock')))return;const p=e.target.closest('#xmBody .xpt');if(p&&!p.contains(e.relatedTarget)){xChartTip(p.dataset.xt,false);return}
   const lk=e.target.closest('#xmBody .xlegend .li[data-xk]');if(lk&&!lk.contains(e.relatedTarget)){const svg=document.querySelector('#xmBody .xfig svg');if(svg){svg.querySelector('.xdots').classList.remove('xfade');svg.querySelectorAll('.xpt').forEach(g=>g.classList.remove('on'))}return}
   const c=e.target.closest('#xmBody [data-xc]');if(c&&!c.contains(e.relatedTarget)){const svg=document.querySelector('#xmBody .xfig svg');if(svg){svg.querySelector('.xdots').classList.remove('xfade');svg.querySelectorAll('.xpt').forEach(g=>g.classList.remove('on'))}}});
 document.addEventListener('mouseover',e=>{if($('xm').hidden||!XM.d||xFakeHover())return;const r=e.target.closest&&e.target.closest('#xCmp tr[data-xrow]');document.querySelectorAll('#xCmp tr.on').forEach(x=>{if(x!==r)x.classList.remove('on')});if(!r)return;r.classList.add('on');const svg=document.querySelector('#xmBody .xfig svg');if(svg){svg.querySelector('.xdots').classList.add('xfade');svg.querySelectorAll('.xpt').forEach(g=>g.classList.toggle('on',g.dataset.xt===r.dataset.xrow||g.dataset.xt===XM.sel))}});
