@@ -1155,7 +1155,7 @@ tr.xecho>td{background:var(--accentBg);transition:background .2s}
 .xftip.rich{white-space:normal;width:250px;padding:10px 12px;display:flex;flex-direction:column;gap:5px;font-size:12.5px;line-height:1.35}
 .xftip .fth{display:flex;align-items:center;gap:8px}.xftip .fth b{font-size:14px}.xftip .ftd{color:var(--muted)}
 .xftip .ftg{margin-left:auto;font:600 10px "IBM Plex Sans",sans-serif;letter-spacing:.05em;text-transform:uppercase;padding:2px 7px;border-radius:999px;background:var(--panel2);color:var(--muted);white-space:nowrap}.xftip .ftg.up{background:color-mix(in srgb,var(--pos) 16%,transparent);color:var(--pos)}.xftip .ftg.dn{background:color-mix(in srgb,var(--neg) 16%,transparent);color:var(--neg)}
-.xftip .ftl{display:flex;justify-content:space-between;gap:8px;color:var(--ink2)}.xftip .pos{color:var(--pos)}.xftip .neg{color:var(--neg)}.xftip .ftp{color:var(--ink2)}
+.xftip .ftl{color:var(--ink2)}.xftip .pos{color:var(--pos)}.xftip .neg{color:var(--neg)}.xftip .ftp{color:var(--ink2)}
 .xftip .ftper{display:grid;grid-template-columns:repeat(6,1fr);gap:2px;border-top:1px solid var(--line);padding-top:6px;margin-top:2px}.xftip .ftper span{display:flex;flex-direction:column;align-items:center;font:500 11px "IBM Plex Mono",monospace;color:var(--ink2)}.xftip .ftper i{font:600 9.5px "IBM Plex Sans",sans-serif;font-style:normal;color:var(--muted)}.xftip .ftper span.on{color:var(--ink);font-weight:700}
 .xdrv{flex:none;font-size:12.5px}.xdrvh{display:flex;align-items:center;gap:8px;font:600 10.5px "IBM Plex Sans",sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}.xdrvh i{font-style:normal;text-transform:none;letter-spacing:0;font-weight:500}
 .xfcol{margin-left:auto;display:inline-flex;border:1px solid var(--line);border-radius:7px;overflow:hidden}.xfcol button{border:0;background:transparent;font:600 10.5px "IBM Plex Sans",sans-serif;color:var(--muted);padding:3px 8px;cursor:pointer;text-transform:none;letter-spacing:0}.xfcol button.sel{background:var(--panel2);color:var(--ink)}
@@ -1603,6 +1603,13 @@ function bFlip(fn,inNew){const R=!document.body.animate||matchMedia('(prefers-re
   })}
 /* rows that weren't there before slide in from the left: adding an ETF, Undo, opening a portfolio */
 let BKEYS=null;
+function bSparks(old){const gl=[],seen=new Set();document.querySelectorAll('#bTable tr').forEach(tr=>{const k=bRowKey(tr),svg=tr.querySelector('.momwrap svg'),p=svg&&svg.querySelector('polyline');if(!k||!p)return;seen.add(k);
+    if(BSPG&&old.has(k)){gl.push({p,from:old.get(k)});return}
+    /* new sparkline: draw it in; if the table redraws mid-draw, carry on from where it had got to */
+    const now=performance.now(),t0=BSPT.get(k);if(!BSPK||!BSPK.has(k)){BSPT.set(k,now);xRevealSvg(svg,650,120)}
+    else if(t0&&now-t0<770&&svg.animate&&!XREDUCE.matches){const fr=Math.max(0,Math.min(1,(now-t0-120)/650));svg.animate([{clipPath:`inset(0 ${((1-fr)*100).toFixed(1)}% 0 0)`},{clipPath:'inset(0 0% 0 0)'}],{duration:Math.max(60,770-(now-t0)),easing:'cubic-bezier(.2,0,.25,1)',fill:'backwards'})}});
+  BSPG=false;BSPK=seen;if(gl.length)xGlidePolys(gl,520)}
+const BSPT=new Map();
 function bNewRows(){const trs=[...document.querySelectorAll('#bTable tr')],now=new Set();trs.forEach(tr=>{const k=bRowKey(tr);if(k&&k!=='add')now.add(k)});
   if(BKEYS&&document.body.animate&&!matchMedia('(prefers-reduced-motion: reduce)').matches)trs.forEach(tr=>{const k=bRowKey(tr);if(k&&k!=='add'&&!BKEYS.has(k))trAnim(tr,[{opacity:0,transform:'translateX(-18px)'},{opacity:1,transform:'none'}],{duration:260,delay:60,easing:'cubic-bezier(.2,0,0,1)',fill:'backwards'})});BKEYS=now}
 function bRemove(go,keys){const gone=keys||new Set(S.b.rows.filter(r=>r.k).map(r=>'r:'+r.t).concat(S.pfs.filter(p=>p.k).map(p=>'p:'+p.id)));
@@ -1679,7 +1686,7 @@ document.addEventListener('click',e=>{if(!e.target.closest)return;const pairs=[[
   if(!e.target.closest('.pmenu'))pairs.forEach(([b,m])=>{const mm=$(m);if(mm&&!mm.hidden){mm.hidden=true;$(b).setAttribute('aria-expanded','false')}})});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')['bDotsM'].forEach(id=>{const m=$(id);if(m)m.hidden=true})});
 function maxDays(){return Math.round((D.ms[D.last]-D.ms[0])/864e5)}
-function setSel(sc,sel){if(sc==='b'){S.b.sel=sel;BGLIDE=true}else S.sel=sel;persist();
+function setSel(sc,sel){if(sc==='b'){S.b.sel=sel;BGLIDE=true;BSPG=true}else S.sel=sel;persist();
   if(sc==='b'){bHideHover();renderPicker('b');renderBChart();renderBTable()}else{hideHover();buildSeries();renderPicker('p');renderChart();renderPortfolios()}}
 function fitBHead(){const bd=$('builder');if(!bd||!S.b.open)return;bd.classList.remove('hwrap');const a=$('bActs').getBoundingClientRect(),rg=document.createRange();rg.selectNodeContents($('bTitle'));const t=rg.getBoundingClientRect();if(a.left<t.right+20||window.innerWidth<=900)bd.classList.add('hwrap')}
 function renderBuilder(){S.b.open=true;withFocus(()=>{
@@ -1707,7 +1714,7 @@ function bsBtn(k,label){const on=BSORT.k===k;const arrow=on?(BSORT.dir<0?' ↓':
 function bOrder(WR,ES){const B=S.b;const idx=B.rows.map((r,j)=>j);if(!BSORT.k||!BSORT.dir)return idx;const k=BSORT.k;
   const val=j=>{const r=B.rows[j];if(k==='t')return r.t;if(k==='ret')return WR[j];if(k==='w')return Number(r.w)||0;if(k==='er')return ER[r.t]??null;const tp=TPER.find(x=>x[0]===k);if(tp)return periodRet(r.t,tp[1]);const st=ES[j]&&ES[j].st;return st?st[k]:null};
   return idx.sort((a,b)=>{const va=val(a),vb=val(b);if(va==null&&vb==null)return a-b;if(va==null)return 1;if(vb==null)return -1;const c=typeof va==='string'?va.localeCompare(vb):va-vb;return (c||a-b)*BSORT.dir})}
-function renderBTable(){const B=S.b;if(!B.open)return;const hp=B.sel.p;
+function renderBTable(){const B=S.b;if(!B.open)return;const hp=B.sel.p;const spOld=new Map();if(BSPG)document.querySelectorAll('#bTable tr').forEach(tr=>{const k=bRowKey(tr),p=tr.querySelector('.momwrap svg polyline');if(k&&p)spOld.set(k,p.getAttribute('points'))});
   const best={};TPER.forEach(([p,m])=>{const vs=B.rows.map(r=>periodRet(r.t,m)).filter(v=>v!=null);if(vs.length>1)best[p]=Math.max(...vs)});
   const ES=B.rows.map(r=>HAS(r.t)?pStats({rows:[{t:r.t,w:100}]},B.sel):null);const bb={};BM.forEach(([k])=>{const vs=ES.map(o=>bmVal(o,k)).filter(v=>v!=null);if(vs.length>1)bb[k]=k==='vol'?Math.min(...vs):Math.max(...vs)});
   const NC=TPER.length+BM.length+5;const full=B.rows.length>=MAXETF;
@@ -1721,7 +1728,7 @@ function renderBTable(){const B=S.b;if(!B.open)return;const hp=B.sel.p;
   $('bTable').innerHTML=`<thead>${grpRow}<tr><th style="text-align:left"><span class="hw">${B.rows.length+S.pfs.length>=2?`<label class="sr" for="bTickAll">Tick everything</label><input type="checkbox" class="tkchk" id="bTickAll" data-tip="Tick all" ${B.rows.every(r=>r.k)&&S.pfs.every(p=>p.k)?'checked':''}><span class="chsp" aria-hidden="true" style="width:${CHSP_HEAD}px"></span>`:''}${bsBtn('t','ETF')}</span></th><th class="r retcol"><span class="hw">${bsBtn('ret',selLabel(B.sel,'short')+' return')}${infoBtn('bret','return')}</span></th>${TPER.map(([p,m],k)=>`<th class="dsk r${p===hp?' hl':''}"><span class="hw">${bsBtn(p,pLabel(p,m))}${k===TPER.length-1?infoBtn('returns','returns'):''}</span></th>`).join('')}${BM.map(([k,lab,info])=>`<th class="dsk r bm bm-${k}${k==='sharpe'?' bmfirst':''}"><span class="hw">${bsBtn(k,lab())}${infoBtn(info,lab())}</span></th>`).join('')}<th class="dsk r ercol"><span class="hw">${bsBtn('er','Fee')}${infoBtn('er','expense ratio')}</span></th><th class="r wcell"><span class="sr">Share in group</span></th><th class="mob"></th><th class="dsk"></th></tr></thead>
     <tbody>${(()=>{const sorted=BSORT.k&&BSORT.dir,ord=bOrder(WR,ES);const items=sorted?sortedTop():topOrder();
       const isK=it=>it.t==='p'?!!it.p.k:!!(B.rows[it.j].k&&HAS(B.rows[it.j].t));const last=[...items].reverse().find(isK);if(!last)PVON=false;
-      return items.map(it=>it.t==='p'?pfRowsHTML(NC,null,[it.p]):etfRow(B.rows[it.j],it.j)).join('')})()}${addRow}</tbody>`;bStrip();bNewRows();bPvPlace(NC,S.pfs.some(p=>p.k)||S.b.rows.some(r=>r.k&&HAS(r.t)));
+      return items.map(it=>it.t==='p'?pfRowsHTML(NC,null,[it.p]):etfRow(B.rows[it.j],it.j)).join('')})()}${addRow}</tbody>`;bStrip();bSparks(spOld);bNewRows();bPvPlace(NC,S.pfs.some(p=>p.k)||S.b.rows.some(r=>r.k&&HAS(r.t)));
   document.querySelectorAll('#bTable button.info:empty').forEach(b=>{b.innerHTML=ICON_I});
 
 }
@@ -1769,12 +1776,14 @@ function bRailToggle(key){const now=Date.now(),lc=bRailClick;
     const v={};keys.forEach(k=>{v[k]=alone?true:k===key});bSetVis(v);bRailClick=null}
   else{bRailClick={key,t:now,prev:bVis()};const v=bVis();v[key]=!v[key];bSetVis(v)}
   persist();bHideHover();renderBuilder()}
-let BGLIDE=false,BLK=null;
+let BGLIDE=false,BLK=null,BSPG=false,BSPK=null;
+/* draw a whole little chart in from the left (works with any stroke, dashed or not) */
+function xRevealSvg(svg,dur,delay){if(!svg||!svg.animate||matchMedia('(prefers-reduced-motion: reduce)').matches)return;svg.animate([{clipPath:'inset(0 100% 0 0)'},{clipPath:'inset(0 0% 0 0)'}],{duration:dur||700,delay:delay||0,easing:'cubic-bezier(.45,0,.25,1)',fill:'backwards'})}
 function renderBChart(){const g=BGLIDE&&!matchMedia('(prefers-reduced-motion: reduce)').matches;BGLIDE=false;let old=null;
   if(g){old=new Map();document.querySelectorAll('#bChartbox svg polyline[data-lk]').forEach(p=>old.set(p.dataset.lk,p.getAttribute('points')))}
   const prev=BLK;renderBChart0();bFocusLine(null);if(old&&old.size)bGlide(old);
   const ls=[...document.querySelectorAll('#bChartbox svg polyline[data-lk]')];BLK=new Set(ls.map(p=>p.dataset.lk));
-  if(prev&&!matchMedia('(prefers-reduced-motion: reduce)').matches)ls.filter(p=>!prev.has(p.dataset.lk)&&!p.getAttribute('stroke-dasharray')&&p.animate).forEach(p=>{let L=0;try{L=p.getTotalLength()}catch(e){}if(!L)return;L=Math.ceil(L)+2;
+  if(!matchMedia('(prefers-reduced-motion: reduce)').matches)ls.filter(p=>!(prev||new Set()).has(p.dataset.lk)&&!p.getAttribute('stroke-dasharray')&&p.animate).forEach(p=>{let L=0;try{L=p.getTotalLength()}catch(e){}if(!L)return;L=Math.ceil(L)+2;
     p.style.strokeDasharray=L;const a=p.animate([{strokeDashoffset:L},{strokeDashoffset:0}],{duration:1100,easing:'cubic-bezier(.45,0,.25,1)'});a.onfinish=a.oncancel=()=>{p.style.strokeDasharray=''}})}
 /* move polylines from old points to new ones; pairs: [{p, from}] */
 function xGlidePolys(pairs,D){const N=180,parse=q=>q.trim().split(/\s+/).map(x=>x.split(',').map(Number)).filter(x=>x.length===2&&!isNaN(x[1]));
@@ -2781,21 +2790,18 @@ function xDrivers(body,items,fund,t){let el=body.querySelector('.xdrv');if(!el){
   const has=items.filter(x=>x.pts!=null&&x.kind!=='oth'),up=has.filter(x=>x.pts>0).sort((a,b)=>b.pts-a.pts).slice(0,3),dn=has.filter(x=>x.pts<0).sort((a,b)=>a.pts-b.pts)[0];
   const pts=v=>(v>=0?'+':'−')+Math.abs(v).toFixed(1)+' pts';
   const row=(x,cls)=>`<li class="${cls}"><span class="sw" style="background:${x.col}"></span><b>${esc(x.t)}</b><span class="r">${xp(x.r)}</span><span class="p">${pts(x.pts)}</span></li>`;
-  el.innerHTML=has.length?`<div class="xdrvh"><span>What moved ${esc(t)} · ${XM.rng}${fund!=null?` <i>(fund ${xp(fund)})</i>`:''}</span><span class="xfcol" role="group" aria-label="Tile colors"><button type="button" data-xfcol="sec" class="${XFCOL==='sec'?'sel':''}">Sector</button><button type="button" data-xfcol="ret" class="${XFCOL==='ret'?'sel':''}">Return</button></span></div><ol>${up.map(x=>row(x,'up')).join('')}${dn?row(dn,'dn'):''}</ol>`:''}
-function xTmPaintItems(box,items){const W=box.clientWidth,H=box.clientHeight;if(!W||!H)return;const tw=items.reduce((a,x)=>a+x.w,0)||1,ctx=box._ctx||{},RET=XFCOL==='ret';
+  el.innerHTML=has.length?`<div class="xdrvh"><span>What moved ${esc(t)} · ${XM.rng}${fund!=null?` <i>(fund ${xp(fund)})</i>`:''}</span></div><ol>${up.map(x=>row(x,'up')).join('')}${dn?row(dn,'dn'):''}</ol>`:''}
+function xTmPaintItems(box,items){const W=box.clientWidth,H=box.clientHeight;if(!W||!H)return;const tw=items.reduce((a,x)=>a+x.w,0)||1;
   const tiles=xSquarify(items.map(x=>({c:x,a:x.w/tw*W*H})),0,0,W,H);
-  box.innerHTML=tiles.map(({c,x,y,w,h},i)=>{const pc=c.w*100,p1=pc.toFixed(1)+'%'+(c.r!=null&&w>=110?' · '+xp(c.r):''),lab=`${c.t}${c.n?' · '+c.n:''} · ${pc.toFixed(1)}%`,ix=items.indexOf(c);
+  box.innerHTML=tiles.map(({c,x,y,w,h},i)=>{const pc=c.w*100,p1=pc.toFixed(1)+'%',lab=`${c.t}${c.n?' · '+c.n:''} · ${pc.toFixed(1)}%`,ix=items.indexOf(c);
     const lw=c.t.split(' ').reduce((a,x)=>Math.max(a,x.length),0),bfs=Math.max(9,Math.min(13,(w-22)/(lw*0.68),(w-22)*2/(c.t.length*0.62))),bfs1=Math.min(13,(w-22)/(c.t.length*0.6));const inner=w>=110&&h>=54?`<b style="font-size:${bfs.toFixed(1)}px">${esc(c.t)}</b><i>${p1}</i>${c.n?`<span>${esc(c.n)}</span>`:''}`:w>=54&&h>=54&&bfs1>=9?`<b class="one" style="font-size:${bfs1.toFixed(1)}px">${esc(c.t)}</b><i>${p1}</i>`:w>=36&&h>=22?`<i style="font-size:${Math.max(10,Math.min(12.5,w/3.8)).toFixed(1)}px">${pc<10?p1:Math.round(pc)+'%'}</i>`:'';
-    /* 1) big tiles also say how that slice did against the whole fund */
-    const vs=c.r!=null&&ctx.fund!=null&&w>=150&&h>=96?`<em class="xfvs">${c.r>=ctx.fund?'Beat':'Trailed'} the fund (${xp(ctx.fund)})</em>`:'';
-    return `<div class="xftile${RET?' b-'+xBucket(c.r)+' xfret':''}" data-tip="${esc(lab)}" data-i="${ix}"${c.gs?` data-gs="${esc(c.gs)}"`:''}${c.gi?` data-gi="${esc(c.gi)}"`:''} style="left:${x.toFixed(1)}px;top:${y.toFixed(1)}px;width:${Math.max(0,w-3).toFixed(1)}px;height:${Math.max(0,h-3).toFixed(1)}px;${w-3<22||h-3<18?'padding:0;':''}${RET?'':'background:'+(c.col||XSCOL[i%XSCOL.length])}">${inner}${vs}</div>`}).join('')+'<div class="xftip" hidden></div>'}
-function xTmTipHTML(box,c){const ctx=box._ctx||{},f=ctx.fund,pts=c.pts,KS=['1M','3M','6M','YTD','1Y','3Y'];
+    return `<div class="xftile" data-tip="${esc(lab)}" data-i="${ix}"${c.gs?` data-gs="${esc(c.gs)}"`:''}${c.gi?` data-gi="${esc(c.gi)}"`:''} style="left:${x.toFixed(1)}px;top:${y.toFixed(1)}px;width:${Math.max(0,w-3).toFixed(1)}px;height:${Math.max(0,h-3).toFixed(1)}px;${w-3<22||h-3<18?'padding:0;':''}background:${c.col||XSCOL[i%XSCOL.length]}">${inner}</div>`}).join('')+'<div class="xftip" hidden></div>'}
+function xTmTipHTML(box,c){const ctx=box._ctx||{},f=ctx.fund,pts=c.pts;
   const tag=c.top&&pts>0?'<span class="ftg up">Biggest driver</span>':c.r!=null&&f!=null?(c.r<f-0.005?'<span class="ftg dn">Held it back</span>':c.r>f+0.005?'<span class="ftg up">Pulled ahead</span>':'<span class="ftg">Kept pace</span>'):'';
-  const per=c.m&&c.m.length?KS.map((lbl,i)=>{const r=c.kind==='stk'?(c.m[0].r?c.m[0].r[i]:null):xGrpR(c.m,i);return `<span${i===ctx.k?' class="on"':''}><i>${lbl}</i>${r==null?'—':xp(r)}</span>`}).join(''):'';
+  const per=XM.rng==='3Y'?' a year over 3Y':' over '+XM.rng;
   return `<div class="fth"><b>${esc(c.t)}</b>${tag}</div>${c.desc?`<div class="ftd">${esc(c.desc)}</div>`:''}
-    <div class="ftl"><span>${(c.w*100).toFixed(1)}% of ${esc(ctx.t||'')}</span>${c.r!=null?`<span>${XM.rng} <b class="${c.r>=0?'pos':'neg'}">${xp(c.r)}</b>${f!=null?` vs fund ${xp(f)}`:''}</span>`:''}</div>
-    ${pts!=null&&f!=null?`<div class="ftp">${pts>=0?'Added':'Took away'} <b>${Math.abs(pts).toFixed(1)} pts</b> of the fund's ${xp(f)}</div>`:''}
-    ${per?`<div class="ftper">${per}</div>`:''}`}
+    ${c.r!=null?`<div class="ftl"><b class="${c.r>=0?'pos':'neg'}">${xp(c.r)}</b>${per}</div>`:''}
+    ${pts!=null&&f!=null?`<div class="ftp">${pts>=0?'Added':'Took away'} <b>${Math.abs(pts).toFixed(1)} pts</b> of the fund's ${xp(f)}</div>`:''}`}
 function xTmTip(tl,on){const box=tl.parentElement,tip=box&&box.querySelector('.xftip');if(!tip)return;if(!on){tip.hidden=true;return}
   const c=box._items&&box._items[+tl.dataset.i];if(c){tip.innerHTML=xTmTipHTML(box,c);tip.classList.add('rich');tip.dataset.k=tl.dataset.tip}else{tip.textContent=tl.dataset.tip;tip.classList.remove('rich')}tip.hidden=false;let x=tl.offsetLeft+tl.offsetWidth/2-tip.offsetWidth/2;x=Math.max(2,Math.min(box.clientWidth-tip.offsetWidth-2,x));let y=tl.offsetTop-tip.offsetHeight-6;if(y<0)y=tl.offsetTop+tl.offsetHeight+6;tip.style.left=x+'px';tip.style.top=y+'px'}
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-xfcol]');if(!b)return;XFCOL=b.dataset.xfcol;requestAnimationFrame(()=>document.querySelectorAll('.xbk-body').forEach(body=>{if(body._d)xTmPaint(body,body.dataset.mode||'ind')}))});
@@ -2856,6 +2862,7 @@ function xChartTip(t,on){if(!on&&XM.sel){t=XM.sel;on=true}
   if(!dock||!leg||!p){if(wdock&&!wdock.hidden){wdock.hidden=true;wdock.innerHTML='';wdock.dataset.t=''}if(pop&&!pop.hidden){xPopOut(pop,xSrcRect(pop.dataset.src));pop.hidden=true;if(pdock){pdock.innerHTML='';pdock.dataset.t=''}}if(leg)leg.classList.remove('showcard');xMatchH();return xTipBase(t,on)}
   xTipBase(t,false);if(svg){svg.querySelector('.xdots').classList.toggle('xfade',!rest);svg.querySelectorAll('.xpt').forEach(g=>g.classList.toggle('on',!rest&&g.dataset.xt===t))}
   const dk=t+(rest?'|rest':''),wasT=dock.dataset.t,wasHid=mob?pop.hidden:wdock.hidden;let chg=false;if(dock.dataset.t!==dk){chg=true;XM.restKey=p.k==='self'&&XM.tab==='alt';dock.innerHTML=p.k==='self'?xSelfCard(XM.d.self):xCard(p,XM.d.self,p.k,true);XM.restKey=false;dock.dataset.t=dk}dock.firstElementChild.classList.toggle('hl',XM.sel===t);if(mob)pop.hidden=false;else{wdock.hidden=false;leg.classList.add('showcard')}
+  if(chg&&(mob||XM.sel===t))xRevealSvg(dock.querySelector('.xspark svg'),700,mob&&wasHid?260:80);
   if(mob){const sel=XM.popSrc||ptS(dk);XM.popSrc=null;if(wasHid||chg)pop.dataset.src=sel;if(wasHid&&!XREDUCE.matches&&pop.animate){pop.animate([{opacity:0},{opacity:1}],{duration:200,easing:'ease-out'});xGrowIn(dock.firstElementChild,xSrcRect(sel))}}else if(!mob&&chg&&wasT&&!wasHid)xSwapIn(dock.firstElementChild);renderXMButtons();xDescFill(dock.firstElementChild);xMoreSync(dock);xMatchH();if(!mob&&XM.sel===t)xGrowModal()}
 /* the card and the chart box share one height */
 function xMatchH(){const fig=document.querySelector('#xmBody .xfig'),dock=$('xCardDock'),c=dock&&!dock.hidden&&dock.firstElementChild;if(!fig||!c||ph0())return;const fr=c.querySelector('.xface.fr');let need=0;if(fr)need=fr.scrollHeight+(c.offsetHeight-fr.clientHeight);const h0=c.style.height?c.offsetHeight:0,h1=Math.max(fig.offsetHeight,need);c.style.height=h1+'px';
@@ -3218,7 +3225,7 @@ function xinTip(t,on){const dock=$('xInDock'),d=XM.d;if(!dock||!d)return;const s
   const tm=$('xTm');if(tm){tm.classList.toggle('fade',!!show);tm.querySelectorAll('.xtile[data-ht]').forEach(x=>x.classList.toggle('on',x.dataset.ht===show))}
   const c=show?xFind(show):null,key=c?show+(XM.sel===show?'*':''):'';if(dock.dataset.t===key)return;
   const tlS=k=>k?`#xTm>.xtile[data-ht="${CSS.escape(k.replace(/\*$/,''))}"]`:'',pop0=$('xInPop'),prevK=dock.dataset.t;if(pop0&&!pop0.hidden&&!c)xPopOut(pop0,xSrcRect(pop0.dataset.src||tlS(prevK)));
-  dock.innerHTML=c?(c.k==='rest'?xRestCard(d):c.k==='grp'?xGrpCard(c,d):xHoldCard(c,d.self)):xAboutCard(d);dock.dataset.t=key;
+  dock.innerHTML=c?(c.k==='rest'?xRestCard(d):c.k==='grp'?xGrpCard(c,d):xHoldCard(c,d.self)):xAboutCard(d);dock.dataset.t=key;if($('xInPop')||key.endsWith('*'))xRevealSvg(dock.querySelector('.xspark svg'),700,$('xInPop')&&c?260:80);
   const pop=$('xInPop');if(pop){if(c&&dock.firstElementChild)dock.firstElementChild.insertAdjacentHTML('afterbegin',xFaceX());const was=pop.hidden;pop.hidden=!c;
     if(c)pop.dataset.src=tlS(show);if(c&&was&&!XREDUCE.matches&&pop.animate){pop.animate([{opacity:0},{opacity:1}],{duration:200,easing:'ease-out'});xGrowIn(dock.firstElementChild,xSrcRect(tlS(show)))}}
   else if(prevK!==undefined&&prevK!=='~'&&!XM.tabAnim)xSwapIn(dock.firstElementChild);
