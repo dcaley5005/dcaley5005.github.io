@@ -708,7 +708,14 @@ tr.dim .spkbtn{opacity:.5}
 .pvacts{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:2px 0 6px}
 #bPv{position:absolute;left:0;right:0;top:0;z-index:6;display:flex;align-items:center;padding:0 10px 0 14px;box-sizing:border-box;background:color-mix(in srgb,var(--accent) 9%,var(--panel));border-bottom:1px solid var(--line);box-shadow:inset 4px 0 0 var(--accent);overflow-x:auto;scrollbar-width:none}#bPv::-webkit-scrollbar{display:none}
 #bPv .pvacts{flex-wrap:nowrap;padding:0;width:100%}#bPv .pvacts>*{flex:none}#bPv .pvn{font:600 13px "IBM Plex Sans",sans-serif;color:var(--accent);margin-right:6px;white-space:nowrap}
-@media (max-width:700px){#bPv{padding:0 8px 0 10px}#bPv .btn,#bPv .pvsel{height:32px!important;padding:0 10px;font-size:12.5px}#bPv .pvn{display:none}}
+@media (max-width:700px){
+  #bPv{position:fixed;left:10px;right:10px;top:auto;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:58;padding:12px;border:1px solid var(--line);border-radius:18px;background:var(--panel);box-shadow:0 12px 34px rgba(0,0,0,.28),0 2px 6px rgba(0,0,0,.12);overflow:visible}
+  #bPv .pvacts{flex-wrap:wrap;gap:8px;row-gap:10px}
+  #bPv .pvn{display:block;order:-2;flex:1 1 calc(100% - 120px);font-size:14px;color:var(--ink);align-self:center}
+  #bPv [data-bclr]{order:-1;border:0!important;background:none!important;padding:0 4px!important;height:28px!important}
+  #bPv .btn,#bPv .pvsel{height:42px!important;padding:0 14px;font-size:14px;border-radius:12px}
+  #bPv .btn[data-bgrp]{flex:1 1 auto;justify-content:center}
+  body.pvbar{padding-bottom:130px}}
 .pvacts .btn{display:inline-flex;gap:7px;align-items:center;height:36px;padding:0 13px;font-size:13px;border-color:var(--inputLine)}
 .pvacts .btn.go{background:var(--accent);border-color:var(--accent);color:var(--panel)}
 .pvacts .btn[data-bgrp]:disabled{opacity:1;cursor:default;font-weight:600;color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,transparent);border-color:var(--accent);animation:pvglow 2s ease-in-out infinite}
@@ -1576,12 +1583,15 @@ function pfRowsHTML(NC,stripAfter,list){const B=S.b,st0=selStart(B.sel),hp=B.sel
   return h}).join('')}
 let PVAT=0,PVON=false;
 /* 1d: the action strip opens right under the last ticked row, joined to the ticked rows by a green edge */
-function bPvPlace(NC,on){const wrap=$('bTable')&&$('bTable').parentElement;if(!wrap)return;let el=$('bPv');
-  if(!on){if(el){el.remove()}return}const fresh=!el;const t=document.createElement('table');t.innerHTML=pvStripHTML(NC);const acts=t.querySelector('.pvacts');if(!acts)return;
+function bPvPlace(NC,on){const wrap=$('bTable')&&$('bTable').parentElement;if(!wrap)return;let el=$('bPv');const PH=innerWidth<=700,host=PH?document.body:wrap;
+  /* phone: a floating bar at the bottom of the screen (slides up, slides away); bigger screens: over the column headers */
+  if(el&&el.parentElement!==host){el.remove();el=null}
+  document.body.classList.toggle('pvbar',!!on&&PH);
+  if(!on){if(el){el.removeAttribute('id');if(PH&&el.animate&&!matchMedia('(prefers-reduced-motion: reduce)').matches){el.animate([{transform:'none',opacity:1},{transform:'translateY(130%)',opacity:.6}],{duration:220,easing:'cubic-bezier(.4,0,1,1)',fill:'forwards'}).onfinish=()=>el.remove()}else el.remove()}return}const fresh=!el;const t=document.createElement('table');t.innerHTML=pvStripHTML(NC);const acts=t.querySelector('.pvacts');if(!acts)return;
   const n=tickNames().length;acts.querySelector('.pvarr')?.replaceWith(Object.assign(document.createElement('span'),{className:'pvn',textContent:n+' selected'}));
-  if(!el){el=document.createElement('div');el.id='bPv';el.setAttribute('role','toolbar');el.setAttribute('aria-label','Actions for what you ticked');wrap.appendChild(el)}
-  el.innerHTML='';el.appendChild(acts);const th=$('bTable').tHead;el.style.height=Math.max(44,th?th.offsetHeight:44)+'px';
-  if(fresh&&el.animate&&!matchMedia('(prefers-reduced-motion: reduce)').matches)el.animate([{opacity:0,transform:'translateY(-6px)'},{opacity:1,transform:'none'}],{duration:200,easing:'cubic-bezier(.2,0,0,1)'})}
+  if(!el){el=document.createElement('div');el.id='bPv';el.setAttribute('role','toolbar');el.setAttribute('aria-label','Actions for what you ticked');host.appendChild(el)}
+  el.innerHTML='';el.appendChild(acts);const th=$('bTable').tHead;el.style.height=PH?'':Math.max(44,th?th.offsetHeight:44)+'px';
+  if(fresh&&el.animate&&!matchMedia('(prefers-reduced-motion: reduce)').matches)el.animate(PH?[{opacity:.6,transform:'translateY(130%)'},{opacity:1,transform:'none'}]:[{opacity:0,transform:'translateY(-6px)'},{opacity:1,transform:'none'}],{duration:PH?320:200,easing:PH?'cubic-bezier(.2,.9,.3,1)':'cubic-bezier(.2,0,0,1)'})}
 function pvStripHTML(NC){const fresh=!PVON;if(fresh)PVAT=Date.now();PVON=true;const names=tickNames(),n=names.length,nm=names.join(' + ');
   const tg=S.pfs.filter(p=>!p.k);
   const pick=tg.length===1?`<button type="button" class="btn" data-baddto="${esc(tg[0].id)}"><span class="pvsw" style="background:${pfCol(tg[0])}"></span>Add to ${esc(tg[0].name)}</button>`
