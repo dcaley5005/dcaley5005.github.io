@@ -3164,7 +3164,8 @@ function xBlockSwap(host,sel,paint,from,to,gOf){
   const MV=600,SEAM=190,LAB=180,E='cubic-bezier(.65,0,.3,1)',GAP=4;
   const coarseSide=merge?nu:old,fineSide=merge?old:nu,G=new Map();
   coarseSide.forEach(c=>{const g=lvl(c.el);if(g)G.set(g,{c,m:[]})});fineSide.forEach(f=>{const g=lvl(f.el),e=g&&G.get(g);if(e)e.m.push(f)});
-  const gs=[...G.values()].filter(e=>e.m.length).sort((x,y)=>y.c.r.w*y.c.r.h-x.c.r.w*x.c.r.h);
+  /* a group too thin to see (a fraction-of-a-percent sector) can't hold pieces: its members just fade */
+  const gs=[...G.values()].filter(e=>e.m.length&&e.c.r.w>=10&&e.c.r.h>=10).sort((x,y)=>y.c.r.w*y.c.r.h-x.c.r.w*x.c.r.h);
   const step=Math.min(40,320/Math.max(1,gs.length)),used=new Set();let end=0;
   gs.forEach((e,i)=>{const R=e.c.r,P=pack(e.m,R,GAP),Z=pack(e.m,R,0),dl=i*step;used.add(e.c);e.m.forEach(f=>used.add(f));
     if(merge){
