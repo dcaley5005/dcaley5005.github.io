@@ -2778,8 +2778,10 @@ function xGrowRow(){if(ph0()||XM.tabAnim)return;const B=$('xmBody'),md=$('xm').q
   if(svg&&svg.clientWidth&&row>fig.offsetHeight+2)xFigTo(row);
   xMatchH();xGrowModal()}
 /* every pick gets one badge and one line on why: what you gain, what it costs, and Sharpe only when risk goes up (3-year numbers, like the chart) */
-function xBestT(d){if(!d)return null;if(d._best!==undefined)return d._best;const s=d.self,seen=new Set();let best=null,bs=-1e9;
-  [['same',d.same],['div',d.div],['mom',d.mom||[]],['own',d.own||[]]].forEach(([k,a])=>a.forEach(c=>{if(seen.has(c.t))return;seen.add(c.t);const sc=(c.r3>s.r3)+(c.vol<s.vol)+(c.sh>s.sh)+((c.r3-s.r3)-(c.vol-s.vol))*2;if(sc>bs){bs=sc;best=c.t}}));return d._best=best}
+function xBestT(d){if(!d)return null;if(d._best!==undefined)return d._best;const s=d.self,seen=new Set(),all=[];let best=null,bs=-1e9;
+  [['same',d.same],['div',d.div],['mom',d.mom||[]],['own',d.own||[]]].forEach(([k,a])=>a.forEach(c=>{if(seen.has(c.t))return;seen.add(c.t);const sc=(c.r3>s.r3)+(c.vol<s.vol)+(c.sh>s.sh)+((c.r3-s.r3)-(c.vol-s.vol))*2;all.push({c,sc});if(sc>bs){bs=sc;best=c.t}}));
+  /* near-tie (within 0.05, about 2.5 pts of return-minus-risk): the one with more return wins */
+  const close=all.filter(x=>x.sc>=bs-0.05).sort((x,y)=>y.c.r3-x.c.r3);if(close.length)best=close[0].c.t;return d._best=best}
 function xBadge(c,s,kind){const dr=(c.r3-s.r3)*100,dv=(c.vol-s.vol)*100,ds=c.sh-s.sh;
   const R=Math.abs(dr)<1?'Similar return':dr>0?'More return':'A bit less return',V=Math.abs(dv)<1.5?'about the same risk':dv<0?'less risk':'more risk';
   if(c.t===xBestT(XM.d))return ['Best Match','g',`${R} with ${V}.`];
