@@ -863,8 +863,13 @@ header.top{display:none!important}
 .xtmh span{font-size:12.5px;color:var(--muted)}
 /* Under the hood: map title with the Stocks / Industries / Sectors toggle beside it */
 .xtmhr{display:flex;align-items:center;justify-content:space-between;gap:10px 16px;flex-wrap:wrap}
-@media (max-width:700px){.xtmhr .xtmseg{flex:1 1 auto;min-width:0;gap:2px}.xtmhr .xtmseg button{padding:0 2px;font-size:13px;min-width:0}.xinab .xbasechip{display:none}
-  .xinab{flex:1 1 auto;min-height:0}.xinab>.xcard{height:100%;box-sizing:border-box;overflow-y:auto}}
+.xtabab{display:none!important}.xabview{display:none}
+@media (max-width:700px){.xtabab{display:inline-flex!important}
+  .xmh{position:relative}.xmh h2{padding-right:56px}#xmClose{position:absolute;top:12px;right:16px}
+  .xmhr .xtabs{display:flex;flex-wrap:nowrap;width:100%;gap:6px}.xmhr .xtab{flex:1 1 auto;justify-content:center;white-space:nowrap;padding:0 8px;min-height:42px;font-size:14px;gap:6px}.xmhr .xtab svg{display:none}
+  .xabview{display:block;position:absolute;left:0;right:0;z-index:8;padding:16px;box-sizing:border-box;background:var(--panel);overflow:hidden;backface-visibility:hidden}
+  .xabin{height:100%}.xabin>.xcard{height:100%;box-sizing:border-box;overflow-y:auto}.xabview .xbasechip{display:none}}
+@media (max-width:380px){.xmhr .xtab{font-size:13.5px;padding:0 6px}}
 .xtmhr .xtmseg{flex:0 1 300px;min-width:240px}
 .xtm .xinftm{position:absolute;inset:0;min-height:0}
 /* Under the hood cards: same layout as the Alternatives card, line chart takes the spare height */
@@ -1264,7 +1269,7 @@ tr.xecho>td{background:var(--accentBg);transition:background .2s}
 </div>
 <div class="pop" id="pop" role="tooltip" hidden></div>
 <div class="modal" id="ioModal" hidden><div class="mback" data-ioclose="1"></div><div class="mpanel" role="dialog" aria-modal="true" aria-labelledby="ioTitle"><div class="mhead"><h3 id="ioTitle">Import / Export</h3><button type="button" class="mclose" data-ioclose="1" aria-label="Close"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div><div id="ioBody"></div></div></div>
-<div class="xm" id="xm" hidden><div class="xmback" data-xclose></div><div class="xmd" role="dialog" aria-modal="true" aria-labelledby="xmTitle"><div class="xmh"><div><h2 id="xmTitle">Compare</h2></div><div class="xmhr"><span class="cnt" id="xmCount" aria-live="polite"></span><div class="xtabs" role="tablist" aria-label="Explore views"><button type="button" class="xtab" role="tab" data-xtab="in" aria-selected="false"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/></svg>Under the hood</button><button type="button" class="xtab" role="tab" data-xtab="alt" aria-selected="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg>Compare</button></div><button type="button" class="xclose" id="xmClose" data-xclose aria-label="Close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div></div><div class="xmb" id="xmBody"></div></div></div>
+<div class="xm" id="xm" hidden><div class="xmback" data-xclose></div><div class="xmd" role="dialog" aria-modal="true" aria-labelledby="xmTitle"><div class="xmh"><div><h2 id="xmTitle">Compare</h2></div><div class="xmhr"><span class="cnt" id="xmCount" aria-live="polite"></span><div class="xtabs" role="tablist" aria-label="Explore views"><button type="button" class="xtab" role="tab" data-xtab="in" aria-selected="false"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/></svg>Under the hood</button><button type="button" class="xtab" role="tab" data-xtab="alt" aria-selected="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg>Compare</button><button type="button" class="xtab xtabab" role="tab" data-xtab="about" aria-selected="false"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg>About</button></div><button type="button" class="xclose" id="xmClose" data-xclose aria-label="Close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div></div><div class="xmb" id="xmBody"></div></div></div>
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 <div class="drophint" id="drophint" hidden>Drop CSV files to import prices</div>
 
@@ -2582,7 +2587,7 @@ function xCanPrice(t){return HAS(t)||(typeof UNI!=='undefined'&&!!UNI[t])}
 /* peers files are fetched on hover so the window opens with its content already in place */
 const XDATA={},XLOAD={};
 function xLoad(t){if(!XLOAD[t])XLOAD[t]=fetch('data/peers/'+encodeURIComponent(t)+'.json').then(r=>{if(!r.ok)throw new Error('none');return r.json()}).then(d=>XDATA[t]=d).catch(e=>{delete XLOAD[t];throw e});return XLOAD[t]}
-async function openExplore(t,from,tab){XM.pf=null;XM.inSized=false;XM.tmMode='stk';$('xm').querySelector('.xmd').style.minHeight='';XM.t=t;XM.tab=tab==='in'?'in':'alt';XM.anchorH=null;XM.openTab=XM.tab;XM.alt=XDATA[t]||null;XM.ins=XIN[t]||null;XM.errA=XM.errI=null;XM.secMode=null;XM.rngSet=0;XM.rng=XM.tab==='in'?'1Y':'3Y';XM.added=[];XM.from=from||null;
+async function openExplore(t,from,tab){xAboutReset();XM.pf=null;XM.inSized=false;XM.tmMode='stk';$('xm').querySelector('.xmd').style.minHeight='';XM.t=t;XM.tab=tab==='in'?'in':'alt';XM.anchorH=null;XM.openTab=XM.tab;XM.alt=XDATA[t]||null;XM.ins=XIN[t]||null;XM.errA=XM.errI=null;XM.secMode=null;XM.rngSet=0;XM.rng=XM.tab==='in'?'1Y':'3Y';XM.added=[];XM.from=from||null;
   {const q=$('qtip');if(q)q.hidden=true}XM.sel=null;
   if(t==='TPS'){XM.errA='TPS is the 12% Solution strategy, not a fund you can buy, so there is nothing to compare it with.';XM.errI='TPS is the 12% Solution strategy, not a fund, so it has no holdings to show.'}
   xUse();$('xm').hidden=false;document.body.classList.add('xm-open');xHead();xRender();xOpenFx();setTimeout(()=>$('xmClose').focus({preventScroll:true}),0);
@@ -2592,7 +2597,7 @@ async function openExplore(t,from,tab){XM.pf=null;XM.inSized=false;XM.tmMode='st
   if(!XM.ins&&!XM.errI)xinLoad(t).then(d=>{XM.ins=d;done('in')},()=>{XM.errI=`Holdings aren't available for ${t} yet. They're added a slice at a time each night, so check back soon.`;done('in')})}
 function xUse(){XM.d=XM.tab==='in'?XM.ins:XM.alt;XM.err=XM.tab==='in'?XM.errI:XM.errA}
 function xRender(){XM.tab==='in'?renderXI():renderXM()}
-function xHead(){$('xmTitle').textContent=XM.tab==='in'?'Under the hood of '+XM.t:'How '+XM.t+' stacks up';document.querySelectorAll('#xm .xtab').forEach(b=>b.setAttribute('aria-selected',b.dataset.xtab===XM.tab))}
+function xHead(){$('xmTitle').textContent=XM.about?'About '+XM.t:XM.tab==='in'?'Under the hood of '+XM.t:'How '+XM.t+' stacks up';document.querySelectorAll('#xm .xtab').forEach(b=>b.setAttribute('aria-selected',XM.about?b.dataset.xtab==='about':b.dataset.xtab===XM.tab))}
 /* a card opens out of the thing you tapped (a clip that widens, like the window opening out of its row) */
 function xSrcRect(sel){const el=sel&&document.querySelector(sel);if(!el)return null;const r=el.getBoundingClientRect();return r.width||r.height?r:null}
 /* zoom between a small source (a tile, a dot, the Best Match button) and a card: the card starts scaled and
@@ -2612,9 +2617,9 @@ function xPopOut(pop,src){if(!pop||pop.hidden||!pop.animate||XREDUCE.matches)ret
   const a=g.animate([{opacity:1},{opacity:1,offset:.6},{opacity:0}],{duration:kf?340:240,easing:'ease-in',fill:'forwards'});a.onfinish=()=>g.remove();setTimeout(()=>g.remove(),700)}
 /* a docked card that changes settles in instead of snapping */
 function xSwapIn(el){if(!el||!el.animate||XREDUCE.matches)return;el.animate([{opacity:.25,transform:'translateY(5px)'},{opacity:1,transform:'none'}],{duration:200,easing:'cubic-bezier(.2,0,0,1)'})}
-function xTab(k){if(XM.tab===k)return;const md=$('xm').querySelector('.xmd'),B=$('xmBody');
+function xTab(k){if(XM.tab===k||k==='about')return;const md=$('xm').querySelector('.xmd'),B=$('xmBody');
   const go=()=>{XM.tab=k;XM.sel=null;if(k==='in'&&XM.rng==='3Y'&&!XM.rngSet)XM.rng='1Y';if(k==='alt'&&!XM.rngSet)XM.rng='3Y';xUse();xHead();xRender();B.scrollTop=0};
-  if(!md||XREDUCE.matches||!md.animate){if(md)md.style.minHeight='';go();xCascade();return}const PH=XPHONE();
+  if(!md||XREDUCE.matches||!md.animate||XM.noTabAnim){if(md)md.style.minHeight='';go();if(!XM.noTabAnim)xCascade();return}const PH=XPHONE();
   /* Compare takes the full height, Under the hood what its cards need */
   const full=Math.round(Math.min(innerHeight-24,XM.anchorH||1000)),to=Math.round(k==='alt'?full:Math.min(XM.inH||full,innerHeight-24)),from=md.offsetHeight;
   if(XM.tabA)XM.tabA.cancel();document.querySelectorAll('#xm .xghost').forEach(g=>g.remove());$('xmBody').style.position='';XM.tabAnim=1;
@@ -2672,7 +2677,7 @@ function closeExplore(){if($('xm').hidden||XM.closing)return;const el=xSrc(),row
   bk.animate([{opacity:1},{opacity:0}],{duration:240,easing:'ease-in',fill:'forwards'});
   const a=md.animate([{opacity:1,transform:'none'},{opacity:0,transform:'translateY(14px) scale(.975)'}],{duration:220,easing:'cubic-bezier(.4,0,1,1)',fill:'forwards'});
   a.onfinish=()=>{finish();a.cancel();bk.getAnimations().forEach(x=>x.cancel())}}
-function xFinishClose(row){document.body.classList.remove('xm-open');const added=XM.added.slice();XM.t=null;
+function xFinishClose(row){xAboutReset();document.body.classList.remove('xm-open');const added=XM.added.slice();XM.t=null;
   document.querySelectorAll('tr.xecho').forEach(r=>r.classList.remove('xecho'));if(row&&document.contains(row)){row.classList.remove('flash');void row.offsetWidth;row.classList.add('flash')}
   if(added.length){toast('Added '+(added.length===1?added[0]:added.slice(0,-1).join(', ')+' and '+added[added.length-1])+' to your portfolio');
     setTimeout(()=>added.forEach(t=>{const tr=document.querySelector(`#bTable tr[data-bt="${CSS.escape(t)}"]`);if(tr){tr.classList.remove('flash');void tr.offsetWidth;tr.classList.add('flash')}}),60)}
@@ -2824,7 +2829,7 @@ document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('[da
 document.addEventListener('mousemove',e=>{if(!XTMSTILL)return;XTMSTILL=false;if(XTOUCH)return;const tl=e.target.closest&&e.target.closest('.xftile');if(tl)xTmTip(tl,true)});
 document.addEventListener('mouseover',e=>{if(!e.target.closest||XTMSTILL||XTOUCH)return;const tl=e.target.closest('.xftile');if(tl)xTmTip(tl,true)});
 document.addEventListener('mouseout',e=>{if(!e.target.closest||XTOUCH)return;const tl=e.target.closest('.xftile');if(tl&&!(e.relatedTarget&&e.relatedTarget.closest&&e.relatedTarget.closest('.xftile')===tl))xTmTip(tl,false)});
-function xSetRange(k){XM.rng=k;XM.rngSet=1;document.querySelectorAll('.xbk-body').forEach(body=>{if(body._d&&body.offsetParent)xTmPaint(body,body.dataset.mode||'ind')});const d=XM.d;if(!d)return;
+function xSetRange(k){XM.rng=k;XM.rngSet=1;{const L=$('xAbView');if(L&&XM.about){const d=XM.ins||XM.d,old=[...L.querySelectorAll('.xspark polyline')].map(p=>p.getAttribute('points'));if(d){L.querySelector('.xabin').innerHTML=xAboutCard(d);const c=L.querySelector('.xcard');if(c)xDescFill(c);xMoreSync(L);const gl=[];L.querySelectorAll('.xspark polyline').forEach((p,i)=>{if(old[i])gl.push({p,from:old[i]})});if(gl.length&&!XREDUCE.matches)xGlidePolys(gl,460)}}}document.querySelectorAll('.xbk-body').forEach(body=>{if(body._d&&body.offsetParent)xTmPaint(body,body.dataset.mode||'ind')});const d=XM.d;if(!d)return;
   /* redraw each line chart at the height it already has, so nothing jumps while periods are clicked through */
   const gl=[];document.querySelectorAll('#xmBody .xspark').forEach(box=>{if(XM.tab==='in'&&box.closest('#xInDock'))return;const c=xFind(box.dataset.xsp);if(!c)return;const col=box.closest('.xcard').style.getPropertyValue('--xc'),sv=box.querySelector('svg'),h=sv&&sv.style.height,olds=[...box.querySelectorAll('polyline')].map(p=>p.getAttribute('points')),par=box.parentNode,nx=box.nextSibling;let html=xSpark(c,d.self,col,c.t);if(h)html=html.replace('<svg ','<svg style="height:'+h+'" ');box.outerHTML=html;const nb=nx?nx.previousSibling:par.lastElementChild;if(nb&&nb.querySelectorAll&&!XREDUCE.matches)[...nb.querySelectorAll('polyline')].forEach((p,i)=>{if(olds[i])gl.push({p,from:olds[i]})})});if(gl.length)xGlidePolys(gl,460);
   document.querySelectorAll('#xmBody [data-xrng]').forEach(b=>{const on=b.dataset.xrng===k;b.classList.toggle('sel',on);b.setAttribute('aria-pressed',on)});{const w=document.querySelector('#xmBody .xgwrap');if(w&&w._h0&&!XGMINI())xgPaint(w,XG.cur);if(w&&XGMINI())setTimeout(()=>xgSync(true),0)}
@@ -3008,7 +3013,7 @@ const xinN=d=>d.top.filter(c=>c.wt>0).length;
 function xinShare(c,k){if(c.pw)return c.pw[k]||0;const d=XM.d,R0=d&&d.self&&d.self.r?d.self.r[k]:null,r0=c.r?c.r[k]:null;if(R0==null||r0==null)return c.wt;const f=k===5?x=>Math.pow(1+x,3)-1:x=>x;return c.wt*(1+f(R0))/(1+f(r0))}
 function xinTitle(){const d=XM.d,t=d.t,m=XM.tmMode||'stk';if(m==='ind')return d.pf?'Your portfolio by industry':`${esc(t)} by industry`;if(m==='sec')return d.pf?'Your portfolio by sector':`${esc(t)} by sector`;
   const tw=d.top.reduce((a,c)=>a+c.wt,0);return d.pf?`The ${xinN(d)} biggest holdings across your ETFs are ${xw(tw)} of the portfolio`:`Top ${xinN(d)} holdings are ${xw(tw)} of ${esc(t)}`}
-function xTmToggle(){const m=XM.inAbout?'about':(XM.tmMode||'stk');return `<div class="xseg xtmseg" role="group" aria-label="Map view">${[['stk','Stocks'],['sec','Sectors'],['ind','Industries']].concat(XPHONE()?[['about','About']]:[]).map(([k,l])=>`<button type="button" data-xtmm="${k}" class="${m===k?'sel':''}" aria-pressed="${m===k}">${l}</button>`).join('')}</div>`}
+function xTmToggle(){const m=XM.tmMode||'stk';return `<div class="xseg xtmseg" role="group" aria-label="Map view">${[['stk','Stocks'],['sec','Sectors'],['ind','Industries']].map(([k,l])=>`<button type="button" data-xtmm="${k}" class="${m===k?'sel':''}" aria-pressed="${m===k}">${l}</button>`).join('')}</div>`}
 function xinNote(){const m=XM.tmMode||'stk',wh=XM.d&&XM.d.pf?'your portfolio':esc(XM.d.t);if((m==='ind'||m==='sec')&&!XM.d.pf&&XGRP[XM.d.t])return `Each tile is ${m==='ind'?'an industry':'a sector'}'s share of ${wh}, from every stock in its latest SEC report. Color is its return ${XRWORD[XM.rng]}.`;if(m==='ind'||m==='sec'){const N=xinN(XM.d);return m==='ind'?`Each tile is an industry's share of ${wh}, from its top ${N} holdings. Color is their return ${XRWORD[XM.rng]}.`:`Each tile is a sector's share of ${wh}. Color is the return ${XRWORD[XM.rng]} of its holdings in the top ${N}.`}const d=XM.d;if(xinSec(d)&&d.pb){const b=d.pb[xRk()],late=b&&Date.parse(b)>xinStart(XM.rng);
     return `Tile size is each holding's share of ${esc(d.t)} ${XAGO[XM.rng]}: ${late?`its first report to the SEC, for ${dayFmt(b)}, moved back with prices`:`its holdings as reported to the SEC for ${dayFmt(b)}, moved to then with prices`}. Color is its return ${XRWORD[XM.rng]}; pick a period on the card to change it.${d.via?` ${esc(d.t)} doesn't file these reports, so its holdings come from ${esc(d.via)}, which tracks the same index.`:''}`}
   if(d&&d.pf&&d.pf.sec&&d.pf.sec.length){const no=d.pf.ws.map(x=>x[0]).filter(t=>!d.pf.sec.includes(t));
@@ -3020,16 +3025,16 @@ function renderXI(){const b=$('xmBody');renderXMFoot();xSizeModal();
   const d=XM.d;if(!d){b.innerHTML='<div class="xskel" style="height:440px"></div>';return}
   const s=d.self||{t:d.t},t=d.t;
   if(!xinEq(d)||!['stk','ind','sec'].includes(XM.tmMode))XM.tmMode='stk';
-  const fig=xinEq(d)?`<figure class="xtmfig"><div class="xtmh"><div class="xtmhr"><b id="xtmTitle" title="${esc(xinNote())}">${xinTitle()}</b>${xTmToggle()}</div></div><div class="xtm" id="xTm"></div>${XPHONE()?'<div class="xinab" style="display:none"></div>':''}</figure>`:xinAssetsHTML(d);
+  const fig=xinEq(d)?`<figure class="xtmfig"><div class="xtmh"><div class="xtmhr"><b id="xtmTitle" title="${esc(xinNote())}">${xinTitle()}</b>${xTmToggle()}</div></div><div class="xtm" id="xTm"></div></figure>`:xinAssetsHTML(d);
   xSetGlance('');xSizeModal();
-  XM.inAbout=false;b.innerHTML=XPHONE()?`<div class="xtop xin">${fig}</div><div class="xpop" id="xInPop" hidden><div class="xpopwrap"><div class="xpopdock xidock" id="xInDock">${xAboutCard(d)}</div></div></div>`
+  b.innerHTML=XPHONE()?`<div class="xtop xin">${fig}</div><div class="xpop" id="xInPop" hidden><div class="xpopwrap"><div class="xpopdock xidock" id="xInDock">${xAboutCard(d)}</div></div></div>`
     :`<div class="xtop xin">${fig}<div class="xcdock xidock" id="xInDock">${xAboutCard(d)}</div></div>`;
   if(!d.pf&&xinEq(d)&&XGRP[t]===undefined)xGrpLoad(t).then(()=>{if(XM.d===d&&XM.tab==='in'&&!$('xm').hidden)xinFit()});
   $('xInDock').dataset.t='';xMoreSync($('xInDock'));xinFit();xinFitRow();xinPaint();if(XM.sel&&xFind(XM.sel))xinTip(XM.sel,true);
   if(document.fonts&&document.fonts.status!=='loaded')document.fonts.ready.then(()=>{if(XM.tab==='in'&&!$('xm').hidden){xinFit();xinFitRow();xinPaint()}})}
 
 /* ---------- under the hood of a portfolio: every member's holdings and sectors, weighted by the portfolio's percentages ---------- */
-function openExplorePf(id,from,tab){XM.inSized=false;XM.tmMode='stk';const p=pf(id);if(!p)return;$('xm').querySelector('.xmd').style.minHeight='';const ws=weights(p);
+function openExplorePf(id,from,tab){xAboutReset();XM.inSized=false;XM.tmMode='stk';const p=pf(id);if(!p)return;$('xm').querySelector('.xmd').style.minHeight='';const ws=weights(p);
   XM.pf=id;XM.t=p.name;XM.tab=tab==='alt'?'alt':'in';XM.anchorH=null;XM.openTab=XM.tab;XM.alt=null;XM.ins=null;XM.errA=XM.errI=ws.length?null:'Give the ETFs in this portfolio some percentages first.';XM.secMode=null;XM.rngSet=0;XM.rng=XM.tab==='in'?'1Y':'3Y';XM.added=[];XM.from=from||null;
   {const q=$('qtip');if(q)q.hidden=true}XM.sel=null;
   xUse();$('xm').hidden=false;document.body.classList.add('xm-open');xHead();xRender();xOpenFx();setTimeout(()=>$('xmClose').focus({preventScroll:true}),0);
@@ -3192,15 +3197,26 @@ function xTmKeys(d){const top=d.top||[],bySt={},indSec={};top.forEach(c=>{const 
 function xDrawCard(dock,base,delay,force){const svg=dock.querySelector('.xspark:not(.xwait) svg');if(!svg)return;if(XM.noReveal){dock._drawn=base;return}
   if(dock._drawn===base&&!force)return;dock._drawn=base;xRevealSvg(svg,700,delay)}
 /* phone: About flips the map's panel over to the fund's own card; Go back flips it back (like Holdings in Compare) */
-/* phone: About (in the Stocks / Sectors / Industries row) flips the map area over to the fund's own card */
-function xAboutFlip(on){const tm=$('xTm'),ab=document.querySelector('#xmBody .xinab');if(!tm||!ab||!XM.d)return;
-  if(on){const h=tm.offsetHeight;ab.innerHTML=xAboutCard(XM.d);const card=ab.firstElementChild;if(card)xDescFill(card);ab.style.height=h+'px';xMoreSync(ab)}
-  const front=on?tm:ab,back=on?ab:tm;
-  const swap=()=>{front.style.display='none';back.style.display='';if(!on)xinPaint();else xRevealSvg(ab.querySelector('.xspark svg'),700,0)};
-  if(XREDUCE.matches||!tm.animate){swap();return}
-  const P='perspective(1100px) ';
-  front.animate([{transform:P+'rotateY(0deg)'},{transform:P+`rotateY(${on?-90:90}deg)`}],{duration:220,easing:'cubic-bezier(.4,0,1,1)'}).onfinish=()=>{swap();
-    back.animate([{transform:P+`rotateY(${on?90:-90}deg)`},{transform:P+'rotateY(0deg)'}],{duration:300,easing:'cubic-bezier(0,0,.2,1)'})}}
+/* phone: an About tab next to Under the hood and Compare. The fund's own card lies over whichever view
+   is open and flips up from the bottom; leaving it flips it back down (to that view, or the tab you picked). */
+function xAboutView(on,next){const md=$('xm').querySelector('.xmd'),B=$('xmBody');if(!md||!B)return;let L=$('xAbView');
+  const P='perspective(1200px) ',fast=XREDUCE.matches||!md.animate;
+  if(on){if(XM.about||!XM.t)return;const d=XM.ins||XM.d;if(!d){if(!XM.errI)xinLoad(XM.t).then(x=>{XM.ins=XM.ins||x;xAboutView(true)}).catch(()=>{});return}
+    if(XM.sel){const t=XM.sel;XM.sel=null;XM.tab==='in'?xinTip(t,false):xChartTip(t,false)}
+    if(!L){L=document.createElement('div');L.id='xAbView';L.className='xabview';md.appendChild(L)}
+    L.style.top=B.offsetTop+'px';L.style.height=B.offsetHeight+'px';L.innerHTML=`<div class="xabin">${xAboutCard(d)}</div>`;
+    const card=L.querySelector('.xcard');if(card)xDescFill(card);xMoreSync(L);XM.about=true;xHead();
+    if(fast){B.style.visibility='hidden';return}
+    B.animate([{transform:P+'rotateX(0deg)'},{transform:P+'rotateX(90deg)'}],{duration:230,easing:'cubic-bezier(.4,0,1,1)',fill:'forwards'}).onfinish=function(){B.style.visibility='hidden';this.cancel()};
+    L.animate([{transform:P+'rotateX(-90deg)'},{transform:P+'rotateX(-90deg)',offset:0.43},{transform:P+'rotateX(0deg)'}],{duration:530,easing:'cubic-bezier(.3,0,.2,1)'});
+    xRevealSvg(L.querySelector('.xspark svg'),700,300);return}
+  if(!XM.about)return;XM.about=false;
+  if(next&&next!==XM.tab){XM.noTabAnim=1;try{xTab(next)}finally{XM.noTabAnim=0}}
+  xHead();B.style.visibility='';
+  if(fast||!L){if(L)L.remove();return}
+  L.animate([{transform:P+'rotateX(0deg)'},{transform:P+'rotateX(-90deg)'}],{duration:230,easing:'cubic-bezier(.4,0,1,1)',fill:'forwards'}).onfinish=()=>L.remove();
+  B.animate([{transform:P+'rotateX(90deg)'},{transform:P+'rotateX(90deg)',offset:0.43},{transform:P+'rotateX(0deg)'}],{duration:530,easing:'cubic-bezier(.3,0,.2,1)'})}
+function xAboutReset(){const L=$('xAbView');if(L)L.remove();XM.about=false;const B=$('xmBody');if(B)B.style.visibility=''}
 function xTmMorph(host,sel,paint){if(XREDUCE.matches||!host.animate){paint();return}
   const rect=el=>({x:el.offsetLeft,y:el.offsetTop,w:el.offsetWidth,h:el.offsetHeight}),box=r=>({left:r.x+'px',top:r.y+'px',width:Math.max(0,r.w)+'px',height:Math.max(0,r.h)+'px'});
   const old=new Map();host.querySelectorAll(sel).forEach(el=>{const k=el.dataset.ht||el.dataset.tip;if(k)old.set(k,{el,r:rect(el),bg:getComputedStyle(el).backgroundColor})});
@@ -3420,11 +3436,8 @@ function xFitChart(){if(ph0()||!XM.d)return;const dock=$('xCardDock'),fig=docume
 function dayFmt(k){return MON[+k.slice(5,7)-1]+' '+(+k.slice(8))+', '+k.slice(0,4)}
 document.addEventListener('click',e=>{{const q=e.target.closest('[data-xpf]');if(q){e.preventDefault();e.stopPropagation();openExplorePf(q.dataset.xpf,q,q.dataset.xtab);return}}const o=e.target.closest('[data-xopen]');if(o){e.preventDefault();openExplore(o.dataset.xopen,o,o.dataset.xtab);return}
   if($('xm').hidden)return;
-  {const b=e.target.closest('#xm .xtab');if(b){xTab(b.dataset.xtab);return}}
-  {const v=e.target.closest('#xmBody [data-xtmm]');if(v&&(v.dataset.xtmm==='about'||XM.inAbout)){const k=v.dataset.xtmm;if(k==='about'&&XM.inAbout)return;
-      document.querySelectorAll('#xmBody [data-xtmm]').forEach(b=>{const on=b===v;b.classList.toggle('sel',on);b.setAttribute('aria-pressed',on)});
-      if(k==='about'){if(XM.sel){XM.sel=null;xinTip(null,false)}XM.inAbout=true;xAboutFlip(true)}else{XM.inAbout=false;XM.tmMode=k;const ti=$('xtmTitle');if(ti){ti.innerHTML=xinTitle();ti.title=xinNote()}xAboutFlip(false)}return}
-    if(v){const pm=XM.tmMode||'stk';if(v.dataset.xtmm===pm)return;XM.tmMode=v.dataset.xtmm;document.querySelectorAll('#xmBody [data-xtmm]').forEach(b=>{const on=b===v;b.classList.toggle('sel',on);b.setAttribute('aria-pressed',on)});const ti=$('xtmTitle');if(ti){ti.innerHTML=xinTitle();ti.title=xinNote()}if(XM.sel){XM.sel=null;const dk=$('xInDock');if(dk)dk.dataset.t='~';xinTip(null,false)}xTmSwap(()=>xinPaint(),pm,XM.tmMode);return}}
+  {const b=e.target.closest('#xm .xtab');if(b){const k=b.dataset.xtab;if(k==='about'){xAboutView(true);return}if(XM.about){xAboutView(false,k);return}xTab(k);return}}
+  {const v=e.target.closest('#xmBody [data-xtmm]');if(v){const pm=XM.tmMode||'stk';if(v.dataset.xtmm===pm)return;XM.tmMode=v.dataset.xtmm;document.querySelectorAll('#xmBody [data-xtmm]').forEach(b=>{const on=b===v;b.classList.toggle('sel',on);b.setAttribute('aria-pressed',on)});const ti=$('xtmTitle');if(ti){ti.innerHTML=xinTitle();ti.title=xinNote()}if(XM.sel){XM.sel=null;const dk=$('xInDock');if(dk)dk.dataset.t='~';xinTip(null,false)}xTmSwap(()=>xinPaint(),pm,XM.tmMode);return}}
   {const g=e.target.closest('#xmBody [data-xgo]');if(g){xTab(g.dataset.xgo);return}}
   {const m=e.target.closest('#xmBody [data-xsm]');if(m){XM.secMode=m.dataset.xsm;const el=$('xinSec');if(el)el.outerHTML=xinSecHTML(XM.d);return}}
   {const tt=e.target.closest('#xmBody .xtile[data-ht]');if(tt){const t=tt.dataset.ht;XM.sel=XM.sel===t?null:t;$('xInDock').dataset.t='~';xinTip(t,!!XM.sel);
