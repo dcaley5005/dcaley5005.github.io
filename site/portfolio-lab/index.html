@@ -918,6 +918,11 @@ header.top{display:none!important}
   #bTable tr[data-bt] .tkchk,#bTable tr.pfrow .tkchk{width:22px;height:22px}
 }
 @media (max-width:380px){#bTable tr[data-bt] .tkchip,#bTable tr.pfrow .tkchip.lg{font-size:16px!important}}
+/* phone row details: closer to the row's own size, so opening a row doesn't drop to fine print */
+@media (max-width:700px){#bTable tr.mdet .mi{font-size:15px;padding:6px 0}#bTable tr.mdet .mgh{font-size:11.5px;padding-top:12px}#bTable tr.mdet .mgh:first-child{padding-top:8px}
+  #bTable tr.mdet .mi.mact .mrm{font-size:15px;height:44px}#bTable tr.mdet .mgrid{gap:2px 14px}
+  #bTable tr.mdet .mgh~.mgh~.mi:not(.mact){grid-column:1/-1}}
+@media (max-width:380px){#bTable tr.mdet .mi.mact .mrm{font-size:14px;padding:0 4px}}
 /* a portfolio's own card has no flip side to stretch into, so its line chart gets a real height */
 #xCardDock .xcard:not(.xflipcard) .xspark svg,#xPopDock .xcard:not(.xflipcard) .xspark svg{height:clamp(90px,14vh,150px)}
 #xPopDock .xcard:has(.xkey) .xspark svg{height:76px!important;min-height:76px!important}#xPopDock .xcard:has(.xkey) .xspark{height:auto!important;flex:none!important;min-height:0!important}
