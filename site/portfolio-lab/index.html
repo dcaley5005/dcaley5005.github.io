@@ -863,6 +863,10 @@ header.top{display:none!important}
 .xtmh span{font-size:12.5px;color:var(--muted)}
 /* Under the hood: map title with the Stocks / Industries / Sectors toggle beside it */
 .xtmhr{display:flex;align-items:center;justify-content:space-between;gap:10px 16px;flex-wrap:wrap}
+.xabbtn{flex:none;display:inline-flex;align-items:center;gap:5px;height:38px;padding:0 11px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font:600 13.5px "IBM Plex Sans",sans-serif;cursor:pointer}
+@media (max-width:700px){.xtmhr{flex-wrap:nowrap;gap:6px}.xtmhr .xtmseg{flex:1 1 auto;min-width:0;gap:2px}.xtmhr .xtmseg button{padding:0 2px;font-size:13px;min-width:0}.xtmhr .xabbtn{padding:0 9px;gap:4px;font-size:13px}.xinab .xbasechip{display:none}
+  .xinab{flex:1 1 auto;min-height:0}.xinab>.xcard{position:relative;height:100%;box-sizing:border-box;overflow-y:auto}.xinab .xch{padding-right:120px}}
+@media (max-width:380px){.xtmhr .xablbl{display:none}.xtmhr .xabbtn{padding:0 10px}}
 .xtmhr .xtmseg{flex:0 1 300px;min-width:240px}
 .xtm .xinftm{position:absolute;inset:0;min-height:0}
 /* Under the hood cards: same layout as the Alternatives card, line chart takes the spare height */
@@ -3018,9 +3022,9 @@ function renderXI(){const b=$('xmBody');renderXMFoot();xSizeModal();
   const d=XM.d;if(!d){b.innerHTML='<div class="xskel" style="height:440px"></div>';return}
   const s=d.self||{t:d.t},t=d.t;
   if(!xinEq(d)||!['stk','ind','sec'].includes(XM.tmMode))XM.tmMode='stk';
-  const fig=xinEq(d)?`<figure class="xtmfig"><div class="xtmh"><div class="xtmhr"><b id="xtmTitle" title="${esc(xinNote())}">${xinTitle()}</b>${xTmToggle()}</div></div><div class="xtm" id="xTm"></div></figure>`:xinAssetsHTML(d);
+  const fig=xinEq(d)?`<figure class="xtmfig"><div class="xtmh"><div class="xtmhr"><b id="xtmTitle" title="${esc(xinNote())}">${xinTitle()}</b>${xTmToggle()}${XPHONE()?`<button type="button" class="xabbtn" data-xabout aria-label="About ${esc(t)}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg><span class="xablbl">About</span></button>`:''}</div></div><div class="xtm" id="xTm"></div></figure>`:xinAssetsHTML(d);
   xSetGlance('');xSizeModal();
-  b.innerHTML=XPHONE()?`<div class="xtop xin">${fig}</div><div class="xpop" id="xInPop" hidden><div class="xpopwrap"><div class="xpopdock xidock" id="xInDock">${xAboutCard(d)}</div></div></div>`
+  b.innerHTML=XPHONE()?`<div class="xtop xin">${fig}<div class="xinab" style="display:none"></div></div><div class="xpop" id="xInPop" hidden><div class="xpopwrap"><div class="xpopdock xidock" id="xInDock">${xAboutCard(d)}</div></div></div>`
     :`<div class="xtop xin">${fig}<div class="xcdock xidock" id="xInDock">${xAboutCard(d)}</div></div>`;
   if(!d.pf&&xinEq(d)&&XGRP[t]===undefined)xGrpLoad(t).then(()=>{if(XM.d===d&&XM.tab==='in'&&!$('xm').hidden)xinFit()});
   $('xInDock').dataset.t='';xMoreSync($('xInDock'));xinFit();xinFitRow();xinPaint();if(XM.sel&&xFind(XM.sel))xinTip(XM.sel,true);
@@ -3189,6 +3193,16 @@ function xTmKeys(d){const top=d.top||[],bySt={},indSec={};top.forEach(c=>{const 
    the same card again (hover, then click) doesn't redraw, and a period change glides instead */
 function xDrawCard(dock,base,delay,force){const svg=dock.querySelector('.xspark:not(.xwait) svg');if(!svg)return;if(XM.noReveal){dock._drawn=base;return}
   if(dock._drawn===base&&!force)return;dock._drawn=base;xRevealSvg(svg,700,delay)}
+/* phone: About flips the map's panel over to the fund's own card; Go back flips it back (like Holdings in Compare) */
+function xAboutFlip(on){const fig=document.querySelector('#xmBody .xtmfig'),ab=document.querySelector('#xmBody .xinab');if(!fig||!ab||!XM.d)return;
+  if(on){const h=fig.offsetHeight;ab.innerHTML=xAboutCard(XM.d);const card=ab.firstElementChild;if(card){card.insertAdjacentHTML('afterbegin',`<button type="button" class="xgoback" data-xaboutback aria-label="Back to the map"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 5.5 8 12l6.5 6.5"/></svg><span>Go back</span></button>`);xDescFill(card)}ab.style.height=h+'px';xMoreSync(ab)}
+  const front=on?fig:ab,back=on?ab:fig;
+  const swap=()=>{front.style.display='none';back.style.display='';if(!on)xinPaint();else xRevealSvg(ab.querySelector('.xspark svg'),700,0)};
+  if(XREDUCE.matches||!fig.animate){swap();return}
+  const P='perspective(1100px) ';
+  front.animate([{transform:P+'rotateY(0deg)'},{transform:P+`rotateY(${on?-90:90}deg)`}],{duration:220,easing:'cubic-bezier(.4,0,1,1)'}).onfinish=()=>{swap();
+    back.animate([{transform:P+`rotateY(${on?90:-90}deg)`},{transform:P+'rotateY(0deg)'}],{duration:300,easing:'cubic-bezier(0,0,.2,1)'})}}
+document.addEventListener('click',e=>{if(!e.target.closest)return;if(e.target.closest('[data-xabout]')){xAboutFlip(true);return}if(e.target.closest('[data-xaboutback]'))xAboutFlip(false)});
 function xTmMorph(host,sel,paint){if(XREDUCE.matches||!host.animate){paint();return}
   const rect=el=>({x:el.offsetLeft,y:el.offsetTop,w:el.offsetWidth,h:el.offsetHeight}),box=r=>({left:r.x+'px',top:r.y+'px',width:Math.max(0,r.w)+'px',height:Math.max(0,r.h)+'px'});
   const old=new Map();host.querySelectorAll(sel).forEach(el=>{const k=el.dataset.ht||el.dataset.tip;if(k)old.set(k,{el,r:rect(el),bg:getComputedStyle(el).backgroundColor})});
