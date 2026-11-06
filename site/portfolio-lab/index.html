@@ -2614,7 +2614,7 @@ function xCanPrice(t){return HAS(t)||(typeof UNI!=='undefined'&&!!UNI[t])}
 /* peers files are fetched on hover so the window opens with its content already in place */
 const XDATA={},XLOAD={};
 function xLoad(t){if(!XLOAD[t])XLOAD[t]=fetch('data/peers/'+encodeURIComponent(t)+'.json').then(r=>{if(!r.ok)throw new Error('none');return r.json()}).then(d=>XDATA[t]=d).catch(e=>{delete XLOAD[t];throw e});return XLOAD[t]}
-async function openExplore(t,from,tab){xAboutReset();XM.pf=null;XM.inSized=false;XM.tmMode='stk';$('xm').querySelector('.xmd').style.minHeight='';XM.t=t;XM.tab=tab==='in'?'in':'alt';XM.anchorH=null;XM.openTab=XM.tab;XM.alt=XDATA[t]||null;XM.ins=XIN[t]||null;XM.errA=XM.errI=null;XM.secMode=null;XM.rngSet=0;XM.rng=XM.tab==='in'?'1Y':'3Y';xStartRng();XM.added=[];XM.from=from||null;
+async function openExplore(t,from,tab){xAboutReset();XM.pf=null;XM.inSized=false;XM.tmMode='stk';$('xm').querySelector('.xmd').style.minHeight='';XM.t=t;XM.tab=tab==='in'?'in':'alt';XM.anchorH=null;XM.openTab=XM.tab;XM.alt=XDATA[t]||null;XM.ins=XIN[t]||null;XM.errA=XM.errI=null;XM.secMode=null;XM.rngSet=0;XM.rngUser=null;XM.rng=XM.tab==='in'?'1Y':'3Y';xStartRng();XM.added=[];XM.from=from||null;
   {const q=$('qtip');if(q)q.hidden=true}XM.sel=null;
   if(t==='TPS'){XM.errA='TPS is the 12% Solution strategy, not a fund you can buy, so there is nothing to compare it with.';XM.errI='TPS is the 12% Solution strategy, not a fund, so it has no holdings to show.'}
   xUse();$('xm').hidden=false;document.body.classList.add('xm-open');xHead();xRender();xOpenFx();setTimeout(()=>$('xmClose').focus({preventScroll:true}),0);
@@ -2705,6 +2705,8 @@ function closeExplore(){if($('xm').hidden||XM.closing)return;const el=xSrc(),row
   const a=md.animate([{opacity:1,transform:'none'},{opacity:0,transform:'translateY(14px) scale(.975)'}],{duration:220,easing:'cubic-bezier(.4,0,1,1)',fill:'forwards'});
   a.onfinish=()=>{finish();a.cancel();bk.getAnimations().forEach(x=>x.cancel())}}
 function xFinishClose(row){xAboutReset();document.body.classList.remove('xm-open');const added=XM.added.slice();XM.t=null;
+  /* a period picked in here carries back to the main page */
+  {const k=XM.rngUser;XM.rngUser=null;if(k&&S.b.sel&&S.b.sel.p!==k&&PRESETS.some(p=>p[0]===k))setSel('b',{p:k})}
   document.querySelectorAll('tr.xecho').forEach(r=>r.classList.remove('xecho'));if(row&&document.contains(row)){row.classList.remove('flash');void row.offsetWidth;row.classList.add('flash')}
   if(added.length){toast('Added '+(added.length===1?added[0]:added.slice(0,-1).join(', ')+' and '+added[added.length-1])+' to your portfolio');
     setTimeout(()=>added.forEach(t=>{const tr=document.querySelector(`#bTable tr[data-bt="${CSS.escape(t)}"]`);if(tr){tr.classList.remove('flash');void tr.offsetWidth;tr.classList.add('flash')}}),60)}
@@ -2859,7 +2861,7 @@ document.addEventListener('mouseout',e=>{if(!e.target.closest||XTOUCH)return;con
 /* open on the period picked on the main page (5Y/10Y and custom days map to the closest range we have) */
 function xStartRng(){const sel=S.b&&S.b.sel;if(!sel)return;let k=sel.p&&XRWORD[sel.p]?sel.p:sel.p==='5Y'||sel.p==='10Y'?'3Y':null;
   if(!k&&sel.d){const d=+sel.d;k=d<=45?'1M':d<=135?'3M':d<=270?'6M':d<=730?'1Y':'3Y'}if(k){XM.rng=k;XM.rngSet=1}}
-function xSetRange(k){XM.rng=k;XM.rngSet=1;{const L=$('xAbView');if(L&&XM.about){const d=XM.ins||XM.d,old=[...L.querySelectorAll('.xspark polyline')].map(p=>p.getAttribute('points'));if(d){L.querySelector('.xabin').innerHTML=xAboutCard(d);const c=L.querySelector('.xcard');if(c)xDescFill(c);xMoreSync(L);const gl=[];L.querySelectorAll('.xspark polyline').forEach((p,i)=>{if(old[i])gl.push({p,from:old[i]})});if(gl.length&&!XREDUCE.matches)xGlidePolys(gl,460)}}}document.querySelectorAll('.xbk-body').forEach(body=>{if(body._d&&body.offsetParent)xTmPaint(body,body.dataset.mode||'ind')});const d=XM.d;if(!d)return;
+function xSetRange(k){XM.rng=k;XM.rngSet=1;XM.rngUser=k;{const L=$('xAbView');if(L&&XM.about){const d=XM.ins||XM.d,old=[...L.querySelectorAll('.xspark polyline')].map(p=>p.getAttribute('points'));if(d){L.querySelector('.xabin').innerHTML=xAboutCard(d);const c=L.querySelector('.xcard');if(c)xDescFill(c);xMoreSync(L);const gl=[];L.querySelectorAll('.xspark polyline').forEach((p,i)=>{if(old[i])gl.push({p,from:old[i]})});if(gl.length&&!XREDUCE.matches)xGlidePolys(gl,460)}}}document.querySelectorAll('.xbk-body').forEach(body=>{if(body._d&&body.offsetParent)xTmPaint(body,body.dataset.mode||'ind')});const d=XM.d;if(!d)return;
   /* redraw each line chart at the height it already has, so nothing jumps while periods are clicked through */
   const gl=[];document.querySelectorAll('#xmBody .xspark').forEach(box=>{if(XM.tab==='in'&&box.closest('#xInDock'))return;const c=xFind(box.dataset.xsp);if(!c)return;const col=box.closest('.xcard').style.getPropertyValue('--xc'),sv=box.querySelector('svg'),h=sv&&sv.style.height,olds=[...box.querySelectorAll('polyline')].map(p=>p.getAttribute('points')),par=box.parentNode,nx=box.nextSibling;let html=xSpark(c,d.self,col,c.t);if(h)html=html.replace('<svg ','<svg style="height:'+h+'" ');box.outerHTML=html;const nb=nx?nx.previousSibling:par.lastElementChild;if(nb&&nb.querySelectorAll&&!XREDUCE.matches)[...nb.querySelectorAll('polyline')].forEach((p,i)=>{if(olds[i])gl.push({p,from:olds[i]})})});if(gl.length)xGlidePolys(gl,460);
   document.querySelectorAll('#xmBody [data-xrng]').forEach(b=>{const on=b.dataset.xrng===k;b.classList.toggle('sel',on);b.setAttribute('aria-pressed',on)});{const w=document.querySelector('#xmBody .xgwrap');if(w&&w._h0&&!XGMINI())xgPaint(w,XG.cur);if(w&&XGMINI())setTimeout(()=>xgSync(true),0)}
@@ -3065,7 +3067,7 @@ function renderXI(){const b=$('xmBody');renderXMFoot();xSizeModal();
 
 /* ---------- under the hood of a portfolio: every member's holdings and sectors, weighted by the portfolio's percentages ---------- */
 function openExplorePf(id,from,tab){xAboutReset();XM.inSized=false;XM.tmMode='stk';const p=pf(id);if(!p)return;$('xm').querySelector('.xmd').style.minHeight='';const ws=weights(p);
-  XM.pf=id;XM.t=p.name;XM.tab=tab==='alt'?'alt':'in';XM.anchorH=null;XM.openTab=XM.tab;XM.alt=null;XM.ins=null;XM.errA=XM.errI=ws.length?null:'Give the ETFs in this portfolio some percentages first.';XM.secMode=null;XM.rngSet=0;XM.rng=XM.tab==='in'?'1Y':'3Y';xStartRng();XM.added=[];XM.from=from||null;
+  XM.pf=id;XM.t=p.name;XM.tab=tab==='alt'?'alt':'in';XM.anchorH=null;XM.openTab=XM.tab;XM.alt=null;XM.ins=null;XM.errA=XM.errI=ws.length?null:'Give the ETFs in this portfolio some percentages first.';XM.secMode=null;XM.rngSet=0;XM.rngUser=null;XM.rng=XM.tab==='in'?'1Y':'3Y';xStartRng();XM.added=[];XM.from=from||null;
   {const q=$('qtip');if(q)q.hidden=true}XM.sel=null;
   xUse();$('xm').hidden=false;document.body.classList.add('xm-open');xHead();xRender();xOpenFx();setTimeout(()=>$('xmClose').focus({preventScroll:true}),0);
   if(!ws.length)return;const key=JSON.stringify(ws);XM.pfKey=key;
