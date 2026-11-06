@@ -498,8 +498,8 @@ tr.mdet{display:none}
   #bTable tbody tr.pfkid .grip{left:0}
   #bTable td.kidw .wbox{display:none}#bTable td.kidw{padding:0!important}
   #bTable tr.pfkid .momwrap svg{display:none}
-  #bTable td.mexpc .wbox .field{width:34px;height:32px;padding:0 3px;font-size:13px;text-align:center}
-  #bTable tr.pfrow .tkchip.lg{max-width:min(72px,calc(100vw - 318px));overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-block;vertical-align:middle}
+  #bTable td.mexpc .wbox .field{width:32px;height:32px;padding:0 2px;font-size:13px;text-align:center}
+  #bTable tr.pfrow .tkchip.lg{max-width:min(66px,calc(100vw - 324px));overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-block;vertical-align:middle}
   .btable tfoot td.wcell{white-space:normal;line-height:1.1}
   .btable tfoot td.wcell .sub{font-size:11px!important}
 }
@@ -901,6 +901,21 @@ header.top{display:none!important}
   /* the table's second column is Sharpe, with its i */
   #bTable th.bm-sharpe,#bTable td.bm-sharpe{display:table-cell!important}
 }
+/* phone rows, Stocks-app style: taller rows (44pt+ tap targets), a bigger ticker, the return as a colored pill,
+   Sharpe smaller and grey. ?rows=nosharpe previews them without Sharpe. */
+@media (max-width:700px){
+  #bTable tbody tr[data-bt]>td,#bTable tbody tr.pfrow>td{height:56px;padding-top:0!important;padding-bottom:0!important}
+  #bTable tr[data-bt] .tkchip{font-size:18px!important;font-weight:700}
+  #bTable tr.pfrow .tkchip.lg{font-size:18px!important}
+  #bTable tr[data-bt] td.momcell .momwrap .v,#bTable tr.pfrow td.momcell .momwrap .v{display:inline-block;min-width:60px;box-sizing:border-box;text-align:center;padding:6px 5px;border-radius:8px;font-size:14.5px;font-weight:700;line-height:1.1;color:var(--panel)!important;background:var(--pos)}
+  #bTable tr[data-bt] td.momcell .momwrap .v.neg,#bTable tr.pfrow td.momcell .momwrap .v.neg{background:var(--neg)}
+  #bTable tr[data-bt] td.momcell .momwrap .v.mut,#bTable tr.pfrow td.momcell .momwrap .v.mut{background:var(--line2);color:var(--ink2)!important}
+  #bTable tr[data-bt] td.bm-sharpe,#bTable tr.pfrow td.bm-sharpe{font-size:13px!important;font-weight:500!important;color:var(--muted)!important}
+  #bTable tr[data-bt] .tkchk,#bTable tr.pfrow .tkchk{width:22px;height:22px}
+  html.rows-nosharpe #bTable .bm-sharpe{display:none!important}
+  html.rows-nosharpe #bTable tr.pfrow .tkchip.lg{max-width:150px}
+}
+@media (max-width:380px){#bTable tr[data-bt] .tkchip,#bTable tr.pfrow .tkchip.lg{font-size:16px!important}}
 /* a portfolio's own card has no flip side to stretch into, so its line chart gets a real height */
 #xCardDock .xcard:not(.xflipcard) .xspark svg,#xPopDock .xcard:not(.xflipcard) .xspark svg{height:clamp(90px,14vh,150px)}
 #xPopDock .xcard:has(.xkey) .xspark svg{height:76px!important;min-height:76px!important}#xPopDock .xcard:has(.xkey) .xspark{height:auto!important;flex:none!important;min-height:0!important}
@@ -1274,6 +1289,8 @@ tr.xecho>td{background:var(--accentBg);transition:background .2s}
 <div class="drophint" id="drophint" hidden>Drop CSV files to import prices</div>
 
 <script>
+/* preview only: ?rows=nosharpe shows the bigger phone rows without the Sharpe column */
+if(/[?&]rows=nosharpe\b/.test(location.search))document.documentElement.classList.add('rows-nosharpe');
 let UNI={};const LOADING=new Set(),NODATA=new Set(); /* UNI: ticker -> name from data/universe.json */
 const NAMES = {SPY:'S&P 500',QQQ:'Nasdaq 100',MDY:'S&P MidCap 400',IWM:'Russell 2000',EFA:'Developed intl. stocks',VTI:'Total US stock market',VEA:'Developed intl. stocks',VWO:'Emerging markets',TLT:'20+ yr Treasuries',IEF:'7–10 yr Treasuries',JNK:'High-yield corporate bonds',HYG:'High-yield corporate bonds',AGG:'US aggregate bonds',BND:'Total US bond market',LQD:'Investment-grade corporate bonds',TIP:'Inflation-protected Treasuries',SHY:'1–3 yr Treasuries',GLD:'Gold',XLK:'Technology Select Sector',FCNTX:'Fidelity Contrafund (mutual fund)',VT:'Total world stocks',VXUS:'Total intl. stocks ex-US',IJR:'S&P SmallCap 600',ACWI:'MSCI All Country World',ACWX:'MSCI All Country World ex-US',IEUR:'Core MSCI Europe',TPS:'The 12 Percent Solution ETF',IEMG:'Core MSCI Emerging Markets'};
 const SAMPLE = [];
