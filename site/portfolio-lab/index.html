@@ -872,7 +872,7 @@ header.top{display:none!important}
   .xmh{position:relative}.xmh h2{padding-right:56px}#xmClose{position:absolute;top:12px;right:16px}.xmhr{margin-top:11px}
   .xmhr .xtabs{display:flex;flex-wrap:nowrap;width:100%;gap:6px}.xmhr .xtab{flex:1 1 auto;justify-content:center;white-space:nowrap;padding:0 8px;min-height:42px;font-size:14px;gap:6px}.xmhr .xtab svg{display:none}
   .xabview{display:block;position:absolute;left:0;right:0;z-index:8;padding:16px;box-sizing:border-box;background:var(--panel);overflow:hidden;backface-visibility:hidden}
-  .xabin{height:100%}.xabin>.xcard{height:100%;box-sizing:border-box;overflow-y:auto}.xabview .xbasechip{display:none}}
+  .xabin{height:100%}.xabin>.xcard{max-height:100%;box-sizing:border-box;overflow-y:auto}.xabview .xbasechip{display:none}}
 @media (max-width:380px){.xmhr .xtab{font-size:13.5px;padding:0 6px}}
 .xtmhr .xtmseg{flex:0 1 300px;min-width:240px}
 .xtm .xinftm{position:absolute;inset:0;min-height:0}
@@ -1248,6 +1248,8 @@ tr.xecho>td{background:var(--accentBg);transition:background .2s}
 .xpt:focus,.xpt:focus-visible{outline:none}
 .xpt:focus-visible>:not(text):not([fill="transparent"]){stroke:var(--ink);stroke-width:2}
 #xm button,#xm .xtile,#xm .xpt,#xm [data-xrng]{touch-action:manipulation}
+/* phone About tab: the Compare tab sits right above, so no Compare button in the card */
+#xAbView .xgoalt{display:none}
 </style>
 
 <div class="wrap">
