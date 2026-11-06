@@ -448,7 +448,7 @@ tr.mdet{display:none}
 .mi .ml{color:var(--muted)}
 .mi.mact{grid-column:1/-1;border:0;justify-content:flex-end;padding-top:6px}
 .mgh{grid-column:1/-1;font:600 10.5px "IBM Plex Sans",sans-serif;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);padding:8px 0 2px}.mgh:first-child{padding-top:4px}
-.mi .mv.on{font-weight:700}.mi:has(.mv.on){background:color-mix(in srgb,var(--accent) 8%,transparent);border-radius:6px;margin:0 -4px;padding-left:4px;padding-right:4px}
+.mi .mv.on{font-weight:700;border-radius:5px;background:color-mix(in srgb,currentColor 14%,transparent);box-shadow:0 0 0 5px color-mix(in srgb,currentColor 14%,transparent)}.mi:has(.mv.on) .ml{color:var(--ink);font-weight:600}
 .mi.mact.mact{display:grid;grid-template-columns:1.35fr 1fr 1fr;gap:8px}.mi.mact .mrm{justify-content:center;white-space:nowrap;padding:0 6px;font-size:13.5px;min-width:0}
 .mrm.mdel{color:var(--neg);border-color:color-mix(in srgb,var(--neg) 45%,var(--line))}
 @media (max-width:700px){
