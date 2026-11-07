@@ -3482,7 +3482,7 @@ document.addEventListener('click',e=>{{const q=e.target.closest('[data-xpf]');if
   {const pp=$('xCardPop');if(pp&&!pp.hidden&&(e.target===pp||e.target.closest('[data-xpopx]'))){const t=XM.sel;XM.sel=null;xChartTip(t,false);return}}
   {const ip=$('xInPop');if(ip&&!ip.hidden&&(e.target===ip||e.target.closest('#xInPop [data-xpopx]'))){const t=XM.sel;XM.sel=null;xinTip(t,false);return}}
   const a=e.target.closest('[data-xadd]');if(a&&!a.disabled){xToggleAdd(a.dataset.xadd);return}
-  const g=e.target.closest('#xmBody [data-xrng],#xgMini [data-xrng]');if(g){xSetRange(g.dataset.xrng);return}
+  const g=e.target.closest('#xmBody [data-xrng],#xgMini [data-xrng],#xAbView [data-xrng]');if(g){xSetRange(g.dataset.xrng);return}
   const p=e.target.closest('#xmBody .xpt');if(p){XM.sel=p.dataset.xt;xChartTip(p.dataset.xt,true);
     /* when the card sits under the chart (narrow screens), bring it into view */const lg=document.querySelector('#xmBody .xlegend'),B=$('xmBody'),svg=p.closest('svg');if(!ph0()&&XM.sel&&lg&&B&&svg&&lg.getBoundingClientRect().top>svg.getBoundingClientRect().bottom-4){const r=lg.getBoundingClientRect(),b=B.getBoundingClientRect(),m=$('xgMini'),off=(XGMINI()&&m?m.offsetHeight:70)+10;if(r.top>b.bottom-120||r.top<b.top+off)B.scrollTo({top:B.scrollTop+(r.top-b.top)-off,behavior:XREDUCE.matches?'auto':'smooth'})}xFitNow();return}
   const rw=e.target.closest('#xCmp tr[data-xrow]');if(rw){const t=rw.dataset.xrow;XM.sel=t;xChartTip(t,true);const tp=document.querySelector('#xmBody .xtop'),B=$('xmBody');if(tp&&B){const r=tp.getBoundingClientRect(),bb=B.getBoundingClientRect();if(r.top<bb.top+60)B.scrollTo({top:B.scrollTop+(r.top-bb.top)-80,behavior:XREDUCE.matches?'auto':'smooth'})}xFitNow();return}
