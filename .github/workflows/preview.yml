@@ -37,7 +37,7 @@ jobs:
         with:
           workflow: refresh.yml
           branch: main
-          workflow_conclusion: success
+          workflow_conclusion: completed
           name: pages-site
           path: _site
           if_no_artifact_found: fail
