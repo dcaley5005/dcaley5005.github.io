@@ -23,6 +23,7 @@ re-ranked weekly (Saturday runs) and saved to data/universe.json in the repo.
 """
 import base64
 import json
+import math
 import os
 import re
 import shutil
@@ -256,6 +257,9 @@ def period_returns(s, last):
             out.append(None)
             continue
         r = float(s.iloc[-1] / prev.iloc[-1] - 1)
+        if not math.isfinite(r) or r <= -1:    # a bad price; annualizing it would give a complex number
+            out.append(None)
+            continue
         out.append(round((1 + r) ** (12 / m) - 1 if m != "ytd" and m > 12 else r, 4))
     return out
 
@@ -613,12 +617,16 @@ def main():
         (OUT / "er.json").write_text(json.dumps(
             {t: f["er"] for t, f in fund.items() if f.get("er") is not None}, separators=(",", ":")))
         build_explore({**core, **got}, names, fund)
-    except Exception as e:  # never let this block the price refresh
-        log(f"Explore step failed: {e}")
+    except Exception as e:  # never let this block the price refresh, but flag the run so it gets noticed
+        import traceback
+        log(f"Explore step failed: {e}\n{traceback.format_exc()}")
+        print(f"::error::Explore step failed: {e}", flush=True)
     try:
         build_whats_inside({**core, **got}, names, load_fund_info())
-    except Exception as e:  # never let this block the price refresh
-        log(f"What's inside step failed: {e}")
+    except Exception as e:  # never let this block the price refresh, but flag the run so it gets noticed
+        import traceback
+        log(f"What's inside step failed: {e}\n{traceback.format_exc()}")
+        print(f"::error::What's inside step failed: {e}", flush=True)
     log("Done.")
 
 

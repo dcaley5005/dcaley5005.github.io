@@ -610,6 +610,8 @@ def group_doc(full, etf_s, stock_series, stocks, idx, nd, wk, end):
         ind = st.get("ind") if st.get("ind") in ind_sec else None
         sec = ind_sec[ind] if ind else (st.get("sec") if st.get("sec") in set(ind_sec.values()) else None)
         ss = stock_series.get(sym)
+        if not p or p <= 0:      # short positions (negative weights) would flip a group's line below zero
+            continue
         if not sec or ss is None or not len(ss) or ss.index[-1] < end - pd.Timedelta(days=7):
             continue
         p0, p1 = _at(ss, asof), _at(ss, end)
@@ -669,6 +671,9 @@ def period_returns(s, last):
             out.append(None)
             continue
         r = float(s.iloc[-1] / prev.iloc[-1] - 1)
+        if not math.isfinite(r) or r <= -1:    # a bad price; annualizing it would give a complex number
+            out.append(None)
+            continue
         out.append(round((1 + r) ** (12 / m) - 1 if m != "ytd" and m > 12 else r, 4))
     return out
 
@@ -717,7 +722,9 @@ def build_inside(out_dir, etf_series, hold, stocks, stock_series, names, fund=No
                 c["dd"] = round(float((px / px.cummax() - 1).min()), 4)
                 if full:
                     yrs = (px.index[-1] - px.index[0]).days / 365.25
-                    c["r3"] = round(float((px.iloc[-1] / px.iloc[0]) ** (1 / yrs) - 1), 4)
+                    g = float(px.iloc[-1] / px.iloc[0])
+                    if g > 0 and yrs > 0:
+                        c["r3"] = round(g ** (1 / yrs) - 1, 4)
                     if rf is not None and vol > 0:
                         c["sh"] = round(float(r.sub(rf.reindex(r.index).fillna(0)).mean() * 252 / vol), 3)
                 relp = (s.reindex(s.index.union(idx)).ffill().reindex(idx) / px.iloc[-1] * 10000).round()
@@ -828,8 +835,11 @@ def build_inside(out_dir, etf_series, hold, stocks, stock_series, names, fund=No
         full = (nport.get(t) or {}).get("full")
         if full and s is not None and len(s):
             gdir.mkdir(parents=True, exist_ok=True)
-            (gdir / f"{t}.json").write_text(json.dumps(group_doc(full, s, stock_series, stocks, idx, nd, wk, end), separators=(",", ":")))
-            grp_n += 1
+            try:     # one fund's odd report shouldn't cost every other fund its files
+                (gdir / f"{t}.json").write_text(json.dumps(group_doc(full, s, stock_series, stocks, idx, nd, wk, end), separators=(",", ":")))
+                grp_n += 1
+            except Exception as e:
+                log(f"  {t}: industry totals skipped ({e})")
     # one small file per holding with its line chart, shared by every fund that holds it
     sdir = out.parent / "stock"
     sdir.mkdir(parents=True, exist_ok=True)
