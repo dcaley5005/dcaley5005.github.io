@@ -67,6 +67,8 @@ jobs:
     if: needs.gate.outputs.run == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 120
+    outputs:
+      kept_old: ${{ steps.reuse.outputs.kept_old }}
     steps:
       - uses: actions/checkout@v4
 
@@ -96,6 +98,46 @@ jobs:
           HOLDINGS_MINUTES: ${{ (github.event.schedule == '47 15 * * 6' || inputs.weekly) && '20' || '0' }}
           STOCK_INFO_MINUTES: ${{ (github.event.schedule == '47 15 * * 6' || inputs.weekly) && '15' || '0' }}
 
+      # The Under the hood and Compare files come from steps that are allowed to fail without stopping the
+      # price refresh. If they come out missing, deploy the last good copy instead of a site without them,
+      # and flag the run (the "flag" job below) so it gets noticed.
+      - name: Check the Under the hood and Compare files
+        id: check
+        run: |
+          d=_site/portfolio-lab/data
+          n_in=$(ls $d/inside 2>/dev/null | wc -l); n_pe=$(ls $d/peers 2>/dev/null | wc -l)
+          echo "inside/: $n_in files, peers/: $n_pe files"
+          if [ "$n_in" -lt 1000 ] || [ "$n_pe" -lt 1000 ]; then echo "short=true" >> "$GITHUB_OUTPUT"; fi
+
+      - name: Fetch the last built site
+        if: steps.check.outputs.short == 'true'
+        uses: dawidd6/action-download-artifact@v6
+        with:
+          workflow: refresh.yml
+          branch: main
+          workflow_conclusion: completed
+          name: pages-site
+          path: _prev
+          if_no_artifact_found: warn
+          search_artifacts: true
+
+      - name: Keep the last good Under the hood and Compare files
+        if: steps.check.outputs.short == 'true'
+        id: reuse
+        run: |
+          d=_site/portfolio-lab/data; p=_prev/portfolio-lab/data
+          if [ "$(ls $d/inside 2>/dev/null | wc -l)" -lt 1000 ] && [ "$(ls $p/inside 2>/dev/null | wc -l)" -ge 1000 ]; then
+            for x in inside grp stock; do rm -rf "$d/$x"; [ -d "$p/$x" ] && cp -r "$p/$x" "$d/$x"; done
+            [ -f "$p/desc.json" ] && cp "$p/desc.json" "$d/desc.json"
+            echo "::error::Under the hood files didn't build; deployed the last good copy (see 'What's inside step failed' in the build log)"
+          fi
+          if [ "$(ls $d/peers 2>/dev/null | wc -l)" -lt 1000 ] && [ "$(ls $p/peers 2>/dev/null | wc -l)" -ge 1000 ]; then
+            rm -rf "$d/peers"; cp -r "$p/peers" "$d/peers"; [ -f "$p/pool.json" ] && cp "$p/pool.json" "$d/pool.json"
+            echo "::error::Compare files didn't build; deployed the last good copy (see 'Explore step failed' in the build log)"
+          fi
+          echo "kept_old=true" >> "$GITHUB_OUTPUT"
+          rm -rf _prev
+
       - name: Save the ETF list, fund details and holdings if they changed
         run: |
           git config user.name "github-actions[bot]"
@@ -113,7 +155,7 @@ jobs:
         with:
           name: pages-site
           path: _site
-          retention-days: 2
+          retention-days: 7
 
       # Keep the preview of the newest open pull request (or remove it if there is none).
       # Added after the pages-site upload above, so the saved built site never carries a preview.
@@ -137,3 +179,14 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
+
+  # Marks the run as failed (GitHub emails a failed scheduled run) when the site had to fall back to
+  # yesterday's Under the hood or Compare files. Prices still deployed.
+  flag:
+    needs: [build, deploy]
+    if: needs.build.outputs.kept_old == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "::error::Under the hood or Compare data didn't build tonight; the site is showing the last good copy. Check the build log."
+          exit 1

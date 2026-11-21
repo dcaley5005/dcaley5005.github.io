@@ -34,7 +34,8 @@ jobs:
         with:
           workflow: refresh.yml
           branch: main
-          workflow_conclusion: success
+          # completed, not success: a run flagged for reusing old Under the hood files still has a full site
+          workflow_conclusion: completed
           name: pages-site
           path: _site
           if_no_artifact_found: fail
